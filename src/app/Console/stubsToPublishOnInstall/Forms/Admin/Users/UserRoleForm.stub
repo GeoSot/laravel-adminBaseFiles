@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Forms\Admin\Users;
+
+
+use GeoSot\BaseAdmin\App\Forms\Admin\Users\UserRoleForm as InitialForm;
+
+
+class UserRoleForm extends InitialForm
+{
+
+}

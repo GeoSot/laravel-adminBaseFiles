@@ -1,0 +1,14 @@
+<?php
+return [
+    'general' => [
+        'menuTitle' => 'DummyMenu',
+        'singular' => 'DummySingle',
+        'plural' => 'DummyPlural',
+    ],
+    'fields' => [
+        'id' => 'ID',
+        'title' => 'Name',
+        'notes' => 'Description',
+        'enabled' => 'Enabled'
+    ]
+];

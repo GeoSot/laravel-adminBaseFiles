@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Forms\Admin\Users;
+
+
+use GeoSot\BaseAdmin\App\Forms\Admin\Users\UserPermissionForm as InitialForm;
+
+class UserPermissionForm extends InitialForm
+{
+
+}

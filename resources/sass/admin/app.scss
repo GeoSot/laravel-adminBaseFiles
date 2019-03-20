@@ -1,0 +1,38 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+// Bootstrap
+@import '~bootstrap/scss/functions';
+@import "variables";
+@import '~bootstrap/scss/bootstrap';
+//Packages
+@import "~font-awesome/scss/font-awesome";
+@import "~ionicons/dist/scss/ionicons";
+@import "~select2/src/scss/core";
+@import "~select2-theme-bootstrap4/src/select2-bootstrap";
+@import "~bootstrap-daterangepicker/daterangepicker.css";
+@import "~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+@import "~toastr/toastr";
+//*****
+//Our Css
+@import "../_partials/offcanvas";
+@import "../_partials/button-labels";
+@import "../_partials/richTextEditors";
+@import "../_partials/standards";
+@import "_partials/layoutBase";
+
+.pace {
+  pointer-events: none;
+  user-select: none;
+  &.pace-inactive {
+    display: none;
+  }
+  .pace-progress {
+    background: theme-color('info');
+    position: absolute;
+    z-index: 2000;
+    bottom: 0;
+    right: 100%;
+    width: 100%;
+    height: 2px;
+  }
+}

@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
+
+class DummyClassTranslation extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('DummyTable_translations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->string('locale')->index();
+            // Your translatable fields
+
+
+
+
+
+            //--Foreign keys
+            $table->integer('DummyForeignKey')->unsigned();
+
+           //--Foreign keys RULEs
+           $table->unique(['DummyForeignKey', 'locale']);
+           $table->foreign('DummyForeignKey')->references('id')->on('DummyTable')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('DummyTable');
+        Schema::enableForeignKeyConstraints();
+    }
+}

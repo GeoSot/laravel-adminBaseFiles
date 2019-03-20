@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Models\HelpModels;
+
+use GeoSot\BaseAdmin\App\Models\HelpModels\FileModel as InitialModel;
+
+
+class FileModel extends InitialModel
+{
+
+}

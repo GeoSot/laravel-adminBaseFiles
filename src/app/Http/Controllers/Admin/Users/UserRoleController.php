@@ -1,0 +1,100 @@
+<?php
+
+namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
+
+
+use App\Models\Users\UserPermission;
+use App\Models\Users\UserRole;
+use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+
+class UserRoleController extends BaseAdminController
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_class = UserRole::class;
+        $this->initializeModelValues();
+
+
+        //OVERRIDES
+        $this->allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
+        $this->_useGenericViewForm = false;
+        $this->_useBasicForm = false;
+
+    }
+
+    public function create(Collection $extraValues = null)
+    {
+        $extraValues = collect(['permissionsGrouped' => UserPermission::getAsGroups()]);
+
+        return parent::create($extraValues);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  UserRole $userRole
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(UserRole $userRole)
+    {
+        $userRole->load('users');
+        $extraValues = collect([
+            'permissionsGrouped' => UserPermission::getAsGroups()
+        ]);
+
+        return $this->genericEdit($userRole, $extraValues);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  UserRole $userRole
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, UserRole $userRole)
+    {
+        return $this->genericUpdate($request, $userRole);
+    }
+
+    public function afterSave(Request &$request, $userRole)
+    {
+        if ($userRole->name !== 'god') {
+            $userRole->syncPermissions(array_filter($request->get('permissions')));
+        }
+    }
+
+    public function delete(Request $request)
+    {
+
+        $protectedRoles = $this->_class::where('is_protected', true)->pluck('id')->toArray();
+
+        $originalSentIds = $request->get('ids');
+        $request['ids'] = array_diff($originalSentIds, $protectedRoles);
+
+
+        if (count($request['ids']) and count($originalSentIds) > count($request['ids'])) {
+            flashToastr(__('admin/' . $this->_modelsLangDir . '.some_roles_where_not_deleted_cause_they_are_protected'), null, 'warning');
+        }
+
+        return parent::delete($request);
+    }
+
+    protected function listFields()//Can be omitted
+    {
+        $neFields = [
+            'listable' => ['display_name', 'name', 'id'],
+            'searchable' => ['name', 'display_name', 'id'],
+            'sortable' => ['display_name', 'id'],
+            'linkable' => ['display_name'],
+        ];
+
+        return array_merge(parent::listFields(), $neFields);
+    }
+
+}

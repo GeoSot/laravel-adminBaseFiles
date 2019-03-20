@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Files;
+
+
+use GeoSot\BaseAdmin\App\Http\Controllers\Admin\Files\FilesController as InitialController;
+
+class FilesController extends InitialController
+{
+
+}

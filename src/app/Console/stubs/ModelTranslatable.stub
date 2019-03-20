@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use GeoSot\BaseAdmin\App\Models\BaseModel;
+
+
+class DummyClass extends BaseModel
+{
+        public $timestamps = false;
+        protected $fillable = [];
+
+}

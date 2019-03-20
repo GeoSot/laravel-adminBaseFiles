@@ -1,0 +1,54 @@
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+
+
+$sideBarWidth:100%;
+
+
+.offcanvas{
+  &-sidebar{
+    min-height: calc(100vh - 56px);
+  }
+
+  &-wrapper{
+    display: flex;
+    flex-wrap: nowrap ;
+    overflow-x: hidden;
+  }
+  &-main{
+    max-width: 100%;
+  }
+  @media (min-width: 993px) {
+    &-sidebar{
+      transition: margin-left .3s ease-in-out;
+      &.open {
+       // margin-left: -$sideBarWidth; from js
+      }
+    }
+  }
+  @media (max-width: 992px) {
+    &-sidebar {
+      position: fixed;
+      bottom: 0;
+      left: -$sideBarWidth;
+      width: $sideBarWidth;
+      max-width: 100%;
+      overflow-y: auto;
+      transition: transform .3s ease-in-out;
+      z-index: $zindex-fixed;
+
+      &.open {
+      transform: translateX($sideBarWidth);
+    }}
+
+  }
+
+
+}

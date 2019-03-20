@@ -1,0 +1,42 @@
+
+#sideBar, .adminSidebar {
+    $hoverOpacity : .2;
+    $activeOpacity : .1;
+    $collapseOpacity : .05;
+
+    .nav > {
+        .nav-item.active > .nav-link {
+            background : rgba(0, 0, 0, $activeOpacity);
+        }
+
+        .nav-item:hover > .nav-link {
+            background : rgba(0, 0, 0, $hoverOpacity);
+        }
+
+        .nav-item .nav-link {
+            .title {
+                padding     : 0 5px;
+                transition  : margin .3s ease-in-out;
+                margin-left : -5px;
+
+            }
+            &:hover .title {
+                margin : 0 -5px 0 5px;
+            }
+        }
+    }
+
+    [data-toggle="collapse"][aria-expanded="true"] .arrow-after:before {
+        content : "\f107";
+    }
+
+    .collapsing, .collapse.show {
+        border-top : 1px solid $gray-600; //515763
+        background : rgba(0, 0, 0, $collapseOpacity);
+
+        .nav-item:hover, .nav-item.active {
+            background : rgba(0, 0, 0, $activeOpacity);
+        }
+    }
+
+}

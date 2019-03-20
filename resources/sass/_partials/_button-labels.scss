@@ -1,0 +1,66 @@
+// Labels for buttons
+// --------------------------------------------------
+
+@mixin labelBtn-size($direction,$padding-y ,$padding-x ) {
+
+  $radius:0;
+  @if $enable-rounded {
+     $radius:$btn-border-radius;
+  }
+  padding: calc(#{$padding-y} + #{$btn-border-width }) calc(#{$padding-x} + #{$btn-border-width});
+  margin-top: calc(-#{$padding-y} - #{$btn-border-width});
+  margin-bottom: calc(-#{$padding-y} - #{$btn-border-width});
+
+  @if $direction == 'left' {
+    border-radius: $radius 0 0 $radius;
+    margin-left: calc(-#{$padding-x} - #{$btn-border-width});
+    margin-right: $padding-x;
+  }
+  @else {
+    border-radius: 0 $radius $radius 0;
+    margin-right: calc(-#{$padding-x} - #{$btn-border-width});
+    margin-left: $padding-x;
+  }
+  // Manually declare to provide an override to the browser default
+
+}
+
+.btn {
+  .btn-label {
+    position: relative;
+    background: transparent;
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.08);
+    @include labelBtn-size('left', $btn-padding-y, $btn-padding-x);
+    &.btn-label-right{
+      @include labelBtn-size('right', $btn-padding-y, $btn-padding-x);
+    }
+
+  }
+  &.btn-lg  .btn-label{
+    @include labelBtn-size('left', $btn-padding-y-lg, $btn-padding-x-lg);
+    &.btn-label-right{
+      @include labelBtn-size('right', $btn-padding-y-lg, $btn-padding-x-lg);
+    }
+
+  }
+
+  &.btn-sm  .btn-label{
+    @include labelBtn-size('left', $btn-padding-y-sm, $btn-padding-x-sm);
+    &.btn-label-right{
+      @include labelBtn-size('right', $btn-padding-y-sm, $btn-padding-x-sm);
+    }
+  }
+
+}
+
+
+////Fix bootstrap grouped buttons
+//.btn-group {
+//  .btn-labeled:not(:first-child) .btn-label:not(.btn-label-right) {
+//    @include border-left-radius(0px);
+//  }
+//  .btn-labeled:not(:last-child) .btn-label.btn-label-right {
+//    @include border-right-radius(0px);
+//  }
+//}
