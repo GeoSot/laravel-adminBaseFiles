@@ -13,10 +13,10 @@ class CreateFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('media_files', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->morphs('model');
+            $table->bigIncrements('id');
+            $table->nullableMorphs('model');
 //            $table->string('title')->nullable();
             $table->string('collection_name');
             $table->string('file');
@@ -29,12 +29,19 @@ class CreateFilesTable extends Migration
             $table->unsignedInteger('order')->nullable();
             $table->text('custom_properties')->nullable();
 
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
+            $table->string('alt_attribute')->nullable();
+            $table->string('keywords')->nullable();
+
             //--Default
             $table->tinyInteger('enabled')->default(1);
             $table->timestamps();
-            $table->integer('modified_by')->unsigned()->nullable();
+            $table->unsignedBigInteger('modified_by')->nullable();
 
         });
+
+
     }
 
 
@@ -46,7 +53,7 @@ class CreateFilesTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('media_files');
         Schema::enableForeignKeyConstraints();
     }
 }

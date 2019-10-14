@@ -9,43 +9,39 @@
 namespace GeoSot\BaseAdmin\App\Traits\Controller\Auth;
 
 
-use Kris\LaravelFormBuilder\Facades\FormBuilder;
+use App\Models\Users\User;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Kris\LaravelFormBuilder\Form;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 trait RegisterFormTrait
 {
+    use FormBuilderTrait;
 
     /**
-     * Can override  protected function showRegistrationForm() with this
-     *    return view('auth.register', compact('form'));
+     * Show the application registration form.
      *
-     * @return \Kris\LaravelFormBuilder\Form
+     * @return Response
      */
-    public function getForm()
+    public function showRegistrationForm()
     {
+        $form = $this->getForm();
 
-
-        $form = FormBuilder::plain($this->getFormOptions());
-        $form->add('first_name', 'text', [
-            'rules' => 'required|string|max:255'
-        ]);
-        $form->add('last_name', 'text', [
-            'rules' => 'required|string|max:255'
-        ]);
-        $form->add('email', 'email', [
-            'rules' => 'required|string|email|max:255|unique:users',
-        ]);
-        $form->add('password', 'password', [
-            'rules' => 'required|string|min:6|confirmed'
-        ]);
-        $form->add('password_confirmation', 'password');
-        $form->add('register_btn', 'submit', [
-            'wrapper' => ['class' => 'form-group text-center'],
-            'attr'    => ['class' => 'btn btn-outline-primary'],
-        ]);
-
-        return $form;
+        return view('auth.register', compact('form'));
     }
 
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, $this->getFormValidationRules());
+    }
 
     /**
      * Can override  protected function validator(array $data) with this
@@ -67,14 +63,63 @@ trait RegisterFormTrait
     }
 
     /**
+     * Can override  protected function showRegistrationForm() with this
+     *    return view('auth.register', compact('form'));
+     *
+     * @return Form
+     */
+    public function getForm()
+    {
+
+
+        $form = $this->plain($this->getFormOptions());
+        $form->add('first_name', 'text', [
+            'rules' => 'required|string|max:255'
+        ]);
+        $form->add('last_name', 'text', [
+            'rules' => 'required|string|max:255'
+        ]);
+        $form->add('email', 'email', [
+            'rules' => 'required|string|email|max:255|unique:users',
+        ]);
+        $form->add('password', 'password', [
+            'rules' => 'required|string|min:6|confirmed'
+        ]);
+        $form->add('password_confirmation', 'password');
+        $form->add('register_btn', 'submit', [
+            'wrapper' => ['class' => 'form-group text-center'],
+            'attr' => ['class' => 'btn btn-outline-primary'],
+        ]);
+
+        return $form;
+    }
+
+    /**
      * @return array
      */
     protected function getFormOptions(): array
     {
         return [
-            'method'        => 'POST',
-            'url'           => route('register'),
+            'method' => 'POST',
+            'url' => route('register'),
             'language_name' => 'baseAdmin::auth.fields'
         ];
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     *
+     * @return User
+     */
+    protected function create(array $data)
+    {
+        return config('baseAdmin.config.models.user')::create([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
     }
 }

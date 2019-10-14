@@ -1,16 +1,16 @@
 
 <div class="col-md-6 col-12 mb-3">
-    @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.formTitles.value')] )
+    @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('modelLang').'.formTitles.value')] )
         {!! form_until($form, 'value') !!}
     @endcomponent
 </div>
 
 
 <div class="col-md-6 col-12 mb-3">
-   @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($packageVariables->get('nameSpace').$viewVals->get('baseLang').'.formTitles.first')] )
+    @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('baseLang').'.formTitles.first')] )
         <div class="text-right">
-            <button data-toggle="enableDevFields" type="button" class="btn btn-outline-secondary btn-sm" title=" @lang($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.buttons.enableDevFieldsDesc')">
-                     @lang($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.buttons.enableDevFields')
+            <button data-toggle="enableDevFields" type="button" class="btn btn-outline-secondary btn-sm" title=" @lang($viewVals->get('modelLang').'.buttons.enableDevFieldsDesc')">
+                @lang($viewVals->get('modelLang').'.buttons.enableDevFields')
             </button>
         </div>
         {!! form_until($form, 'group') !!}
@@ -19,10 +19,11 @@
 
 @if($form->has('model_type'))
     <div class="col-md-6 col-12 mb-3">
-        @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.formTitles.relatedModel')] )
+        @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('modelLang').'.formTitles.relatedModel')] )
             <div class="text-right">
-                <button data-toggle="enableDevFields" type="button" class="btn btn-outline-secondary btn-sm" title=" @lang($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.buttons.enableDevFieldsDesc')">
-                     @lang($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.buttons.enableDevFields')
+                <button data-toggle="enableDevFields" type="button" class="btn btn-outline-secondary btn-sm"
+                        title=" @lang($viewVals->get('modelLang').'.buttons.enableDevFieldsDesc')">
+                    @lang($viewVals->get('modelLang').'.buttons.enableDevFields')
                 </button>
             </div>
             {!! form_until($form,'model_id') !!}
@@ -31,7 +32,7 @@
 @endif
 
 <div class="col-md-6 col-12 mb-3">
-   @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($packageVariables->get('nameSpace').$viewVals->get('baseLang').'.formTitles.third')]   )
+    @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('baseLang').'.formTitles.third')]   )
         {!! form_row($form->notes) !!}
     @endcomponent
 </div>

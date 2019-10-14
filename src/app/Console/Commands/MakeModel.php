@@ -31,31 +31,6 @@ class MakeModel extends ModelMakeCommand
      */
     protected $type = 'Model';
 
-
-    public function handle()
-    {
-        parent::handle();
-        if ($this->isTranslatableModel()) {
-            $this->makeModelTranslation();
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTranslatableModel()
-    {
-        return filter_var($this->option('translatable'), FILTER_VALIDATE_BOOLEAN);
-    }
-
-    protected function makeModelTranslation()
-    {
-        //Model
-        $this->call('baseAdmin:makeModelTranslation', [
-            'name' => $this->argument('name') . 'Translation',
-        ]);
-    }
-
     /**
      * Get the stub file for the generator.
      *
@@ -63,7 +38,7 @@ class MakeModel extends ModelMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/Model.stub';
+        return __DIR__.'/../stubs/Model.stub';
     }
 
     /**
@@ -77,7 +52,6 @@ class MakeModel extends ModelMakeCommand
             ['viewBase', null, InputOption::VALUE_NONE, 'viewBaser.'],
             ['langBase', null, InputOption::VALUE_NONE, 'langBase.'],
             ['routeBase', null, InputOption::VALUE_NONE, 'routeBase.'],
-            ['translatable', null, InputOption::VALUE_NONE, 'translatable.']
         ];
         return array_merge(parent::getOptions(), $extendedOptions);
 
@@ -86,7 +60,7 @@ class MakeModel extends ModelMakeCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string $name
+     * @param  string  $name
      * @return string
      */
     protected function buildClass($name)
@@ -106,8 +80,6 @@ class MakeModel extends ModelMakeCommand
             }
         }
 
-        $replace = array_merge(['DummyTranslatable' => $this->getTranslatableText()], $replace);
-
 
         //		if ($this->option('model')) {
         //		$stub = $this->buildModelReplacements($stub);
@@ -120,16 +92,6 @@ class MakeModel extends ModelMakeCommand
             array_keys($replace), array_values($replace), parent::buildClass($name)
         );
 
-    }
-
-    /**
-     * @return string
-     */
-    protected function getTranslatableText(): string
-    {
-        return $this->isTranslatableModel() ? " use Translatable;
-    
-                                                public \$translatedAttributes = ['title'];" : '';
     }
 
 }

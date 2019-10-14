@@ -4,10 +4,12 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
-use GeoSot\BaseAdmin\App\Models\HelpModels\ImageModel;
+use GeoSot\BaseAdmin\App\Models\MediaModels\ImageModel;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -20,21 +22,21 @@ trait HasImages
     public static function bootHasImages()
     {
         //Delete All Files from Album
-        static::deleting(function ($model) {
+        static::deleting(function (HasImages $model) {
             $model->deleteAssociateImages();
         });
     }
 
     public function hasImages()
     {
-        return (boolean)$this->images()->count();
+        return (boolean) $this->images()->count();
     }
 
     /**
      * Relation of Image to parent model. Morph Many To Many relationship
      * Get all images related to the parent model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
     public function images()
     {
@@ -47,20 +49,14 @@ trait HasImages
     }
 
 
-    private function deleteAssociateImages()
-    {
-        $this->images()->each(function ($model) {
-            $model->delete();
-        });
-    }
 
     /**
      * Sync An image to  model
      *
-     * @param  mixed   $img
+     * @param  mixed  $img
      * @param  string  $directoryName
-     * @param  string  $displayName *
-     * @param  integer $order
+     * @param  string  $displayName  *
+     * @param  integer  $order
      * @param  string  $disk
      *
      * @return ImageModel
@@ -72,13 +68,19 @@ trait HasImages
         return $this->addImage($img, $directoryName, $disk, $displayName, $order);
     }
 
+    private function deleteAssociateImages()
+    {
+        $this->images()->each(function ($model) {
+            $model->delete();
+        });
+    }
     /**
      * .Add An image to  model
      *
-     * @param  mixed   $img
+     * @param  mixed  $img
      * @param  string  $directoryName
-     * @param  string  $displayName *
-     * @param  integer $order
+     * @param  string  $displayName  *
+     * @param  integer  $order
      * @param  string  $disk
      *
      * @return ImageModel
@@ -96,10 +98,10 @@ trait HasImages
     /**
      * .Sync An image to  model
      *
-     * @param  mixed   $img
+     * @param  mixed  $img
      * @param  string  $directoryName
-     * @param  string  $displayName *
-     * @param  integer $order
+     * @param  string  $displayName  *
+     * @param  integer  $order
      * @param  string  $disk
      *
      * @return array
@@ -109,41 +111,40 @@ trait HasImages
         $collection = preg_replace('/[^a-zA-Z0-9]/', '', $directoryName);
         $sizeMb = $mimeType = $extension = null;
         if ($img instanceof UploadedFile) {
-            if ($displayName) {
-                $filePath = Storage::disk($disk)->putFileAs($collection, $img, $displayName . '.' . $img->getClientOriginalExtension());
-            } else {
-                $filePath = Storage::disk($disk)->putFile($collection, $img);
-            }
-            $fileName = is_null($displayName) ? str_replace('.' . $img->getClientOriginalExtension(), '', $img->getClientOriginalName()) : $displayName;
-            $sizeMb = (float)number_format($img->getSize() / 1048576, 2);
+            $filePath = ($displayName)
+                ? Storage::disk($disk)->putFileAs($collection, $img, $displayName.'.'.$img->getClientOriginalExtension())
+                : $filePath = Storage::disk($disk)->putFile($collection, $img);
+
+            $fileName = $displayName ?: str_replace('.'.$img->getClientOriginalExtension(), '', $img->getClientOriginalName());
+            $sizeMb = (float) number_format($img->getSize() / 1048576, 2);
             $mimeType = $img->getMimeType();
             $extension = $img->getClientOriginalExtension();
         } else {
             $filePath = $img;
-            $fileName = is_null($displayName) ? $img : $displayName;
+            $fileName = $displayName ?: $img;
             $disk = "uri";
         }
         return [
-            'model_type'      => get_class($this),
-            'model_id'        => $this->getKey(),
+            'model_type' => get_class($this),
+            'model_id' => $this->getKey(),
             'collection_name' => $collection,
-            'title'           => $fileName,
-            'file'            => $filePath,
-            'disk'            => $disk,
-            'size_MB'         => $sizeMb,
-            'mime_type'       => $mimeType,
-            'extension'       => $extension,
-            'order'           => $order,
+            'title' => $fileName,
+            'file' => $filePath,
+            'disk' => $disk,
+            'size_mb' => $sizeMb,
+            'mime_type' => $mimeType,
+            'extension' => $extension,
+            'order' => $order,
         ];
 
     }
 
     /**
-     * @param null   $images
-     * @param string $directoryName
-     * @param string $disk
+     * @param  null  $images
+     * @param  string  $directoryName
+     * @param  string  $disk
      *
-     * @return \Illuminate\Support\Collection|null
+     * @return Collection|null
      */
     public function syncImages($images = null, string $directoryName, string $disk = 'uploads')
     {
@@ -169,8 +170,8 @@ trait HasImages
     /**
      * Save a Users Profile Picture
      *
-     * @param Request $request
-     * @param bool    $keepFirstOnly
+     * @param  Request  $request
+     * @param  bool  $keepFirstOnly
      *
      * @return mixed
      */
@@ -184,7 +185,6 @@ trait HasImages
             return false;
         }
 
-
         if ($request->get('repeatable_images', !$keepFirstOnly)) {
             return $this->addImages($images, $this->getTable(), "uploads");
         }
@@ -195,9 +195,9 @@ trait HasImages
         });
         $allFields = array_merge($this->getArrayableAppends(), $this->getFillable());
         $extraText = array_intersect(['full_name', 'title', 'slug'], $allFields)[0] ?? '';
-        $slug = empty($extraText) ? '' : '-' . Str::slug($this[$extraText]);
+        $slug = empty($extraText) ? '' : '-'.Str::slug($this[$extraText]);
 
-        $fileName = $this->getKey() . $slug;
+        $fileName = $this->getKey().$slug;
 
         return $this->syncImage($file, $this->getTable(), "uploads", $fileName);
 
@@ -207,13 +207,12 @@ trait HasImages
     /**
      * Save a Users Profile Picture
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return boolean
      */
     protected function removePictures(Request $request)
     {
-
         $removeIdsArray = array_filter($request->get('remove_images', []));
         $oldIds = array_filter($request->get('old_images', []));
         $deleteIdsArray = $this->images->whereNotIn('id', $oldIds)->pluck('id')->toArray();
@@ -232,7 +231,7 @@ trait HasImages
      */
     protected function getModel(): string
     {
-        return config('baseAdmin.config.models.namespace') . 'HelpModels\\ImageModel';
+        return config('baseAdmin.config.models.namespace').'MediaModels\\ImageModel';
     }
 
 }

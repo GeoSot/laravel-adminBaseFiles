@@ -12,7 +12,7 @@
  @php($leftSideClasses='col-12 col-sm-4 col-md-3 col-lg-3 col-xl-2')
  @includeIf($packageVariables->get('blades').'admin._includes.header')
  <div id="app" class="wrapper    offcanvas-wrapper  ">
-   <aside id="sideBar" class="offcanvas-sidebar  navbar px-0  bg-admin navbar-dark align-items-start {{$leftSideClasses}}">
+     <aside id="sideBar" class="overflow-hidden offcanvas-sidebar  navbar px-0  bg-admin navbar-dark align-items-start {{$leftSideClasses}}">
        @include($packageVariables->get('blades').'admin._includes.sidebar.index')
    </aside>
 
@@ -28,7 +28,7 @@
               @stack('notifications')
         </div>
 
-    <main id="mainContent-wrapper" class=" container-fluid mt-3 d-flex flex-fill flex-column">
+       <main id="mainContent-wrapper" class=" container-fluid mt-3 d-flex flex-fill flex-column mb-5">
         @yield('content')
     </main>
    </div>

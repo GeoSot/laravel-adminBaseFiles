@@ -1,9 +1,16 @@
+@php
+    use Illuminate\Support\Collection;
+     /**
+     * @var Collection $packageVariables
+     */
+     $snippetsDir=$packageVariables->get('blades').'admin._includes.listDataParsingSnippets.';
+@endphp
 <section class="navbar-nav sidebar  flex-fill py-4">
     <ul id="menu" class="page-sidebar-menu flex-column  nav">
         <li class="  nav-item @if(Route::is("admin.dashboard")) active @endif">
-            <a class="px-3 nav-link" href="{{ route('admin.dashboard') }}">
+            <a class=" d-flex align-items-center px-3 nav-link" href="{{ route('admin.dashboard') }}">
                 <i class="icon ion-ios-home fa-lg mr-2"></i>
-                <span class="title"> @lang($packageVariables->get('nameSpace').'admin/generic.menu.dashboard')</span>
+                <span class="title"> {{trans_with_fallback('admin/generic.menu.dashboard')}}</span>
             </a>
         </li>
         @include($packageVariables->get('blades').'.admin._includes.sidebar._separatorLine')
@@ -27,7 +34,7 @@
 
         @foreach($mergeCollection->sortBy('order') as $key=>$dt)
             @if($dt['isCustomMenu'])
-               @include($packageVariables->get('blades').'admin._includes.sidebar._customItem',['parentRoute' =>$key, 'node'=>$customMenuItems->get($key)])
+                @include($packageVariables->get('blades').'admin._includes.sidebar._customItem',['parentRoute' =>$key, 'node'=>$customMenuItems->get($key)])
             @else
                 @include( $packageVariables->get('blades').'admin._includes.sidebar._mainItem',['parentRoute' =>$key, 'node'=>$routes->get($key)])
             @endif

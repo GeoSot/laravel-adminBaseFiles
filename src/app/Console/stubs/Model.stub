@@ -8,7 +8,6 @@ use GeoSot\BaseAdmin\App\Models\BaseModel;
 class DummyClass extends BaseModel
 {
     //use Sluggable;
-    DummyTranslatable
 
     /**
      * The attributes that are mass assignable.

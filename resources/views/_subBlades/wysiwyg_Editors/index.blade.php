@@ -8,4 +8,4 @@
         </script>
 @endpush
 
-@includeIf($packageVariables->get('helpBlades').'.wysiwyg_Editors._'.($editor??'quill'))
+@includeIf($packageVariables->get('blades').'_subBlades.wysiwyg_Editors._'.($editor??'quill'))

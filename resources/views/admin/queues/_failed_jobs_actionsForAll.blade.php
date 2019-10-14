@@ -10,7 +10,7 @@
 
                     <button type="submit" class="btn  btn-primary ">
                             <span class="btn-label"><i class="fa fa-refresh"></i></span>
-                            <span class="btn_text"> @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.buttons.retryAll")</span>
+                        <span class="btn_text"> @lang("{$viewVals->get('modelLang')}.buttons.retryAll")</span>
                           </button>
                     </form>
             @endif
@@ -20,7 +20,7 @@
                     @csrf
                     <button type="submit" class="btn  btn-warning  ">
                         <span class="btn-label"><i class="fa fa-remove"></i></span>
-                        <span class="btn_text"> @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.buttons.flushAll")</span>
+                        <span class="btn_text"> @lang("{$viewVals->get('modelLang')}.buttons.flushAll")</span>
                       </button>
                     </form>
             @endif

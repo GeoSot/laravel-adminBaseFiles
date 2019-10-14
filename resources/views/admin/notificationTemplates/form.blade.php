@@ -1,4 +1,11 @@
 @extends($packageVariables->get('adminLayout'))
+@php
+    use Illuminate\Support\Collection;
+     /**
+     * @var Collection $packageVariables
+     * @var Collection $viewVals
+     */
+@endphp
 
 @component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals]    )
 @endcomponent
@@ -21,10 +28,10 @@
             @endcomponent
         </div>
         <div class="col-md-6 offset-md-1 col-12 mb-3">
-            @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.formTitles.developerChoices')]   )
+            @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('modelLang').'.formTitles.developerChoices')]   )
                 @if($viewVals->get('action')=='edit')
                     <div class="text-right">
-                        <button data-toggle="enableDevFields" type="button" class="btn btn-secondary btn-sm"> @lang($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.buttons.enableDevFields')</button>
+                        <button data-toggle="enableDevFields" type="button" class="btn btn-secondary btn-sm"> @lang($viewVals->get('modelLang').'.buttons.enableDevFields')</button>
                     </div>
                 @endif
                 {!! form_rest($form) !!}

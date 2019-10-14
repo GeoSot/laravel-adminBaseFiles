@@ -1,7 +1,7 @@
 require('../app');
 
 
-window.aw.admin = window.aw.admin || {};
+window.BaseAdmin = window.BaseAdmin || {};
 
 
 require('../_partials/offcanvas');
@@ -20,7 +20,7 @@ $('[data-toggle="select-all"]').change(function (e) {
 });
 
 
-aw.admin.makeAjax = function (url, type, data, show_message, callback) {
+BaseAdmin.makeAjax = function (url, type, data, show_message, callback) {
     return jQuery.ajax({
         url: url,
         type: type,

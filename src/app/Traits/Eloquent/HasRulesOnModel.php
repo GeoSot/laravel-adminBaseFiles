@@ -64,7 +64,7 @@ trait HasRulesOnModel
      */
     public function getFieldRule(string $field)
     {
-        return $this->getRules()[$field] ?? [];
+        return Arr::get($this->getRules(), $this->fieldNameToDot($field), []);
     }
 
 
@@ -77,10 +77,9 @@ trait HasRulesOnModel
      */
     public function getFieldErrorMessages(string $field)
     {
-
         $messages = $this->getErrorMessages();
-
-        return isset($messages[$field]) ?Arr::dot([$field => $messages[$field]]) : [];
+        $fieldName = $this->fieldNameToDot($field);
+        return isset($messages[$fieldName]) ? Arr::dot([$fieldName => $messages[$fieldName]]) : [];
     }
 
     /**
@@ -102,7 +101,7 @@ trait HasRulesOnModel
      *
      * @return string
      */
-    private function getIgnoreTextOnUpdate(string $attr = 'id')
+    protected function getIgnoreTextOnUpdate(string $attr = 'id')
     {
         return (is_null($this->{$attr}) ? '' : ',' . $this->{$attr});
     }
@@ -113,7 +112,7 @@ trait HasRulesOnModel
         $values = [];
         foreach ($this->requiredLocales() as $localeKey => $locale) {
             foreach ($arrayValues as $attribute => $value) {
-                $values[$localeKey . '.' . $attribute] = $value;
+                $values["{$attribute}.{$localeKey}"] = $value;
             }
         }
 
@@ -178,5 +177,15 @@ trait HasRulesOnModel
     protected function translationErrorMessages(array $merge = [])
     {
         return array_merge($this->translationErrorMessages, $merge);
+    }
+
+    /**
+     * @param  string  $field
+     *
+     * @return string
+     */
+    protected function fieldNameToDot(string $field)
+    {
+        return str_replace(']', '', str_replace('[', '.', $field));
     }
 }

@@ -7,32 +7,28 @@ use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 
 class UserPermissionController extends BaseAdminController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->_class = UserPermission::class;
-        $this->initializeModelValues();
 
-        //OVERRIDES
-        $this->allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
-        $this->allowedActionsOnIndex = ['create', 'edit'];
-        $this->_useGenericViewIndex = false;
-        $this->_useBasicForm = false;
-    }
+    protected $_class = UserPermission::class;
+
+    //OVERRIDES
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
+    protected $allowedActionsOnIndex = ['create', 'edit'];
 
 
     public function index(Request $request)
     {
         $extraValues = collect([]);
-        $params = $this->makeParams($request, $extraValues);
+        $params = $this->makeParams($request);
         $records = UserPermission::getAsGroups();
         $roles = UserRole::orderBy('id', 'ASC')->get()->load('permissions');
 
         $form = $this->plain([
-            'url' => route('admin.' . $this->baseRoute . '.change.status'),
+            'url' => route($this->_modelRoute.'.change.status'),
             'method' => 'POST',
             'id' => 'permissionsForm',
         ]);
@@ -45,9 +41,9 @@ class UserPermissionController extends BaseAdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  UserPermission $userPermission
+     * @param  UserPermission  $userPermission
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(UserPermission $userPermission)
     {
@@ -57,10 +53,10 @@ class UserPermissionController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  UserPermission $userPermission
+     * @param  Request  $request
+     * @param  UserPermission  $userPermission
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, UserPermission $userPermission)
     {
@@ -75,19 +71,11 @@ class UserPermissionController extends BaseAdminController
     public function changeStatus(Request $request)
     {
 
+        foreach (UserRole::where('name', '<>', 'god')->get() as $role) {
 
-        foreach (UserRole::all() as $role) {
-            if ($role->name == 'god') {// Avoid Change GOdD Permissions
-                continue;
-            }
             $perms = $request->get('role_permissions');
-            if (isset($perms[$role->id])) {
-                $role->syncPermissions($perms[$role->id]);
-            } else {
-                $role->syncPermissions([]);
-            }
+            $role->syncPermissions(Arr::get($perms, $role->getKey(), []));
         }
-
         return redirect()->back();
 
     }

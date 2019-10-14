@@ -8,7 +8,6 @@ use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
 class UserForm extends BaseAdminForm
 {
-    protected $formOptions = [];
 
     public function getFormFields()
     {
@@ -18,8 +17,8 @@ class UserForm extends BaseAdminForm
             'value' => false,
         ])->add('password_confirmation', 'password')->add('gender', 'choice', [
             'choices' => [
-                'M' => trans($this->languageName . '.gender_M'),
-                'F' => trans($this->languageName . '.gender_F'),
+                'M' => $this->transText('gender_M'),
+                'F' => $this->transText('gender_F'),
             ],
             'choice_options' => [
                 'wrapper' => ['class' => 'ml-3 custom-control custom-radio custom-control-inline'],

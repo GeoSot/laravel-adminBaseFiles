@@ -4,7 +4,8 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
-use App\Models\HelpModels\FileModel;
+use App\Models\MediaModels\FileModel;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -19,21 +20,21 @@ trait HasFiles
     public static function bootHasFile()
     {
         //Delete All Files from Model
-        static::deleting(function ($model) {
+        static::deleting(function (HasFiles $model) {
             $model->deleteAssociateFiles();
         });
     }
 
     public function hasFiles()
     {
-        return (boolean)$this->files()->count();
+        return (boolean) $this->files()->count();
     }
 
     /**
      * Relation of Files to parent model. Morph Many To Many relationship
      * Get all files related to the parent model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
     public function files()
     {
@@ -48,16 +49,16 @@ trait HasFiles
     /**
      * Sync A File to model
      *
-     * @param  mixed   $file
+     * @param  mixed  $file
      * @param  string  $directoryName
      * @param  string  $displayName
-     * @param  integer $order
+     * @param  integer  $order
      * @param  string  $disk
      * @param  string  $fileName
      *
      * @return FileModel
      */
-    public function syncFile($file, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null, string $fileName = null)
+    public function syncFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null, string $fileName = null)
     {
         $this->deleteAssociateFiles();
 
@@ -74,16 +75,16 @@ trait HasFiles
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  mixed   $file
+     * @param  mixed  $file
      * @param  string  $directoryName
-     * @param  string  $displayName *
-     * @param  integer $order
+     * @param  string  $displayName  *
+     * @param  integer  $order
      * @param  string  $disk
      * @param  string  $fileName
      *
      * @return FileModel
      */
-    public function addFile($file, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null, string $fileName = null)
+    public function addFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null, string $fileName = null)
     {
 
         if (is_string($file) or $file instanceof UploadedFile) {
@@ -102,29 +103,29 @@ trait HasFiles
 
         $sizeMb = $mimeType = $extension = '';
         if ($file instanceof UploadedFile) {
-            $showName     = is_null($displayName) ? str_replace('.' . $file->getClientOriginalExtension(), '', $file->getClientOriginalName()) : $displayName;
-            $fileSaveName = is_null($displayName) ? $file->hashName() : $displayName;
-            $fileSaveName = (is_null($fileName) ? $fileSaveName : $fileName) . '.' . $file->getClientOriginalExtension();
-            $filePath     = Storage::disk($disk)->putFileAs($collection, $file, $fileSaveName);
-            $sizeMb       = (float)number_format($file->getSize() / 1048576, 3);
-            $mimeType     = $file->getMimeType();
-            $extension    = $file->getClientOriginalExtension();
+            $showName = $displayName ?? str_replace('.'.$file->getClientOriginalExtension(), '', $file->getClientOriginalName());
+            $fileSaveName = $displayName ?: $file->hashName();
+            $fileSaveName = ($fileName ?: $fileSaveName).'.'.$file->getClientOriginalExtension();
+            $filePath = Storage::disk($disk)->putFileAs($collection, $file, $fileSaveName);
+            $sizeMb = (float) number_format($file->getSize() / 1048576, 3);
+            $mimeType = $file->getMimeType();
+            $extension = $file->getClientOriginalExtension();
         } else {
             $filePath = $file;
             $showName = is_null($displayName) ? $file : $displayName;
-            $disk     = "uri";
+            $disk = "uri";
         }
         $attributes = [
-            'model_type'      => get_class($this),
-            'model_id'        => $this->id,
+            'model_type' => get_class($this),
+            'model_id' => $this->id,
             'collection_name' => $collection,
-            'title'           => $showName,
-            'file'            => $filePath,
-            'disk'            => $disk,
-            'size_mb'         => $sizeMb,
-            'mime_type'       => $mimeType,
-            'extension'       => $extension,
-            'order'           => $order
+            'title' => $showName,
+            'file' => $filePath,
+            'disk' => $disk,
+            'size_mb' => $sizeMb,
+            'mime_type' => $mimeType,
+            'extension' => $extension,
+            'order' => $order
         ];
 
         return $attributes;
@@ -134,8 +135,8 @@ trait HasFiles
      * Sync A File to model
      *
      * @param  mixed  $files
-     * @param  string $directoryName
-     * @param  string $disk
+     * @param  string  $directoryName
+     * @param  string  $disk
      *
      * @return FileModel
      */
@@ -160,74 +161,12 @@ trait HasFiles
         return $collection;
     }
 
-    //    /**
-    //     * Save a Users Profile Picture
-    //     *
-    //     * @param Request $request
-    //     * @param bool    $keepFirstOnly
-    //     * @param string    $subFieldName
-    //     *
-    //     * @return mixed
-    //     */
-    //    public function syncFilesFromRequest(Request $request, $keepFirstOnly = false, string $subFieldName='')
-    //    {
-    //        $this->removeFilesFromRequest($request);
-    //
-    //        $files = array_filter($request->file('files', []));
-    //
-    //        if (empty($files)) {
-    //            return false;
-    //        }
-    //
-    //
-    //        if ($request->get('repeatable_files', !$keepFirstOnly)) {
-    //            return $this->addFiles($files, $this->getTable(), "uploads");
-    //        }
-    //
-    //
-    //        $file      = array_first($files, function ($value, $key) {
-    //            return isset($value);
-    //        });
-    //        $allFields = array_merge($this->getArrayableAppends(), $this->getFillable());
-    //        $extraText = array_intersect(['full_name', 'title', 'slug'], $allFields)[0] ?? '';
-    //        $slug      = empty($extraText) ? '' : '-' . str_slug($this[$extraText]);
-    //
-    //        $fileName = $this->id . $slug;
-    //
-    //        return $this->syncFile($file, $this->getTable(), "uploads", $fileName);
-    //
-    //
-    //    }
-    //
-    //    /**
-    //     * Save a Users Profile Picture
-    //     *
-    //     * @param Request $request
-    //     * @param string $subFieldName
-    //     *
-    //     * @return boolean
-    //     */
-    //    protected function removeFilesFromRequest(Request $request,  string $subFieldName='')
-    //    {
-    //
-    //        $removeIdsArray = array_filter($request->get('remove_files', []));
-    //        $oldIds         = array_filter($request->get('old_files', []));
-    //        $deleteIdsArray = $this->files->whereNotIn('id', $oldIds)->pluck('id')->toArray();
-    //
-    //        if (!empty($ids = array_merge($removeIdsArray, $deleteIdsArray))) {
-    //            FileModel::deleteIds($ids);
-    //
-    //            return true;
-    //        }
-    //
-    //        return false;
-    //    }
 
     /**
      * @return string
      */
     protected function getModel(): string
     {
-        return config('baseAdmin.config.models.namespace') . 'HelpModels\\FileModel';
+        return config('baseAdmin.config.models.namespace').'MediaModels\\FileModel';
     }
 }

@@ -5,12 +5,12 @@ return [
     |  Model settings
     | ------------------------------------------------------------------------------------------------
     */
-    'models'  => [
-        'namespace'  => 'App\\Models\\',
-        'user'       => App\Models\Users\User::class,
-        'role'       => App\Models\Users\UserRole::class,
+    'models' => [
+        'namespace' => 'App\\Models\\',
+        'user' => App\Models\Users\User::class,
+        'role' => App\Models\Users\UserRole::class,
         'permission' => App\Models\Users\UserPermission::class,
-        'setting'    => App\Models\Setting::class
+        'setting' => App\Models\Setting::class
     ],
 
 
@@ -25,14 +25,14 @@ return [
     'backEnd' => [
         'baseRoute' => 'admin',
         //Set Views options
-        'layout'    => 'baseAdmin::admin.layout',
+        'layout' => 'baseAdmin::admin.layout',
     ],
 
 
     'site' => [
         'baseRoute' => '',
         //Set Views options
-        'layout'    => 'baseAdmin::site.layout',
+        'layout' => 'baseAdmin::site.layout',
     ],
     /*
     |--------------------------------------------------------------------------
@@ -43,8 +43,8 @@ return [
     |
     */
 
-    'assets'        => [
-        'path'    => 'assets',
+    'assets' => [
+        'path' => 'assets',
         'version' => '?n9'
     ],
 
@@ -55,15 +55,26 @@ return [
 	 */
     'cacheSettings' => [
         'enable' => false,
-        'time'   => 15,//  cache time in minutes
+        'time' => 15,//  cache time in minutes
     ],
 
 
     'translatables' => [
+        /*
+        | Locales
+        |
+        | Contains an array with the applications available locales.
+        |
+        */
+        'locales' => [
+            'en',
+            'el',
+        ],
+
         'enable-TranslatableFields-OnModel' => true,
-        'input-locale-attribute'            => 'data-language',
-        'form-group-class'                  => 'form-group-translation',
-        'label-locale-indicator'            => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'
+        'input-locale-attribute' => 'data-language',
+        'form-group-class' => 'form-group-translation',
+        'label-locale-indicator' => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'
     ],
 
 ];

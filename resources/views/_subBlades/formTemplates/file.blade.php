@@ -21,7 +21,7 @@
             <div class="input-group mb-3 ">
                 @if(!$viewAndRemoveOnly)
                     <span data-trigger="fileinput"
-                          class="fileinput-filename  form-control text-truncate  ">@if($options['value']){!! is_string($options['value'])?$options['value']:$options['value']->first()->getFullName() !!}@endif</span>
+                          class="fileinput-filename  form-control text-truncate  ">@if($options['value']){!! is_string($options['value'])?$options['value']:$options['value']->first()->full_name !!}@endif</span>
                     {!!  Form::input($type, $name,null, array_merge( ['hidden'=>true, ] ))  !!}
                     <input type="hidden" name="remove_{{$name}}" data-id="{{\Illuminate\Support\Arr::get($options, 'id')}}">
                 @else

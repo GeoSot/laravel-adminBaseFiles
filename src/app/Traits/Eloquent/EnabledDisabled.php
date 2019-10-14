@@ -6,18 +6,41 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait EnabledDisabled
 {
+    /**
+     * @return bool
+     */
     public function isEnabled()
     {
-        return (bool)in_array('enabled', $this->getFillable()) ? $this->enabled : true;
+        return $this->hasAttribute('enabled') ? $this->enabled : true;
     }
 
+    /**
+     * @param  Builder  $builder
+     *
+     * @return Builder
+     */
     public function scopeEnabled(Builder $builder)
     {
-        return in_array('enabled', $this->getFillable()) ? $builder->where('enabled', true) : $builder;
+        return $this->hasAttribute('enabled') ? $builder->where('enabled', true) : $builder;
     }
 
+    /**
+     * @param  Builder  $builder
+     *
+     * @return Builder
+     */
     public function scopeDisabled(Builder $builder)
     {
-        return in_array('enabled', $this->getFillable()) ? $builder->where('enabled', false) : $builder;
+        return $this->hasAttribute('enabled') ? $builder->where('enabled', false) : $builder;
+    }
+
+    /**
+     * @param $attr
+     *
+     * @return bool
+     */
+    public function hasAttribute($attr)
+    {
+        return array_key_exists($attr, $this->attributes);
     }
 }

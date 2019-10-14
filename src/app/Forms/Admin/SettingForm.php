@@ -3,7 +3,8 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
 
-use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
+use App\Models\Setting;
+use Illuminate\Support\Arr;
 use Symfony\Component\Finder\Finder;
 
 class SettingForm extends BaseAdminForm
@@ -12,12 +13,7 @@ class SettingForm extends BaseAdminForm
     public function getFormFields()
     {
 
-        if ($this->isCreate) {
-            $this->getCreateFields();
-        } else {
-            $this->getEditFields();
-            // $this->viewOptions['tabs']=
-        }
+        $this->isCreate ? $this->getCreateFields() : $this->getEditFields();
 
     }
 
@@ -28,6 +24,7 @@ class SettingForm extends BaseAdminForm
         $this->add('sub_group', 'text', ['attr' => ['list' => "subGroups"]]);
         $this->add('group', 'text', ['attr' => ['list' => "groups"]]);
 
+
         $this->add('settingsFieldsInfo', 'static', [
             'label' => false,
             'wrapper' => ['class' => 'form-group  my-4 px-3 py-2 small'],
@@ -36,9 +33,7 @@ class SettingForm extends BaseAdminForm
 
 
         $this->add('type', 'choice', [
-            'choices' => collect($this->getModel()->choices)->mapWithKeys(function ($item) {
-                return [$item => trans($this->languageName . '.types.' . $item)];
-            })->toArray(),
+            'choices' => Arr::sort(Setting::getSettingTypes()),
             'empty_value' => $this->getSelectEmptyValueLabel(),
             'help_block' => [
                 'text' => $this->transHelpText('type'),
@@ -81,11 +76,9 @@ class SettingForm extends BaseAdminForm
 
     protected function getEditFirstFields()
     {
-
-        $this->add('slug', 'text', [
-            'attr' => ['readonly' => 'readonly'],
-        ]);
-        $this->add('type', 'text', ['attr' => ['readonly' => 'readonly']]);
+        $attr = ['attr' => ['readonly' => 'readonly']];
+        $this->add('slug', 'text', $attr);
+        $this->add('type', 'text', $attr);
 
     }
 
@@ -93,9 +86,11 @@ class SettingForm extends BaseAdminForm
     {
         $type = $this->getModel()->type;
 
-
         if (in_array($type, ['textarea', 'number'])) {
             $this->add('value', $type);
+        }
+        if ($type == 'boolean') {
+            $this->addCheckBox('value');
         }
 
         if ($type == 'timeToMinutes') {
@@ -127,24 +122,18 @@ class SettingForm extends BaseAdminForm
 
     protected function getEditSecondFields()
     {
-        $this->add('key', 'text', [
-            'attr' => ['readonly' => 'readonly'],
-        ]);
-
-        $this->add('sub_group', 'text', ['attr' => ['readonly' => 'readonly']]);
-
-        $this->add('group', 'text', ['attr' => ['readonly' => 'readonly']]);
+        $attr = ['attr' => ['readonly' => 'readonly']];
+        $this->add('key', 'text', $attr);
+        $this->add('sub_group', 'text', $attr);
+        $this->add('group', 'text', $attr);
     }
+
 
     protected function getEditRelatedModelFields()
     {
 
         $relatedModelName = $this->getModel()->model_type;
-
         if ($relatedModelName) {
-            //            $this->add('model_type', 'text', [
-            //                'attr' => ['readonly' => 'readonly'],
-            //            ]);
 
             $this->add('model_type', 'select', [
                 'choices' => $this->getModelNames()->toArray(),
@@ -157,7 +146,6 @@ class SettingForm extends BaseAdminForm
                 'property' => 'title',
                 'attr' => ['disabled'],
                 'empty_value' => $this->getSelectEmptyValueLabel(),
-                // 'query_builder' => function ( $el) {return $el->enabled();}
             ]);
         }
 

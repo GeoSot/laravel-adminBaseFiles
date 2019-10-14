@@ -1,15 +1,22 @@
 <!--com_formCard.blade -->
 <div class="card ">
-    <div class="card-header  {{ $class ?? 'bg-primary' }} text-white d-flex justify-content-between align-items-center py-1 pr-0">
-        <div class="title h5 mb-0 font-weight-normal">@isset($title) {!!$title !!} @endisset</div>
-        <button data-toggle="collapse" data-target="#{{$randId=uniqid('collapse_')}}" aria-expanded="true" aria-controls="{{$randId}}" type="button" class="btn text-reset">
+    @isset($title)
+        <div class="card-header  {{ $class ?? 'border-bottom border-primary' }} text-primary d-flex justify-content-between align-items-center py-1 pr-0 mouse-pointer"
+             data-toggle="collapse" data-target="#{{$randId=uniqid('collapse_')}}" aria-expanded="true" aria-controls="{{$randId}}">
+            <div class="title h5 mb-0 font-weight-normal">@isset($title) {!!$title !!} @endisset</div>
+            <span class="btn text-reset">
             <i class="fa fa-angle-up fa-lg " aria-hidden="true"></i>
-        </button>
-    </div>
-    <div class="collapse @if(!isset($show) or $show==true) show @endif" id="{{$randId}}">
-        <div class="card-body">
-            {!! $slot !!}
+        </span>
         </div>
-    </div>
+    @endisset
+    @isset($title)
+        <div class="collapse @if(!isset($show) or $show==true) show @endif" id="{{$randId}}">
+            @endisset
+            <div class="card-body">
+                {!! $slot !!}
+            </div>
+            @isset($title)
+        </div>
+    @endisset
 </div>
-    <!--com_formCard.blade end-->
+<!--com_formCard.blade end-->

@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -14,7 +15,7 @@ class MakeNewMigration extends Command
      *
      * @var string
      */
-    protected $signature = 'baseAdmin:makeNewMigration {name : The name of the Migration} {--create= : The name of the migration.}{--translatable=false : Whether the model has translated values.}';
+    protected $signature = 'baseAdmin:makeNewMigration {name : The name of the Migration} {--create= : The name of the migration.}';
 
     /**
      * The console command description.
@@ -29,7 +30,7 @@ class MakeNewMigration extends Command
     /**
      * Create a new migration install command instance.
      *
-     * @param  \Illuminate\Support\Composer $composer
+     * @param  Composer  $composer
      *
      * @return void
      */
@@ -47,36 +48,33 @@ class MakeNewMigration extends Command
 
         $table = Str::snake($this->input->getOption('create') ?: $name);
 
-        $finalName = str_replace('++', $table, $this->migrationString);
 
-
-        $this->writeMigration($finalName, $table, false);
-
-        if ($this->isTranslatableModel()) {
-            $this->writeMigration($finalName, $table, true);
-        }
+        $this->writeMigration($table, false);
 
     }
 
-    protected function writeMigration($name, $table, $isTranslation)
+    protected function writeMigration($table)
     {
-        if ($this->checkIfMigrationExist($name, $table)) {
+        $name = $this->getTableNAme($table);
+
+        if ($this->checkIfMigrationExist($name)) {
             $this->error("Migration {$this->getClassName($name)} class already exists.");
             return;
         }
-        $file = $this->getMigrationPath() . '\\' . $this->getDatePrefix() . '_' . $name($isTranslation ? '_translations' : '') . '.php';
+        $file = $this->getMigrationPath().'\\'.$this->getDatePrefix().'_'.$name.'.php';
 
-        $res = file_put_contents($file, $this->populateStub($table, $this->getClassName($name), $isTranslation));
+
+        $res = file_put_contents($file, $this->populateStub($table, $this->getClassName($name)));
         $this->info("Created Migration: {$file}");
         $this->composer->dumpAutoloads();
     }
 
     /**
      * @param $name
-     * @param $table
+     *
      * @return bool
      */
-    protected function checkIfMigrationExist($name, $table)
+    protected function checkIfMigrationExist($name)
     {
         if (class_exists($className = $this->getClassName($name))) {
             return true;
@@ -84,6 +82,7 @@ class MakeNewMigration extends Command
 
         $filesInFolder = File::allFiles($this->getMigrationPath());
         foreach ($filesInFolder as $path) {
+
             $exists = Str::contains($path->getBasename(), $name);
             if ($exists) {
                 return true;
@@ -96,7 +95,7 @@ class MakeNewMigration extends Command
     /**
      * Get the class name of a migration name.
      *
-     * @param  string $name
+     * @param  string  $name
      *
      * @return string
      */
@@ -126,37 +125,39 @@ class MakeNewMigration extends Command
     }
 
     /**
-     * @param string $table
-     * @param string $class
-     * @param bool $isTranslation
+     * @param  string  $table
+     * @param  string  $class
+     *
      * @return mixed|string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    protected function populateStub($table = 'DummyTable', $class = "DummyClass", $isTranslation = false)
+    protected function populateStub($table = 'DummyTable', $class = "DummyClass")
     {
-        $stub = File::get($this->getStubPath($isTranslation));
+        $stub = File::get($this->getStubPath());
         $stub = str_replace('DummyTable', $table, $stub);
         $stub = str_replace('DummyClass', $class, $stub);
-        $stub = str_replace('DummyForeignKey', Str::singular($table) . '_id', $stub);
+        $stub = str_replace('DummyForeignKey', Str::singular($table).'_id', $stub);
 
         return $stub;
     }
 
     /**
-     * @param $isForTranslation
+     *
      * @return string
      */
-    public function getStubPath($isForTranslation)
+    public function getStubPath()
     {
-        $stubName = $isForTranslation ? 'MigrationMigration' : 'Migration';
-        return __DIR__ . "/../stubs/$stubName.stub";
+        return __DIR__."/../stubs/Migration.stub";
     }
 
+
     /**
-     * @return bool
+     * @param $table
+     *
+     * @return string
      */
-    public function isTranslatableModel()
+    protected function getTableNAme($table)
     {
-        return filter_var($this->option('translatable'), FILTER_VALIDATE_BOOLEAN);
+        return str_replace('++', $table, $this->migrationString);
     }
 }

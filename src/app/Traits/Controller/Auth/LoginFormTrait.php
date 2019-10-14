@@ -10,7 +10,9 @@
 namespace GeoSot\BaseAdmin\App\Traits\Controller\Auth;
 
 
+use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\Facades\FormBuilder;
+use Kris\LaravelFormBuilder\Form;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 trait LoginFormTrait
@@ -19,8 +21,20 @@ trait LoginFormTrait
 
 
     /**
+     * Show the application's login form.
      *
-     * @return \Kris\LaravelFormBuilder\Form
+     * @return Response
+     */
+    public function showLoginForm()
+    {
+        $form = $this->getForm();
+
+        return view('baseAdmin::auth.login', compact('form'));
+    }
+
+    /**
+     *
+     * @return Form
      */
     public function getForm()
     {
@@ -34,7 +48,7 @@ trait LoginFormTrait
         $form->add('remember', 'checkbox');
         $form->add('login_btn', 'submit', [
             'wrapper' => ['class' => 'form-group text-center'],
-            'attr'    => ['class' => 'btn btn-outline-primary'],
+            'attr' => ['class' => 'btn btn-outline-primary'],
         ]);
 
         return $form;
@@ -46,8 +60,8 @@ trait LoginFormTrait
     protected function getFormOptions(): array
     {
         return [
-            'method'        => 'POST',
-            'url'           => route('login'),
+            'method' => 'POST',
+            'url' => route('login'),
             'language_name' => 'baseAdmin::auth.fields'
         ];
     }

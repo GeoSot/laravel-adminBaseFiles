@@ -10,35 +10,37 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use ReflectionClass;
+use ReflectionException;
 
 trait HasFrontEndConfigs
 {
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getDefaultFrontEndConfigValues()
     {
+
         $shortClassName = class_basename($this);
-        $namespace      = str_replace('App\\Models\\', '', (new \ReflectionClass($this))->getNamespaceName());
-        $namespace_low  = lcfirst($namespace);
-        $singular       = lcfirst($shortClassName);
-        $plural         = Str::plural($singular);
-        $routePrefix    = ($namespace_low == $plural) ? '' : $namespace_low . '.';
-        $routeSuffix    = Str::plural(lcfirst(Str::plural($shortClassName) == $namespace ? $shortClassName : str_replace(Str::singular($namespace), '', $shortClassName)));
+        $namespace = ltrim(str_replace('App\\Models', '', (new ReflectionClass($this))->getNamespaceName()), '\\');
+        $namespace_low = lcfirst($namespace);
+        $singular = lcfirst($shortClassName);
+        $plural = Str::plural($singular);
+        $routePrefix = ($namespace_low == $plural or !$namespace_low) ? '' : $namespace_low.'.';
+        $routeSuffix = Str::plural(lcfirst(Str::plural($shortClassName) == $namespace ? $shortClassName : str_replace(Str::singular($namespace), '', $shortClassName)));
+
+        $base = [
+            'langDir' => (($namespace_low) ? $namespace_low.'/' : '').$singular,
+            'viewDir' => (($namespace_low) ? $namespace_low.'.' : '').$plural,
+            'route' => $routePrefix.$routeSuffix,
+        ];
 
         return [
-            'admin' => [
-                'langDir' => $namespace_low . '/' . $singular,
-                'viewDir' => $namespace_low . '.' . $plural,
-                'route'   => $routePrefix . $routeSuffix,
-            ],
-            'site'  => [
-                'langDir' => $namespace_low . '/' . $singular,
-                'viewDir' => $namespace_low . '.' . $plural,
-                'route'   => $routePrefix . $routeSuffix,
-            ],
+            'admin' => $base,
+            'site' => $base,
         ];
 
     }
@@ -49,19 +51,17 @@ trait HasFrontEndConfigs
      * @param string      $side
      * @param string|null $arg
      *
-     * @return bool|\Illuminate\Support\Collection|mixed
-     * @throws \ReflectionException
+     * @return bool|Collection|mixed
+     * @throws ReflectionException
      */
     public function getFrontEndConfig(string $side = 'admin', string $arg = null)
     {
-        if (!in_array($side, ['admin', 'site'])) {
-            return false;
-        }
-        $frontEndConfigValues = (property_exists($this, 'frontEndConfigValues') and isset($this->frontEndConfigValues)) ? $this->frontEndConfigValues : [];
-        foreach ($this->getDefaultFrontEndConfigValues() as $key => $item) {
-            $frontEndConfigValues[$key] = array_merge($this->getDefaultFrontEndConfigValues() [$key], Arr::get($frontEndConfigValues, $key, []));
-        }
-        $collection = collect(array_merge($frontEndConfigValues[$side], ['model' => class_basename($this), 'fullModel' => get_class($this)]));
+//        $frontEndConfigValues = $this->frontEndConfigValues ?? [];
+//        foreach ($this->getDefaultFrontEndConfigValues() as $key => $item) {
+//            $frontEndConfigValues[$key] = array_merge($this->getDefaultFrontEndConfigValues() [$key], Arr::get($frontEndConfigValues, $key, []));
+//        }
+        $frontEndConfigValues = array_replace_recursive($this->getDefaultFrontEndConfigValues(), $this->frontEndConfigValues ?? []);
+        $collection = collect(array_merge(Arr::get($frontEndConfigValues, $side, []), ['model' => class_basename($this), 'fullModel' => get_class($this)]));
 
         return ($arg) ? $collection->get($arg) : $collection;
     }
@@ -70,30 +70,21 @@ trait HasFrontEndConfigs
      * @param string      $side
      * @param string|null $arg
      *
-     * @return bool|\Illuminate\Support\Collection|mixed
-     * @throws \ReflectionException
+     * @return bool|Collection|mixed
+     * @throws ReflectionException
      */
     public function getFrontEndConfigPrefixed(string $side = 'admin', string $arg = null)
     {
-        if (!in_array($side, ['admin', 'site'])) {
-            return false;
-        }
-
         $collection = $this->getFrontEndConfig($side)->map(function ($item, $key) use ($side) {
 
-            switch ($key) {
-                case 'langDir':
-                    return $side . '/' . $item;
-                    break;
-                case 'viewDir':
-                    return $side . '.' . $item;
-                    break;
-                case 'route':
-                    return $side . '.' . $item;
-                    break;
-                default:
-                    return $item;
+            if ($key == 'langDir') {
+                return $side.'/'.$item;
             }
+            if (in_array($key, ['viewDir', 'route'])) {
+                return $side.'.'.$item;
+            }
+            return $item;
+
         });
 
         return ($arg) ? $collection->get($arg) : $collection;
@@ -105,7 +96,7 @@ trait HasFrontEndConfigs
      * @param array  $options
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getDashBoardLink(string $linkTitle = 'id', bool $appendAsString = false, $options = [])
     {
@@ -118,7 +109,7 @@ trait HasFrontEndConfigs
      * @param bool   $appendAsString
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getSiteLink(string $linkTitle = 'id', bool $appendAsString = false)
     {
@@ -133,7 +124,7 @@ trait HasFrontEndConfigs
      * @param array  $options
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getLink(string $linkTitle = 'id', bool $appendAsString = false, $side = 'admin', $options = [])
     {

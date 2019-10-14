@@ -4,16 +4,66 @@ namespace GeoSot\BaseAdmin\App\Models;
 
 
 use Carbon\Carbon;
-use GeoSot\BaseAdmin\Services\Settings;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
+use GeoSot\BaseAdmin\Facades\Settings;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
+/**
+ * GeoSot\BaseAdmin\App\Models\Setting
+ *
+ * @mixin Eloquent
+ * @property int $id
+ * @property string $slug
+ * @property string $key
+ * @property string|null $group
+ * @property string|null $sub_group
+ * @property string|null $value
+ * @property string $type
+ * @property string|null $notes
+ * @property string|null $model_type
+ * @property int|null $model_id
+ * @property int $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property int|null $modified_by
+ * @property-read mixed $slug_key
+ * @property-read mixed $value_parsed
+ * @property-read mixed $value_parsed_to_human
+ * @property-read Model|Eloquent $ownerModel
+ * @method static Builder|BaseModel disabled()
+ * @method static Builder|BaseModel enabled()
+ * @method static Builder|Setting findSimilarSlugs($attribute, $config, $slug)
+ * @method static Builder|Setting newModelQuery()
+ * @method static Builder|Setting newQuery()
+ * @method static Builder|Setting query()
+ * @method static Builder|Setting whereCreatedAt($value)
+ * @method static Builder|Setting whereDeletedAt($value)
+ * @method static Builder|Setting whereEnabled($value)
+ * @method static Builder|Setting whereGroup($value)
+ * @method static Builder|Setting whereId($value)
+ * @method static Builder|Setting whereKey($value)
+ * @method static Builder|Setting whereModelId($value)
+ * @method static Builder|Setting whereModelType($value)
+ * @method static Builder|Setting whereModifiedBy($value)
+ * @method static Builder|Setting whereNotes($value)
+ * @method static Builder|Setting whereSlug($value)
+ * @method static Builder|Setting whereSubGroup($value)
+ * @method static Builder|Setting whereType($value)
+ * @method static Builder|Setting whereUpdatedAt($value)
+ * @method static Builder|Setting whereValue($value)
+ */
 class Setting extends BaseModel
 {
-    //use Sluggable;
+    use Sluggable;
 
     public $choices = [
         'string',
+        'boolean',
         'textarea',
         'number',
         'timeToMinutes',
@@ -41,8 +91,6 @@ class Setting extends BaseModel
         'modified_by',
     ];
 
-    protected $casts = [//'enabled' => 'boolean',
-    ];
 
     protected $appends = [
         'value_parsed',
@@ -51,10 +99,9 @@ class Setting extends BaseModel
     protected $frontEndConfigValues = [
         'admin' => [
             'langDir' => 'settings/setting',
-            'viewDir' => 'settings',
-            'route' => 'settings',
         ],
     ];
+
     protected $errorMessages = [
         'key' => ['unique' => 'keySubGroupGroupUnique'],
         'sub_group' => ['unique' => 'keySubGroupGroupUnique'],
@@ -75,7 +122,7 @@ class Setting extends BaseModel
         });
         static::saved(function ($model) {
             Settings::flushKey($model->slug);
-            Settings::flushKey('group.' . $model->group);
+            Settings::flushKey('group.'.$model->group);
         });
     }
 
@@ -102,7 +149,7 @@ class Setting extends BaseModel
 
     public function rules(array $merge = [])
     {
-        $textOnUpdate = is_null($this->id) ? '' : ',' . $this->id;
+        $textOnUpdate = is_null($this->id) ? '' : ','.$this->id;
 
         $uniqueCombinationRule = Rule::unique($this->getTable())->where(function ($query) {
             return $query->where('key', request()->input('key'))
@@ -119,7 +166,7 @@ class Setting extends BaseModel
             'sub_group' => ['required_with:group', $uniqueCombinationRule],
             'group' => [$uniqueCombinationRule],
             'type' => 'required',
-            'slug' => "min:3|unique:{$this->getTable()},slug" . $textOnUpdate,
+            'slug' => "min:3|unique:{$this->getTable()},slug".$textOnUpdate,
         ], $merge, $this->rules);
     }
 
@@ -155,7 +202,7 @@ class Setting extends BaseModel
             return $this->key;
         }
 
-        return $this->key . '-' . lcfirst(class_basename($this->model_type)) . '-' . $this->model_id;
+        return $this->key.'-'.lcfirst(class_basename($this->model_type)).'-'.$this->model_id;
     }
 
 
@@ -168,7 +215,7 @@ class Setting extends BaseModel
 
     public function getValueParsedToHumanAttribute()
     {
-        return implode(', ', (array)$this->getValueParsedAttribute());
+        return implode(', ', (array) $this->getValueParsedAttribute());
     }
 
     public function getValueParsedAttribute()
@@ -179,18 +226,35 @@ class Setting extends BaseModel
         }
 
         if (in_array($this->type, ['number', 'timeToMinutes'])) {
-            return (float)$value;
+            return (float) $value;
         }
         if (in_array($this->type, ['collectionSting', 'collectionNumber'])) {
             return array_map(function ($it) {
-                return ($this->type == 'collectionNumber') ? (float)$it : $it;
-            }, (array)json_decode($value));
+                return ($this->type == 'collectionNumber') ? (float) $it : $it;
+            }, (array) json_decode($value));
         }
         if ($this->type == 'dateTime') {
             return Carbon::parse($value);
         }
+        if ($this->type == 'boolean') {
+            return (bool) $value;
+        }
 
         return $value;
 
+    }
+
+    public static function getSettingTypes()
+    {
+        return [
+            'string' => 'String',
+            'textarea' => 'Textarea',
+            'boolean' => 'Boolean',
+            'number' => 'Number',
+            'timeToMinutes' => 'Time To Minutes',
+            'dateTime' => 'DateTime',
+            'collectionSting' => 'Collection of Strings',
+            'collectionNumber' => 'Collection of Numbers',
+        ];
     }
 }

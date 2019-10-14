@@ -10,15 +10,18 @@ namespace GeoSot\BaseAdmin\Services;
 
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Settings
  */
 class Settings
 {
+
     /**
      * config
      *
@@ -28,7 +31,6 @@ class Settings
     protected $cacheIsEnabled;
     protected $cachedTime;
     protected $settingsModel;
-    protected $cache;
 
 
     public function __construct()
@@ -38,12 +40,12 @@ class Settings
         $this->cachedTime = Carbon::now()->addMinutes(config('baseAdmin.config.cacheSettings.time', 15));
     }
 
+
     /**
-     * Gets Group Of Values SeparatedBy '.'
+     * @param  string  $groupKey
      *
-     * @param string $groupKey
-     *
-     * @return Collection
+     * @return mixed|null
+     * @throws InvalidArgumentException
      */
     public function getGroup(string $groupKey)
     {
@@ -61,12 +63,12 @@ class Settings
 
     }
 
+
     /**
-     * Checks if setting exists.
-     *
-     * @param $key
+     * @param  string  $key
      *
      * @return bool
+     * @throws InvalidArgumentException
      */
     public function hasGroup(string $key)
     {
@@ -74,39 +76,47 @@ class Settings
     }
 
 
-    //    /**
-    //     * Store value into registry.
-    //     *
-    //     * @param string $key
-    //     * @param mixed  $value
-    //     * @param string $type
-    //     *
-    //     * @return boolean
-    //     */
-    //    public function set(string $key, $value = null, $type = null)
-    //    {
-    //        $setting = Setting::where('key', $key)->first();
-    //        //Protect Developer's Mistake
-    //        if (is_null($setting) and is_null($type)) {
-    //            return false;
-    //        }
-    //        Setting::updateOrCreate([
-    //            'key' => $key
-    //        ], [
-    //            'value' => $value,
-    //            'type'  => is_null($type) ? $setting->type : $type,
-    //        ]);
-    //        $this->flushKey($key);
-    //
-    //        return true;
-    //    }
+    /**
+     * Store value into registry.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @param  string  $type
+     *
+     * @param  Model|null  $relatedModel
+     * @return boolean
+     */
+    public function set(string $key, $value, $type, Model $relatedModel = null)
+    {
+//        $setting=$this->get()
+//        $validator = Validator::make($request->all(), [
+//            'email' => 'required|email|unique:users',
+//            'name' => 'required|string|max:50',
+//            'password' => 'required'
+//        ]);
+//
+//        if ($validator->fails()) {
+//        }
+//        $setting = Setting::where('key', $key)->first();
+//        //Protect Developer's Mistake
+//
+//        Setting::updateOrCreate([
+//            'key' => $key
+//        ], [
+//            'value' => $value,
+//            'type' => is_null($type) ? $setting->type : $type,
+//        ]);
+//        $this->flushKey($key);
+//
+//        return true;
+    }
+
 
     /**
-     * Checks if setting exists.
-     *
-     * @param $key
+     * @param  string  $key
      *
      * @return bool
+     * @throws InvalidArgumentException
      */
     public function has(string $key)
     {
@@ -118,18 +128,21 @@ class Settings
         return !is_null($row);
     }
 
+    /**
+     * @return Repository
+     */
     private function getCache()
     {
         return Cache::store('file');
     }
 
+
     /**
-     * Gets a value.
-     *
-     * @param string $key
-     * @param string $default
+     * @param  string  $key
+     * @param  null  $default
      *
      * @return mixed
+     * @throws InvalidArgumentException
      */
     public function get(string $key, $default = null)
     {
@@ -144,19 +157,19 @@ class Settings
         return $this->cacheKey($key, $returnValue);
     }
 
+    /**
+     * @return Model
+     */
     protected function getSettingsModelInstance()
     {
-
         return $this->settingsModel;
-
     }
 
     /**
      * REFRESH THE Cache Key
      *
-     * @param string $key
-     * @param mixed $value
-     *
+     * @param  string  $key
+     * @param  mixed  $value  *
      *
      * @return mixed
      */
@@ -170,46 +183,49 @@ class Settings
     }
 
     /**
-     * @param string $key
+     * @param  string  $key
      *
      * @return string
      */
     protected function getSafeGroupKey(string $key)
     {
-        return 'group.' . str_replace('group', '', $key);
+        return 'group.'.str_replace('group', '', $key);
     }
 
+    /**
+     * @return bool
+     */
     public function cacheAll()
     {
         if ($this->cacheIsEnabled) {
             $this->getSettingsModelInstance()::all()->each(function ($item) {
                 $this->cacheKey($item->slug, $item->parsed_value);
             });
+            return true;
         }
+        return false;
     }
 
     /**
      * Deletes the SETTING
      *
-     * @param string $key
-     *
+     * @param  string  $key
+     * @return bool
      */
     public function deleteKey(string $key)
     {
         $this->flushKey($key);
-        $this->getSettingsModelInstance()::where('slug', $key)->delete();
+        return $this->getSettingsModelInstance()::where('slug', $key)->delete();
     }
 
     /**
      * REFRESH THE Cache Key
      *
-     * @param string $key
-     *
+     * @param  string  $key
+     * @return bool
      */
     public function flushKey(string $key)
     {
-        //if ($this->cacheIsEnabled) {
-        $this->getCache()->forget($key);
-        // }
+        return $this->getCache()->forget($key);
     }
 }

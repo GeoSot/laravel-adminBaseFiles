@@ -7,13 +7,13 @@
         <div class="card-body">
 
                 @foreach( $viewVals->get('records') as  $index=>$record)
-                    <div class="h4"> @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.general.{$index}")</div>
+                <div class="h4"> @lang("{$viewVals->get('modelLang')}.general.{$index}")</div>
                 <div class="table-responsive small">
                             <table class="table  table-hover  table-sm mb-5">
                                 <thead class=" @if($index=='jobs') bg-primary @else bg-danger @endif text-white">
                                 <tr>
                                     @foreach( $record->get('listable') as $name)
-                                        <th scope="col"> @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.fields.{$name}")</th>
+                                        <th scope="col"> @lang("{$viewVals->get('modelLang')}.fields.{$name}")</th>
                                     @endforeach
                                 </tr>
                                 </thead>

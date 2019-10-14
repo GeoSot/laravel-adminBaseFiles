@@ -9,20 +9,36 @@
 namespace GeoSot\BaseAdmin\App\Traits\Controller\Auth;
 
 
-use Kris\LaravelFormBuilder\Facades\FormBuilder;
+use Illuminate\Http\Response;
+use Kris\LaravelFormBuilder\Form;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 trait ForgotPasswordFormTrait
 {
 
 
+    use FormBuilderTrait;
+
+    /**
+     * Display the form to request a password reset link.
+     *
+     * @return Response
+     */
+    public function showLinkRequestForm()
+    {
+        $form = $this->getForm();
+
+        return view('baseAdmin::auth.passwords.email', compact('form'));
+    }
+
     /**
      *
-     * @return \Kris\LaravelFormBuilder\Form
+     * @return Form
      */
     public function getForm()
     {
 
-        $form = FormBuilder::plain($this->getFormOptions())->add('email', 'email', [
+        $form = $this->plain($this->getFormOptions())->add('email', 'email', [
             'rules' => 'required|email',
             'value' => request()->input('email')
         ])->add('forgotPass_btn', 'submit', [

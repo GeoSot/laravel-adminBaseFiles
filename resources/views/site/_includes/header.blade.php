@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg  bg-white navbar-light shadow-sm " style="font-size: 1rem">
         <div class="container-fluid px-0 ">
             <a href="{{ route('home') }}" class="navbar-brand  px-sm-2 rounded" title=" @lang($packageVariables->get('nameSpace').'site/generic.app.title')">
-                @lang($packageVariables->get('nameSpace').'site/generic.app.title')
+                @lang($packageVariables->get('nameSpace').'site/app.title')
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbarToggler" aria-controls="mainNavbarToggler" aria-expanded="false"

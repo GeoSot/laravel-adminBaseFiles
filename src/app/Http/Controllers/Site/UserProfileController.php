@@ -7,30 +7,19 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 use App\Models\Users\User;
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseFrontController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UserProfileController extends BaseFrontController
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
 
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->_class = User::class;
-        $this->initializeModelValues();
-
-    }
+    protected $_class = User::class;
 
     /**
      * Show the form for editing the specified resource.
      *
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit()
     {
@@ -44,9 +33,9 @@ class UserProfileController extends BaseFrontController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request)
     {
@@ -56,7 +45,7 @@ class UserProfileController extends BaseFrontController
 
         if (!is_null($request->input('password'))) {
             $rules = array_merge($rules, [
-                'current_password' => 'required|samePassword:' . $user->getAuthPassword(),
+                'current_password' => 'required|samePassword:'.$user->getAuthPassword(),
             ]);
         }
         $request->validate($rules, $this->getModelValidationMessages());

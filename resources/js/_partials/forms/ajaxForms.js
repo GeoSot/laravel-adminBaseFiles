@@ -1,9 +1,9 @@
-window.aw = window.aw || {};
-window.aw.forms = window.aw.forms || {};
-aw.forms.ajaxified = window.aw.ajaxified || {};
+window.BaseAdmin = window.BaseAdmin || {};
+window.BaseAdmin.forms = window.BaseAdmin.forms || {};
+BaseAdmin.forms.ajaxified = window.BaseAdmin.ajaxified || {};
 
 
-aw.forms.errors = function ($form) {
+BaseAdmin.forms.errors = function ($form) {
 
     const classes = {
         group: "form-group",
@@ -73,10 +73,10 @@ aw.forms.errors = function ($form) {
  * @param   formSelector
  * @return AjaxObj
  */
-aw.forms.ajaxify = function (formSelector) {
-    if (!(this instanceof aw.forms.ajaxify)) return new aw.forms.ajaxify(name);
-    if (aw.forms.ajaxified && aw.forms.ajaxified[formSelector]) {
-        return aw.forms.ajaxified[formSelector];
+BaseAdmin.forms.ajaxify = function (formSelector) {
+    if (!(this instanceof BaseAdmin.forms.ajaxify)) return new BaseAdmin.forms.ajaxify(name);
+    if (BaseAdmin.forms.ajaxified && BaseAdmin.forms.ajaxified[formSelector]) {
+        return BaseAdmin.forms.ajaxified[formSelector];
     }
     this.$form = $(formSelector);
     if (!this.$form.length) {
@@ -89,7 +89,7 @@ aw.forms.ajaxify = function (formSelector) {
     this.id = $(formSelector).attr('id');
     this._callback = null;
     this.errorsObj = null;
-    this.spinnerId = 'formSpinner_' + aw.uuid();
+    this.spinnerId = 'formSpinner_' + BaseAdmin.uuid();
 
     let destroyListeners = function () {
         $(_self.form).off("submit.ajaxify");
@@ -132,11 +132,10 @@ aw.forms.ajaxify = function (formSelector) {
             dataType: "json",
         }).fail(function (data) {
             console.log(data);
-            aw.tt = data;
             //  console.log(data);
             let text = data.statusText + '<br>  Error Code: ' + data.status;
             if (data.responseJSON) {
-                _self.errorsObj = new aw.forms.errors(_self.$form).setErrors(data.responseJSON.errors);
+                _self.errorsObj = new BaseAdmin.forms.errors(_self.$form).setErrors(data.responseJSON.errors);
                 _self.errorsObj.appendFormErrors();
                 text = _self.errorsObj.getErrorsAsText() || data.responseJSON.message || text;
             }
@@ -156,7 +155,7 @@ aw.forms.ajaxify = function (formSelector) {
     };
     this.destroy = function () {
         destroyListeners();
-        delete  window.aw.forms.ajaxified[_self.form];
+        delete window.BaseAdmin.forms.ajaxified[_self.form];
     };
     let getSpinnerWrapper = () => {
         return '<div id="' + _self.spinnerId + '" class="spinnerWrapper position-absolute d-flex justify-content-center align-items-center" ' +
@@ -165,17 +164,17 @@ aw.forms.ajaxify = function (formSelector) {
             '</div>'
     };
 
-    window.aw.forms.ajaxified[_self.form] = _self;
+    window.BaseAdmin.forms.ajaxified[_self.form] = _self;
     return _self;
 };
 
 
-aw.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false) {
+BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false) {
 
     if (!$(formSelector).length || !$(modalSelector).length) {
         return;
     }
-    let form = new aw.forms.ajaxify(formSelector);
+    let form = new BaseAdmin.forms.ajaxify(formSelector);
     $(modalSelector).on('hide.bs.modal', function (e) {
         form.clearInputs();
         if (destroyOnClose) {
@@ -189,11 +188,11 @@ aw.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToRe
 
     form.onSubmit(function (instance, jqxhr) {
         jqxhr.done(function (data) {
-            // aw.DebugMsg(formSelector, instance, 'ajaxifyForm taskForm');
+            // BaseAdminDebugMsg(formSelector, instance, 'ajaxifyForm taskForm');
             instance.clearInputs();
             toastr.success(data.msg.msg, data.msg.title);
             $(modalSelector).modal('hide');
-            aw.ajaxLoadWrappers(wrapperToReload);
+            BaseAdminajaxLoadWrappers(wrapperToReload);
         });
     });
 };
@@ -204,9 +203,9 @@ aw.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToRe
 *
     <script data-comment="newPostAjax">
 
-     new aw.forms.ajaxify("form#newPostForm").onSubmit(function (instance, jqxhr) {
+     new BaseAdmin.forms.ajaxify("form#newPostForm").onSubmit(function (instance, jqxhr) {
          jqxhr.done(function (data) {
-             aw.DebugMsg('form#newPostForm', instance, 'ajaxifyForm newPostForm');
+             BaseAdminDebugMsg('form#newPostForm', instance, 'ajaxifyForm newPostForm');
              instance.clearInputs();
              toastr.success(data.responseText, '{{  __('message.success_title') }}');
              $('.js-listWrapper').load(location.href + ' .js-listWrapper  > *', function (response) {

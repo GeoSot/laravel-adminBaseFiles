@@ -1,9 +1,9 @@
 <?php
 return [
-    'app' => [
-        'title' => 'Support Dash',
-        'version' => '.v1'
+    'sideMenuCustom' => [
+        'logs' => 'Logs'
     ],
+
     'menu' => [
         'dashboard' => 'Dashboard',
         'site' => 'Site',
@@ -19,12 +19,7 @@ return [
             'isImpersonating' => 'You are impersonating',
         ],
     ],
-    'sideMenuCustom' => [
-        'configurations' => 'Configurations',
-        'dotenveditor' => '.Env Editor',
-        'logs' => 'Log Files',
-        'translation' => 'Translations Manager'
-    ],
+
     'messages' => [
         'crud' => [
             'create' => [
@@ -133,7 +128,9 @@ return [
         'btnSite' => 'Site',
         'btnAdmin' => 'Dashboard',
     ],
-
+    'internationalization' => [
+        'formAvailableLanguages' => 'Available languages'
+    ],
     'permissionDenied' => [
         'title' => 'Warning',
         'msg' => "You don't have the proper Permission",

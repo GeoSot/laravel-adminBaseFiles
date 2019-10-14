@@ -1,10 +1,12 @@
 @extends($packageVariables->get('adminLayout'))
 
 @php
+    use Illuminate\Support\Collection;
+    /**
+    * @var Collection $viewVals
+    */
     $action=$viewVals->get('action');
     $btnsLang=$viewVals->get('baseLang').'.button';
-    //  $baseRoute=$viewVals->get('baseRoute');
-    //   $params=$viewVals->get('params');
     $options=$viewVals->get('options')->get("editActions");
     $modelClass=lcfirst($viewVals->get('modelClassShort'));
     $allowToHandle=$viewVals->get('record')?$viewVals->get('record')->allowedToHandle():true;
@@ -18,7 +20,7 @@
             @if(in_array('save',$viewVals->get('options')->get('editActions')) and auth()->user()->can('admin.update-'.$modelClass) and $allowToHandle)
                 <button id="save" class="btn btn-success  my-1" data-value="save" onclick="document.getElementById('permissionsForm').submit();">
                     <span class="btn-label"><i class="fa fa-floppy-o"></i></span>
-                    <span class="btn_label"> @lang($packageVariables->get('nameSpace').$btnsLang.'.save')</span>
+                    <span class="btn_label"> @lang($btnsLang.'.save')</span>
                 </button>
             @endif
         @endslot

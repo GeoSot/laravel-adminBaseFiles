@@ -1,6 +1,6 @@
 <?php
 return [
-    'permissionsCheckOnSideBar' => true,
+    'permissionsCheckOnSideBar' => false,
 
     'routes' => [
         'user' => [
@@ -10,13 +10,13 @@ return [
             'makeFiles' => false,
             'translatable' => ['customer', 'contact'],
         ],
-//        'customer' => [
-//            'menus' => ['customer', 'contact'],
-//            'icon' => ['class' => 'fa  fa-address-book', 'style' => 'color:#52c1dc',],
-//            'order' => 30,
-//            'makeFiles' => false,
-//            'separatorAfter' => false
-//        ],
+        'page' => [
+            'menus' => ['page', 'block', 'area'],
+            'icon' => ['class' => 'fa  fa-file-text-o', 'style' => 'color:#52c1dc',],
+            'order' => 30,
+            'makeFiles' => true,
+            'translatable' => ['page', 'block', 'area']
+        ],
 //        'payment' => [
 //            'menus' => ['payment', 'status'],
 //            'icon' => ['class' => 'fa  fa-money', 'style' => 'color:#73f3a2',],
@@ -32,34 +32,7 @@ return [
 //            'excludeFromSideBar' => ['message', 'task', 'messageNote'],
 //            'separatorAfter' => true
 //        ],
-//        'domainContract' => [
-//            'menus' => ['domainContract', 'category',],
-//            'icon' => ['class' => 'fa  fa-sitemap', 'style' => 'color:#d552dc',],
-//            'order' => 70,
-//            'makeFiles' => false
-//        ],
-//
-//        'hostingContract' => [
-//            'menus' => ['hostingContract', 'category',],
-//            'icon' => ['class' => 'fa  fa-sitemap', 'style' => 'color:#ccdc52',],
-//            'order' => 80,
-//            'makeFiles' => false
-//        ],
-//
-//        'supportContract' => [
-//            'menus' => ['supportContract', 'category',],
-//            'icon' => ['class' => 'fa  fa-life-ring', 'style' => 'color:#73f3a2',],
-//            'order' => 90,
-//            'makeFiles' => false,
-//        ],
-//
-//        'updateContract' => [
-//            'menus' => ['updateContract', 'category',],
-//            'icon' => ['class' => 'fa  fa-wrench', 'style' => 'color:#e9d7a2'],
-//            'order' => 100,
-//            'makeFiles' => false,
-//            'separatorAfter' => true
-//        ],
+
 //        'project' => [
 //            'menus' => ['project', 'fieldType', 'fieldGroup'],
 //            'icon' => ['class' => 'fa  fa-product-hunt', 'style' => 'color:#52c1dc',],
@@ -67,33 +40,32 @@ return [
 //            'makeFiles' => false,
 //            'excludeFromSideBar' => ['user', 'emailAccount',],
 //        ],
-//        'server' => [
-//            'icon' => ['class' => 'fa  fa-tasks', 'style' => 'color:#8bafe6',],
-//            'order' => 130,
-//            'makeFiles' => false,
-//            'separatorAfter' => true
-//        ],
+
+
+        'setting' => [//I use it to autoRegister Routes
+            'makeFiles' => false,
+            'excludeFromSideBar' => ['setting']
+        ],
 //
-//        'blacklistMail' => [
-//            'makeFiles' => false,
-//            'excludeFromSideBar' => ['blacklistMail']
-//        ],
-//        'notificationTemplate' => [
-//            'makeFiles' => false,
-//            'excludeFromSideBar' => ['notificationTemplate']
-//        ],
-//        'contractTask' => [
-//            'makeFiles' => false,
-//            'excludeFromSideBar' => ['contractTask']
-//        ],
-//        'setting' => [
-//            'makeFiles' => false,
-//            'excludeFromSideBar' => ['setting']
-//        ],
 
     ],
 
     'customMenuItems' => [
+        'media' => [
+            'menus' => [
+                'image' => [
+                    'trans' => 'mediaModels/imageModel.general.menuTitle',
+                    'route' => 'images.index'
+                ],
+                'file' => [
+                    'trans' => 'mediaModels/fileModel.general.menuTitle',
+                    'route' => 'files.index'
+                ],
+            ],
+            'icon' => ['class' => 'fa  fa-picture-o', 'style' => 'color:rgb(124, 255, 130)',],
+            'order' => 140,
+            'trans' => 'sideMenu.custom.media'
+        ],
         'development' => [
             'menus' => [
                 'setting' => [
@@ -101,22 +73,14 @@ return [
                     'route' => 'settings.index'
                     //'url'=>'www.klkk'
                 ],
-                'blacklistMail' => [
-                    'trans' => 'blacklistMails/blacklistMail.general.menuTitle',
-                    'route' => 'blacklistMails.index'
-                ],
-                'notificationTemplate' => [
-                    'trans' => 'notificationTemplates/notificationTemplate.general.menuTitle',
-                    'route' => 'notificationTemplates.index'
-                ],
                 'dotenveditor' => [
-                    'trans' => 'generic.sideMenuCustom.dotenveditor',
-                   // 'url' => '/admin/configurations/enveditor',
-                    'route'=>'env-editor.index'
+                    'trans' => 'sideMenu.custom.dotenveditor',
+                    // 'url' => '/admin/configurations/enveditor',
+                    'route' => 'env-editor.index'
 
                 ],
                 'translation' => [
-                    'trans' => 'generic.sideMenuCustom.translation',
+                    'trans' => 'sideMenu.custom.translation',
                     'url' => '/admin/translations'
 
                 ],
@@ -135,7 +99,7 @@ return [
             ],
             'icon' => ['class' => 'fa  fa-cog', 'style' => 'color:#ff887c',],
             'order' => 150,
-            'trans' => 'generic.sideMenuCustom.configurations'
+            'trans' => 'sideMenu.custom.configurations'
         ],
         //        'testCustomMenu'      => [
         //            'trans' => 'settings/setting.general.menuTitle',
@@ -152,13 +116,13 @@ return [
 
     //Listing of Extra  Permissions In Order To Be able to Create them from baseAdmin:makePermissionsForModel
     'extraPermissions' => [
-        'delete-file',
-        'index-dotenveditor',
-        'index-job',
-        'retry-job',
-        'flush-job',
-        'index-log',
-        'delete-log',
+        'dotenveditor' => ['index'],
+        'job' => ['index', 'retry', 'flush'],
+        'log' => ['index', 'delete'],
+        'setting' => ['all'],
+        'fileModel' => ['all'],
+        'imageModel' => ['all'],
+
     ]
 ];
 

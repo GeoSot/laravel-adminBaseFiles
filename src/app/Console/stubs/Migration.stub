@@ -17,7 +17,7 @@ class DummyClass extends Migration
     {
         Schema::create('DummyTable', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('title')->unique();
             //$table->string('slug')->unique();
             $table->text('notes')->nullable();
@@ -30,8 +30,8 @@ class DummyClass extends Migration
             //$table->softDeletes();
 
             //--Foreign keys
-            //$table->unsignedInteger('user_id')->nullable();
-            $table->unsignedInteger('modified_by')->nullable();
+            //$table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('modified_by')->nullable();
 
            //--Foreign keys RULEs
            //$table->foreign('user_id')->references('id')->on('users')->onDelete('set null');

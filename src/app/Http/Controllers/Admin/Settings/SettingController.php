@@ -3,31 +3,22 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
 
-
-use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use App\Models\Setting;
+use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class SettingController extends BaseAdminController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->_class = Setting::class;
-        $this->initializeModelValues();
 
+    protected $_class = Setting::class;
 
-        //OVERRIDES
-        $this->_useBasicForm = false;
-        $this->_useGenericViewForm = false;
-        $this->_useGenericViewIndex = false;
+    //OVERRIDES
+    protected $allowedActionsOnIndex = ['create', 'edit'];
+    protected $allowedActionsOnCreate = ['save',];
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy'];
 
-        $this->allowedActionsOnIndex = ['create', 'edit'];
-        $this->allowedActionsOnCreate = ['save',];
-        $this->allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy'];
-
-    }
 
     public function afterFilteringIndex(Request &$request, Collection &$params, &$query, &$extraOptions)
     {
@@ -63,9 +54,9 @@ class SettingController extends BaseAdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Setting $setting
+     * @param  Setting  $setting
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Setting $setting)
     {
@@ -77,10 +68,10 @@ class SettingController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  Setting $setting
+     * @param  Request  $request
+     * @param  Setting  $setting
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Setting $setting)
     {

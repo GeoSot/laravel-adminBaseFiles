@@ -23,7 +23,7 @@
                  <form action="{{route( $viewVals->get('modelRoute').".retry",$job->id)}}" method="POST" class="form-inline  ">
                     @method('PATCH')
                      @csrf
-                     <button type="submit" class="btn  btn-primary btn-sm" title=" @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.buttons.retry")">
+                     <button type="submit" class="btn  btn-primary btn-sm" title=" @lang("{$viewVals->get('modelLang')}.buttons.retry")">
                      <i class="fa fa-refresh"></i>
                       </button>
                 </form>
@@ -32,14 +32,14 @@
                  <form action="{{route( $viewVals->get('modelRoute').".flush",$job->id)}}" method="POST" class="form-inline  ">
                     @method('PATCH')
                      @csrf
-                     <button type="submit" class="btn  btn-warning btn-sm" title=" @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.buttons.flush")">
+                     <button type="submit" class="btn  btn-warning btn-sm" title=" @lang("{$viewVals->get('modelLang')}.buttons.flush")">
                      <i class="fa fa-trash"></i>
                       </button>
                 </form>
              @endif
              <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-failedJob_{{$job->id}}" aria-expanded="false"
                      aria-controls="collapse-failedJob_{{$job->id}}"
-                     title=" @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.buttons.details")">
+                     title=" @lang("{$viewVals->get('modelLang')}.buttons.details")">
                      <i class="fa fa-eye"></i>
                  </button>
          </div>

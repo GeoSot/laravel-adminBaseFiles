@@ -22,7 +22,7 @@ class LaratrustAddFields extends Migration
         });
 
         Schema::table(config('laratrust.tables.permissions'), function (Blueprint $table) {
-            $table->unsignedInteger('permission_group_id')->nullable();
+            $table->unsignedBigInteger('permission_group_id')->nullable();
 
             $table->foreign('permission_group_id')->references('id')->on('permission_groups')->onDelete('set null');
         });

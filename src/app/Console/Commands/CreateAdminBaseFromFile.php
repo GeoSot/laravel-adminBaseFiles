@@ -28,7 +28,7 @@ class CreateAdminBaseFromFile extends Command
     /**
      * Create a new migration install command instance.
      *
-     * @param  \Illuminate\Support\Composer $composer
+     * @param  Composer  $composer
      *
      * @return void
      */
@@ -56,13 +56,13 @@ class CreateAdminBaseFromFile extends Command
 
             $parentPlural = Arr::get($node, 'plural', Str::plural($parentRoute));
 
-            $this->makeFiles($parentRoute, $parentPlural, '', isset($node['menus']), $this->existsOnTranslatableArray($parentPlural, $node));
+            $this->makeFiles($parentRoute, $parentPlural, '', isset($node['menus']));
 
             foreach (Arr::get($node, 'menus', []) as $name) {
                 if ($name == $parentRoute) {
                     continue;
                 }
-                $this->makeFiles($name, $parentPlural, $parentRoute, true, $this->existsOnTranslatableArray($name, $node));
+                $this->makeFiles($name, $parentPlural, $parentRoute, true);
             }
 
         }
@@ -70,29 +70,29 @@ class CreateAdminBaseFromFile extends Command
         $this->composer->dumpAutoloads();
     }
 
-    protected function makeFiles($name, $plural, $parentRoute = '', $hasSubMenus = true, $isTranslatable = false)
+    protected function makeFiles($name, $plural, $parentRoute = '', $hasSubMenus = true)
     {
-        $controllerName = ucfirst($parentRoute) . ucfirst($name) . 'Controller';
-        $model = ucfirst($parentRoute) . ucfirst($name);
-        $modelNameSpace = 'App\Models\\' . (($plural) ? ucfirst($plural) . '\\' : '');
-        $fullModelClass = $modelNameSpace . $model;
+        $controllerName = ucfirst($parentRoute).ucfirst($name).'Controller';
+        $model = ucfirst($parentRoute).ucfirst($name);
+        $modelNameSpace = 'App\Models\\'.(($plural) ? ucfirst($plural).'\\' : '');
+        $fullModelClass = $modelNameSpace.$model;
         $viewBaseDir = lcfirst(Str::plural(empty($parentRoute) ? $model : $parentRoute));
         if ($hasSubMenus) {
-            $viewBaseDir .= '/' . lcfirst(Str::plural($model));
+            $viewBaseDir .= '/'.lcfirst(Str::plural($model));
         }
         $viewBase = str_replace('/', '.', $viewBaseDir);
-        $langBase = lcfirst($plural) . '/' . lcfirst($model);
-        $routeBase = ((!empty($parentRoute)) ? Str::plural($parentRoute) . '.' : '') . Str::plural($name);
+        $langBase = lcfirst($plural).'/'.lcfirst($model);
+        $routeBase = ((!empty($parentRoute)) ? Str::plural($parentRoute).'.' : '').Str::plural($name);
 
 
         $this->info('');
-        $this->info($model . '  ---  Making Files');
+        $this->info($model.'  ---  Making Files');
         $this->info('------------------------------------------');
 
         if ($this->confirm("Make  {$model} Files?")) {
 
             if ($this->confirm("Make {$model} Model?")) {
-                $this->makeModel($fullModelClass, $viewBase, $langBase, $routeBase, $isTranslatable);
+                $this->makeModel($fullModelClass, $viewBase, $langBase, $routeBase);
             }
             if ($this->confirm("Make Admin Permissions for {$model} Model?")) {
                 $this->makePermissions($model);
@@ -119,20 +119,18 @@ class CreateAdminBaseFromFile extends Command
 
     /**
      * @param        $fullModelClass
-     * @param string $viewBase
-     * @param string $langBase
-     * @param string $routeBase
-     * @param bool   $isTranslatable
+     * @param  string  $viewBase
+     * @param  string  $langBase
+     * @param  string  $routeBase
      */
-    protected function makeModel($fullModelClass, string $viewBase, string $langBase, string $routeBase, bool $isTranslatable)
+    protected function makeModel($fullModelClass, string $viewBase, string $langBase, string $routeBase)
     {
         //Model
         $this->call('baseAdmin:makeModel', [
-            'name'           => $fullModelClass,
-            '--viewBase'     => $viewBase,
-            '--langBase'     => $langBase,
-            '--routeBase'    => $routeBase,
-            '--translatable' => $isTranslatable
+            'name' => $fullModelClass,
+            '--viewBase' => $viewBase,
+            '--langBase' => $langBase,
+            '--routeBase' => $routeBase,
         ]);
     }
 
@@ -156,7 +154,7 @@ class CreateAdminBaseFromFile extends Command
     {
         //Controller
         $this->call('baseAdmin:makeAdminController', [
-            'name'    => ucfirst($plural) . '\\' . $controllerName,
+            'name' => ucfirst($plural).'\\'.$controllerName,
             '--model' => $fullModelClass,
         ]);
     }
@@ -170,8 +168,8 @@ class CreateAdminBaseFromFile extends Command
     {
         //Migration
         $this->call('baseAdmin:makeNewMigration', [
-            'name'     => Str::plural($model),
-            '--create' => (($parentRoute) ? $parentRoute . '_' : '') . Str::plural($name)
+            'name' => Str::plural($model),
+            '--create' => (($parentRoute) ? $parentRoute.'_' : '').Str::plural($name),
         ]);
     }
 
@@ -183,7 +181,7 @@ class CreateAdminBaseFromFile extends Command
     {
         //Factory
         $this->call('make:factory', [
-            'name'    => $model . 'Factory',
+            'name' => $model.'Factory',
             '--model' => $fullModelClass
         ]);
     }
@@ -195,7 +193,7 @@ class CreateAdminBaseFromFile extends Command
     {
         //Language
         $this->call('baseAdmin:makeLanguageFile', [
-            'name' => 'admin/' . $langBase
+            'name' => 'admin/'.$langBase
         ]);
     }
 
@@ -210,22 +208,10 @@ class CreateAdminBaseFromFile extends Command
     {
         //View
         $this->call('baseAdmin:nameView', [
-            'name'         => 'admin/' . $viewBase . '/' . $viewName,
-            '--textInside' => $parentRoute . '   ' . $model,
-            '--layout'     => 'admin.layout'
+            'name' => 'admin/'.$viewBase.'/'.$viewName,
+            '--textInside' => $parentRoute.'   '.$model,
+            '--layout' => 'admin.layout'
         ]);
     }
-
-    /**
-     * @param $name
-     * @param $node
-     *
-     * @return  bool
-     */
-    protected function existsOnTranslatableArray($name, $node)
-    {
-        return in_array($name, Arr::get($node, 'translatable', []));
-    }
-
 
 }

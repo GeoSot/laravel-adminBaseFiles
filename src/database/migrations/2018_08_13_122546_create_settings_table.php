@@ -15,7 +15,7 @@ class CreateSettingsTable extends Migration
     public function up()
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('slug')->unique();
             $table->string('key');
             $table->string('group')->nullable();
@@ -33,7 +33,7 @@ class CreateSettingsTable extends Migration
 
             //--Foreign keys
 
-            $table->unsignedInteger('modified_by')->nullable();
+            $table->unsignedBigInteger('modified_by')->nullable();
 
             //--Foreign keys RULEs
 

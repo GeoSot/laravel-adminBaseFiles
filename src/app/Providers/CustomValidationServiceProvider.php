@@ -20,6 +20,16 @@ class CustomValidationServiceProvider extends ServiceProvider
         foreach ($method_names as $class) {
             $this->$class();
         }
+        /* @var \Form $form */
+        $form = $this->app['form'];
+        $form->macro('customLabel', function ($name, $value, $options = []) use ($form) {
+            $escape = !Arr::get($options, 'raw', true);
+            if (isset($options['for']) && $for = $options['for']) {
+                unset($options['for']);
+                return $form->label($for, $value, $options, $escape);
+            }
+            return $form->label($name, $value, $options, $escape);
+        });
     }
 
     /**

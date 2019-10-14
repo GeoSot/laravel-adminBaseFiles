@@ -9,25 +9,48 @@
 namespace GeoSot\BaseAdmin\App\Traits\Controller\Auth;
 
 
-use Kris\LaravelFormBuilder\Facades\FormBuilder;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Kris\LaravelFormBuilder\Form;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 trait ResetPasswordFormTrait
 {
-
+    use FormBuilderTrait;
 
     /**
-     * @param string $token
+     * Display the password reset view for the given token.
      *
-     * @return \Kris\LaravelFormBuilder\Form
+     * If no token is present, display the link request form.
+     *
+     * @param  Request  $request
+     * @param  string|null  $token
+     *
+     * @return Factory|View
      */
-    public function getForm(string $token)
+    public function showResetForm(Request $request, $token = null)
+    {
+
+        $form = $this->getForm($token, $request->input('email'));
+
+        return view('auth.passwords.reset', compact('form', 'token', 'email'));
+    }
+
+    /**
+     * @param  string  $token
+     *
+     * @param  string  $emailDefault
+     * @return Form
+     */
+    public function getForm(string $token, string $emailDefault = '')
     {
 
 
-        $form = FormBuilder::plain($this->getFormOptions());
+        $form = $this->plain($this->getFormOptions());
         $form->add('token', 'hidden', ['value' => $token]);
         $form->add('email', 'email', [
-            'value' => request()->input('email'),
+            'value' => $emailDefault,
             'attr' => ['autofocus' => true],
             'rules' => 'required|email',
 

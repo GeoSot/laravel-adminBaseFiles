@@ -49,10 +49,10 @@ class RefreshDbMigrationsAndSeeds extends Command
                 Schema::dropIfExists($table_array[key($table_array)]);
             }
         }
-        $commands = ['migrate', 'db:seed'];//artisan queue:restart  artisan queue:work
+        $commands = ['migrate', 'db:seed'];
         foreach ($commands as $command) {
             $this->call($command, []);
-            // $html .= '<pre>' . Artisan::output() . '</pre>';
+
         }
         Schema::enableForeignKeyConstraints();
         File::cleanDirectory(Storage::disk('uploads')->path(''));

@@ -3,18 +3,29 @@
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\InputOption;
+
 abstract class GenericFileCreateCommand extends GeneratorCommand
 {
 
     /**
      * Get the view full path.
-
      * @return string
      */
     abstract protected function getFileWithPath();
 
+    public function __construct(Filesystem $files)
+    {
+        parent::__construct($files);
+        $this->addOption('--force', null, InputOption::VALUE_NONE, 'Publish the files, even if already exists');
+    }
+
+
     /**
      * @param $stub
+     *
      * @return mixed
      */
     protected function buildParentReplacements($stub)
@@ -24,19 +35,19 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
 
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function handle()
     {
-        $path = $this->getFileWithPath();
         $stub = $this->buildParentReplacements($this->getStubContent());
-        $this->populateStub($path, $stub);
+
+        $this->populateStub($this->getFileWithPath(), $stub);
     }
 
 
     /**
      * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     protected function getStubContent()
     {
@@ -52,7 +63,7 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
      */
     protected function populateStub(string $path, string $stub)
     {
-        if ($this->alreadyExists($path)) {
+        if ($this->alreadyExists($path) and !$this->option('force')) {
             $this->warn("{$this->type} {$path} already exists!");
             return false;
         }
@@ -71,6 +82,7 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
      * Determine if the class already exists.
      *
      * @param  string $rawName
+     *
      * @return bool
      */
     protected function alreadyExists($rawName)
@@ -78,5 +90,16 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
         return $this->files->exists($this->getFileWithPath($rawName));
     }
 
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['force', null, InputOption::VALUE_NONE, 'Publish the files, even if already exists'],
+        ];
+    }
 
 }

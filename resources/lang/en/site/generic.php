@@ -1,14 +1,8 @@
 <?php
 return [
-    'app' => [
-        'title' => 'ARTIFIEDWEB Support',
-    ],
+
     'menu' => [
         'dashboard' => 'Dashboard',
-        'contracts' => 'Services',
-        'tickets' => 'Tickets',
-        'prices' => 'Maintenance Plans',
-
         'user' => [
             'profile' => 'My Profile',
             'logout' => 'Logout',

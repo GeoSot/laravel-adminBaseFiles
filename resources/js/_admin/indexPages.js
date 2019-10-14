@@ -2,19 +2,19 @@
  * Created by Max @ ArtifiedWeb on 14/06/17.
  */
 
-window.aw = window.aw || {};
-aw.admin = window.aw.admin || {};
+window.BaseAdmin = window.BaseAdmin || {};
+
 
 let $tableForm = $('#tableForm');
 let translatedWords = $('.js-translatedWords');
 
 
-aw.admin.listingActions = {
+BaseAdmin.listingActions = {
     ChangeEnableDisableStatus: function (url, type, data, show_message, keyword, callback = null) {
 
         data.status = (keyword === 'enable') ? 1 : 0;
 
-        aw.admin.makeAjax(url, type, data, show_message, callback);
+        BaseAdmin.makeAjax(url, type, data, show_message, callback);
     },
     allOtherActions: function (url, type, data, show_message, keyword, callback = null) {
         //   console.log(keyword)
@@ -26,7 +26,7 @@ aw.admin.listingActions = {
             //dangerMode : true,
         }).then(function (continueAction) {
             if (continueAction) {
-                aw.admin.makeAjax(url, type, data, show_message, callback);
+                BaseAdmin.makeAjax(url, type, data, show_message, callback);
             }
         });
     },
@@ -45,15 +45,15 @@ aw.admin.listingActions = {
         let show_message = 0;
         let keyword = $(elem).data('keyword');
         if (keyword === 'enable' || keyword === 'disable') {
-            return aw.admin.listingActions.ChangeEnableDisableStatus(url, type, data, show_message, keyword);
+            return BaseAdmin.listingActions.ChangeEnableDisableStatus(url, type, data, show_message, keyword);
         } else {
-            return aw.admin.listingActions.allOtherActions(url, type, data, show_message, keyword);
+            return BaseAdmin.listingActions.allOtherActions(url, type, data, show_message, keyword);
         }
 
     }
 };
 $('[data-toggle="listing-actions"]').click(function () {
-    aw.admin.listingActions.HandleAction(this);
+    BaseAdmin.listingActions.HandleAction(this);
 });
 $('[data-change="js-submit-form"]').change(function () {
     if ($(this).is('[name="trashed"]')) {
@@ -84,7 +84,7 @@ $('[data-toggle="listing-actions-status"]').click(function () {
         ids: [$btn.data('id')]
     };
 
-    aw.admin.listingActions.ChangeEnableDisableStatus(url, type, data, 0, keyword, function (responseData, textStatus) {
+    BaseAdmin.listingActions.ChangeEnableDisableStatus(url, type, data, 0, keyword, function (responseData, textStatus) {
 
         if (textStatus !== 'success') {
             return;

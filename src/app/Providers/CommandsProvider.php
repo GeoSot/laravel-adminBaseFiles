@@ -7,6 +7,7 @@ use GeoSot\BaseAdmin\App\Console\Commands\{CreateAdminBaseFromFile,
     InstallScripts\AddValuesToConfigFiles,
     InstallScripts\InitializeEnv,
     InstallScripts\MainCommand,
+    InstallScripts\PublishForeignConfigs,
     InstallScripts\PublishInitialFiles,
     MakeAdminController,
     MakeAdminPermissions,
@@ -68,6 +69,7 @@ class CommandsProvider extends ServiceProvider
             InitializeEnv::class,
             PublishInitialFiles::class,
             AddValuesToConfigFiles::class,
+            PublishForeignConfigs::class,
         ]);
     }
 

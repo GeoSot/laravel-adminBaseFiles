@@ -3,6 +3,8 @@
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+
 class PublishInitialFiles extends GenericFileCreateCommand
 {
     /**
@@ -17,7 +19,7 @@ class PublishInitialFiles extends GenericFileCreateCommand
      *
      * @var string
      */
-    protected $description = 'Publishes all Files from stubsToPublishOnInstall Directory';
+    protected $description = 'Publishes all Files to app Directory';
 
     /**
      * The type of class being generated.
@@ -25,29 +27,25 @@ class PublishInitialFiles extends GenericFileCreateCommand
      * @var string
      */
     protected $type = 'File';
+
     protected $fileName = '';
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function handle()
     {
         $allStubFiles = $this->files->allFiles($this->getStubDirectory());
         foreach ($allStubFiles as $stubFile) {
             $this->fileName = $stubFile->getRelativePathname();
-            //  $this->type = $stubFile->getBasename('.stub');
-            $path = $this->getFileWithPath();
             $stub = $this->buildParentReplacements($this->getStubContent());
-            $this->populateStub($path, $stub);
+            $this->populateStub($this->getFileWithPath(), $stub);
         }
-
-
     }
-
 
     protected function getStubDirectory()
     {
-        return __DIR__ . '/../../stubsToPublishOnInstall';
+        return __DIR__.'/../../../../../filesToPublish/app/';
     }
 
     /**
@@ -59,7 +57,7 @@ class PublishInitialFiles extends GenericFileCreateCommand
     public function getFileWithPath()
     {
         $file = str_replace('.stub', '', $this->fileName);
-        return "app\\{$file}.php";
+        return base_path("app/{$file}.php");
     }
 
     /**
@@ -69,6 +67,6 @@ class PublishInitialFiles extends GenericFileCreateCommand
      */
     protected function getStub()
     {
-        return $this->getStubDirectory() . '/' . $this->fileName;
+        return $this->getStubDirectory().DIRECTORY_SEPARATOR.$this->fileName;
     }
 }

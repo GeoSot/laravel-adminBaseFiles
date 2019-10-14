@@ -18,15 +18,6 @@ return [
         'notes' => 'Notes',
         'enabled' => 'Enabled',
         'ownerModel' => ['title' => 'Related Model'],
-        'types' => [
-            'string' => 'String',
-            'textarea' => 'Textarea',
-            'number' => 'Number',
-            'timeToMinutes' => 'TimeToMinutes',
-            'dateTime' => 'DateTime',
-            'collectionSting' => 'Collection of Strings',
-            'collectionNumber' => 'Collection of Numbers',
-        ],
     ],
 
 
@@ -38,7 +29,7 @@ return [
     'fieldsHelpTexts' => [
         'model_type' => 'If you want the setting to be related with a model, please choose one',
         'type' => 'It doesn\'t change later',
-        'settingsFieldsInfo' => 'The final Key (slug) will be created using the combination "group.subGroup.key".<br> For consistency reasons all the first letters will by lowercase '
+        'settingsFieldsInfo' => 'The final Key (slug) will be created using the combination "group.subGroup.key".<br> For consistency reasons all the first letters will be lowercase '
     ],
     'buttons' => [
         'enableDevFields' => 'Edit fields',

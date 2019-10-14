@@ -36,16 +36,16 @@ const app = new Vue({
     el: '#app'
 });
 
-window.aw = window.aw || {};
+window.BaseAdmin = window.BaseAdmin || {};
 
 //Generates Unique IDs
-window.aw.uuid = () => {
+BaseAdmin.uuid = () => {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     )
 };
 
-require('./_partials/debugCustom');
+BaseAdmin.debug = require('./_partials/debugCustom');
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
@@ -80,7 +80,7 @@ $.fn.select2.defaults.set("dropdownAutoWidth", true);
 // dropdownParent: $(this).parent()
 
 
-aw.handleSelectInputs = ($el) => {
+BaseAdmin.handleSelectInputs = ($el) => {
     if ($el instanceof jQuery) {
         $($el).find('select').each(function () {
             let $sel = $(this);
@@ -90,7 +90,7 @@ aw.handleSelectInputs = ($el) => {
         });
     }
 };
-aw.handleSelectInputs($('body'));
+BaseAdmin.handleSelectInputs($('body'));
 
 
 require('./_partials/forms/_index');

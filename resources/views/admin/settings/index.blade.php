@@ -21,7 +21,7 @@
                                                 @foreach( $listable=$viewVals->get('extraValues')->get('listable') as $name)
                                                     <th scope="col" class="{{$name}}  " data-name="{{$name}}">
                                                          <div class="d-flex justify-content-between flex-wrap p-1">
-                                                                 <span>	 @lang($packageVariables->get('nameSpace')."{$viewVals->get('modelLang')}.fields.{$name}")</span>
+                                                             <span>	 @lang("{$viewVals->get('modelLang')}.fields.{$name}")</span>
                                                          </div>
                                                     </th>
                                                 @endforeach

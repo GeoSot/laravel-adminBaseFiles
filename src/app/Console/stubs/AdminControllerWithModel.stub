@@ -8,14 +8,8 @@ use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 
 class DummyClass extends BaseAdminController
 {
-     public function __construct()
-     {
-         parent::__construct();
-         $this->_class = DummyModelClass::class;
-         $this->initializeModelValues();
 
-     }
-
+    protected $_class = DummyModelClass::class;
 
     /**
      * Show the form for editing the specified resource.

@@ -1,10 +1,10 @@
-@component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.formTitles.permissions'),'viewVals'=>$viewVals] )
+@component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('modelLang').'.formTitles.permissions'),'viewVals'=>$viewVals] )
     {{--{!! form_row($form->permissions) !!}--}}
-    @php($permissionsGrouped=$viewVals->get('extraValues')->get('permissionsGrouped'))
-    @php($permFields=collect($form->permissions->getChildren())->groupBy([function ($item) {
-               return \Illuminate\Support\Str::before($item->getOption('label'),'.');
+    @php(/* @var Collection $viewVals */ $permissionsGrouped=$viewVals->get('extraValues')->get('permissionsGrouped'))
+    @php(/* @var \GeoSot\BaseAdmin\App\Forms\Admin\Users\UserRoleForm $form */ $permFields=collect($form->permissions->getChildren())->groupBy([function (\Kris\LaravelFormBuilder\Fields\FormField $item) {
+               return Str::before($item->getOption('label'),'.');
            },                        function ($item) {
-               return \Illuminate\Support\Str::after($item->getOption('label'),'-');
+               return Str::after($item->getOption('label'),'-');
            }]))
 
     @foreach($permissionsGrouped as $groupName=>$group)
@@ -18,7 +18,7 @@
                                  <div class="ml-4">
 
                              @foreach($permFields->get($groupName)->get($subGroupName) as $checkableType )
-                                         @php($customLabelName=str_replace(['-'.$subGroupName,$groupName.'.'],'',$checkableType->getOption('label')))
+                                         @php( $customLabelName=str_replace(['-'.$subGroupName,$groupName.'.'],'',$checkableType->getOption('label')))
                                          {!! $checkableType->render(['label'=>$customLabelName,  'attr' => ['data-select-all' => $subGroupName]]) !!}
                                      @endforeach
                                  </div>

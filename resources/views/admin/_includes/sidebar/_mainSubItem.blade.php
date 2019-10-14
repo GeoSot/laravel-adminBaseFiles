@@ -1,9 +1,16 @@
-@php($subMenuPlural = \Illuminate\Support\Str::plural($subMenu))
+@php    /**
+    * @var array $node
+    * @var string $parentRoute
+    * @var string $subMenu
+    */
+@endphp
+@php($subMenuPlural = Str::plural($subMenu))
 @php($routeName =($subMenu == $parentRoute)? "admin.{$subMenuPlural}.index": "admin.{$parentPlural}.{$subMenuPlural}.index")
+@php($routePrefix=LaravelLocalization::getCurrentLocale()."/admin/{$parentPlural}")
 
 @php($values=[
-'active'=>Request::is("admin/{$parentPlural}/{$subMenuPlural}*") or (Request::is("admin/{$parentPlural}") and  $subMenu == $parentRoute),
-'title'=>($subMenu == $parentRoute)?__($packageVariables->get('nameSpace').'admin/generic.menu.listTitle'):__($packageVariables->get('nameSpace').'admin/'.$parentPlural.'/'.$parentRoute.ucfirst($subMenu).'.general.menuTitle'),
+'active'=>Request::is($routePrefix."/{$subMenuPlural}*") or (Request::is($routePrefix) and  $subMenu == $parentRoute),
+'title'=>($subMenu == $parentRoute)?trans_with_fallback('admin/generic.menu.listTitle'):trans_with_fallback('admin/'.$parentPlural.'/'.$parentRoute.ucfirst($subMenu).'.general.menuTitle'),
 'url'=> getCachedRouteAsLink($routeName)
 ])
 <li class="pl-3 nav-item @if($values['active']) active @endif">

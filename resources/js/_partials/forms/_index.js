@@ -1,11 +1,12 @@
-window.aw = window.aw || {};
-window.aw.forms = window.aw.forms || {};
+window.BaseAdmin = window.BaseAdmin || {};
+window.BaseAdmin.forms = window.BaseAdmin.forms || {};
 
 
 require('bootstrap-colorpicker');
 window.Sortable = require('sortablejs');
 require('./formFields');
 require('./ajaxForms');
+BaseAdmin.forms.fields.Init();
 require('./formSubmitByKeyboard');
 
 $('.modal').on('shown.bs.modal', function () {

@@ -4,6 +4,7 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\morphTo;
 use Illuminate\Support\Facades\Storage;
 
 trait ManagesFiles
@@ -11,14 +12,12 @@ trait ManagesFiles
     public static function bootManagesFiles()
     {
         static::deleting(function ($model) {
-            $notRealDisks = ['youTube', 'vimeo', 'uri'];
-            if (in_array($model['disk'], $notRealDisks)) {
+            if (in_array($model['disk'], ['youTube', 'vimeo', 'uri'])) {
                 return;
             }
             $exists = Storage::disk($model->disk)->exists($model->file);
             if ($exists) {
-                $class = get_class($model);
-                $getUsagesCountOfThisFile = count($class::where('file', $model->file)->get());
+                $getUsagesCountOfThisFile = count(get_class($model)::where('file', $model->file)->get());
                 if ($getUsagesCountOfThisFile > 1) {
                     //Probably is in use By another
                     return;
@@ -35,8 +34,10 @@ trait ManagesFiles
 
     /**
      * Get all of the owning commentable models.
+     *
+     * @param  array  $idsToBeDeleted
      */
-    public static function deleteIds($idsToBeDeleted)
+    public static function deleteIds(array $idsToBeDeleted)
     {
         static::whereIn('id', $idsToBeDeleted)->each(function ($model) {
             $model->delete();
@@ -46,7 +47,7 @@ trait ManagesFiles
     /**
      * TODO review this relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\morphTo
+     * @return morphTo
      */
     public function ownerModel()
     {

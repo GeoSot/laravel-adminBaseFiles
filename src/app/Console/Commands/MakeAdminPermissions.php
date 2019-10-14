@@ -4,6 +4,7 @@ namespace GeoSot\BaseAdmin\App\Console\Commands;
 
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class MakeAdminPermissions extends Command
@@ -30,22 +31,13 @@ class MakeAdminPermissions extends Command
      */
     public function handle()
     {
-        $nameInput    = lcfirst($this->argument('name'));
+        $nameInput = lcfirst($this->argument('name'));
         $permNameMode = lcfirst($this->option('isPermName'));
 
         if ($permNameMode == 'true') {
             $this->createPermissionFromString($nameInput);
         } elseif ($nameInput == 'all') {
-
-            $this->createPermissionsForAllAdminModels();
-
-            foreach (config('baseAdmin.main.extraPermissions', []) as $permName) {
-
-                $this->createPermissionFromString('admin.' . $permName);
-            }
-            foreach (config('baseAdmin.main.customMenuItems') as $parentRoute => $node) {
-                $this->createPermissionFromString('admin.index-' . $parentRoute);
-            }
+            $this->makeAllPermissions();
         } else {
             $this->createPermissionsForModel($nameInput);
         }
@@ -84,7 +76,7 @@ class MakeAdminPermissions extends Command
                 if ($name == $parentRoute) {
                     continue;
                 }
-                $this->createPermissionsForModel($parentRoute . ucfirst($name));
+                $this->createPermissionsForModel($parentRoute.ucfirst($name));
             }
 
         }
@@ -98,8 +90,8 @@ class MakeAdminPermissions extends Command
         $this->info('');
         foreach ($this->getPermissionsMapping() as $el) {
 
-            $friendlyName = ucwords(str_replace('.', ' ', $el)) . ' ' . ucfirst(Str::plural($nameInput));
-            $name = $el . '-' . $nameInput;
+            $friendlyName = ucwords(str_replace('.', ' ', $el)).' '.ucfirst(Str::plural($nameInput));
+            $name = $el.'-'.$nameInput;
             $permission = $this->updateOrCreatePermissionModel($name, $friendlyName);
         }
 
@@ -124,8 +116,8 @@ class MakeAdminPermissions extends Command
     }
 
     /**
-     * @param string $name
-     * @param string $friendlyName
+     * @param  string  $name
+     * @param  string  $friendlyName
      *
      * @return mixed
      */
@@ -133,18 +125,31 @@ class MakeAdminPermissions extends Command
     {
 
 
-
         $permission = config('baseAdmin.config.models.permission')::updateOrCreate(['name' => $name], [
             'display_name' => $friendlyName,
-            'description'  => $friendlyName,
+            'description' => $friendlyName,
             //                'permission_group_id'
         ]);
 
-        $this->info(($permission->wasRecentlyCreated ? 'Creating' : 'Existing') . '  Permission ' . $permission->name);
+        $this->info(($permission->wasRecentlyCreated ? 'Creating' : 'Existing').'  Permission '.$permission->name);
 
 
         return $permission;
 
+    }
+
+    protected function makeAllPermissions(): void
+    {
+        $this->createPermissionsForAllAdminModels();
+
+        foreach (config('baseAdmin.main.extraPermissions', []) as $name => $permissions) {
+            array_map(function ($permission) use ($name) {
+                ($permission == 'all') ? $this->createPermissionsForModel($name) : $this->createPermissionFromString("admin.{$permission}-{$name}");
+            }, Arr::wrap($permissions));
+        }
+        foreach (config('baseAdmin.main.customMenuItems', []) as $parentRoute => $node) {
+            $this->createPermissionFromString('admin.index-'.$parentRoute);
+        }
     }
 
 }

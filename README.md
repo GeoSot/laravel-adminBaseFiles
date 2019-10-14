@@ -1,24 +1,6 @@
-# LaravelSettings
-This Package allows to save settings on Database 
+# Laravel AdminBaseFiles
+This Package Initiates a mini Cms System with Admin Area, translatable models etc
 
-It supports:
->- Cache usage 
->- Many type of settings like integer, separated values as collection, strings, Carbon objects etc
->- Crud 
->- Customizable Views files 
-
-
-Once installed you can do stuff like this:
-
-```php
-    
-    // Set new settings (returns Boolean)
-    Settings::set('key','value','type');
-  
-   // Get setting value
-    Settings::get('key');
-            
-```
 
 
 * [Installation](#installation)
@@ -29,27 +11,29 @@ Once installed you can do stuff like this:
 1. Install package
 
     ```bash
-    composer require geo-sot/laravel-settings
+    composer require geo-sot/laravel-adminbasefiles
     ```
+2. Initialize Package
 
-2. Edit config/app.php (Skip this step if you are using laravel 5.5+)
-
-    Service provider:
-
-    ```php
-    GeoSot\Settings\ServiceProvider::class,
+    ```bash
+     artisan baseAdmin:install
     ```
+    Runs the Following Artisan Commands
+    
+    > - publishFiles
+    > - initializeEnv
+    > - publishPackageMigrations
+    > - publishEnvEditorConfig
+    > - publishLocalizationConfig
+    > - makePassportKeys
+    > - editConfigFiles
 
-    Class aliases:
 
-    ```php
-    'Settings' => GeoSot\Settings\Facades\Settings::class,
-    ```
 
 3. Publish assets and migrate
 
      ```bash
-     php artisan vendor:publish --provider=GeoSot\Settings\ServiceProvider     
+     php artisan vendor:publish --provider=GeoSot\BaseAdmin\ServiceProvider     
       ```
       
       This will publish all files:

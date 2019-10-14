@@ -64,7 +64,7 @@ class InitStickyElement {
             // callback when at bottom of page, `this` is headroom object
             onBottom: function () {
             },
-            // callback when moving away from bottom of page, `this` is headroom object
+            // callback when moving BaseAdminay from bottom of page, `this` is headroom object
             onNotBottom: function () {
             }
         });

@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 trait FieldsHelper

@@ -1,9 +1,13 @@
 <?php
 
 namespace GeoSot\BaseAdmin\Seeds;
+
+use App\Models\Users\User;
+use Illuminate\Support\Arr;
+
 class UsersSeeder extends BaseSeeder
 {
-    protected $class = \App\Models\Users\User::class;
+    protected $class = User::class;
 
     /**
      * Run the database seeds.
@@ -13,15 +17,9 @@ class UsersSeeder extends BaseSeeder
         $static = new $this->class();
 
         foreach ($this->data() as $index => $userData) {
-            $user = $static->create([
-                'email'       => $userData['email'],
-                'password'    => $userData['password'],
-                'first_name'  => $userData['first_name'],
-                'last_name'   => $userData['last_name'],
-                'modified_by' => 1,
-            ]);
-            $user->attachRoles($userData['roles']);
 
+            $user = $static::create(Arr::except($userData, 'roles'));
+            $user->attachRoles($userData['roles']);
             $this->creatingDataMsg($userData['first_name'] . ' ' . $userData['last_name']);
         }
 
@@ -34,7 +32,6 @@ class UsersSeeder extends BaseSeeder
     protected function data()
     {
         return [
-
             'geo' => [
                 'email'      => 'george_sotis@yahoo.gr',
                 'password'   => bcrypt('123456'),
@@ -42,7 +39,6 @@ class UsersSeeder extends BaseSeeder
                 'last_name'  => 'Sot',
                 'roles'      => ['god', 'user'],
             ],
-
         ];
     }
 }

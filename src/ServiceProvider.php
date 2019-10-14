@@ -4,11 +4,11 @@ namespace GeoSot\BaseAdmin;
 
 
 use Carbon\Carbon;
-use GeoSot\BaseAdmin\App\Providers\AdminRoutingServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\RouteServiceProvider;
 use GeoSot\BaseAdmin\Services\Settings;
-use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
 
@@ -20,7 +20,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @var string
      */
-    protected $vendor = 'geo-sv';
+    protected $vendor = 'geo-sot';
     /**
      * Package name.
      *
@@ -51,10 +51,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        //  $this->loadHelpers();
         $this->registerProviders();
-        $this->mergeConfigFrom(__DIR__ . "/../config/main.php", $this->package . '.main');
-        $this->mergeConfigFrom(__DIR__ . "/../config/config.php", $this->package . '.config');
+        $this->mergeConfigFrom(__DIR__."/../config/main.php", $this->package.'.main');
+        $this->mergeConfigFrom(__DIR__."/../config/config.php", $this->package.'.config');
+
     }
 
     /**
@@ -63,9 +63,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     private function loadResources()
     {
         //  $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', $this->package);
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', $this->package);
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package);
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', $this->package);
     }
 
     /**
@@ -75,34 +75,34 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
 
         $this->publishes([
-            __DIR__ . "/../config" => config_path($this->package)
+            __DIR__."/../config" => config_path($this->package)
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/' => resource_path("views"),//resource_path("views/vendor/{$this->vendor}/{$this->package}"),
+            __DIR__.'/../resources/views/' => resource_path("views/vendor/{$this->vendor}/{$this->package}"),//resource_path("views/vendor/{$this->vendor}/{$this->package}"),
         ], 'views');
 
         $this->publishes([
-            __DIR__ . '/database/migrations/' => database_path('migrations')
+            __DIR__.'/database/migrations/' => database_path('migrations')
         ], 'migrations');
         $this->publishes([
-            __DIR__ . '/../resources/lang/' => resource_path("lang"),
-            //            __DIR__ . '/../resources/lang/' => resource_path("lang/{$this->vendor}"),
+//            __DIR__ . '/../resources/lang/' => resource_path("lang"),
+            __DIR__.'/../resources/lang/' => resource_path("lang/vendor/{$this->package}"),
         ], 'translations');
     }
 
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     private function getPackageVariables()
     {
         return collect([
-            'package'     => $this->package,
-            'nameSpace'   => $this->package . '::',
-            'adminLayout' => config($this->package . ".config.backEnd.layout"),
-            'siteLayout'  => config($this->package . ".config.site.layout"),
-            'blades'      => $this->package . "::",
+            'package' => $this->package,
+            'nameSpace' => $this->package.'::',
+            'adminLayout' => config($this->package.".config.backEnd.layout"),
+            'siteLayout' => config($this->package.".config.site.layout"),
+            'blades' => $this->package."::",
         ]);
     }
 
@@ -111,17 +111,30 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerProviders()
     {
-        $this->app->register(CustomValidationServiceProvider::class);
-        $this->app->register(AdminRoutingServiceProvider::class);
-        $this->app->register(CommandsProvider::class);
+        $providers = [
+            CustomValidationServiceProvider::class,
+            RouteServiceProvider::class,
+            CommandsProvider::class,
+//            ModuleServiceProvider::class,
+            CommandsProvider::class,
+//            SidebarServiceProvider::class,
+        ];
+
+        array_map(function ($provider) {
+            $this->app->register($provider);
+        }, $providers);
+
     }
 
-    protected function registerServices(): void
+    /**
+     * Register Services.
+     */
+    protected function registerServices()
     {
-        $this->app->singleton(Settings::class, function ($app) {
+        $this->app->singleton('settings', function ($app) {
             return new Settings();
         });
-        $this->app->alias(Settings::class, 'settings');
+
     }
 
     /**
@@ -137,13 +150,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 //        });
     }
 
-    /**
-     * Load helpers.
-     */
-    protected function loadHelpers()
-    {
-        foreach (glob(__DIR__ . '/Helpers/*.php') as $filename) {
-            require_once $filename;
-        }
-    }
 }

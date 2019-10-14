@@ -1,0 +1,11 @@
+<?php
+
+
+namespace App\Models\MediaModels;
+
+use GeoSot\BaseAdmin\App\Models\MediaModels\ImageModel as InitialModel;
+
+class ImageModel extends InitialModel
+{
+
+}

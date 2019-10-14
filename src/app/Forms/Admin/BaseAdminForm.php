@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
 use GeoSot\BaseAdmin\App\Forms\BaseForm;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasSettings;
-use Illuminate\Support\Arr;
 use Kris\LaravelFormBuilder\Fields\FormField;
 
 abstract class BaseAdminForm extends BaseForm
@@ -22,6 +21,7 @@ abstract class BaseAdminForm extends BaseForm
             $this->getRulesAndCustomMessagesForFields($this->getModel());
             $this->includeModelRelatedSettings($this->getModel());
         }
+
     }
 
 
@@ -30,42 +30,48 @@ abstract class BaseAdminForm extends BaseForm
      */
     protected function createTranslatableFields()
     {
-        if (!config('baseAdmin.enable-TranslatableFields-OnModel', true)) {
+        if (!config('baseAdmin.config.translatables.enable-TranslatableFields-OnModel', true)) {
             return;
         }
-        $availableLocales = (array)config('translatable.locales', config('app.locale'));
-        if (property_exists($this->getModel(), 'translatedAttributes')) {
+        $availableLocales = (array) config('baseAdmin.config.translatables.locales');
 
-            foreach (Arr::except($availableLocales, array_search(app()->getLocale(), $availableLocales)) as $locale) {
-                foreach ($this->getModel()->translatedAttributes as $fieldName) {
-                    $newName = "{$locale}[{$fieldName}]";
-                    $field = $this->getField($fieldName);
-                    $this->addAfter($fieldName, $newName, $field->getType(), $field->getOptions());
-                    $newField = $this->getField($newName);
-                    $this->addAttributesToTranslatableField($newField, $locale);
-                }
-            }
+        if (!property_exists($this->getModel(), 'translatable')) {
+            return;
         }
+
+        foreach (array_intersect($this->getModel()->translatable, array_keys($this->getFields())) as $fieldName) {
+            $field = $this->getField($fieldName);
+            foreach ($availableLocales as $locale) {
+                $newName = "{$fieldName}[{$locale}]";
+
+                $this->addAfter($fieldName, $newName, $field->getType(), $field->getOptions());
+                $newField = $this->getField($newName);
+                $this->addAttributesToTranslatableField($newField, $locale, $fieldName);
+            }
+            $this->remove($fieldName);
+        }
+
 
     }
 
     /**
-     * @param FormField $field
-     * @param string    $locale
+     * @param  FormField  $field
+     * @param  string  $locale
+     * @param  string  $originalName
      */
-    protected function addAttributesToTranslatableField(FormField $field, string $locale)
+    protected function addAttributesToTranslatableField(FormField $field, string $locale, string $originalName)
     {
 
         $field->setOption('label', $this->getTranslatableLabel($field, $locale));
         $field->setOption('attr', array_merge($field->getOption('attr'), [config('baseAdmin.translatables.input-locale-attribute', 'data-language') => $locale]));
-        $field->setOption('wrapper.class', $field->getOption('wrapper.class') . '  ' . config('baseAdmin.translatables.form-group-class', 'form-group-translation '));
+        $field->setOption('wrapper.class', $field->getOption('wrapper.class').'  '.config('baseAdmin.translatables.form-group-class', 'form-group-translation '));
         $field->setOption('wrapper.group-translation', $locale);
-
+        $field->setOption('value', $this->getModel()->getTranslation($originalName, $locale));
     }
 
     /**
-     * @param FormField $field
-     * @param string    $locale
+     * @param  FormField  $field
+     * @param  string  $locale
      *
      * @return mixed
      */
@@ -84,10 +90,10 @@ abstract class BaseAdminForm extends BaseForm
     protected function getRulesAndCustomMessagesForFields($modelInstance): void
     {
         foreach ($this->getFields() as $field) {
-            if (in_array($field->getName(), $modelInstance->getFillable())) {
-                $field->setOption('rules', $modelInstance->getFieldRule($field->getName()));
-                $field->setOption('error_messages', $modelInstance->getFieldErrorMessages($field->getName()));
-            }
+            //      if (in_array($field->getName(), $modelInstance->getFillable())) {
+            $field->setOption('rules', $modelInstance->getFieldRule($field->getName()));
+            $field->setOption('error_messages', $modelInstance->getFieldErrorMessages($field->getName()));
+            //      }
         }
     }
 
@@ -104,7 +110,7 @@ abstract class BaseAdminForm extends BaseForm
 
             $subForm->add($setting->key, 'static', [
                 'label' => false,
-                'value' => $setting->getDashBoardLink($setting->key, true, ['class' => 'mr-2 d-block']) . $setting->value_parsed_to_human,
+                'value' => $setting->getDashBoardLink($setting->key, true, ['class' => 'mr-2 d-block']).$setting->value_parsed_to_human,
             ]);
         }
 

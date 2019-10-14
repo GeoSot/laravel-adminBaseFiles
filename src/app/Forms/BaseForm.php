@@ -78,13 +78,14 @@ abstract class BaseForm extends Form
     /**
      * Create translation Help Text (modelLang.fieldsHelpTexts.).
      *
-     * @param string $text
+     * @param  string  $text  *
+     * @param  array  $replace
      *
      * @return  string
      */
-    public function transHelpText(string $text)
+    public function transHelpText(string $text, $replace = [])
     {
-        return __($this->getHelpTextLanguageName() . '.' . $text);
+        return __($this->getHelpTextLanguageName().'.'.$text, $replace);
     }
 
 

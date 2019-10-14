@@ -7,23 +7,16 @@ use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class UserRoleController extends BaseAdminController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->_class = UserRole::class;
-        $this->initializeModelValues();
+    protected $_class = UserRole::class;
+    //OVERRIDES
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
 
 
-        //OVERRIDES
-        $this->allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
-        $this->_useGenericViewForm = false;
-        $this->_useBasicForm = false;
-
-    }
 
     public function create(Collection $extraValues = null)
     {
@@ -35,9 +28,9 @@ class UserRoleController extends BaseAdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  UserRole $userRole
+     * @param  UserRole  $userRole
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(UserRole $userRole)
     {
@@ -52,10 +45,10 @@ class UserRoleController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  UserRole $userRole
+     * @param  Request  $request
+     * @param  UserRole  $userRole
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, UserRole $userRole)
     {
@@ -79,7 +72,7 @@ class UserRoleController extends BaseAdminController
 
 
         if (count($request['ids']) and count($originalSentIds) > count($request['ids'])) {
-            flashToastr(__('admin/' . $this->_modelsLangDir . '.some_roles_where_not_deleted_cause_they_are_protected'), null, 'warning');
+            flashToastr(__('admin/'.$this->_modelsLangDir.'.some_roles_where_not_deleted_cause_they_are_protected'), null, 'warning');
         }
 
         return parent::delete($request);
