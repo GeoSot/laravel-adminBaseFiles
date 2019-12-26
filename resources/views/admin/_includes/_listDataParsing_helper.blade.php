@@ -1,11 +1,12 @@
 @php
-    use GeoSot\BaseAdmin\App\Models\BaseModel;use Illuminate\Support\Collection;
+    use GeoSot\BaseAdmin\App\Models\BaseModel;
+    use Illuminate\Support\Collection;
      /**
      * @var Collection $packageVariables
      * @var string $listName
      * @var BaseModel $record
      */
-     $snippetsDir=$packageVariables->get('blades').'admin._includes.listDataParsingSnippets.';
+     $snippetsDir=$packageVariables->get('blades').'admin._includes.listDataParsingSnippets.'
 @endphp
 
 @switch($parse)
@@ -24,16 +25,14 @@
     @case('fields')
 
     @php
-        use Carbon\Carbon;use Illuminate\Database\Eloquent\Model;use Illuminate\Support\Collection;$snippetsDir=$packageVariables->get('blades').'admin._includes.listDataParsingSnippets.';
+        $snippetsDir=$packageVariables->get('blades').'admin._includes.listDataParsingSnippets.';
          $fieldData=data_get($record,$listName);
          $recordIs_Model= is_subclass_of($record, Model::class);
          $fieldIs_Carbon=($fieldData  instanceof Carbon);
          $fieldIs_Collection=($fieldData  instanceof  Collection);
          $fieldIs_Model=is_subclass_of($fieldData, Model::class);
          $array=explode('.',$listName);
-         $dataCollection=data_get($record,$array[0]);
-
-
+         $dataCollection=data_get($record,$array[0])
     @endphp
     <td>
         @if( in_array($listName,['enabled','color']) )

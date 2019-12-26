@@ -61,6 +61,7 @@ if (mix.inProduction()) {
 // Add this to very bottom of your webpack-mix.js
 mix.webpackConfig({
     resolve: {
+        // modules: [path.resolve(__dirname, '../../../node_modules')],
         alias: {
             jquery: "jquery/src/jquery",
             pace: 'pace-progress'

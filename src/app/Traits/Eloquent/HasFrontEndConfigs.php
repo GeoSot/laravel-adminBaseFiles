@@ -13,13 +13,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionClass;
-use ReflectionException;
 
 trait HasFrontEndConfigs
 {
     /**
      * @return array
-     * @throws ReflectionException
      */
     public function getDefaultFrontEndConfigValues()
     {
@@ -48,11 +46,10 @@ trait HasFrontEndConfigs
     /**
      * Gets the model Configuration Strings
      *
-     * @param string      $side
-     * @param string|null $arg
+     * @param  string  $side
+     * @param  string|null  $arg
      *
      * @return bool|Collection|mixed
-     * @throws ReflectionException
      */
     public function getFrontEndConfig(string $side = 'admin', string $arg = null)
     {
@@ -67,11 +64,10 @@ trait HasFrontEndConfigs
     }
 
     /**
-     * @param string      $side
-     * @param string|null $arg
+     * @param  string  $side
+     * @param  string|null  $arg
      *
      * @return bool|Collection|mixed
-     * @throws ReflectionException
      */
     public function getFrontEndConfigPrefixed(string $side = 'admin', string $arg = null)
     {
@@ -91,12 +87,11 @@ trait HasFrontEndConfigs
     }
 
     /**
-     * @param string $linkTitle
-     * @param bool   $appendAsString
-     * @param array  $options
+     * @param  string  $linkTitle
+     * @param  bool  $appendAsString
+     * @param  array  $options
      *
      * @return string
-     * @throws ReflectionException
      */
     public function getDashBoardLink(string $linkTitle = 'id', bool $appendAsString = false, $options = [])
     {
@@ -105,11 +100,10 @@ trait HasFrontEndConfigs
     }
 
     /**
-     * @param string $linkTitle
-     * @param bool   $appendAsString
+     * @param  string  $linkTitle
+     * @param  bool  $appendAsString
      *
      * @return string
-     * @throws ReflectionException
      */
     public function getSiteLink(string $linkTitle = 'id', bool $appendAsString = false)
     {
@@ -118,13 +112,12 @@ trait HasFrontEndConfigs
     }
 
     /**
-     * @param string $linkTitle
-     * @param bool   $appendAsString
-     * @param string $side
-     * @param array  $options
+     * @param  string  $linkTitle
+     * @param  bool  $appendAsString
+     * @param  string  $side
+     * @param  array  $options
      *
      * @return string
-     * @throws ReflectionException
      */
     public function getLink(string $linkTitle = 'id', bool $appendAsString = false, $side = 'admin', $options = [])
     {
@@ -134,9 +127,9 @@ trait HasFrontEndConfigs
             $text = $linkTitle;
         }
         $flatClasses = array_map(function ($key, $value) {
-            return $key . '="' . $value . '"';
+            return $key.'="'.$value.'"';
         }, array_keys($options), $options);
 
-        return '<a  href="' . route($this->getFrontEndConfigPrefixed($side, 'route') . '.edit', $this) . '" ' . implode('   ', $flatClasses) . '>' . $text . '</a>';
+        return '<a  href="'.route($this->getFrontEndConfigPrefixed($side, 'route').'.edit', $this).'" '.implode('   ', $flatClasses).'>'.$text.'</a>';
     }
 }

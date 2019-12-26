@@ -1,5 +1,6 @@
 @php
-    use Illuminate\Support\Collection;use Illuminate\View\Factory;
+    use Illuminate\Support\Collection;
+    use Illuminate\View\Factory;
      /**
      * @var Collection $packageVariables
      * @var Factory $__env

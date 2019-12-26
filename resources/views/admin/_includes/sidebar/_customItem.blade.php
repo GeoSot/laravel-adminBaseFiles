@@ -1,24 +1,25 @@
 @php
-    /* @var string  $parentRoute
-     * @var array  $node
-     * @var Collection $packageVariables
-    */
+    use Illuminate\Support\Collection;
+       /* @var string  $parentRoute
+        * @var array  $node
+        * @var Collection $packageVariables
+       */
 
-       use Illuminate\Support\Collection;$parentPlural = isset($node['plural']) ? $node['plural'] : Str::plural($parentRoute);
-        $parentPermission="admin.index-{$parentRoute}";
-        $hasInnerMenus=Arr::has($node, 'menus') ;
-         //Gather All Permissions In Order To Find if User Can se the Item
-        //**************
-        $canSeeMenu=auth()->user()->can($parentPermission);
-       if($hasInnerMenus){
-            $children= array_keys( $node['menus'] );
+          $parentPlural = isset($node['plural']) ? $node['plural'] : Str::plural($parentRoute);
+           $parentPermission="admin.index-{$parentRoute}";
+           $hasInnerMenus=Arr::has($node, 'menus') ;
+            //Gather All Permissions In Order To Find if User Can se the Item
+           //**************
+           $canSeeMenu=auth()->user()->can($parentPermission);
+          if($hasInnerMenus){
+               $children= array_keys( $node['menus'] );
 
-            $childPermissions= array_map(function ($child) use ($parentRoute) {
-                return 'admin.index-'.$child;
-            }, $children);
-           $canSeeMenu= auth()->user()->can(array_merge([$parentPermission], $childPermissions));
-       }
-      //**************
+               $childPermissions= array_map(function ($child) use ($parentRoute) {
+                   return 'admin.index-'.$child;
+               }, $children);
+              $canSeeMenu= auth()->user()->can(array_merge([$parentPermission], $childPermissions));
+          }
+         //**************
 
 @endphp
 

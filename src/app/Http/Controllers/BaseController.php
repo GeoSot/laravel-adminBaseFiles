@@ -22,8 +22,9 @@ abstract class BaseController extends Controller
     use FormBuilderTrait, AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     //
     protected $_genericLangDir = 'generic';
+    /* @var BaseModel $_class */
     protected $_class;
-    /* @var BaseModel */
+    /* @var BaseModel $_hydratedModel */
     protected $_hydratedModel;
     protected $_modelRoute;
     protected $_modelsLangDir;
@@ -105,5 +106,16 @@ abstract class BaseController extends Controller
     protected function addPackagePrefix(string $string = ''): string
     {
         return 'baseAdmin::'.$string;
+    }
+
+    /**
+     * @param  string  $string
+     */
+    protected function debugMsg(string $string): void
+    {
+        if (!class_exists(\Barryvdh\Debugbar\Facade::class)) {
+            return;
+        }
+        \Barryvdh\Debugbar\Facade::debug($string);
     }
 }

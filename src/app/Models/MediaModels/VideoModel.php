@@ -3,16 +3,16 @@
 namespace GeoSot\BaseAdmin\App\Models\MediaModels;
 
 
-class ImageModel extends BaseMediaModel
+class VideoModel extends BaseMediaModel
 {
-    protected $table = 'media_images';
+    protected $table = 'media_videos';
 
 
     protected $frontEndConfigValues = [
         'admin' => [
 //            'langDir' => 'helpModels/image',
 //            'viewDir' => 'images',
-            'route' => 'images',
+            'route' => 'videos',
         ],
     ];
 

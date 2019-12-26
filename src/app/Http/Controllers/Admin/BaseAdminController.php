@@ -4,7 +4,9 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
 
+use GeoSot\BaseAdmin\App\Forms\Admin\BasicForm;
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
+use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\app\Traits\Controller\CachesRouteParameters;
 use GeoSot\BaseAdmin\App\Traits\Controller\FieldsHelper;
 use GeoSot\BaseAdmin\App\Traits\Controller\FiltersHelper;
@@ -319,7 +321,7 @@ abstract class BaseAdminController extends BaseController
         $form = $this->makeForm($model);
         $extraValues->put('form', $form);
         if (request()->wantsJson()) {
-            $newForm = clone  $form;
+            $newForm = clone $form;
             $extraValues->put('formRendered', $newForm->renderForm(['id' => 'edit'.class_basename($this->_class).'Form']));
         }
 
@@ -330,6 +332,7 @@ abstract class BaseAdminController extends BaseController
 
     protected function genericUpdate(Request $request, $model)
     {
+        /* @var BaseModel $model */
         /* poio apotelesmatiko validation
          * $form = $this->makeForm($model);
         $form->redirectIfNotValid();*/
@@ -425,7 +428,9 @@ abstract class BaseAdminController extends BaseController
     protected function chooseProperLangFile(string $string = ''): string
     {
         //Translation File Can Be In LangPath
-        if (trans()->has($this->_modelsLangDir.'.general.menuTitle', [])) {
+        $langFile = $this->_modelsLangDir.'.general.menuTitle';
+        $this->debugMsg("Try Find Lang: {$langFile}");
+        if (trans()->has($langFile, [])) {
             return $this->_modelsLangDir.$string;
         }
         /**
@@ -433,7 +438,9 @@ abstract class BaseAdminController extends BaseController
          * Example: resources/lang/vendor/baseAdmin/en/admin/pages/page.php
          * $file = app()->langPath().DIRECTORY_SEPARATOR.app()->getLocale().DIRECTORY_SEPARATOR.$this->_modelsLangDir.'.php';
          * */
-        return $this->addPackagePrefix($this->_modelsLangDir.$string);
+        $langFile = $this->_modelsLangDir.$string;
+        $this->debugMsg("Return Lang: {$langFile}");
+        return $this->addPackagePrefix($langFile);
 
     }
 
@@ -450,15 +457,20 @@ abstract class BaseAdminController extends BaseController
         $suffix = '.'.($action == 'index' ? 'index' : 'form');
 
         $modelView = $this->_modelsViewsDir;
-
-        if (view()->exists($modelView.$suffix)) {
+        $view = $modelView.$suffix;
+        $this->debugMsg("Try Find View: {$view}");
+        if (view()->exists($view)) {
             return $modelView;
         }
-
-        if (view()->exists($this->addPackagePrefix($modelView.$suffix))) {
+        $view = $this->addPackagePrefix($modelView.$suffix);
+        $this->debugMsg("Try Find View: {$view}");
+        if (view()->exists($view)) {
             return $this->addPackagePrefix($modelView);
         }
-        return $this->addPackagePrefix($this->_genericViewsDir);
+
+        $view = $this->addPackagePrefix($this->_genericViewsDir);
+        $this->debugMsg("Return View: {$view}");
+        return $view;
     }
 
 
@@ -486,14 +498,18 @@ abstract class BaseAdminController extends BaseController
         $parentDir = (Str::replaceFirst('\\', '', str_replace('App\Models', '', Str::replaceLast('\\'.class_basename($this->_class), '', $this->_class))));
         $parenName = (empty($parentDir) ? '' : $parentDir.'\\');
         $formName = 'App\\Forms\\Admin\\'.$parenName.class_basename($this->_class).'Form';
+        $this->debugMsg("Try Find Form: {$formName}");
         if (class_exists($formName)) {
             return $this->form($formName, $options);
         }
         $formName = 'GeoSot\\BaseAdmin\\'.$formName;
+        $this->debugMsg("Try Find Form: {$formName}");
         if (class_exists($formName)) {
             return $this->form($formName, $options);
         }
-        return $this->form('GeoSot\\BaseAdmin\\App\\Forms\\Admin\\BasicForm', $options);
+        $formName = BasicForm::class;
+        $this->debugMsg("Return Form: {$formName}");
+        return $this->form($formName, $options);
     }
 
 }

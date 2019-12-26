@@ -11,7 +11,7 @@
               $params=$viewVals->get('params');
               $options=$viewVals->get('options')->get("{$action}Actions");
               $modelClass=lcfirst($viewVals->get('modelClassShort'));
-              $allowToHandle=$viewVals->get('record')?$viewVals->get('record')->allowedToHandle():true;
+              $allowToHandle=$viewVals->get('record')?$viewVals->get('record')->allowedToHandle():true
     @endphp
     <section class="button_actions card js-buttonActions shadow-sm">
         <div class=" card-body  py-2 d-flex align-items-center flex-wrap">
@@ -62,10 +62,10 @@
 
 
 @push('topBar')
-    <section class="d-flex justify-content-en px-3 mt-2">
+    <section class="d-flex justify-content-end px-3 mt-1">
         @if($viewVals->get('options')->get('modelIsTranslatable'))
-            @if(0)
-                <select class="form-control custom-select w-auto m-1 " id="formLanguages" name="formLanguages" data-change="js-form-languages"
+            @if(1)
+                <select class="form-control custom-select  custom-select-sm w-auto m-1 " id="formLanguages" name="formLanguages" data-change="js-form-languages"
                         onchange="formLanguageChanged(this)">
                     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
                         <option
