@@ -1,16 +1,16 @@
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.13/tinymce.min.js"></script>
-    <script data-comment="wysiwyg_Editor tinymce">
+    <script defer data-comment="wysiwyg_Editor tinymce">
 
-            let toolbar = ' undo redo  | cut copy paste pastetext | bold  styleselect  | bullist  hr  link ';
-            let menubar = false;
-            if (location.pathname.replace('/', '').split('/')[0] == 'admin') {
-                toolbar = '  bold forecolor styleselect  | bullist numlist outdent indent | hr  codesample charmap link | code';
-                menubar = 'edit  format table tools ';
-                inline = false;
-            }
-            tinymce.init({
-                selector: 'textarea.withEditor',
+        let toolbar = ' undo redo  | cut copy paste pastetext | bold  styleselect  | bullist  hr  link ';
+        let menubar = false;
+        if (location.pathname.replace('/', '').split('/')[0] == 'admin') {
+            toolbar = '  bold forecolor styleselect  | bullist numlist outdent indent | hr  codesample charmap link | code';
+            menubar = 'edit  format table tools ';
+            inline = false;
+        }
+        tinymce.init({
+            selector: 'textarea.withEditor',
                 //height: 500,
                 plugins: [
                     'advlist autolink textcolor lists link image charmap autolink searchreplace visualblocks code fullscreen  media  table contextmenu paste    hr '

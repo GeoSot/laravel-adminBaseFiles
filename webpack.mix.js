@@ -1,6 +1,8 @@
 const mix = require('laravel-mix');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const publicDirectory = 'public/';
+const publicDirectory = './filesToPublish/assets/';
+mix.setResourceRoot('./');
+mix.setPublicPath(publicDirectory);
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -13,51 +15,46 @@ const publicDirectory = 'public/';
  */
 
 
-mix.copy('node_modules/font-awesome/fonts', publicDirectory + 'css/fonts')
-    .copy('node_modules/ionicons/dist/fonts', publicDirectory + 'css/fonts');
+mix.copy('node_modules/font-awesome/fonts', publicDirectory + 'css/fonts');
 
-
-mix.js('resources/js/mainScripts/site.js', publicDirectory + 'js/site/app.js')
-    .js('resources/js/mainScripts/admin.js', publicDirectory + 'js/admin/app.js')
+mix.js('resources/js/mainScripts/admin.js', publicDirectory + 'js/admin/app.js')
+    .js('resources/js/mainScripts/site.js', publicDirectory + 'js/site/app.js')
     .sass('resources/sass/site/app.scss', publicDirectory + 'css/site/app.css')
     .sass('resources/sass/admin/app.scss', publicDirectory + 'css/admin/app.css');
 //mix.babel(),mix.minify('path/to/file.js');
 mix.options({//https://laravel-mix.com/docs/2.1/options
-    cleanCss: {
-        level: {
-            1: {
-                specialComments: 'none'
-            }
-        }
+    cssNano: {
+        discardComments: {removeAll: true},
     },
     processCssUrls: false,
     autoprefixer: {
         options: {
-            browsers: [
-                'last 3 versions',
-            ]
+            browsers: ['last 3 versions']
         }
     },
-    // postCss: [
-    //     require('autoprefixer')({
-    //         browsers: ['last 2 versions'],
-    //         cascade: false
-    //     })
-    // ],
     purifyCss: false
 });
 
 
 if (mix.inProduction()) {
-    mix.version();
+    mix.version()
+        .options({
+            // Optimize JS minification process
+            terser: {
+                cache: true,
+                parallel: true,
+                sourceMap: true
+            }
+        });
 } else {
     mix.sourceMaps();
-    // mix.browserSync('baseAdmin.test');
+    mix.webpackConfig({
+        devtool: 'inline-source-map'
+    });
+    //l mix.browserSync('baseAdmin.test');
 }
 
-//mix.autoload({
-//    jquery: ['$', 'window.jQuery']
-// });
+
 // Add this to very bottom of your webpack-mix.js
 mix.webpackConfig({
     resolve: {
@@ -71,6 +68,6 @@ mix.webpackConfig({
         fs: "empty"
     },
     plugins: [
-        new CleanWebpackPlugin([publicDirectory + 'js', publicDirectory + 'css', publicDirectory + 'fonts'])//prosoxi katharizei ta panta apo to public
+        // new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns:[publicDirectory + 'js', publicDirectory + 'css', publicDirectory + 'fonts']})//prosoxi katharizei ta panta apo to public
     ]
 });

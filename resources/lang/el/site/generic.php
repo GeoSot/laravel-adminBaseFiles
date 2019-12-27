@@ -1,7 +1,7 @@
 <?php
 return [
     'app' => [
-        'title' => 'ARTIFIEDWEB Support',
+        'title' => 'My APP',
     ],
     'menu' => [
         'dashboard' => 'Διαχειριστικό',

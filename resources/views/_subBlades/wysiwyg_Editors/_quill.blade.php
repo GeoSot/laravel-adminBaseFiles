@@ -4,7 +4,7 @@
 
     <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
-    <script data-comment="wysiwyg_Editor quill">
+    <script defer data-comment="wysiwyg_Editor quill">
 
 
         BaseAdmin.initActiveTextEditor = function (el) {

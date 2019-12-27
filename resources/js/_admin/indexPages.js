@@ -1,7 +1,3 @@
-/**
- * Created by Max @ ArtifiedWeb on 14/06/17.
- */
-
 window.BaseAdmin = window.BaseAdmin || {};
 
 

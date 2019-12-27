@@ -1,6 +1,6 @@
 @push('scripts')
-    <script data-comment="wysiwyg_Editor initialize">
-        window.BaseAdmin = BaseAdmin || {};
+    <script defer data-comment="wysiwyg_Editor initialize">
+        window.BaseAdmin = window.BaseAdmin || {};
         BaseAdmin.textEditors = BaseAdmin.textEditors || [];
         BaseAdmin.initTextEditor = function (el) {
             BaseAdmin.initActiveTextEditor(el)

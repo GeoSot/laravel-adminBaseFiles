@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\RouteServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\SidebarServiceProvider;
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -117,7 +118,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             CommandsProvider::class,
 //            ModuleServiceProvider::class,
             CommandsProvider::class,
-//            SidebarServiceProvider::class,
         ];
 
         array_map(function ($provider) {

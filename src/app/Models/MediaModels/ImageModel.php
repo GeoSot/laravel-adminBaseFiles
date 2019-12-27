@@ -5,7 +5,7 @@ namespace GeoSot\BaseAdmin\App\Models\MediaModels;
 
 class ImageModel extends BaseMediaModel
 {
-    protected $table = 'media_images';
+    protected static $type = 'image';
 
 
     protected $frontEndConfigValues = [

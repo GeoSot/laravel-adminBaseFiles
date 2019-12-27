@@ -34,7 +34,7 @@
 
 @push('scripts')
 
-    <script data-comment="logActions">
+    <script defer data-comment="logActions">
         $('[data-toggle="logAction"]').click(function (e) {
             let $btn = $(this);
             swal({

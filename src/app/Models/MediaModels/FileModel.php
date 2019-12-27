@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class FileModel extends BaseMediaModel
 {
 
-    protected $table = 'media_files';
+    protected static $type = 'file';
 
 
     protected $frontEndConfigValues = [

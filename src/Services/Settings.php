@@ -1,6 +1,6 @@
 <?php
 /**
- * Artified by GeoSv.
+ * by GeoSv.
  * User: gsoti
  * Date: 20/8/2018
  * Time: 12:02 μμ

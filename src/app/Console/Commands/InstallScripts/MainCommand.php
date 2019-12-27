@@ -32,7 +32,7 @@ class MainCommand extends BaseInstallCommand
     /**
      * Create a new migration install command instance.
      *
-     * @param  \Illuminate\Support\Composer $composer
+     * @param  Composer  $composer
      *
      * @return void
      */
@@ -88,12 +88,13 @@ class MainCommand extends BaseInstallCommand
             'publishLocalizationConfig' => [
                 'vendor:publish', [
                     '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
-                    '--tag'      => 'config'
+                    '--tag' => 'config'
                 ]
             ],
-            'makePassportKeys'          => ['passport:keys', []],
+            'makePassportKeys' => ['passport:keys', []],
             //  'installPassport'           => ['passport:install', []],//after migrate /https://laravel.com/docs/passport
-            'editConfigFiles'           => ['baseAdmin:install:editConfigFiles', []]
+            'editConfigFiles' => ['baseAdmin:install:editConfigFiles', []],
+            'publishAssets' => ['baseAdmin:publishAssets', []],
         ];
 
     }

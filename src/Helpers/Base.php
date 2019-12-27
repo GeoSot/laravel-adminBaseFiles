@@ -8,6 +8,10 @@
 
 
 if (!function_exists('minutesToHuman')) {
+    /**
+     * @param $arg
+     * @return string
+     */
     function minutesToHuman($arg)
     {
         if (is_null($arg)) {
@@ -26,6 +30,10 @@ if (!function_exists('minutesToHuman')) {
 
 
 if (!function_exists('getCachedRouteAsLink')) {
+    /**
+     * @param $routeName
+     * @return string
+     */
     function getCachedRouteAsLink($routeName)
     {
         if (is_null($routeName)) {
@@ -41,6 +49,12 @@ if (!function_exists('getCachedRouteAsLink')) {
 
 
 if (!function_exists('settings')) {
+    /**
+     * @param  null  $key
+     * @param  null  $default
+     * @return \GeoSot\BaseAdmin\Services\Settings|\Illuminate\Contracts\Foundation\Application|mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     function settings($key = null, $default = null)
     {
         $settings = app('settings');
@@ -54,10 +68,21 @@ if (!function_exists('settings')) {
 
 }
 
-if (!function_exists('baseAdmin_asset')) {
-    function baseAdmin_asset(string $path, $secure = null)
+if (!function_exists('baseAdmin_assets')) {
+    /**
+     * @param  string  $path
+     * @param  null  $secure
+     * @return \Illuminate\Support\HtmlString|string
+     * @throws Exception
+     */
+    function baseAdmin_assets(string $path, $secure = null)
     {
-        return asset(config('baseAdmin.config.assets.path').'/'.$path.config('baseAdmin.config.assets.version'), $secure);
+        if (Str::endsWith($path, '/')) {
+            $path = Str::replaceLast('/', '', $path);
+        }
+        $assetsPath = str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath'));
+
+        return mix($path, $assetsPath);
     }
 }
 

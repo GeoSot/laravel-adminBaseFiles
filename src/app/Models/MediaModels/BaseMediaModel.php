@@ -7,6 +7,7 @@ namespace GeoSot\BaseAdmin\App\Models\MediaModels;
 use Eloquent;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ManagesFiles;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Translatable\HasTranslations;
 
@@ -17,18 +18,20 @@ use Spatie\Translatable\HasTranslations;
  * */
 abstract class BaseMediaModel extends BaseModel
 {
+    protected $table = 'media';
     use ManagesFiles, HasTranslations;
+    private static $type = '';
 
-//    public static function boot()
-//    {
-//        parent::boot();
-//        static::saving(function ($model) {
-//            $model['type'] = $model->type;
-//        });
-//        static::addGlobalScope(function ($query) {
-//            $query->where('type', 'file');
-//        });
-//    }
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function ($model) {
+            $model['type'] = $model->type;
+        });
+        static::addGlobalScope('type', function (Builder $query) {
+            return $query->where('type', '=', static::$type);
+        });
+    }
 
 
     public $translatable = [

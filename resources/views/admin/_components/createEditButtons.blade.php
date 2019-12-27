@@ -97,7 +97,7 @@
     </style>
 @endpush
 @push('scripts')
-    <script data-comment="formSubmitButtons formLanguageButtons">
+    <script defer data-comment="formSubmitButtons formLanguageButtons">
         function cancelButtonClicked() {
             let $hiddenRedirectInput = $('input[name="after_save_redirect_to"]');
 

@@ -5,7 +5,7 @@ namespace GeoSot\BaseAdmin\App\Models\MediaModels;
 
 class VideoModel extends BaseMediaModel
 {
-    protected $table = 'media_videos';
+    protected static $type = 'video';
 
 
     protected $frontEndConfigValues = [

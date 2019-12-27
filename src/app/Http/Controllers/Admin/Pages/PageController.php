@@ -54,7 +54,7 @@ class PageController extends BaseAdminController
     protected function filters()
     {
         return [
-            'parentPage.slug' => ['type' => 'multiSelect'],
+            'parentPage.title' => ['type' => 'multiSelect'],
         ];
     }
 

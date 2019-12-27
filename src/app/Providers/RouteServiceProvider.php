@@ -87,6 +87,9 @@ class RouteServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * register Middleware
+     */
     protected function registerMiddlewareGroups()
     {
         foreach ($this->middlewareToAdd as $name => $class) {
@@ -159,7 +162,7 @@ class RouteServiceProvider extends ServiceProvider
         $controller = $controller ?? ucfirst($parentRoute).ucfirst($name).'Controller';
         $model = ($parentRoute) ? $parentRoute.ucfirst($name) : $name;
         $this->getRouter()->get('',
-            "{$controller}@index")->name('index')->middleware([$permissionPrefix.'.index-'.$model]);;
+            "{$controller}@index")->name('index')->middleware([$permissionPrefix.'.index-'.$model]);
 
         $this->getRouter()->get('create',
             "{$controller}@create")->name('create')->middleware([$permissionPrefix.'.create-'.$model]);

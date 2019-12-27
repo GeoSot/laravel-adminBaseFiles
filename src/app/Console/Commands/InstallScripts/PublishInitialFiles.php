@@ -45,8 +45,14 @@ class PublishInitialFiles extends GenericFileCreateCommand
 
     protected function getStubDirectory()
     {
-        return __DIR__.'/../../../../../filesToPublish/app/';
+        return $this->getBaseStubDirectory().'app/';
     }
+
+    protected function getBaseStubDirectory()
+    {
+        return __DIR__.'/../../../../../filesToPublish/';
+    }
+
 
     /**
      * Get the view full path.
