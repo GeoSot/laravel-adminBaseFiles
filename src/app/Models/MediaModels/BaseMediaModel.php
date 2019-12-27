@@ -25,8 +25,8 @@ abstract class BaseMediaModel extends BaseModel
     public static function boot()
     {
         parent::boot();
-        static::saving(function ($model) {
-            $model['type'] = $model->type;
+        static::saving(function (BaseMediaModel $model) {
+            $model['type'] = static::$type;
         });
         static::addGlobalScope('type', function (Builder $query) {
             return $query->where('type', '=', static::$type);
@@ -59,7 +59,8 @@ abstract class BaseMediaModel extends BaseModel
         'order',
         'custom_properties',
         'enabled',
-        'modified_by'
+        'modified_by',
+        'type'
     ];
 
     protected $casts = [

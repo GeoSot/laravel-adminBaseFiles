@@ -55,7 +55,8 @@ class UserController extends BaseAdminController
 
     protected function afterSave(Request &$request, $model)
     {
-        $model->syncPictures($request);
+        /* @var User $model */
+        $model->syncPictures($request, true);
 
         $model->syncRoles($request->get('roles', []));
     }

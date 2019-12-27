@@ -5,8 +5,10 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
 use App\Models\MediaModels\FileModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -67,7 +69,7 @@ trait HasFiles
 
     private function deleteAssociateFiles()
     {
-        $this->files()->each(function ($model) {
+        $this->files()->each(function (Model $model) {
             $model->delete();
         });
     }
@@ -97,6 +99,15 @@ trait HasFiles
         return null;
     }
 
+    /**
+     * @param $file
+     * @param $directoryName
+     * @param $disk
+     * @param  null  $displayName
+     * @param  null  $order
+     * @param  string|null  $fileName
+     * @return array
+     */
     private function fillFileData($file, $directoryName, $disk, $displayName = null, $order = null, string $fileName = null)
     {
         $collection = Str::snake($directoryName);
@@ -138,7 +149,7 @@ trait HasFiles
      * @param  string  $directoryName
      * @param  string  $disk
      *
-     * @return FileModel
+     * @return  Collection|null
      */
     public function syncFiles($files, string $directoryName, string $disk = 'uploads')
     {
@@ -147,6 +158,12 @@ trait HasFiles
         return $this->addFiles($files, $directoryName, $disk);
     }
 
+    /**
+     * @param $files
+     * @param  string  $directoryName
+     * @param  string  $disk
+     * @return Collection|null
+     */
     public function addFiles($files, string $directoryName, string $disk = 'uploads')
     {
         if (is_null($files) or empty($files)) {

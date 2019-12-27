@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
 use GeoSot\BaseAdmin\App\Models\MediaModels\ImageModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -12,6 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 trait HasImages
 {
@@ -49,7 +51,6 @@ trait HasImages
     }
 
 
-
     /**
      * Sync An image to  model
      *
@@ -64,16 +65,16 @@ trait HasImages
     public function syncImage($img = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
     {
         $this->deleteAssociateImages();
-
         return $this->addImage($img, $directoryName, $disk, $displayName, $order);
     }
 
     private function deleteAssociateImages()
     {
-        $this->images()->each(function ($model) {
+        $this->images()->each(function (Model $model) {
             $model->delete();
         });
     }
+
     /**
      * .Add An image to  model
      *
@@ -111,9 +112,13 @@ trait HasImages
         $collection = preg_replace('/[^a-zA-Z0-9]/', '', $directoryName);
         $sizeMb = $mimeType = $extension = null;
         if ($img instanceof UploadedFile) {
+            if (class_exists(ImageOptimizer::class)) {
+                ImageOptimizer::optimize($img->getPathname());
+            }
             $filePath = ($displayName)
                 ? Storage::disk($disk)->putFileAs($collection, $img, $displayName.'.'.$img->getClientOriginalExtension())
                 : $filePath = Storage::disk($disk)->putFile($collection, $img);
+
 
             $fileName = $displayName ?: str_replace('.'.$img->getClientOriginalExtension(), '', $img->getClientOriginalName());
             $sizeMb = (float) number_format($img->getSize() / 1048576, 2);
@@ -198,7 +203,6 @@ trait HasImages
         $slug = empty($extraText) ? '' : '-'.Str::slug($this[$extraText]);
 
         $fileName = $this->getKey().$slug;
-
         return $this->syncImage($file, $this->getTable(), "uploads", $fileName);
 
 

@@ -25,6 +25,7 @@
         "mcamara/laravel-localization": "^1.3",
         "rap2hpoutre/laravel-log-viewer": "^1.3",
         "santigarcor/laratrust": "^5.",
+        "spatie/laravel-image-optimizer": "^1.5",
         "spatie/laravel-translatable": "^4.2"
     },
     "autoload": {
