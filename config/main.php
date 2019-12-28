@@ -41,11 +41,6 @@ return [
 //            'excludeFromSideBar' => ['user', 'emailAccount',],
 //        ],
 
-
-        'setting' => [//I use it to autoRegister Routes
-            'makeFiles' => false,
-            'excludeFromSideBar' => ['setting']
-        ],
 //
 
     ],
@@ -122,7 +117,6 @@ return [
         'setting' => ['all'],
         'fileModel' => ['all'],
         'imageModel' => ['all'],
-
     ]
 ];
 

@@ -82,13 +82,19 @@ class MainCommand extends BaseInstallCommand
             'publishEnvEditorConfig'    => [
                 'vendor:publish', [
                     '--provider' => 'GeoSot\EnvEditor\ServiceProvider',
-                    '--tag'      => 'config'
+                    '--tag' => 'config'
                 ]
             ],
             'publishLocalizationConfig' => [
                 'vendor:publish', [
                     '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
                     '--tag' => 'config'
+                ]
+            ],
+            'publishTranslationMigrations' => [
+                'vendor:publish', [
+                    '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
+                    '--tag' => 'migrations'
                 ]
             ],
             'makePassportKeys' => ['passport:keys', []],

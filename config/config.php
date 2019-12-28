@@ -24,6 +24,9 @@ return [
     */
     'backEnd' => [
         'baseRoute' => 'admin',
+        'assetsPath' => 'assets\\geo-sot\\base-admin',
+        'extraCss' => [],
+        'extraJs' => [],
         //Set Views options
         'layout' => 'baseAdmin::admin.layout',
     ],
@@ -31,21 +34,10 @@ return [
 
     'site' => [
         'baseRoute' => '',
+        'extraCss' => [],
+        'extraJs' => [],
         //Set Views options
         'layout' => 'baseAdmin::site.layout',
-    ],
-    /*
-    |--------------------------------------------------------------------------
-    | Path to the Voyager Assets
-    |--------------------------------------------------------------------------
-    |
-    | Here you can specify the location of the voyager assets path
-    |
-    */
-
-    'assets' => [
-        'path' => 'assets',
-        'version' => '?n9'
     ],
 
 
@@ -54,7 +46,7 @@ return [
 	 | ------------------------------------------------------------------------------------------------
 	 */
     'cacheSettings' => [
-        'enable' => false,
+        'enable' => true,
         'time' => 15,//  cache time in minutes
     ],
 
