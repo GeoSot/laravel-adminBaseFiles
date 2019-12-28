@@ -77,9 +77,7 @@ class RouteServiceProvider extends ServiceProvider
                 $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->namespace('Admin')->as('admin.')->middleware(['auth'])->group(function () {
                     $this->loadBackendRoutes();
                 });
-                $this->getRouter()->auth([/*'register' => false, 'reset' => false,*/
-                    'verify' => true,
-                ]);
+                $this->getRouter()->auth(config('baseAdmin.config.authActions'));
                 $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->namespace('Site')->group(function () {
                     $this->loadFrontendRoutes();
                 });

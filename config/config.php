@@ -69,4 +69,12 @@ return [
         'label-locale-indicator' => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'
     ],
 
+
+    'authActions' => [
+        'register' => true,
+        'reset' => true,
+        'confirm' => true,
+        'verify' => true,
+    ]
+
 ];
