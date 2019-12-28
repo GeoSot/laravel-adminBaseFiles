@@ -12,7 +12,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
     /**
      * The filesystem instance.
      *
-     * @var \Illuminate\Filesystem\Filesystem
+     * @var Filesystem
      */
     protected $files;
 
@@ -33,7 +33,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
     /**
      * Create a new controller creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem $files
+     * @param  Filesystem  $files
      *
      * @return void
      */
@@ -121,6 +121,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
 
         $newValue = is_array($existingValue) ? array_merge($existingValue, Arr::wrap($valueToChange)) : $valueToChange;
         //  dd($existingValue);
+        //TODO
         dd(var_export($existingValue) . ',');
 
 // create the array as a php text string

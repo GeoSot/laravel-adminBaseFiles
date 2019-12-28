@@ -15,8 +15,6 @@ use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 trait ForgotPasswordFormTrait
 {
-
-
     use FormBuilderTrait;
 
     /**

@@ -64,3 +64,68 @@ This Package Initiates a mini Cms System with Admin Area, translatable models et
      php artisan migrate
       ```
  
+4. Changes to Auth Controllers
+
+> LoginController
+```php
+ 
+    use AuthenticatesUsers, LoginFormTrait;
+  
+    public function showLoginForm()
+    {
+        $form = $this->getForm();
+
+        return view('baseAdmin::auth.login', compact('form'));
+    }
+  
+```
+> RegisterController
+```php
+ 
+ use RegistersUsers, RegisterFormTrait;
+
+  
+    public function showRegistrationForm()
+    {
+        $form = $this->getForm();
+
+        return view('auth.register', compact('form'));
+    }
+  
+```
+
+> ResetPasswordController
+```php
+ 
+ use ResetsPasswords, ResetPasswordFormTrait;
+
+    public function showResetForm(Request $request, $token = null)
+    {
+
+        $form = $this->getForm($token, $request->input('email'));
+
+        return view('auth.passwords.reset', compact('form', 'token', 'email'));
+    }
+  
+```
+
+> ForgotPasswordController
+```php
+ 
+    use SendsPasswordResetEmails,ForgotPasswordFormTrait;
+    
+    public function showLinkRequestForm()
+    {
+        $form = $this->getForm();
+
+        return view('baseAdmin::auth.passwords.email', compact('form'));
+    }
+  
+```
+> VerificationController
+
+
+> RouteServiceProvider 
+```php
+   public const HOME = '/;
+```

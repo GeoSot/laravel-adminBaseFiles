@@ -28,7 +28,7 @@
                         {{ auth()->user()->first_name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class=" dropdown-item" href="{{route('home')}}">
+                        <a class=" dropdown-item" href="{{ \App\Providers\RouteServiceProvider::HOME)}}">
                             <i class="fa fa-sitemap "></i> @lang($packageVariables->get('nameSpace').'admin/generic.menu.site')
                         </a>
 

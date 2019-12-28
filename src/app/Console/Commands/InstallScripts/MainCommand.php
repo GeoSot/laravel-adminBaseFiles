@@ -101,6 +101,8 @@ class MainCommand extends BaseInstallCommand
             //  'installPassport'           => ['passport:install', []],//after migrate /https://laravel.com/docs/passport
             'editConfigFiles' => ['baseAdmin:install:editConfigFiles', []],
             'publishAssets' => ['baseAdmin:publishAssets', []],
+            'runMigration' => ['migrate', []],
+            'seedPackageData' => ['db:seed', ['--class' => 'GeoSot\BaseAdmin\Seeds\DatabaseSeeder']],
         ];
 
     }
