@@ -94,3 +94,4 @@ BaseAdmin.handleSelectInputs($('body'));
 
 
 require('./_partials/forms/_index');
+require('./_partials/lazyImages');

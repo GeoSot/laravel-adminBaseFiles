@@ -19,7 +19,7 @@
 @endpush
 
 @push('scripts')
-    <script data-comment="return to top button">
+    <script defer data-comment="return to top button">
 
 
         $(function () {

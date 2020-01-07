@@ -201,7 +201,7 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
 /*
 *  E X A M P L E
 *
-    <script data-comment="newPostAjax">
+    <script defer data-comment="newPostAjax">
 
      new BaseAdmin.forms.ajaxify("form#newPostForm").onSubmit(function (instance, jqxhr) {
          jqxhr.done(function (data) {

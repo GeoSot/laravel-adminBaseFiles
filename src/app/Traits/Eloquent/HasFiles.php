@@ -4,11 +4,11 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
-use App\Models\MediaModels\FileModel;
+use App\Models\Media\MediumFile;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 
 trait HasFiles
@@ -38,7 +38,7 @@ trait HasFiles
      */
     public function files()
     {
-        return $this->morphMany($this->getModel(), 'model');
+        return $this->morphMany(MediumFile::class, 'model');
     }
 
     public function filesEnabled()
@@ -54,20 +54,19 @@ trait HasFiles
      * @param  string  $displayName
      * @param  integer  $order
      * @param  string  $disk
-     * @param  string  $fileName
      *
-     * @return FileModel
+     * @return MediumFile
      */
-    public function syncFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null, string $fileName = null)
+    public function syncFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
         $this->deleteAssociateFiles();
 
-        return $this->addFile($file, $directoryName, $disk, $displayName, $order, $fileName);
+        return $this->addFile($file, $directoryName, $disk, $displayName, $order);
     }
 
     private function deleteAssociateFiles()
     {
-        $this->files()->each(function ($model) {
+        $this->files()->each(function (Model $model) {
             $model->delete();
         });
     }
@@ -80,81 +79,52 @@ trait HasFiles
      * @param  string  $displayName  *
      * @param  integer  $order
      * @param  string  $disk
-     * @param  string  $fileName
      *
-     * @return FileModel
+     * @return MediumFile
      */
-    public function addFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null, string $fileName = null)
+    public function addFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
 
         if (is_string($file) or $file instanceof UploadedFile) {
 
-            $data = $this->fillFileData($file, $directoryName, $disk, $displayName, $order, $fileName);
+            $data = (new MediumFile())->fillData($this, $file, $directoryName, $disk, $displayName, $order);
 
-            return $this->getModel()::create($data);
+            return MediumFile::create($data);
         }
 
         return null;
     }
 
-    private function fillFileData($file, $directoryName, $disk, $displayName = null, $order = null, string $fileName = null)
-    {
-        $collection = Str::snake($directoryName);
-
-        $sizeMb = $mimeType = $extension = '';
-        if ($file instanceof UploadedFile) {
-            $showName = $displayName ?? str_replace('.'.$file->getClientOriginalExtension(), '', $file->getClientOriginalName());
-            $fileSaveName = $displayName ?: $file->hashName();
-            $fileSaveName = ($fileName ?: $fileSaveName).'.'.$file->getClientOriginalExtension();
-            $filePath = Storage::disk($disk)->putFileAs($collection, $file, $fileSaveName);
-            $sizeMb = (float) number_format($file->getSize() / 1048576, 3);
-            $mimeType = $file->getMimeType();
-            $extension = $file->getClientOriginalExtension();
-        } else {
-            $filePath = $file;
-            $showName = is_null($displayName) ? $file : $displayName;
-            $disk = "uri";
-        }
-        $attributes = [
-            'model_type' => get_class($this),
-            'model_id' => $this->id,
-            'collection_name' => $collection,
-            'title' => $showName,
-            'file' => $filePath,
-            'disk' => $disk,
-            'size_mb' => $sizeMb,
-            'mime_type' => $mimeType,
-            'extension' => $extension,
-            'order' => $order
-        ];
-
-        return $attributes;
-    }
 
     /**
      * Sync A File to model
      *
-     * @param  mixed  $files
+     * @param  Collection  $files
      * @param  string  $directoryName
      * @param  string  $disk
      *
-     * @return FileModel
+     * @return  Collection|null
      */
-    public function syncFiles($files, string $directoryName, string $disk = 'uploads')
+    public function syncFiles(Collection $files, string $directoryName, string $disk = 'uploads')
     {
         $this->deleteAssociateFiles();
 
         return $this->addFiles($files, $directoryName, $disk);
     }
 
-    public function addFiles($files, string $directoryName, string $disk = 'uploads')
+    /**
+     * @param  Collection  $files
+     * @param  string  $directoryName
+     * @param  string  $disk
+     * @return Collection|null
+     */
+    public function addFiles(Collection $files, string $directoryName, string $disk = 'uploads')
     {
-        if (is_null($files) or empty($files)) {
+        if ($files->isEmpty()) {
             return null;
         }
-
         $collection = collect([]);
-        foreach (collect($files) as $index => $file) {
+        foreach ($files as $index => $file) {
             $collection->push($this->addFile($file, $directoryName, $disk, null, $index * 10));
         }
 
@@ -162,11 +132,4 @@ trait HasFiles
     }
 
 
-    /**
-     * @return string
-     */
-    protected function getModel(): string
-    {
-        return config('baseAdmin.config.models.namespace').'MediaModels\\FileModel';
-    }
 }

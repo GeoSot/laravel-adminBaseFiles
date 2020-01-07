@@ -8,7 +8,7 @@
      $isSortable=\Illuminate\Support\Arr::get($options,'sortable',false);
      $viewAndRemoveOnly=\Illuminate\Support\Arr::get($options,'viewAndRemoveOnly',false);
      $parentForm=\Illuminate\Support\Arr::get($options,'form');
-     $extraFields=['sortable'=>$isSortable,'repeatable'=>$isRepeatable, 'viewAndRemoveOnly'=>$viewAndRemoveOnly ];
+     $extraFields=['sortable'=>$isSortable,'repeatable'=>$isRepeatable, 'viewAndRemoveOnly'=>$viewAndRemoveOnly ]
 
 @endphp
 @if ($showLabel && $showField)
@@ -17,7 +17,7 @@
     @endif
 @endif
         @if ($showLabel && $options['label'] !== false && $options['label_show'])
-            {!!  Form::customLabel($name, $options['label'], $options['label_attr'])  !!}
+                {!!  Form::customLabel($name, $options['label'], $options['label_attr'])  !!}
         @endif
         @if($showField)
                 @if($isSortable )

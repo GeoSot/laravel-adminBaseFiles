@@ -4,13 +4,12 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
-use GeoSot\BaseAdmin\App\Models\MediaModels\ImageModel;
+use GeoSot\BaseAdmin\App\Models\Media\MediumImage;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 trait HasImages
@@ -40,14 +39,13 @@ trait HasImages
      */
     public function images()
     {
-        return $this->morphMany($this->getModel(), 'model');
+        return $this->morphMany(MediumImage::class, 'model');
     }
 
     public function imagesEnabled()
     {
         return $this->images()->where('enabled', true)->where('the_file_exists', true);
     }
-
 
 
     /**
@@ -59,21 +57,21 @@ trait HasImages
      * @param  integer  $order
      * @param  string  $disk
      *
-     * @return ImageModel
+     * @return MediumImage
      */
     public function syncImage($img = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
     {
         $this->deleteAssociateImages();
-
         return $this->addImage($img, $directoryName, $disk, $displayName, $order);
     }
 
     private function deleteAssociateImages()
     {
-        $this->images()->each(function ($model) {
+        $this->images()->each(function (Model $model) {
             $model->delete();
         });
     }
+
     /**
      * .Add An image to  model
      *
@@ -83,83 +81,47 @@ trait HasImages
      * @param  integer  $order
      * @param  string  $disk
      *
-     * @return ImageModel
+     * @return MediumImage
      */
     public function addImage($img = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
     {
         if (is_null($img)) {
             return null;
         }
-        $data = $this->fillData($img, $directoryName, $disk, $displayName, $order);
 
-        return ImageModel::create($data);
+        $data = (new MediumImage())->fillData($this, $img, $directoryName, $disk, $displayName, $order);
+
+        return MediumImage::create($data);
     }
 
-    /**
-     * .Sync An image to  model
-     *
-     * @param  mixed  $img
-     * @param  string  $directoryName
-     * @param  string  $displayName  *
-     * @param  integer  $order
-     * @param  string  $disk
-     *
-     * @return array
-     */
-    private function fillData($img, string $directoryName, string $disk, string $displayName = null, int $order = null)
-    {
-        $collection = preg_replace('/[^a-zA-Z0-9]/', '', $directoryName);
-        $sizeMb = $mimeType = $extension = null;
-        if ($img instanceof UploadedFile) {
-            $filePath = ($displayName)
-                ? Storage::disk($disk)->putFileAs($collection, $img, $displayName.'.'.$img->getClientOriginalExtension())
-                : $filePath = Storage::disk($disk)->putFile($collection, $img);
-
-            $fileName = $displayName ?: str_replace('.'.$img->getClientOriginalExtension(), '', $img->getClientOriginalName());
-            $sizeMb = (float) number_format($img->getSize() / 1048576, 2);
-            $mimeType = $img->getMimeType();
-            $extension = $img->getClientOriginalExtension();
-        } else {
-            $filePath = $img;
-            $fileName = $displayName ?: $img;
-            $disk = "uri";
-        }
-        return [
-            'model_type' => get_class($this),
-            'model_id' => $this->getKey(),
-            'collection_name' => $collection,
-            'title' => $fileName,
-            'file' => $filePath,
-            'disk' => $disk,
-            'size_mb' => $sizeMb,
-            'mime_type' => $mimeType,
-            'extension' => $extension,
-            'order' => $order,
-        ];
-
-    }
 
     /**
-     * @param  null  $images
+     * @param  Collection  $images
      * @param  string  $directoryName
      * @param  string  $disk
      *
      * @return Collection|null
      */
-    public function syncImages($images = null, string $directoryName, string $disk = 'uploads')
+    public function syncImages(Collection $images, string $directoryName, string $disk = 'uploads')
     {
         $this->deleteAssociateImages();
 
         return $this->addImages($images, $directoryName, $disk);
     }
 
-    public function addImages($images, string $directoryName, string $disk = 'uploads')
+    /**
+     * @param  Collection  $images
+     * @param  string  $directoryName
+     * @param  string  $disk
+     * @return Collection|null
+     */
+    public function addImages(Collection $images, string $directoryName, string $disk = 'uploads')
     {
-        if (is_null($images) or empty($images)) {
+        if ($images->isEmpty()) {
             return null;
         }
         $collection = collect([]);
-        foreach (Arr::wrap($images) as $index => $image) {
+        foreach ($images as $index => $image) {
             $collection->push($this->addImage($image, $directoryName, $disk, null, $index * 10));
         }
 
@@ -198,7 +160,6 @@ trait HasImages
         $slug = empty($extraText) ? '' : '-'.Str::slug($this[$extraText]);
 
         $fileName = $this->getKey().$slug;
-
         return $this->syncImage($file, $this->getTable(), "uploads", $fileName);
 
 
@@ -215,10 +176,10 @@ trait HasImages
     {
         $removeIdsArray = array_filter($request->get('remove_images', []));
         $oldIds = array_filter($request->get('old_images', []));
-        $deleteIdsArray = $this->images->whereNotIn('id', $oldIds)->pluck('id')->toArray();
+        $deleteIdsArray = $this->images()->whereNotIn('id', $oldIds)->pluck('id')->toArray();
 
         if (!empty($ids = array_merge($removeIdsArray, $deleteIdsArray))) {
-            $this->getModel()::deleteIds($ids);
+            MediumImage::deleteIds($ids);
 
             return true;
         }
@@ -226,12 +187,5 @@ trait HasImages
         return false;
     }
 
-    /**
-     * @return string
-     */
-    protected function getModel(): string
-    {
-        return config('baseAdmin.config.models.namespace').'MediaModels\\ImageModel';
-    }
 
 }

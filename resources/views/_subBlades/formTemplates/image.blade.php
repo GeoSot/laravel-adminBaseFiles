@@ -28,7 +28,7 @@
             <div class="fileinput-preview  border border-light thumbnail  bg-light   {!! $imgWrapper['class'] ??'' !!}"
                  {!! $imgWrapperAttrs !!} data-imgclass="img-fluid  {!!$imgClass!!}">
                 @if ((is_string($options['value']) and $options['value']) or ($options['value'] instanceof  \Illuminate\Support\Collection and $options['value']->count()))
-                    <img src="{!! is_string($options['value'])?$options['value']:$options['value']->first()->getFilePath() !!}" class="  img-fluid   {!!$imgClass!!}"/>
+                    <img data-src="{!! is_string($options['value'])?$options['value']:$options['value']->first()->getFilePath() !!}" class=" js-lazy img-fluid   {!!$imgClass!!}"/>
                 @endif
             </div>
 
@@ -50,7 +50,13 @@
                 <button class="btn btn-secondary  btn-sm fileinput-exists mx-1 mb-1" type="button" data-dismiss="fileinput">
                     @lang($packageVariables->get('nameSpace').'admin/generic.button.remove')
                 </button>
-                <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$options['value']}}" target="_blank"><i class="fa fa-eye"></i></a>
+                @if($val=$options['value'])
+                    @php($href=
+                              $options['model'] instanceOf \App\Models\Media\MediumImage
+                              ?route($options['model']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['model'])
+                              :$val)
+                    <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>
+                @endif
                 @if(\Illuminate\Support\Arr::get($options, 'repeatable', false))
                     <button class="btn btn-danger ml-auto btn-sm mb-1" type="button" data-remove="fileinput"><i class="fa fa-minus"></i></button>
                 @endif

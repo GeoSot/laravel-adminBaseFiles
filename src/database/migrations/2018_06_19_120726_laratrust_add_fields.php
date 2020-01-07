@@ -21,11 +21,6 @@ class LaratrustAddFields extends Migration
             $table->softDeletes();
         });
 
-        Schema::table(config('laratrust.tables.permissions'), function (Blueprint $table) {
-            $table->unsignedBigInteger('permission_group_id')->nullable();
-
-            $table->foreign('permission_group_id')->references('id')->on('permission_groups')->onDelete('set null');
-        });
     }
 
     /**
@@ -42,11 +37,6 @@ class LaratrustAddFields extends Migration
             $table->dropColumn('front_users_can_choose');
             $table->dropColumn('is_protected');
             $table->dropSoftDeletes();
-        });
-
-        Schema::table(config('laratrust.tables.permissions'), function (Blueprint $table) {
-            $table->dropForeign(['permission_group_id']);
-            $table->dropColumn('permission_group_id');
         });
 
         Schema::enableForeignKeyConstraints();

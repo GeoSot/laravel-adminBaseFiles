@@ -9,7 +9,7 @@
     $modelLang=$viewVals->get('modelLang');
     $filters=$viewVals->get('extra_filters');
     $requestParams=$params->get('extra_filters');
-    $requestHasExtraFilters=$requestParams->filter(function ($it){ return is_array($it)?!empty(array_filter($it)):!is_null($it);})->isNotEmpty();
+    $requestHasExtraFilters=$requestParams->filter(function ($it){ return is_array($it)?!empty(array_filter($it)):!is_null($it);})->isNotEmpty()
 @endphp
 @if($filters->count())
     <div class="px-5">
@@ -118,8 +118,8 @@
     </div>
 
     @push('scripts')
-        <script data-comment="extra_filters on index page">
-            const clearFiltersBrn = '[data-toggle="clearExtraFilters"]';
+        <script defer data-comment="extra_filters on index page">
+            let clearFiltersBrn = '[data-toggle="clearExtraFilters"]';
             $(document).on('click', clearFiltersBrn, function () {
                 let $filterInputs = $('[name^="extra_filters\["]');
                 $filterInputs.val('').trigger('change');

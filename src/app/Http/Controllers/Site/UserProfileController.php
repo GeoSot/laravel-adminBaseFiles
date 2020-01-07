@@ -41,7 +41,8 @@ class UserProfileController extends BaseFrontController
     {
         $user = auth()->user();
 
-        $rules = $user->rules();
+        /* @var User $user */
+        $rules = $user->getRules();
 
         if (!is_null($request->input('password'))) {
             $rules = array_merge($rules, [

@@ -50,20 +50,12 @@ class Page extends BaseModel
         'enabled' => 'boolean',
     ];
 
-    function translationRules(array $merge = [])
+
+    protected function rules(array $merge = [])
     {
         return array_merge([
             'title' => ['required', 'min:3'],
-            //            'title' => ['required', 'min:3', "unique:{$this->getTranslationsTable()},title" . $this->getIgnoreTextOnUpdate(),],
-            // 'description' => 'required'
-        ], $merge);
-    }
-
-    function rules(array $merge = [])
-    {
-        return array_merge([
-            //   'title' => ['required','min:3', "unique:{$this->getTable()},title" . $this->getIgnoreTextOnUpdate(),],
-            'slug' => 'required'
+            'slug' => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
         ], $merge, $this->rules);
     }
 

@@ -38,12 +38,11 @@ class UserRole extends LaratrustRole
      *
      * @return array
      */
-    public function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
-        $textOnUpdate = (is_null($this->id) ? '' : ',' . $this->id);
 
         return array_merge([
-            'name' => "required|unique:{$this->getTable()},name" . $textOnUpdate,
+            'name' => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
             "display_name" => "required",
         ], $merge);
     }

@@ -44,6 +44,7 @@ class RouteServiceProvider extends ServiceProvider
         'localize' => Mcamara\LaravelLocalizationRoutes::class,
         'localizationRedirect' => Mcamara\LaravelLocalizationRedirectFilter::class,
         'localeSessionRedirect' => Mcamara\LocaleSessionRedirect::class,
+        'localeCookieRedirect' => Mcamara\LocaleCookieRedirect::class,
         'localeViewPath' => Mcamara\LaravelLocalizationViewPath::class
     ];
 
@@ -77,9 +78,7 @@ class RouteServiceProvider extends ServiceProvider
                 $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->namespace('Admin')->as('admin.')->middleware(['auth'])->group(function () {
                     $this->loadBackendRoutes();
                 });
-                $this->getRouter()->auth([/*'register' => false, 'reset' => false,*/
-                    'verify' => true,
-                ]);
+                $this->getRouter()->auth(config('baseAdmin.config.authActions'));
                 $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->namespace('Site')->group(function () {
                     $this->loadFrontendRoutes();
                 });
@@ -87,6 +86,9 @@ class RouteServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * register Middleware
+     */
     protected function registerMiddlewareGroups()
     {
         foreach ($this->middlewareToAdd as $name => $class) {
@@ -126,12 +128,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->getRouter()->get('', 'DashboardController@index')->name('dashboard')->middleware(['permission:admin.*']);
         $this->getRouter()->get('admin.or-site', 'DashboardController@choosePage')->name('choosePage');
 
-        $this->getRouter()->prefix('files')->as('files.')->namespace('MediaModels')->group(function () {
-            $this->makeCrudRoutes('fileModel', null, '', 'admin', 'FileController');
-        });
-        $this->getRouter()->prefix('images')->as('images.')->namespace('MediaModels')->group(function () {
-            $this->makeCrudRoutes('imageModel', null, '', 'admin', 'ImageController');
-        });
 
         //QUEUES
         $this->getRouter()->prefix('queues')->name('queues.')->namespace('Queues')->group(function () {
@@ -158,8 +154,9 @@ class RouteServiceProvider extends ServiceProvider
         $permissionPrefix = 'permission:'.strtolower($side);
         $controller = $controller ?? ucfirst($parentRoute).ucfirst($name).'Controller';
         $model = ($parentRoute) ? $parentRoute.ucfirst($name) : $name;
+
         $this->getRouter()->get('',
-            "{$controller}@index")->name('index')->middleware([$permissionPrefix.'.index-'.$model]);;
+            "{$controller}@index")->name('index')->middleware([$permissionPrefix.'.index-'.$model]);
 
         $this->getRouter()->get('create',
             "{$controller}@create")->name('create')->middleware([$permissionPrefix.'.create-'.$model]);
@@ -190,7 +187,9 @@ class RouteServiceProvider extends ServiceProvider
 
             $this->getRouter()->prefix($parentPlural)->as($parentPlural.'.')->namespace(ucfirst($parentPlural))->group(function () use ($parentRoute, $node, $parentPlural) {
 
-                $this->makeCrudRoutes($parentRoute, $parentPlural, '', 'admin');
+                if (!Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
+                    $this->makeCrudRoutes($parentRoute, $parentPlural, '', 'admin');
+                }
 
                 foreach (Arr::get($node, 'menus', []) as $name) {
                     if ($name == $parentRoute) {

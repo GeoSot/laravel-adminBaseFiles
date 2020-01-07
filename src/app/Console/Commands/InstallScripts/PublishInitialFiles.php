@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
 
+use GeoSot\BaseAdmin\Helpers\Paths;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class PublishInitialFiles extends GenericFileCreateCommand
@@ -45,8 +46,9 @@ class PublishInitialFiles extends GenericFileCreateCommand
 
     protected function getStubDirectory()
     {
-        return __DIR__.'/../../../../../filesToPublish/app/';
+        return Paths::filesToPublishDir('app');
     }
+
 
     /**
      * Get the view full path.
@@ -57,7 +59,7 @@ class PublishInitialFiles extends GenericFileCreateCommand
     public function getFileWithPath()
     {
         $file = str_replace('.stub', '', $this->fileName);
-        return base_path("app/{$file}.php");
+        return base_path("app\\{$file}.php");
     }
 
     /**

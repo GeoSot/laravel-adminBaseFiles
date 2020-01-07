@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Forms\Site;
+
+use GeoSot\BaseAdmin\App\Forms\Site\UserForm as InitialForm;
+
+class UserForm extends InitialForm
+{
+
+}

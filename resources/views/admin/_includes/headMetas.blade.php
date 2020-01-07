@@ -7,11 +7,12 @@
 <!-- Tells Google not to provide a translation for this page -->
 <meta name="google" content="notranslate">
 @php
-    $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.general.menuTitle'): __($packageVariables->get('nameSpace').'admin/generic.menu.dashboard');
-    $pushedTitle=$__env->yieldPushContent('documentTitle', $title);
+    $nameSpace=$packageVariables->get('nameSpace');
+        $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($nameSpace.$viewVals->get('modelLang').'.general.menuTitle'): __($nameSpace.'admin/generic.menu.dashboard');
+        $pushedTitle=$__env->yieldPushContent('documentTitle', $title)
 @endphp
 
-<title>{!! $pushedTitle !!} |  @lang($packageVariables->get('nameSpace').'admin/generic.app.title')</title>
+<title>{!! $pushedTitle !!} | @lang($nameSpace.'admin/app.title')</title>
 
 <!--Tricks to Get Some Resources Quicker-->
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -20,8 +21,8 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <script type="text/javascript">
-    window.Laravel = @json([
+    window.Laravel ={!! json_encode(([
 		'csrfToken' => csrf_token(),
 		'debug' => config('app.debug'),
-	])
+	])) !!}
 </script>

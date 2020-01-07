@@ -27,7 +27,10 @@
 @endphp
 
 @if(config($packageVariables->get('package').'.main.permissionsCheckOnSideBar',true)? $canSeeMenu : !$isExcludedFromConfFile )
-    <li class=" nav-item @if($activeParent=Request::is(LaravelLocalization::getCurrentLocale()."/admin/$parentPlural*")) active  @endif ">
+
+    @php($localePrefix=LaravelLocalization::isHiddenDefault(LaravelLocalization::getCurrentLocale())?'':LaravelLocalization::getCurrentLocale().'/')
+
+    <li class=" nav-item @if($activeParent=Request::is($localePrefix.config('baseAdmin.config.backEnd.baseRoute')."/$parentPlural*")) active  @endif ">
         <a class="px-3 nav-link  d-flex align-items-center" href="{{ getCachedRouteAsLink( "admin.$parentPlural.index")}}"
            @if($activeParent and $hasInnerMenus) aria-expanded="true" @endif
            @if($hasInnerMenus) data-toggle="collapse" data-target="#collapse_{{$parentPlural}}" role="button" aria-expanded="false"
@@ -53,6 +56,7 @@
                     @if(config($packageVariables->get('package').'.main.permissionsCheckOnSideBar',true)? $canSeeSubMenu :true )
                         @include($packageVariables->get('blades').'admin._includes.sidebar._mainSubItem')
                     @endif
+
                 @endforeach
             </ul>
         @endif

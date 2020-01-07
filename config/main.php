@@ -1,6 +1,28 @@
 <?php
 return [
+
+    /* ------------------------------------------------------------------------------------------------
+    |  IF permissionsCheckOnSideBar = TRUE and user doesn't have the permission to see a menu item,
+    |  then the menu item will not appear on sidebar
+    | ------------------------------------------------------------------------------------------------
+    */
     'permissionsCheckOnSideBar' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes & Entities
+    |--------------------------------------------------------------------------
+    |
+    | each route array creates created a set of routes (using a combination of the index (array key) and each menu item
+    | Each menu item it is considered as a Model entity, in order to automatically create Models Admin Controllers and permissions
+    |
+    | menus: Each item inside it counts as a Model and an admin route
+    | icon: can be filled with ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
+    | order: defines the total order of the menu item on admin sidebar
+    | makeFiles: if false doesn't create Admin files during "baseAdmin:autoCreateAll" command
+    | excludeFromSideBar: excludes menu-items From admin Menu
+    | separatorAfter: add a separator line after this menu
+    */
 
     'routes' => [
         'user' => [
@@ -8,22 +30,20 @@ return [
             'icon' => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
             'order' => 20,
             'makeFiles' => false,
-            'translatable' => ['customer', 'contact'],
         ],
         'page' => [
             'menus' => ['page', 'block', 'area'],
             'icon' => ['class' => 'fa  fa-file-text-o', 'style' => 'color:#52c1dc',],
             'order' => 30,
-            'makeFiles' => true,
-            'translatable' => ['page', 'block', 'area']
+            'makeFiles' => false,
         ],
-//        'payment' => [
-//            'menus' => ['payment', 'status'],
-//            'icon' => ['class' => 'fa  fa-money', 'style' => 'color:#73f3a2',],
-//            'order' => 40,
-//            'makeFiles' => false,
-//            'separatorAfter' => true
-//        ],
+        'medium' => [
+            'menus' => ['gallery', 'file', 'image', 'video'],
+            'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
+            'excludeFromSideBar' => ['video'],
+            'order' => 40,
+        ],
+
 //        'ticket' => [
 //            'menus' => ['ticket', 'type', 'status', 'priority', 'message', 'messageNote', 'task',],
 //            'icon' => ['class' => 'fa fa-ticket', 'style' => 'color:#fff',],
@@ -41,31 +61,17 @@ return [
 //            'excludeFromSideBar' => ['user', 'emailAccount',],
 //        ],
 
+//
 
         'setting' => [//I use it to autoRegister Routes
             'makeFiles' => false,
             'excludeFromSideBar' => ['setting']
         ],
-//
 
     ],
 
     'customMenuItems' => [
-        'media' => [
-            'menus' => [
-                'image' => [
-                    'trans' => 'mediaModels/imageModel.general.menuTitle',
-                    'route' => 'images.index'
-                ],
-                'file' => [
-                    'trans' => 'mediaModels/fileModel.general.menuTitle',
-                    'route' => 'files.index'
-                ],
-            ],
-            'icon' => ['class' => 'fa  fa-picture-o', 'style' => 'color:rgb(124, 255, 130)',],
-            'order' => 140,
-            'trans' => 'sideMenu.custom.media'
-        ],
+
         'development' => [
             'menus' => [
                 'setting' => [
@@ -119,10 +125,6 @@ return [
         'dotenveditor' => ['index'],
         'job' => ['index', 'retry', 'flush'],
         'log' => ['index', 'delete'],
-        'setting' => ['all'],
-        'fileModel' => ['all'],
-        'imageModel' => ['all'],
-
     ]
 ];
 

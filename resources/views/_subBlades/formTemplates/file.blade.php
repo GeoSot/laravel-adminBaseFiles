@@ -15,7 +15,6 @@
     <div class="{!! $classContents[1] !!} fileinput  {!! $existsClass !!}" data-toggle="fileInput" {!! $withoutClass !!} >
 
 
-
         @if ($showField)
 
             <div class="input-group mb-3 ">
@@ -28,21 +27,27 @@
                     <span class="form-control text-truncat  ">@if(\Illuminate\Support\Arr::has($options,'model')){{ $options['model']->name }}@endif</span>
                 @endif
                 <input type="hidden" name="old_{{$name}}" value="{{\Illuminate\Support\Arr::get($options, 'id')}}">
-                    <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
-              <div class="input-group-append">
+                <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
+                <div class="input-group-append">
                     @if(!$viewAndRemoveOnly)
-                      <button class="btn btn-secondary fileinput-exists " type="button" data-dismiss="fileinput"> @lang($packageVariables->get('nameSpace').'admin/generic.button.remove')</button>
-                      <button class="btn btn-secondary " type="button" data-trigger="fileinput">
-                      <span class="fileinput-new"> @lang($packageVariables->get('nameSpace').'admin/generic.button.selectFile')</span>
-                      <span class="fileinput-exists"> @lang($packageVariables->get('nameSpace').'admin/generic.button.change')</span>
-                  </button>
-                  @else
-                      <a class=" btn btn-secondary btn-sm align-middle" role="button" href="{{$options['value']}}" target="_blank"><i class="fa fa-eye"></i></a>
-                  @endif
-                  @if(\Illuminate\Support\Arr::get($options, 'repeatable', false) ?? $viewAndRemoveOnly)
-                      <button class="btn btn-danger ml-auto btn-sm" type="button" data-remove="fileinput"><i class="fa fa-minus"></i></button>
-                  @endif
-              </div>
+                        <button class="btn btn-secondary fileinput-exists " type="button"
+                                data-dismiss="fileinput"> @lang($packageVariables->get('nameSpace').'admin/generic.button.remove')</button>
+                        <button class="btn btn-secondary " type="button" data-trigger="fileinput">
+                            <span class="fileinput-new"> @lang($packageVariables->get('nameSpace').'admin/generic.button.selectFile')</span>
+                            <span class="fileinput-exists"> @lang($packageVariables->get('nameSpace').'admin/generic.button.change')</span>
+                        </button>
+                    @else
+                        @if($val=$options['value'])
+                            @php($href=
+                                      $options['model'] instanceOf \App\Models\Media\MediumFile
+                                      ?route($options['model']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['model'])
+                                      :$val)
+                            <a class=" btn btn-secondary btn-sm align-middle" role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>
+                        @endif
+                        @if(\Illuminate\Support\Arr::get($options, 'repeatable', false) ?? $viewAndRemoveOnly)
+                            <button class="btn btn-danger ml-auto btn-sm" type="button" data-remove="fileinput"><i class="fa fa-minus"></i></button>
+                        @endif
+                </div>
             </div>
             @include('laravel-form-builder::help_block')
         @endif
@@ -54,4 +59,5 @@
 
 @endif
 
+@endif
 <!--FileField  END -->

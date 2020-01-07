@@ -1,7 +1,8 @@
 <header class="js-mainHeader  fixed-top ">
     <nav class="navbar navbar-expand-lg  bg-white navbar-light shadow-sm " style="font-size: 1rem">
         <div class="container-fluid px-0 ">
-            <a href="{{ route('home') }}" class="navbar-brand  px-sm-2 rounded" title=" @lang($packageVariables->get('nameSpace').'site/generic.app.title')">
+            <a href="{{ \App\Providers\RouteServiceProvider::HOME }}" class="navbar-brand  px-sm-2 rounded"
+               title=" @lang($packageVariables->get('nameSpace').'site/generic.app.title')">
                 @lang($packageVariables->get('nameSpace').'site/app.title')
             </a>
 
@@ -26,13 +27,13 @@
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon ion-md-person fa-lg pr-1 "></i>
+                                <i class="fa fa-user fa-lg pr-1 "></i>
                                 {{ auth()->user()->first_name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuProfile">
                                 @if( auth()->user()->can('admin.*') )
                                     <a class=" dropdown-item" href="{{   route('admin.dashboard')}}">
-                                        <i class="icon ion-ios-home "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.dashboard')
+                                        <i class="fa fa-home "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.dashboard')
                                     </a>
                                 @endif
                                 <a class=" dropdown-item" href="{{ route('site.users.edit') }}">

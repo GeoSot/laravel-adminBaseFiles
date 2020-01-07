@@ -13,9 +13,10 @@ class CreateFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('media_files', function (Blueprint $table) {
+        Schema::create('media', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
+            $table->string('type');
             $table->nullableMorphs('model');
 //            $table->string('title')->nullable();
             $table->string('collection_name');
@@ -53,7 +54,7 @@ class CreateFilesTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('media_files');
+        Schema::dropIfExists('media');
         Schema::enableForeignKeyConstraints();
     }
 }

@@ -24,11 +24,11 @@
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        <i class="icon ion-md-person fa-lg pr-1 "></i>
+                        <i class="fa fa-user fa-lg pr-1 "></i>
                         {{ auth()->user()->first_name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class=" dropdown-item" href="{{route('home')}}">
+                        <a class=" dropdown-item" href="{{ \App\Providers\RouteServiceProvider::HOME}}">
                             <i class="fa fa-sitemap "></i> @lang($packageVariables->get('nameSpace').'admin/generic.menu.site')
                         </a>
 

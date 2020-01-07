@@ -44,7 +44,7 @@ class PageBlock extends BaseModel
     ];
 
 
-    function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
         $rules = ['slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),]];
         if (!is_null($this->getKey())) {

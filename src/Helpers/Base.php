@@ -7,7 +7,16 @@
  */
 
 
+use GeoSot\BaseAdmin\Helpers\Paths;
+use GeoSot\BaseAdmin\Services\Settings;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\HtmlString;
+
 if (!function_exists('minutesToHuman')) {
+    /**
+     * @param $arg
+     * @return string
+     */
     function minutesToHuman($arg)
     {
         if (is_null($arg)) {
@@ -26,9 +35,13 @@ if (!function_exists('minutesToHuman')) {
 
 
 if (!function_exists('getCachedRouteAsLink')) {
+    /**
+     * @param $routeName
+     * @return string
+     */
     function getCachedRouteAsLink($routeName)
     {
-        if (is_null($routeName)) {
+        if (is_null($routeName) or !Route::has($routeName)) {
             return '#';
         }
         $saveName = 'routesParameters.'.str_replace('.', '_', $routeName);
@@ -41,6 +54,12 @@ if (!function_exists('getCachedRouteAsLink')) {
 
 
 if (!function_exists('settings')) {
+    /**
+     * @param  null  $key
+     * @param  null  $default
+     * @return Settings|Application|mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     function settings($key = null, $default = null)
     {
         $settings = app('settings');
@@ -54,10 +73,33 @@ if (!function_exists('settings')) {
 
 }
 
-if (!function_exists('baseAdmin_asset')) {
-    function baseAdmin_asset(string $path, $secure = null)
+if (!function_exists('baseAdmin_assets')) {
+    /**
+     * @param  string  $path
+     * @return HtmlString|string
+     * @throws Exception
+     */
+    function baseAdmin_assets(string $path)
     {
-        return asset(config('baseAdmin.config.assets.path').'/'.$path.config('baseAdmin.config.assets.version'), $secure);
+        if (Str::endsWith($path, '/')) {
+            $path = Str::replaceLast('/', '', $path);
+        }
+        $assetsPath = str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath'));
+
+        $fullPath = $assetsPath.$path;
+
+        $manifest = Paths::rootDir().'mix-manifest.json';
+        if (file_exists($manifest)) {
+            $manifestData = json_decode(file_get_contents($manifest), true);
+            $dummyPath = '/filesToPublish/assets/';
+
+            if (isset($manifestData[$dummyPath.$path])) {
+                return str_replace($dummyPath, "/$assetsPath", $manifestData[$dummyPath.$path]);
+            }
+
+        }
+
+        return "/$fullPath";
     }
 }
 

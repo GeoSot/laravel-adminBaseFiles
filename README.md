@@ -27,6 +27,9 @@ This Package Initiates a mini Cms System with Admin Area, translatable models et
     > - publishLocalizationConfig
     > - makePassportKeys
     > - editConfigFiles
+    > - publishAssets                                                                                                                          >
+    > - publishViews                                                                                                                          >
+                                                                                                                          >
 
 
 
@@ -61,149 +64,83 @@ This Package Initiates a mini Cms System with Admin Area, translatable models et
      ```bash
      php artisan migrate
       ```
-      
+ 
+4. Changes to Auth Controllers
 
-4.  When published, the config/settings.php config file contains:
+> LoginController
+```php
+ 
+    use AuthenticatesUsers, LoginFormTrait;
+  
+    public function showLoginForm()
+    {
+        $form = $this->getForm();
 
-  ```php
+        return view('baseAdmin::auth.login', compact('form'));
+    }
+  
+```
+> RegisterController
+```php
+ 
+ use RegistersUsers, RegisterFormTrait;
 
-return [
+  
+    public function showRegistrationForm()
+    {
+        $form = $this->getForm();
 
-	/* ------------------------------------------------------------------------------------------------
-	|  Model settings
-	| ------------------------------------------------------------------------------------------------
-	*/
-	'dbTable' => 'settings',
-	'model' => 'App/Setting',
+        return view('auth.register', compact('form'));
+    }
+  
+```
 
-	/*
-	|--------------------------------------------------------------------------
-	| Routes group config
-	|--------------------------------------------------------------------------
-	|
-	| The default group settings for the Paclage routes.
-	|
-	*/
-	'route' => [
-		'prefix' => '',
-		'name' => 'settings',
-		'middleware' => ['web'],
-	],
+> ResetPasswordController
+```php
+ 
+ use ResetsPasswords, ResetPasswordFormTrait;
 
+    public function showResetForm(Request $request, $token = null)
+    {
 
-	/* ------------------------------------------------------------------------------------------------
-	 |  Cache settings (minutes)
-	 | ------------------------------------------------------------------------------------------------
-	 */
-	'cache' => [
-		'enable' => false,
-		'time' => 15,//  cache time in minutes
-	],
+        $form = $this->getForm($token, $request->input('email'));
 
+        return view('auth.passwords.reset', compact('form', 'token', 'email'));
+    }
+  
+```
 
-	'controller' => [
-		/* ------------------------------------------------------------------------------------------------
-		 | Set Responsible Controller For the Crud Process
-		 | ------------------------------------------------------------------------------------------------
-		 */
-		'name' => 'GeoSot\Settings\Controllers\SettingController',
-		/* ------------------------------------------------------------------------------------------------
-	 |  Add MiddleWare on Controller Actions
-	 | ------------------------------------------------------------------------------------------------
-	 */
-		'middleware' => [
-			'index' => '',
-			'store' => 'auth',
-			'show' => '',
-			'edit' => '',
-			'update' => ['web', 'auth'],
-			'delete' => '',
-		]
-	],
-
-	/* ------------------------------------------------------------------------------------------------
-	 | Set Views options
-	 | ------------------------------------------------------------------------------------------------
-	 */
-	'blade' => [
-		'layout' => 'settings::layout',
-		'titleSection' => 'pageTitle',
-		'mainContentSection' => 'content',
-		'pushStyles' => 'styles',
-		'pushScripts' => 'scripts',
-		'pushModals' => 'modals'
-	],
-
-
-	/* ------------------------------------------------------------------------------------------------
-	 |  Allow Deletions
-	 | ------------------------------------------------------------------------------------------------
-	 */
-	'allowDelete' => true,
-
-
-	/* ------------------------------------------------------------------------------------------------
-	 |  Set the available Types of Settings.
-	 |  By Default ['string', 'integer', 'date',  'collection', 'regex']
-	 | ------------------------------------------------------------------------------------------------
-	 */
-	'availableTypes' => ['string', 'integer', 'collection', 'regex', 'date',],
-
-
-	/* ------------------------------------------------------------------------------------------------
-	 |  Set the available Types of Settings.
-	 |  By Default ['string', 'integer', 'date', 'time'm 'collection', 'regex']
-	 | ------------------------------------------------------------------------------------------------
-	 */
-	'parsingFormats' => [
-		'date' => 'd/m/Y',
-	],
-
-	'collectionDelimiter' => '||',
-];
-
-  ```
-
-
-###Usage
-
-After package is installed the following methods are available for usage 
+> ForgotPasswordController
+```php
+ 
+    use SendsPasswordResetEmails,ForgotPasswordFormTrait;
     
-   
-   ```php 
-    // Check key existance  (returns Boolean)
-    Settings::has('key');
-    //or use Helper
-    settings()->has('key');
-    
-     
-    // Set new settings. It returns Boolean if settings was saved or not
-    Settings::set('key','value','type');
-    //Helper
-    settings(['key','value','type']);
-    settings()->set('key','value','type');
-    
-    // Get setting values
-    Settings::get('key','returnValueInCaseOfNull');
-    //Helper
-    settings('key','returnValueInCaseOfNull')
-    settings()->get('key','returnValueInCaseOfNull')
-        
-    
-    //Use groups of settings separated by '.' example: group.key and get them as collections
-    Settings::getGroup('group','returnValueInCaseOfNull');
-    //Helper
-    settings()->getGroup('key','returnValueInCaseOfNull')
-    
-    
-    //Flush key from Cache
-    Settings::flushKey('key');
-    //Helper
-    settings()->flushKey('key');
-    
-    //Delete key
-    Settings::deleteKey('key');
-    //Helper
-    settings()->deleteKey('key');
-   ````
-    
+    public function showLinkRequestForm()
+    {
+        $form = $this->getForm();
+
+        return view('baseAdmin::auth.passwords.email', compact('form'));
+    }
+  
+```
+> VerificationController
+
+
+> RouteServiceProvider 
+
+ Put/Change the following Constant
+```php
+   public const HOME = '/;
+```
+
+
+> Change 'config\auth'
+
+```php
+
+ providers->user->model = App\Models\Users\User::class
+
+ guards->api->driver =passport   
+
+```
+(and delete the File app\User.php)

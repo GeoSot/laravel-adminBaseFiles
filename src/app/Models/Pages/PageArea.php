@@ -40,11 +40,10 @@ class PageArea extends BaseModel
     ];
 
 
-    function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
         return array_merge([
             'slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),],
-
         ], $merge, $this->rules);
     }
 

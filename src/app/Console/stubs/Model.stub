@@ -4,7 +4,6 @@ namespace DummyNamespace;
 
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 
-
 class DummyClass extends BaseModel
 {
     //use Sluggable;
@@ -39,15 +38,18 @@ class DummyClass extends BaseModel
 
 
 
- /* protected $errorMessages = [
+ /* protected $errorMessages = [ //Can use ":attribute"
             'title' => ['required' => 'The title field is mandatory.']
-    ];*/
+    ];
+ */
 
-    public function rules(array $merge = [])
+
+    protected function rules(array $merge = [])
     {
         return array_merge([
             //  'title' => "required|min:3|unique:{$this->getTable()},title" . $this->getIgnoreTextOnUpdate(),
-           // 'description' => 'required'
+           // 'notes' => 'required'
+           //    'slug'      => "min:3|unique:{$this->getTable()},slug" . $this->getIgnoreTextOnUpdate(),
         ], $merge, $this->rules);
     }
 

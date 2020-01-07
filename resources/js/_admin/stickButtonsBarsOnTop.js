@@ -1,7 +1,3 @@
-/**
- * Created by Geo @ ArtifiedWeb on 22/11/17.
- */
-
 
 window.Headroom = require('headroom.js');
 

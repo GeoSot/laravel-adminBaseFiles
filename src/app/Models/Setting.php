@@ -147,7 +147,7 @@ class Setting extends BaseModel
         return $grouped;
     }
 
-    public function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
         $textOnUpdate = is_null($this->id) ? '' : ','.$this->id;
 

@@ -4,6 +4,7 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\morphTo;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,7 +40,7 @@ trait ManagesFiles
      */
     public static function deleteIds(array $idsToBeDeleted)
     {
-        static::whereIn('id', $idsToBeDeleted)->each(function ($model) {
+        static::whereIn('id', $idsToBeDeleted)->each(function (Model $model) {
             $model->delete();
         });
     }

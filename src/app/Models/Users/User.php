@@ -109,7 +109,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
      *
      * @return array
      */
-    public function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
         if (is_null($this->id) or !is_null(request()->input('password'))) {
             $merge = array_merge($merge, [

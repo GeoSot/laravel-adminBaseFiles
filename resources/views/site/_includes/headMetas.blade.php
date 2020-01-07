@@ -12,10 +12,10 @@
 
 @php
     $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.general.menuTitle'): __($packageVariables->get('nameSpace').'site/generic.app.title');
-    $pushedTitle=$__env->yieldPushContent('documentTitle', $title);
+    $pushedTitle=$__env->yieldPushContent('documentTitle', $title)
 @endphp
 
-<title>{!! $pushedTitle !!} |  @lang($packageVariables->get('nameSpace').'site/generic.app.title')</title>
+<title>{!! strip_tags( $pushedTitle) !!} | @lang($packageVariables->get('nameSpace').'site/app.title')</title>
 
 <!--Tricks to Get Some Resources Quicker-->
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -24,8 +24,8 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <script type="text/javascript">
-    window.Laravel = @json([
+    window.Laravel ={!! json_decode(([
 		'csrfToken' => csrf_token(),
 		'debug' => config('app.debug'),
-	])
+	])) !!}
 </script>

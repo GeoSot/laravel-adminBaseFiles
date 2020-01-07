@@ -4,7 +4,7 @@
     $withoutClass= preg_replace('/class=".*?"/', '', $wrapAttrs);
     $isSortable=\Illuminate\Support\Arr::get($options, 'sortable', false);
     $urlBtn=\Illuminate\Support\Arr::get($options, 'urlBtn', false);
-    $isRepeatable=\Illuminate\Support\Arr::get($options, 'repeatable', false);
+    $isRepeatable=\Illuminate\Support\Arr::get($options, 'repeatable', false)
 @endphp
 @if ($showLabel && $showField)
 

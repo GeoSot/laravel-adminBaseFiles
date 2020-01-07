@@ -8,6 +8,7 @@ return [
     'fields' => [
         'id' => 'ID',
         'title' => 'Name',
+        'slug' => 'Url Slug',
         'notes' => 'Description',
         'enabled' => 'Enabled'
     ]

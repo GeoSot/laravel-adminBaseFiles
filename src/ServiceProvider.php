@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\RouteServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\SidebarServiceProvider;
+use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -52,8 +54,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->registerProviders();
-        $this->mergeConfigFrom(__DIR__."/../config/main.php", $this->package.'.main');
-        $this->mergeConfigFrom(__DIR__."/../config/config.php", $this->package.'.config');
+        $configDir = Paths::rootDir('config');
+        $this->mergeConfigFrom($configDir.'main.php', $this->package.'.main');
+        $this->mergeConfigFrom($configDir.'config.php', $this->package.'.config');
 
     }
 
@@ -63,9 +66,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     private function loadResources()
     {
         //  $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package);
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', $this->package);
+        $this->loadMigrationsFrom(Paths::srcDir('database/migrations'));
+        $this->loadViewsFrom(Paths::rootDir('resources/views'), $this->package);
+        $this->loadTranslationsFrom(Paths::rootDir('resources/lang'), $this->package);
     }
 
     /**
@@ -117,7 +120,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             CommandsProvider::class,
 //            ModuleServiceProvider::class,
             CommandsProvider::class,
-//            SidebarServiceProvider::class,
         ];
 
         array_map(function ($provider) {

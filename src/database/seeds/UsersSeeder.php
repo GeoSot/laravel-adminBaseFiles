@@ -32,12 +32,12 @@ class UsersSeeder extends BaseSeeder
     protected function data()
     {
         return [
-            'geo' => [
-                'email'      => 'george_sotis@yahoo.gr',
-                'password'   => bcrypt('123456'),
-                'first_name' => 'George',
-                'last_name'  => 'Sot',
-                'roles'      => ['god', 'user'],
+            'admin' => [
+                'email' => 'admin@example.com',
+                'password' => bcrypt('123456'),
+                'first_name' => 'Admin',
+                'last_name' => 'AdminLast',
+                'roles' => ['god', 'user'],
             ],
         ];
     }

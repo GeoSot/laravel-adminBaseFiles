@@ -56,7 +56,9 @@ class CreateAdminBaseFromFile extends Command
 
             $parentPlural = Arr::get($node, 'plural', Str::plural($parentRoute));
 
-            $this->makeFiles($parentRoute, $parentPlural, '', isset($node['menus']));
+            if (!Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
+                $this->makeFiles($parentRoute, $parentPlural, '', isset($node['menus']));
+            }
 
             foreach (Arr::get($node, 'menus', []) as $name) {
                 if ($name == $parentRoute) {

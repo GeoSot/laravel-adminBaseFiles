@@ -1,14 +1,16 @@
 <!--listingTableHead-->
 @php
+
+    use Illuminate\Support\Collection;
     /**
     * @var Collection $viewVals
     */
 
-    use Illuminate\Support\Collection;$params=$viewVals->get('params');
+    $params=$viewVals->get('params');
     $modelLang=$viewVals->get('modelLang');
     $baseLang=$viewVals->get('baseLang');
     $listable=$viewVals->get('extraValues')->get('listable');
-    $sortable=$viewVals->get('extraValues')->get('sortable');
+    $sortable=$viewVals->get('extraValues')->get('sortable')
 
 @endphp
 

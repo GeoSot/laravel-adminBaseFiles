@@ -32,7 +32,7 @@ class MainCommand extends BaseInstallCommand
     /**
      * Create a new migration install command instance.
      *
-     * @param  \Illuminate\Support\Composer $composer
+     * @param  Composer  $composer
      *
      * @return void
      */
@@ -71,29 +71,40 @@ class MainCommand extends BaseInstallCommand
     protected function getInstallScripts(): array
     {
         return [
-            'publishFiles'              => ['baseAdmin:install:publishInitialFiles', []],
-            'initializeEnv'             => ['baseAdmin:install:initializeEnv', []],
-            'publishPackageMigrations'  => [
+            'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
+            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
+//            'publishLaratrustMigrations'             => ['laratrust:migration'],//not in use cause migration creates a file with the Now() date
+//            'publishPackageMigrations'  => [
+//                'vendor:publish', [
+//                    '--provider' => 'GeoSot\BaseAdmin\ServiceProvider',
+//                    '--tag'      => 'migrations'
+//                ]
+//            ],
+//            'publishEnvEditorConfig'    => [
+//                'vendor:publish', [
+//                    '--provider' => 'GeoSot\EnvEditor\ServiceProvider',
+//                    '--tag' => 'config'
+//                ]
+//            ],
+//            'publishLocalizationConfig' => [
+//                'vendor:publish', [
+//                    '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
+//                    '--tag' => 'config'
+//                ]
+//            ],
+            'publishTranslationMigrations' => [
                 'vendor:publish', [
-                    '--provider' => 'GeoSot\BaseAdmin\ServiceProvider',
-                    '--tag'      => 'migrations'
+                    '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
+                    '--tag' => 'migrations'
                 ]
             ],
-            'publishEnvEditorConfig'    => [
-                'vendor:publish', [
-                    '--provider' => 'GeoSot\EnvEditor\ServiceProvider',
-                    '--tag'      => 'config'
-                ]
-            ],
-            'publishLocalizationConfig' => [
-                'vendor:publish', [
-                    '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
-                    '--tag'      => 'config'
-                ]
-            ],
-            'makePassportKeys'          => ['passport:keys', []],
-            //  'installPassport'           => ['passport:install', []],//after migrate /https://laravel.com/docs/passport
-            'editConfigFiles'           => ['baseAdmin:install:editConfigFiles', []]
+            'makePassportKeys' => ['passport:keys'],
+            'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
+            'publishViews' => ['baseAdmin:publishViews'],
+            'publishAssets' => ['baseAdmin:publishAssets'],
+            'runMigration' => ['migrate',],
+            'seedPackageData' => ['db:seed', ['--class' => 'GeoSot\BaseAdmin\Seeds\DatabaseSeeder']],
+            'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
         ];
 
     }

@@ -1,4 +1,6 @@
 require('../app');
+// var Turbolinks = require("turbolinks");
+// /Turbolinks.start();
 
 
 window.BaseAdmin = window.BaseAdmin || {};
@@ -8,7 +10,7 @@ require('../_partials/offcanvas');
 require('../_admin/indexPages');
 require('../_admin/stickButtonsBarsOnTop');
 const pace = require('pace-progress');
-pace.start({target:'header.js-mainHeader'});
+pace.start({target: 'header.js-mainHeader'});
 
 
 require('../_partials/ajaxLoadWrappers');
