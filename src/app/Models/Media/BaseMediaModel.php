@@ -84,7 +84,7 @@ abstract class BaseMediaModel extends BaseModel
     {
         $downloadAttr = ($download) ? ' download="true" ' : '';
         $class = $class ?? 'btn btn-link';
-        return '<a data-id="'.$this->getKey().'" class="'.$class.'" href="'.$this->getFilePath().'" target="_blank" '.$downloadAttr.' title="'.$this->title.'">'.$this->full_name.'</a>';
+        return '<a data-id="'.$this->getKey().'" class="js-lazy '.$class.'" href="'.$this->getFilePath().'" target="_blank" '.$downloadAttr.' title="'.$this->title.'">'.$this->full_name.'</a>';
     }
 
     /**
@@ -116,6 +116,14 @@ abstract class BaseMediaModel extends BaseModel
     /**
      * @return string
      */
+    public static function getDummyImageUrl()
+    {
+        return baseAdmin_assets('images/dummy-image.png');
+    }
+
+    /**
+     * @return string
+     */
     public function getFullNameAttribute()
     {
         return ($this->title ?? str_replace('Model', '', class_basename($this))).'.'.$this->extension;
@@ -135,7 +143,16 @@ abstract class BaseMediaModel extends BaseModel
      */
     public function getThumbHtmlAttribute()
     {
-        return '<img class="img-fluid" style="max-width:250px" src="'.$this->getThumbPath().'" />';
+        return $this->getThumb();
+    }
+
+    /**
+     * @param  string  $width
+     * @return string
+     */
+    public function getThumb(string $width = '250px')
+    {
+        return '<img class="js-lazy img-fluid" style="max-width:100%; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbPath().'" />';
     }
 
 

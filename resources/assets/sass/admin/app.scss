@@ -1,16 +1,16 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 // Bootstrap
-@import '~bootstrap/scss/functions';
+@import '../../../../node_modules/bootstrap/scss/functions';
 @import "variables";
-@import '~bootstrap/scss/bootstrap';
+@import '../../../../node_modules/bootstrap/scss/bootstrap';
 //Packages
-@import "~font-awesome/scss/font-awesome";
-@import "~select2/src/scss/core";
-@import "~select2-theme-bootstrap4/src/select2-bootstrap";
-@import "~bootstrap-daterangepicker/daterangepicker.css";
-@import "~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
-@import "~toastr/toastr";
+@import "../../../../node_modules/font-awesome/scss/font-awesome";
+@import "../../../../node_modules/select2/src/scss/core";
+@import "../../../../node_modules/select2-theme-bootstrap4/src/select2-bootstrap";
+@import "../../../../node_modules/bootstrap-daterangepicker/daterangepicker.css";
+@import "../../../../node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+@import "../../../../node_modules/toastr/toastr";
 //*****
 //Our Css
 @import "../_partials/offcanvas";

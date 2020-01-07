@@ -38,7 +38,7 @@ return [
             'makeFiles' => false,
         ],
         'medium' => [
-            'menus' => ['gallery', 'file', 'image', 'video'],
+            'menus' => ['gallery', 'image', 'video', 'file'],
             'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
             'excludeFromSideBar' => ['video'],
             'order' => 40,

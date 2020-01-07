@@ -28,7 +28,9 @@
             <div class="fileinput-preview  border border-light thumbnail  bg-light   {!! $imgWrapper['class'] ??'' !!}"
                  {!! $imgWrapperAttrs !!} data-imgclass="img-fluid  {!!$imgClass!!}">
                 @if ((is_string($options['value']) and $options['value']) or ($options['value'] instanceof  \Illuminate\Support\Collection and $options['value']->count()))
-                    <img data-src="{!! is_string($options['value'])?$options['value']:$options['value']->first()->getFilePath() !!}" class=" js-lazy img-fluid   {!!$imgClass!!}"/>
+                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\MediumImage::getDummyImageUrl()!!}"
+                         data-src="{!! is_string($options['value'])?$options['value']:$options['value']->first()->getFilePath() !!}"
+                         class=" js-lazy img-fluid   {!!$imgClass!!}"/>
                 @endif
             </div>
 

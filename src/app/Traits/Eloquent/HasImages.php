@@ -4,7 +4,7 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
-use GeoSot\BaseAdmin\App\Models\Media\MediumImage;
+use App\Models\Media\MediumImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;

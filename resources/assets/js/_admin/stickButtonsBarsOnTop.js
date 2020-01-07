@@ -1,5 +1,5 @@
 
-window.Headroom = require('headroom.js');
+window.Headroom = require('../../../../node_modules/headroom.js/dist/headroom');
 
 class InitStickyElement {
 

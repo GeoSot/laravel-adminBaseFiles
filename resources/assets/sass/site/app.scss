@@ -1,0 +1,24 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+// Bootstrap
+@import '../../../../node_modules/bootstrap/scss/functions';
+@import "variables";
+@import '../../../../node_modules/bootstrap/scss/bootstrap';
+//Packages
+@import "../../../../node_modules/font-awesome/scss/font-awesome";
+@import "../../../../node_modules/select2/src/scss/core";
+@import "../../../../node_modules/select2-theme-bootstrap4/src/select2-bootstrap";
+@import "../../../../node_modules/bootstrap-daterangepicker/daterangepicker.css";
+@import "../../../../node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+@import "../../../../node_modules/toastr/toastr";
+//Our Css
+@import "../_partials/richTextEditors";
+@import "../_partials/standards";
+
+
+a{
+    transition: all 0.3s ease-out;
+    &:hover{
+        opacity: .9;
+    }
+}

@@ -41,6 +41,16 @@ class Paths
     }
 
     /**
+     * Return Resources path
+     * @param  string  $path
+     * @return string
+     */
+    public static function resourcesDir(string $path = '')
+    {
+        return self::rootDir('resources'.self::sanitizePath($path));
+    }
+
+    /**
      * @param  string  $path
      * @return string
      */

@@ -35,7 +35,7 @@ class MediumImage extends BaseMediaModel
         //TODO move on views
         $onclick = (is_null($onclickAction)) ? '' : 'onclick = "'.$onclickAction.'"';
         $html = '<figure class="'.$figureClass.'" data-originalimage="'.$this->getFilePath().'" data-originalid="'.$this->getKey().'" '.$onclick.' itemprop="image" itemscope itemtype="http://schema.org/ImageObject">';
-        $html .= ' <img itemprop="image"src="'.$this->getFilePath($typeOfImg).'" alt="" class="img-responsive img-fluid"/>';
+        $html .= ' <img itemprop="image" src="'.static::getDummyImageUrl().'" alt="" class="img-responsive img-fluid js-lazy" data-src="'.$this->getFilePath($typeOfImg).'"/>';
         $html .= '<meta itemprop="url" content="'.$this->getFilePath().'" /></figure>';
         return $html;
     }

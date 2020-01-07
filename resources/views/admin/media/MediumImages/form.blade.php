@@ -9,8 +9,8 @@
         <div class=" my-4 "> {!! $viewVals->get('record')->getImgHtml(); !!}</div>
 
         @if(!$viewVals->get('record')->thumb)
-            <div class="border-top my-4 pt-2">  @lang("{$viewVals->get('modelLang')}.fields.thumb")</div>
-            <div><img src="{!! $viewVals->get('record')->getFilePath('thumb'); !!}" alt="thumb" width="200px"></div>
+            <div class="border-top my-4 pt-2"> @lang("{$viewVals->get('modelLang')}.fields.thumb")</div>
+            <div>{!!optional( $viewVals->get('record'))->getThumb() !!}</div>
         @endif
 
     @endcomponent

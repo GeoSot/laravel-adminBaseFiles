@@ -76,8 +76,7 @@ if (!function_exists('settings')) {
 if (!function_exists('baseAdmin_assets')) {
     /**
      * @param  string  $path
-     * @return HtmlString|string
-     * @throws Exception
+     * @return string
      */
     function baseAdmin_assets(string $path)
     {

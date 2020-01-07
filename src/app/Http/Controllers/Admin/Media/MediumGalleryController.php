@@ -9,12 +9,8 @@ use Illuminate\Http\Request;
 
 class MediumGalleryController extends BaseAdminController
 {
-
     protected $_class = MediumGallery::class;
     //OVERRIDES
-
-//    protected $allowedActionsOnIndex = ['edit', 'enable', 'disable', 'delete', 'forceDelete', 'restore'];
-//    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
 
 
     public function edit(MediumGallery $mediumGallery)
@@ -31,8 +27,8 @@ class MediumGalleryController extends BaseAdminController
     protected function listFields()
     {
         $neFields = [
-            'listable' => ['title', 'thumb_html', 'enabled', 'id'],
-            'searchable' => ['translations.title', 'collection_name', 'file', 'enabled', 'id'],
+            'listable' => ['title', 'ownerModel', 'enabled', 'id'],
+            'searchable' => ['title', 'slug', 'related_type', 'enabled', 'id'],
         ];
 
         return array_merge(parent::listFields(), $neFields);
