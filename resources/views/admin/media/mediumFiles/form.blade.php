@@ -2,9 +2,11 @@
 
 @section('mediaModelExtraContent')
     @component($packageVariables->get('blades').'admin._components.formCard' )
-        @if($viewVals->get('record'))
+        {{''/* @var \App\Models\Media\MediumImage $record */}}
+        @php($record=$viewVals->get('record'))
+        @if($record)
             @lang("{$viewVals->get('modelLang')}.fields.fileLink")
-            {!! $viewVals->get('record')->getAsLink('btn-block'); !!}
+            {!!$record->getAsLink('btn-block'); !!}
         @endif
     @endcomponent
 @endSection

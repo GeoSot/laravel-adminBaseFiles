@@ -3,6 +3,8 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
 
+use App\Models\Media\MediumFile;
+use App\Models\Media\MediumImage;
 use App\Models\Setting;
 use Illuminate\Support\Arr;
 use Symfony\Component\Finder\Finder;
@@ -58,7 +60,7 @@ class SettingForm extends BaseAdminForm
 
         collect($files)->each(function ($item) use ($modelsList, $modelPath) {
             $modelCleanName = str_replace('.php', '', $item->getFilename());
-            $modelsList['App\\Models\\' . str_replace('/', '\\', $item->getRelativePath()) . '\\' . $modelCleanName] = $modelCleanName;
+            $modelsList['App\\Models\\'.str_replace('/', '\\', $item->getRelativePath()).'\\'.$modelCleanName] = $modelCleanName;
         });
 
         return $modelsList;
@@ -78,7 +80,8 @@ class SettingForm extends BaseAdminForm
     {
         $attr = ['attr' => ['readonly' => 'readonly']];
         $this->add('slug', 'text', $attr);
-        $this->add('type', 'text', $attr);
+        $this->add('type_to_human', 'text', $attr);
+        $this->add('type', 'hidden');
 
     }
 
@@ -103,20 +106,7 @@ class SettingForm extends BaseAdminForm
             ]);
         }
 
-        if (in_array($type, ['collectionSting', 'collectionNumber'])) {
-            $this->add('value', 'collection', [
-                'type' => ('collectionSting' == $type) ? 'text' : 'number',
-                'repeatable' => true,
-                'options' => [    // these are options for a single type
-                    'label' => false,
-                ],
-                'data' => collect(json_decode($this->getModel()->value))
-            ]);
-        }
-
-        if (!$this->has('value')) {
-            $this->add('value', 'text');
-        }
+        $this->getValueField($type);
 
     }
 
@@ -150,5 +140,48 @@ class SettingForm extends BaseAdminForm
         }
 
 
+    }
+
+    /**
+     * @param $type
+     */
+    protected function getValueField($type): void
+    {
+        if (in_array($type, ['collectionSting', 'collectionNumber'])) {
+            $this->add('value', 'collection', [
+                'type' => ('collectionSting' == $type) ? 'text' : 'number',
+                'repeatable' => true,
+                'options' => [    // these are options for a single type
+                    'label' => false,
+                ],
+                'data' => collect(json_decode($this->getModel()->value))
+            ]);
+        }
+
+        if (in_array($type, [MediumFile::class, MediumImage::class])) {
+            $this->add('value_file', 'collection', [
+                'type' => 'file',
+                // 'repeatable' => true,
+                //   'viewAndRemoveOnly'=>true,
+                'options' => [
+                    'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
+                    'img' => ['class' => ' mbed-responsive-item'],
+                    'label' => false,
+                    'template' => 'baseAdmin::_subBlades.formTemplates.'.($type == MediumImage::class ? 'image' : 'file'),
+                    'final_property' => 'file_path',
+                    'value' => function () {
+                        $FQN = $this->getModel()->type;
+                        $val = $this->getModel()->value;
+                        return $val ? $FQN::find($val) : '';
+                    }
+                ]
+            ]);
+            $this->add('value', 'hidden');
+            return;
+        }
+
+        if (!$this->has('value')) {
+            $this->add('value', 'text');
+        }
     }
 }

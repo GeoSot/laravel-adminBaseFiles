@@ -23,7 +23,7 @@ abstract class BaseMediaModel extends BaseModel
 {
     protected $table = 'media';
     use ManagesFiles, HasTranslations;
-    private static $type = '';
+    protected static $type = '';
 
     public static function boot()
     {
@@ -150,9 +150,9 @@ abstract class BaseMediaModel extends BaseModel
      * @param  string  $width
      * @return string
      */
-    public function getThumb(string $width = '250px')
+    public function getThumb(string $width = '')
     {
-        return '<img class="js-lazy img-fluid" style="max-width:100%; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbPath().'" />';
+        return '<img class="js-lazy img-fluid" style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbPath().'" />';
     }
 
 

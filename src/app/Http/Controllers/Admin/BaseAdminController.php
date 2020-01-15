@@ -357,6 +357,7 @@ abstract class BaseAdminController extends BaseController
 
             return redirect()->back();
         }
+
         $this->beforeUpdate($request, $model);
         $this->validate($request, $model->getRules(), $this->getModelValidationMessages());
         $model->update($request->all());

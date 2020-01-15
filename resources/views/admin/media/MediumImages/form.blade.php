@@ -2,15 +2,15 @@
 
 @section('mediaModelExtraContent')
     @component($packageVariables->get('blades').'admin._components.formCard' )
-        @if(!$viewVals->get('record'))
-            @lang("{$viewVals->get('modelLang')}.fields.fileLink")
-            {!! $viewVals->get('record')->getAsLink('btn-block'); !!}
-        @endif
-        <div class=" my-4 "> {!! $viewVals->get('record')->getImgHtml(); !!}</div>
+        {!! '' /* @var \App\Models\Media\MediumImage $record */ !!}
+        @php($record=$viewVals->get('record'))
 
-        @if(!$viewVals->get('record')->thumb)
+        {!! $record->getAsLink('btn-block'); !!}
+        <div class=" my-4 "> {!! $record->getImgHtml(); !!}</div>
+
+        @if(!$record->thumb)
             <div class="border-top my-4 pt-2"> @lang("{$viewVals->get('modelLang')}.fields.thumb")</div>
-            <div>{!!optional( $viewVals->get('record'))->getThumb() !!}</div>
+            <div>{!!optional($record)->getThumb() !!}</div>
         @endif
 
     @endcomponent

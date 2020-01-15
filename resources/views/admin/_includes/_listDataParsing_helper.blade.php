@@ -49,11 +49,11 @@
             <div class="text-right">{!! $fieldData !!}</div>
         @elseif(is_bool($fieldData))
             @includeFirst([$snippetsDir.'boolean',$snippetsDir.'bool'])
-        @elseif(is_subclass_of($dataCollection, \Illuminate\Database\Eloquent\Model::class))
+        @elseif( is_object($dataCollection) and is_subclass_of($dataCollection, \Illuminate\Database\Eloquent\Model::class))
             {!!$dataCollection->getDashBoardLink($array[1], false,['target'=>'_blank']) !!}
         @elseif( $dataCollection instanceof  \Illuminate\Support\Collection)
             @foreach($dataCollection as $dt)
-                @if(is_subclass_of($dt, \Illuminate\Database\Eloquent\Model::class) and $dt->allowedToHandle())
+                @if( is_object($dataCollection) and is_subclass_of($dt, \Illuminate\Database\Eloquent\Model::class) and $dt->allowedToHandle())
                     {!!$dt->getDashBoardLink($array[1], false,['class'=>'badge badge-primary badge-pill ']) !!}
                 @else
                     <span class="badge badge-pill badge-primary ">

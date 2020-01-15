@@ -54,8 +54,8 @@
                 </button>
                 @if($val=$options['value'])
                     @php($href=
-                              $options['model'] instanceOf \App\Models\Media\MediumImage
-                              ?route($options['model']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['model'])
+                              $options['value'] instanceOf \App\Models\Media\MediumImage
+                              ?route($options['value']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['value'])
                               :$val)
                     <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>
                 @endif

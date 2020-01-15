@@ -5,93 +5,86 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
 use App\Models\Media\MediumImage;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 trait HasImages
 {
+    use HasMediaSubTrait;
 
     /**
      * Listener
      */
     public static function bootHasImages()
     {
-        //Delete All Files from Album
-        static::deleting(function (HasImages $model) {
-            $model->deleteAssociateImages();
+        //Delete All Files from Model
+        static::deleting(function ($model) {
+            /* @var HasImages $model */
+            $model->deleteAssociateMedia('image');
         });
     }
 
+
+    /**
+     * @return bool
+     */
     public function hasImages()
     {
-        return (boolean) $this->images()->count();
+        return $this->hasMedia($this->getImageModelType());
     }
 
     /**
-     * Relation of Image to parent model. Morph Many To Many relationship
-     * Get all images related to the parent model.
+     * Relation of Files to parent model. Morph Many To Many relationship
+     * Get all files related to the parent model.
      *
      * @return MorphMany
      */
     public function images()
     {
-        return $this->morphMany(MediumImage::class, 'model');
+        return $this->media($this->getImageModelFQN());
     }
 
+    /**
+     * @return Builder
+     */
     public function imagesEnabled()
     {
-        return $this->images()->where('enabled', true)->where('the_file_exists', true);
+        return $this->mediaEnabled($this->images());
     }
 
 
     /**
      * Sync An image to  model
      *
-     * @param  mixed  $img
+     * @param  mixed  $file
      * @param  string  $directoryName
      * @param  string  $displayName  *
      * @param  integer  $order
      * @param  string  $disk
      *
-     * @return MediumImage
+     * @return MediumImage|null
      */
-    public function syncImage($img = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
+    public function syncImage($file = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
     {
-        $this->deleteAssociateImages();
-        return $this->addImage($img, $directoryName, $disk, $displayName, $order);
-    }
-
-    private function deleteAssociateImages()
-    {
-        $this->images()->each(function (Model $model) {
-            $model->delete();
-        });
+        return $this->syncMedium($this->getImageModelType(), $file, $directoryName, $disk, $displayName, $order);
     }
 
     /**
      * .Add An image to  model
      *
-     * @param  mixed  $img
+     * @param  mixed  $file
      * @param  string  $directoryName
      * @param  string  $displayName  *
      * @param  integer  $order
      * @param  string  $disk
      *
-     * @return MediumImage
+     * @return MediumImage|null
      */
-    public function addImage($img = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
+    public function addImage($file = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
     {
-        if (is_null($img)) {
-            return null;
-        }
-
-        $data = (new MediumImage())->fillData($this, $img, $directoryName, $disk, $displayName, $order);
-
-        return MediumImage::create($data);
+        return $this->addMedium($this->getImageModelFQN(), $file, $directoryName, $disk, $displayName, $order);
     }
 
 
@@ -104,9 +97,7 @@ trait HasImages
      */
     public function syncImages(Collection $images, string $directoryName, string $disk = 'uploads')
     {
-        $this->deleteAssociateImages();
-
-        return $this->addImages($images, $directoryName, $disk);
+        return $this->syncMedia($this->getImageModelType(), $images, $directoryName, $disk);
     }
 
     /**
@@ -117,15 +108,7 @@ trait HasImages
      */
     public function addImages(Collection $images, string $directoryName, string $disk = 'uploads')
     {
-        if ($images->isEmpty()) {
-            return null;
-        }
-        $collection = collect([]);
-        foreach ($images as $index => $image) {
-            $collection->push($this->addImage($image, $directoryName, $disk, null, $index * 10));
-        }
-
-        return $collection;
+        return $this->addMedia($this->getImageModelType(), $images, $directoryName, $disk);
     }
 
 
@@ -134,35 +117,12 @@ trait HasImages
      *
      * @param  Request  $request
      * @param  bool  $keepFirstOnly
-     *
-     * @return mixed
+     * @param  string  $requestFieldName
+     * @return MediumImage|null
      */
-    public function syncPictures(Request $request, $keepFirstOnly = false)
+    public function syncRequestImages(Request $request, $keepFirstOnly = false, string $requestFieldName = 'images')
     {
-        $this->removePictures($request);
-
-        $images = array_filter($request->file('images', []));
-
-        if (empty($images)) {
-            return false;
-        }
-
-        if ($request->get('repeatable_images', !$keepFirstOnly)) {
-            return $this->addImages($images, $this->getTable(), "uploads");
-        }
-
-
-        $file = Arr::first($images, function ($value, $key) {
-            return isset($value);
-        });
-        $allFields = array_merge($this->getArrayableAppends(), $this->getFillable());
-        $extraText = array_intersect(['full_name', 'title', 'slug'], $allFields)[0] ?? '';
-        $slug = empty($extraText) ? '' : '-'.Str::slug($this[$extraText]);
-
-        $fileName = $this->getKey().$slug;
-        return $this->syncImage($file, $this->getTable(), "uploads", $fileName);
-
-
+        return $this->syncRequestMedia($request, $keepFirstOnly, $requestFieldName, $this->getImageModelType(), $this->getImageModelFQN());
     }
 
     /**
@@ -170,22 +130,29 @@ trait HasImages
      *
      * @param  Request  $request
      *
+     * @param  string  $requestFieldName
      * @return boolean
      */
-    protected function removePictures(Request $request)
+    protected function removeRequestImages(Request $request, string $requestFieldName = 'images')
     {
-        $removeIdsArray = array_filter($request->get('remove_images', []));
-        $oldIds = array_filter($request->get('old_images', []));
-        $deleteIdsArray = $this->images()->whereNotIn('id', $oldIds)->pluck('id')->toArray();
-
-        if (!empty($ids = array_merge($removeIdsArray, $deleteIdsArray))) {
-            MediumImage::deleteIds($ids);
-
-            return true;
-        }
-
-        return false;
+        return $this->removeRequestMedia($request, $requestFieldName, $this->getImageModelType(), $this->getImageModelFQN());
     }
 
 
+    /**
+     * @return string
+     */
+    private function getImageModelFQN()
+    {
+        return MediumImage::class;
+    }
+
+    /**
+     * @return string
+     */
+    private function getImageModelType()
+    {
+        return 'image';
+
+    }
 }

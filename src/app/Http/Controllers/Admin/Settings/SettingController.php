@@ -5,22 +5,24 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
 use App\Models\Setting;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use GeoSot\BaseAdmin\App\Models\Media\MediumFile;
+use GeoSot\BaseAdmin\App\Models\Media\MediumImage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class SettingController extends BaseAdminController
 {
-
     protected $_class = Setting::class;
 
     //OVERRIDES
-    protected $allowedActionsOnIndex = ['create', 'edit'];
+    protected $allowedActionsOnIndex = ['create', 'edit', 'delete', 'forceDelete', 'restore'];
     protected $allowedActionsOnCreate = ['save',];
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy'];
 
 
-    public function afterFilteringIndex(Request &$request, Collection &$params, &$query, &$extraOptions)
+    public function afterFilteringIndex(Request &$request, Collection &$params, Builder &$query, &$extraOptions)
     {
         if (empty($request->query())) {
             $query->whereRaw('1 = 0');
@@ -78,11 +80,29 @@ class SettingController extends BaseAdminController
         return $this->genericUpdate($request, $setting);
     }
 
+    protected function beforeUpdate(Request &$request, $model)
+    {
+
+        /* @var Setting $model */
+
+        if (is_subclass_of($request->input('type'), MediumImage::class)) {
+            $result = $model->syncRequestImages($request, true, 'value_file');
+            $request->merge(['value', optional($result)->getKey()]);
+        }
+        if (is_subclass_of($request->input('type'), MediumFile::class)) {
+
+            $result = $model->syncRequestFiles($request, true, 'value_file');
+            $request->merge(['value' => optional($result)->getKey()]);
+        }
+
+    }
+
+
     protected function listFields()//Can be omitted
     {
         $neFields = [
             'linkable' => ['key'],
-            'listable' => ['key', 'value', 'type', 'ownerModel.title', 'id'],
+            'listable' => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
             'searchable' => [],
             'sortable' => ['key'],
             'orderBy' => ['column' => 'key', 'sort' => 'desc'],

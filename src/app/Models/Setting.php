@@ -3,63 +3,24 @@
 namespace GeoSot\BaseAdmin\App\Models;
 
 
+use App\Models\Media\MediumFile;
+use App\Models\Media\MediumImage;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Eloquent;
+use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFiles;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\HasImages;
 use GeoSot\BaseAdmin\Facades\Settings;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 /**
  * GeoSot\BaseAdmin\App\Models\Setting
- *
- * @mixin Eloquent
- * @property int $id
- * @property string $slug
- * @property string $key
- * @property string|null $group
- * @property string|null $sub_group
- * @property string|null $value
- * @property string $type
- * @property string|null $notes
- * @property string|null $model_type
- * @property int|null $model_id
- * @property int $enabled
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property int|null $modified_by
- * @property-read mixed $slug_key
- * @property-read mixed $value_parsed
- * @property-read mixed $value_parsed_to_human
- * @property-read Model|Eloquent $ownerModel
- * @method static Builder|BaseModel disabled()
- * @method static Builder|BaseModel enabled()
- * @method static Builder|Setting findSimilarSlugs($attribute, $config, $slug)
- * @method static Builder|Setting newModelQuery()
- * @method static Builder|Setting newQuery()
- * @method static Builder|Setting query()
- * @method static Builder|Setting whereCreatedAt($value)
- * @method static Builder|Setting whereDeletedAt($value)
- * @method static Builder|Setting whereEnabled($value)
- * @method static Builder|Setting whereGroup($value)
- * @method static Builder|Setting whereId($value)
- * @method static Builder|Setting whereKey($value)
- * @method static Builder|Setting whereModelId($value)
- * @method static Builder|Setting whereModelType($value)
- * @method static Builder|Setting whereModifiedBy($value)
- * @method static Builder|Setting whereNotes($value)
- * @method static Builder|Setting whereSlug($value)
- * @method static Builder|Setting whereSubGroup($value)
- * @method static Builder|Setting whereType($value)
- * @method static Builder|Setting whereUpdatedAt($value)
- * @method static Builder|Setting whereValue($value)
  */
 class Setting extends BaseModel
 {
-    use Sluggable;
+    use Sluggable, HasImages, HasFiles;
 
     public $choices = [
         'string',
@@ -70,6 +31,8 @@ class Setting extends BaseModel
         'dateTime',
         'collectionSting',
         'collectionNumber',
+        MediumFile::class,
+        MediumImage::class,
     ];
     /**
      * The attributes that are mass assignable.
@@ -87,7 +50,6 @@ class Setting extends BaseModel
         'model_id',
         'type',
         'enabled',
-        // 'user_id',
         'modified_by',
     ];
 
@@ -95,6 +57,7 @@ class Setting extends BaseModel
     protected $appends = [
         'value_parsed',
         'value_parsed_to_human',
+        'type_to_human',
     ];
     protected $frontEndConfigValues = [
         'admin' => [
@@ -116,9 +79,11 @@ class Setting extends BaseModel
             foreach (['key', 'sub_group', 'group',] as $name) {
                 $model[$name] = lcfirst($model[$name]);
             }
+
             if (is_array($model->value)) {
                 $model->value = json_encode($model->value);
             }
+
         });
         static::saved(function ($model) {
             Settings::flushKey($model->slug);
@@ -151,7 +116,7 @@ class Setting extends BaseModel
     {
         $textOnUpdate = is_null($this->id) ? '' : ','.$this->id;
 
-        $uniqueCombinationRule = Rule::unique($this->getTable())->where(function ($query) {
+        $uniqueCombinationRule = Rule::unique($this->getTable())->where(function (Builder $query) {
             return $query->where('key', request()->input('key'))
                 ->where('sub_group', request()->input('sub_group'))
                 ->where('group', request()->input('group'))
@@ -239,11 +204,24 @@ class Setting extends BaseModel
         if ($this->type == 'boolean') {
             return (bool) $value;
         }
+        if (in_array($this->type, [MediumFile::class, MediumImage::class])) {
+            /* @var BaseMediaModel $FQN */
+            $FQN = $this->type;
+            return $FQN::find($value);
+        }
 
         return $value;
 
     }
 
+    public function getTypeToHumanAttribute()
+    {
+        return Arr::get(static::getSettingTypes(), $this->type, $this->type);
+    }
+
+    /**
+     * @return array
+     */
     public static function getSettingTypes()
     {
         return [
@@ -255,6 +233,8 @@ class Setting extends BaseModel
             'dateTime' => 'DateTime',
             'collectionSting' => 'Collection of Strings',
             'collectionNumber' => 'Collection of Numbers',
+            MediumFile::class => 'File',
+            MediumImage::class => 'Image',
         ];
     }
 }

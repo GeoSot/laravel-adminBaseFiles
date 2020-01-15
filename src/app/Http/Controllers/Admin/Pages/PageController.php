@@ -61,7 +61,8 @@ class PageController extends BaseAdminController
 
     protected function afterSave(Request &$request, $model)
     {
-        $model->syncPictures($request);
+        /* @var Page $model */
+        $model->syncRequestImages($request, true);
     }
 
 }

@@ -56,7 +56,8 @@ class PageBlockController extends BaseAdminController
 
     protected function afterSave(Request &$request, $model)
     {
-        $model->syncPictures($request);
+        /* @var PageBlock $model */
+        $model->syncRequestImages($request);
     }
 
 }

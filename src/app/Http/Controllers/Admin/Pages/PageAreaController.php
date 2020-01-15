@@ -56,7 +56,8 @@ class PageAreaController extends BaseAdminController
 
     protected function afterSave(Request &$request, $model)
     {
-        $model->syncPictures($request);
+        /* @var PageArea $model */
+        $model->syncRequestImages($request, true);
     }
 
 }

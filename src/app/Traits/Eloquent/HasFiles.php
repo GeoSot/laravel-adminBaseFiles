@@ -5,29 +5,34 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
 use App\Models\Media\MediumFile;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 
 trait HasFiles
 {
+    use HasMediaSubTrait;
 
     /**
      * Listener
      */
-    public static function bootHasFile()
+    public static function bootHasFiles()
     {
         //Delete All Files from Model
-        static::deleting(function (HasFiles $model) {
-            $model->deleteAssociateFiles();
+        static::deleting(function ($model) {
+            /* @var HasFiles $model */
+            $model->deleteAssociateMedia('file');
         });
     }
 
+    /**
+     * @return bool
+     */
     public function hasFiles()
     {
-        return (boolean) $this->files()->count();
+        return $this->hasMedia($this->getFileModelType());
     }
 
     /**
@@ -38,12 +43,15 @@ trait HasFiles
      */
     public function files()
     {
-        return $this->morphMany(MediumFile::class, 'model');
+        return $this->media($this->getFileModelFQN());
     }
 
+    /**
+     * @return Builder
+     */
     public function filesEnabled()
     {
-        return $this->files()->where('enabled', true)->where('the_file_exists', true);
+        return $this->mediaEnabled($this->files());
     }
 
     /**
@@ -55,20 +63,11 @@ trait HasFiles
      * @param  integer  $order
      * @param  string  $disk
      *
-     * @return MediumFile
+     * @return MediumFile|null
      */
     public function syncFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-        $this->deleteAssociateFiles();
-
-        return $this->addFile($file, $directoryName, $disk, $displayName, $order);
-    }
-
-    private function deleteAssociateFiles()
-    {
-        $this->files()->each(function (Model $model) {
-            $model->delete();
-        });
+        return $this->syncMedium($this->getFileModelType(), $file, $directoryName, $disk, $displayName, $order);
     }
 
     /**
@@ -80,19 +79,11 @@ trait HasFiles
      * @param  integer  $order
      * @param  string  $disk
      *
-     * @return MediumFile
+     * @return MediumFile|null
      */
     public function addFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-
-        if (is_string($file) or $file instanceof UploadedFile) {
-
-            $data = (new MediumFile())->fillData($this, $file, $directoryName, $disk, $displayName, $order);
-
-            return MediumFile::create($data);
-        }
-
-        return null;
+        return $this->addMedium($this->getFileModelFQN(), $file, $directoryName, $disk, $displayName, $order);
     }
 
 
@@ -107,9 +98,7 @@ trait HasFiles
      */
     public function syncFiles(Collection $files, string $directoryName, string $disk = 'uploads')
     {
-        $this->deleteAssociateFiles();
-
-        return $this->addFiles($files, $directoryName, $disk);
+        return $this->syncMedia($this->getFileModelType(), $files, $directoryName, $disk);
     }
 
     /**
@@ -120,16 +109,49 @@ trait HasFiles
      */
     public function addFiles(Collection $files, string $directoryName, string $disk = 'uploads')
     {
-        if ($files->isEmpty()) {
-            return null;
-        }
-        $collection = collect([]);
-        foreach ($files as $index => $file) {
-            $collection->push($this->addFile($file, $directoryName, $disk, null, $index * 10));
-        }
-
-        return $collection;
+        return $this->addMedia($this->getFileModelType(), $files, $directoryName, $disk);
     }
 
+    /**
+     * Save a Users Profile Picture
+     *
+     * @param  Request  $request
+     * @param  bool  $keepFirstOnly
+     * @param  string  $requestFieldName
+     * @return MediumFile|null
+     */
+    public function syncRequestFiles(Request $request, $keepFirstOnly = false, string $requestFieldName = 'files')
+    {
+        return $this->syncRequestMedia($request, $keepFirstOnly, $requestFieldName, $this->getFileModelType(), $this->getFileModelFQN());
+    }
+
+    /**
+     * Save a Users Profile Picture
+     *
+     * @param  Request  $request
+     *
+     * @param  string  $requestFieldName
+     * @return boolean
+     */
+    protected function removeRequestFiles(Request $request, string $requestFieldName = 'files')
+    {
+        return $this->removeRequestMedia($request, $requestFieldName, $this->getFileModelType(), $this->getFileModelFQN());
+    }
+
+    /**
+     * @return string
+     */
+    private function getFileModelFQN()
+    {
+        return MediumFile::class;
+    }
+
+    /**
+     * @return string
+     */
+    private function getFileModelType()
+    {
+        return 'file';
+    }
 
 }
