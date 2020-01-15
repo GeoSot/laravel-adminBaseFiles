@@ -12,38 +12,57 @@ use Illuminate\Support\Collection;
 
 trait HasVideos
 {
-    use HasMediaSubTrait;
+    /**
+     * @var HasMediaTraitHelper
+     */
+    private $hasVideosHelper;
 
     /**
      * Listener
      */
     public static function bootHasVideos()
     {
-        //Delete All Files from Model
+        //Delete All Videos from Model
         static::deleting(function ($model) {
             /* @var HasVideos $model */
-            $model->deleteAssociateMedia('video');
+            $model->getHasVideosHelper()->deleteAssociateMedia();
         });
     }
 
+    /**
+     * Initiator
+     */
+    public function initializeHasVideos()
+    {
+        $this->hasVideosHelper = new HasMediaTraitHelper($this, 'video', MediumVideo::class);
+    }
+
+
+    /**
+     * @return HasMediaTraitHelper
+     */
+    public function getHasVideosHelper()
+    {
+        return $this->hasVideosHelper;
+    }
 
     /**
      * @return bool
      */
     public function hasVideos()
     {
-        return $this->hasMedia($this->getVideoModelType());
+        return $this->getHasVideosHelper()->hasMedia();
     }
 
     /**
-     * Relation of Files to parent model. Morph Many To Many relationship
-     * Get all files related to the parent model.
+     * Relation of Videos to parent model. Morph Many To Many relationship
+     * Get all videos related to the parent model.
      *
      * @return MorphMany
      */
     public function videos()
     {
-        return $this->media($this->getVideoModelFQN());
+        return $this->getHasVideosHelper()->media();
     }
 
     /**
@@ -51,14 +70,29 @@ trait HasVideos
      */
     public function videosEnabled()
     {
-        return $this->mediaEnabled($this->videos());
+        return $this->getHasVideosHelper()->mediaEnabled($this->videos());
     }
 
+    /**
+     * Sync A Video to model
+     *
+     * @param  mixed  $video
+     * @param  string  $directoryName
+     * @param  string  $displayName
+     * @param  integer  $order
+     * @param  string  $disk
+     *
+     * @return MediumVideo|null
+     */
+    public function syncVideo($video = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    {
+        return $this->getHasVideosHelper()->syncMedium($video, $directoryName, $disk, $displayName, $order);
+    }
 
     /**
-     * Sync An video to  model
+     * Show the form for editing the specified resource.
      *
-     * @param  mixed  $file
+     * @param  mixed  $video
      * @param  string  $directoryName
      * @param  string  $displayName  *
      * @param  integer  $order
@@ -66,38 +100,24 @@ trait HasVideos
      *
      * @return MediumVideo|null
      */
-    public function syncVideo($file = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
+    public function addVideo($video = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-        return $this->syncMedium($this->getVideoModelType(), $file, $directoryName, $disk, $displayName, $order);
-    }
-
-    /**
-     * .Add An video to  model
-     *
-     * @param  mixed  $file
-     * @param  string  $directoryName
-     * @param  string  $displayName  *
-     * @param  integer  $order
-     * @param  string  $disk
-     *
-     * @return MediumVideo|null
-     */
-    public function addVideo($file = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
-    {
-        return $this->addMedium($this->getVideoModelFQN(), $file, $directoryName, $disk, $displayName, $order);
+        return $this->getHasVideosHelper()->addMedium($video, $directoryName, $disk, $displayName, $order);
     }
 
 
     /**
+     * Sync A Video to model
+     *
      * @param  Collection  $videos
      * @param  string  $directoryName
      * @param  string  $disk
      *
-     * @return Collection|null
+     * @return  Collection|null
      */
     public function syncVideos(Collection $videos, string $directoryName, string $disk = 'uploads')
     {
-        return $this->syncMedia($this->getVideoModelType(), $videos, $directoryName, $disk);
+        return $this->getHasVideosHelper()->syncMedia($videos, $directoryName, $disk);
     }
 
     /**
@@ -108,12 +128,11 @@ trait HasVideos
      */
     public function addVideos(Collection $videos, string $directoryName, string $disk = 'uploads')
     {
-        return $this->addMedia($this->getVideoModelType(), $videos, $directoryName, $disk);
+        return $this->getHasVideosHelper()->addMedia($videos, $directoryName, $disk);
     }
 
-
     /**
-     * Save a Users Profile Picture
+     * Save a Users Provideo Picture
      *
      * @param  Request  $request
      * @param  bool  $keepFirstOnly
@@ -122,11 +141,11 @@ trait HasVideos
      */
     public function syncRequestVideos(Request $request, $keepFirstOnly = false, string $requestFieldName = 'videos')
     {
-        return $this->syncRequestMedia($request, $keepFirstOnly, $requestFieldName, $this->getVideoModelType(), $this->getVideoModelFQN());
+        return $this->getHasVideosHelper()->syncRequestMedia($request, $keepFirstOnly, $requestFieldName);
     }
 
     /**
-     * Save a Users Profile Picture
+     * Save a Users Provideo Picture
      *
      * @param  Request  $request
      *
@@ -135,25 +154,7 @@ trait HasVideos
      */
     protected function removeRequestVideos(Request $request, string $requestFieldName = 'videos')
     {
-        return $this->removeRequestMedia($request, $requestFieldName, $this->getVideoModelType(), $this->getVideoModelFQN());
+        return $this->getHasVideosHelper()->removeRequestMedia($request, $requestFieldName);
     }
-
-
-    /**
-     * @return string
-     */
-    private function getVideoModelFQN()
-    {
-        return MediumVideo::class;
-    }
-
-    /**
-     * @return string
-     */
-    private function getVideoModelType()
-    {
-        return 'video';
-    }
-
 
 }

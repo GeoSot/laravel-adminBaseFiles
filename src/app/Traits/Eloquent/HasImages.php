@@ -12,38 +12,58 @@ use Illuminate\Support\Collection;
 
 trait HasImages
 {
-    use HasMediaSubTrait;
+
+    /**
+     * @var HasMediaTraitHelper
+     */
+    private $hasImagesHelper;
 
     /**
      * Listener
      */
     public static function bootHasImages()
     {
-        //Delete All Files from Model
+        //Delete All Images from Model
         static::deleting(function ($model) {
             /* @var HasImages $model */
-            $model->deleteAssociateMedia('image');
+            $model->getHasImagesHelper()->deleteAssociateMedia();
         });
     }
 
+    /**
+     * Initiator
+     */
+    public function initializeHasImages()
+    {
+        $this->hasImagesHelper = new HasMediaTraitHelper($this, 'image', MediumImage::class);
+    }
+
+
+    /**
+     * @return HasMediaTraitHelper
+     */
+    public function getHasImagesHelper()
+    {
+        return $this->hasImagesHelper;
+    }
 
     /**
      * @return bool
      */
     public function hasImages()
     {
-        return $this->hasMedia($this->getImageModelType());
+        return $this->getHasImagesHelper()->hasMedia();
     }
 
     /**
-     * Relation of Files to parent model. Morph Many To Many relationship
-     * Get all files related to the parent model.
+     * Relation of Images to parent model. Morph Many To Many relationship
+     * Get all images related to the parent model.
      *
      * @return MorphMany
      */
     public function images()
     {
-        return $this->media($this->getImageModelFQN());
+        return $this->getHasImagesHelper()->media();
     }
 
     /**
@@ -51,14 +71,29 @@ trait HasImages
      */
     public function imagesEnabled()
     {
-        return $this->mediaEnabled($this->images());
+        return $this->getHasImagesHelper()->mediaEnabled($this->images());
     }
 
+    /**
+     * Sync A Image to model
+     *
+     * @param  mixed  $image
+     * @param  string  $directoryName
+     * @param  string  $displayName
+     * @param  integer  $order
+     * @param  string  $disk
+     *
+     * @return MediumImage|null
+     */
+    public function syncImage($image = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    {
+        return $this->getHasImagesHelper()->syncMedium($image, $directoryName, $disk, $displayName, $order);
+    }
 
     /**
-     * Sync An image to  model
+     * Show the form for editing the specified resource.
      *
-     * @param  mixed  $file
+     * @param  mixed  $image
      * @param  string  $directoryName
      * @param  string  $displayName  *
      * @param  integer  $order
@@ -66,38 +101,24 @@ trait HasImages
      *
      * @return MediumImage|null
      */
-    public function syncImage($file = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
+    public function addImage($image = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-        return $this->syncMedium($this->getImageModelType(), $file, $directoryName, $disk, $displayName, $order);
-    }
-
-    /**
-     * .Add An image to  model
-     *
-     * @param  mixed  $file
-     * @param  string  $directoryName
-     * @param  string  $displayName  *
-     * @param  integer  $order
-     * @param  string  $disk
-     *
-     * @return MediumImage|null
-     */
-    public function addImage($file = null, string $directoryName, string $disk = "uploads", string $displayName = null, int $order = null)
-    {
-        return $this->addMedium($this->getImageModelFQN(), $file, $directoryName, $disk, $displayName, $order);
+        return $this->getHasImagesHelper()->addMedium($image, $directoryName, $disk, $displayName, $order);
     }
 
 
     /**
+     * Sync A Image to model
+     *
      * @param  Collection  $images
      * @param  string  $directoryName
      * @param  string  $disk
      *
-     * @return Collection|null
+     * @return  Collection|null
      */
     public function syncImages(Collection $images, string $directoryName, string $disk = 'uploads')
     {
-        return $this->syncMedia($this->getImageModelType(), $images, $directoryName, $disk);
+        return $this->getHasImagesHelper()->syncMedia($images, $directoryName, $disk);
     }
 
     /**
@@ -108,12 +129,11 @@ trait HasImages
      */
     public function addImages(Collection $images, string $directoryName, string $disk = 'uploads')
     {
-        return $this->addMedia($this->getImageModelType(), $images, $directoryName, $disk);
+        return $this->getHasImagesHelper()->addMedia($images, $directoryName, $disk);
     }
 
-
     /**
-     * Save a Users Profile Picture
+     * Save a Users Proimage Picture
      *
      * @param  Request  $request
      * @param  bool  $keepFirstOnly
@@ -122,11 +142,11 @@ trait HasImages
      */
     public function syncRequestImages(Request $request, $keepFirstOnly = false, string $requestFieldName = 'images')
     {
-        return $this->syncRequestMedia($request, $keepFirstOnly, $requestFieldName, $this->getImageModelType(), $this->getImageModelFQN());
+        return $this->getHasImagesHelper()->syncRequestMedia($request, $keepFirstOnly, $requestFieldName);
     }
 
     /**
-     * Save a Users Profile Picture
+     * Save a Users Proimage Picture
      *
      * @param  Request  $request
      *
@@ -135,24 +155,7 @@ trait HasImages
      */
     protected function removeRequestImages(Request $request, string $requestFieldName = 'images')
     {
-        return $this->removeRequestMedia($request, $requestFieldName, $this->getImageModelType(), $this->getImageModelFQN());
+        return $this->getHasImagesHelper()->removeRequestMedia($request, $requestFieldName);
     }
 
-
-    /**
-     * @return string
-     */
-    private function getImageModelFQN()
-    {
-        return MediumImage::class;
-    }
-
-    /**
-     * @return string
-     */
-    private function getImageModelType()
-    {
-        return 'image';
-
-    }
 }

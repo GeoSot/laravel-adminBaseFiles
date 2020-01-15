@@ -27,10 +27,21 @@
         <div class="w-100 p-2 mb-1 shadow-sm d-flex mouse-pointer" data-trigger="fileinput" style="min-height:100px;">
             <div class="fileinput-preview  border border-light thumbnail  bg-light   {!! $imgWrapper['class'] ??'' !!}"
                  {!! $imgWrapperAttrs !!} data-imgclass="img-fluid  {!!$imgClass!!}">
-                @if ((is_string($options['value']) and $options['value']) or ($options['value'] instanceof  \Illuminate\Support\Collection and $options['value']->count()))
-                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\MediumImage::getDummyImageUrl()!!}"
-                         data-src="{!! is_string($options['value'])?$options['value']:$options['value']->first()->getFilePath() !!}"
-                         class=" js-lazy img-fluid   {!!$imgClass!!}"/>
+                @php
+                    $value='';
+                    $optionsValue=$options['value'];
+                     if((is_string($optionsValue) and $optionsValue)){
+                         $value=$optionsValue;
+                     }
+                     if( $optionsValue instanceof  \Illuminate\Support\Collection and $optionsValue->count()){
+                         $value=$optionsValue->first()->getFilePath();
+                     }
+                     if( $optionsValue instanceof  \App\Models\Media\MediumImage){
+                         $value=$optionsValue->getFilePath();
+                     }
+                @endphp
+                @if ($value)
+                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\MediumImage::getDummyImageUrl()!!}" data-src="{!! $value !!}" class=" js-lazy img-fluid   {!!$imgClass!!}"/>
                 @endif
             </div>
 
@@ -52,7 +63,8 @@
                 <button class="btn btn-secondary  btn-sm fileinput-exists mx-1 mb-1" type="button" data-dismiss="fileinput">
                     @lang($packageVariables->get('nameSpace').'admin/generic.button.remove')
                 </button>
-                @if($val=$options['value'])
+
+            @if($val=$options['value'])
                     @php($href=
                               $options['value'] instanceOf \App\Models\Media\MediumImage
                               ?route($options['value']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['value'])

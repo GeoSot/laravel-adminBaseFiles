@@ -13,7 +13,10 @@ use Illuminate\Support\Collection;
 
 trait HasFiles
 {
-    use HasMediaSubTrait;
+    /**
+     * @var HasMediaTraitHelper
+     */
+    private $hasFilesHelper;
 
     /**
      * Listener
@@ -23,8 +26,25 @@ trait HasFiles
         //Delete All Files from Model
         static::deleting(function ($model) {
             /* @var HasFiles $model */
-            $model->deleteAssociateMedia('file');
+            $model->getHasFilesHelper()->deleteAssociateMedia();
         });
+    }
+
+    /**
+     * Initiator
+     */
+    public function initializeHasFiles()
+    {
+        $this->hasFilesHelper = new HasMediaTraitHelper($this, 'file', MediumFile::class);
+    }
+
+
+    /**
+     * @return HasMediaTraitHelper
+     */
+    public function getHasFilesHelper()
+    {
+        return $this->hasFilesHelper;
     }
 
     /**
@@ -32,7 +52,7 @@ trait HasFiles
      */
     public function hasFiles()
     {
-        return $this->hasMedia($this->getFileModelType());
+        return $this->getHasFilesHelper()->hasMedia();
     }
 
     /**
@@ -43,7 +63,7 @@ trait HasFiles
      */
     public function files()
     {
-        return $this->media($this->getFileModelFQN());
+        return $this->getHasFilesHelper()->media();
     }
 
     /**
@@ -51,7 +71,7 @@ trait HasFiles
      */
     public function filesEnabled()
     {
-        return $this->mediaEnabled($this->files());
+        return $this->getHasFilesHelper()->mediaEnabled($this->files());
     }
 
     /**
@@ -67,7 +87,7 @@ trait HasFiles
      */
     public function syncFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-        return $this->syncMedium($this->getFileModelType(), $file, $directoryName, $disk, $displayName, $order);
+        return $this->getHasFilesHelper()->syncMedium($file, $directoryName, $disk, $displayName, $order);
     }
 
     /**
@@ -83,7 +103,7 @@ trait HasFiles
      */
     public function addFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-        return $this->addMedium($this->getFileModelFQN(), $file, $directoryName, $disk, $displayName, $order);
+        return $this->getHasFilesHelper()->addMedium($file, $directoryName, $disk, $displayName, $order);
     }
 
 
@@ -98,7 +118,7 @@ trait HasFiles
      */
     public function syncFiles(Collection $files, string $directoryName, string $disk = 'uploads')
     {
-        return $this->syncMedia($this->getFileModelType(), $files, $directoryName, $disk);
+        return $this->getHasFilesHelper()->syncMedia($files, $directoryName, $disk);
     }
 
     /**
@@ -109,7 +129,7 @@ trait HasFiles
      */
     public function addFiles(Collection $files, string $directoryName, string $disk = 'uploads')
     {
-        return $this->addMedia($this->getFileModelType(), $files, $directoryName, $disk);
+        return $this->getHasFilesHelper()->addMedia($files, $directoryName, $disk);
     }
 
     /**
@@ -122,7 +142,7 @@ trait HasFiles
      */
     public function syncRequestFiles(Request $request, $keepFirstOnly = false, string $requestFieldName = 'files')
     {
-        return $this->syncRequestMedia($request, $keepFirstOnly, $requestFieldName, $this->getFileModelType(), $this->getFileModelFQN());
+        return $this->getHasFilesHelper()->syncRequestMedia($request, $keepFirstOnly, $requestFieldName);
     }
 
     /**
@@ -135,23 +155,7 @@ trait HasFiles
      */
     protected function removeRequestFiles(Request $request, string $requestFieldName = 'files')
     {
-        return $this->removeRequestMedia($request, $requestFieldName, $this->getFileModelType(), $this->getFileModelFQN());
-    }
-
-    /**
-     * @return string
-     */
-    private function getFileModelFQN()
-    {
-        return MediumFile::class;
-    }
-
-    /**
-     * @return string
-     */
-    private function getFileModelType()
-    {
-        return 'file';
+        return $this->getHasFilesHelper()->removeRequestMedia($request, $requestFieldName);
     }
 
 }

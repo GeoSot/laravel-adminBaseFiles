@@ -86,12 +86,12 @@ class SettingController extends BaseAdminController
         /* @var Setting $model */
 
         if (is_subclass_of($request->input('type'), MediumImage::class)) {
-            $result = $model->syncRequestImages($request, true, 'value_file');
-            $request->merge(['value', optional($result)->getKey()]);
+            $result = $model->syncRequestImages($request, true, 'value_dummy');
+            $request->merge(['value' => optional($result)->getKey()]);
         }
         if (is_subclass_of($request->input('type'), MediumFile::class)) {
 
-            $result = $model->syncRequestFiles($request, true, 'value_file');
+            $result = $model->syncRequestFiles($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
 

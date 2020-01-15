@@ -159,7 +159,7 @@ class SettingForm extends BaseAdminForm
         }
 
         if (in_array($type, [MediumFile::class, MediumImage::class])) {
-            $this->add('value_file', 'collection', [
+            $this->add('value_dummy', 'collection', [
                 'type' => 'file',
                 // 'repeatable' => true,
                 //   'viewAndRemoveOnly'=>true,

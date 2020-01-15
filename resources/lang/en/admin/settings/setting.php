@@ -9,6 +9,7 @@ return [
         'id' => 'ID',
         'key' => 'Key',
         'value' => 'Value',
+        'value_dummy' => 'Value',
         'slug' => 'Slug',
         'group' => 'Group',
         'sub_group' => 'SubGroup',
