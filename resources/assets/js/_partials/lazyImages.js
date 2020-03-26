@@ -30,7 +30,7 @@ lazyLoad = function (items, callBack) {
                     imgObserver.unobserve(lazyImage);
                 }
             })
-        });
+        }, {rootMargin: '100px 0px 100px 0px'});
         items.forEach((v) => {
             imageObserver.observe(v);
         })

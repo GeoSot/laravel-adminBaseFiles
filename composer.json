@@ -17,17 +17,17 @@
     "require": {
         "php": "^7.0",
         "barryvdh/laravel-debugbar": "^3.2",
-        "barryvdh/laravel-translation-manager": "^0.5.6",
-        "cviebrock/eloquent-sluggable": "^6",
+        "barryvdh/laravel-translation-manager": "^0.5.8",
+        "cviebrock/eloquent-sluggable": "^7",
         "geo-sot/laravel-env-editor": "^0.9.4",
-        "kris/laravel-form-builder": "^1.22",
-        "lab404/laravel-impersonate": "^1.4",
-        "laravel/passport": "^8.0",
-        "mcamara/laravel-localization": "^1.3",
-        "rap2hpoutre/laravel-log-viewer": "^1.3",
+        "kris/laravel-form-builder": "^1.30",
+        "lab404/laravel-impersonate": "^1.6",
+        "laravel/passport": "^8.4",
+        "mcamara/laravel-localization": "^1.5",
+        "rap2hpoutre/laravel-log-viewer": "^1.4",
         "santigarcor/laratrust": "^5.",
-        "spatie/laravel-image-optimizer": "^1.5",
-        "spatie/laravel-translatable": "^4.2"
+        "spatie/laravel-image-optimizer": "^1.6",
+        "spatie/laravel-translatable": "^4.3"
     },
     "autoload": {
         "psr-4": {

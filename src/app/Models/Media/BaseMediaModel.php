@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 use Spatie\Translatable\HasTranslations;
 
 /**
- * GeoSot\BaseAdmin\App\Models\MedimaModels\BaseMediaModel
+ * GeoSot\BaseAdmin\App\Models\Media\Models\BaseMediaModel
  *
  * @mixin Eloquent
  * */

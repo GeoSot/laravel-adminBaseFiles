@@ -3,6 +3,8 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use GeoSot\BaseAdmin\App\Jobs\CompressImage;
+use GeoSot\BaseAdmin\App\Models\Media\MediumImage;
 
 
 class DashboardController extends Controller
@@ -19,6 +21,7 @@ class DashboardController extends Controller
         if (!app()->environment('local')) {
             return;
         }
+
 
         //
         //        $oClient = new Client(config('imap.accounts.default'));

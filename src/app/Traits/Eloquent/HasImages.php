@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
 use App\Models\Media\MediumImage;
+use GeoSot\BaseAdmin\App\Jobs\CompressImage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
@@ -103,7 +104,13 @@ trait HasImages
      */
     public function addImage($image = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
     {
-        return $this->getHasImagesHelper()->addMedium($image, $directoryName, $disk, $displayName, $order);
+        $img = $this->getHasImagesHelper()->addMedium($image, $directoryName, $disk, $displayName, $order);
+
+        if ($img instanceof MediumImage) {
+            CompressImage::dispatch($img);
+        }
+
+        return $img;
     }
 
 
