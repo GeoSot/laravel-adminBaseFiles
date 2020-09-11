@@ -6,7 +6,7 @@
  * Time: 2:41 πμ
  */
 
-namespace GeoSot\BaseAdmin\app\Providers;
+namespace GeoSot\BaseAdmin\App\Providers;
 
 
 use Illuminate\Support\ServiceProvider;

@@ -66,7 +66,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     private function loadResources()
     {
         //  $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
-        $this->loadMigrationsFrom(Paths::srcDir('database/migrations'));
+        $this->loadMigrationsFrom(Paths::srcDir('Database/Migrations'));
         $this->loadViewsFrom(Paths::rootDir('resources/views'), $this->package);
         $this->loadTranslationsFrom(Paths::rootDir('resources/lang'), $this->package);
     }
@@ -86,7 +86,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/database/migrations/' => database_path('migrations')
+            __DIR__.'/Database/Migrations/' => database_path('migrations')
         ], 'migrations');
         $this->publishes([
 //            __DIR__ . '/../resources/lang/' => resource_path("lang"),

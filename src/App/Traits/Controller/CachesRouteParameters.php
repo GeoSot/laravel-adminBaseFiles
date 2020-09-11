@@ -6,7 +6,7 @@
  * Time: 7:30 μμ
  */
 
-namespace GeoSot\BaseAdmin\app\Traits\Controller;
+namespace GeoSot\BaseAdmin\App\Traits\Controller;
 
 
 use Illuminate\Http\Request;

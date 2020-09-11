@@ -5,7 +5,6 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
 use App\Models\Users\User;
-use GeoSot\BaseAdmin\App\Http\Controllers\BaseFrontController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

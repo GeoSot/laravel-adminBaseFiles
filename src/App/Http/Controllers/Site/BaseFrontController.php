@@ -1,8 +1,9 @@
 <?php
 
-namespace GeoSot\BaseAdmin\App\Http\Controllers;
+namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
+use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
 use Kris\LaravelFormBuilder\Form;
 
 abstract class BaseFrontController extends BaseController
