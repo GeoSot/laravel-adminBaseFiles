@@ -16,6 +16,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.0",
+        "laravel/ui": "^2.0",
         "barryvdh/laravel-debugbar": "^3.2",
         "barryvdh/laravel-translation-manager": "^0.5.8",
         "cviebrock/eloquent-sluggable": "^7",
