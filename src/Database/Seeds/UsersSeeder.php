@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoSot\BaseAdmin\Seeds;
+namespace GeoSot\BaseAdmin\Database\Seeds;
 
 use App\Models\Users\User;
 use Illuminate\Support\Arr;

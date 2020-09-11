@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoSot\BaseAdmin\Seeds;
+namespace GeoSot\BaseAdmin\Database\Seeds;
 use App\Models\Users\UserRole;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
