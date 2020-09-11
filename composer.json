@@ -22,10 +22,10 @@
         "geo-sot/laravel-env-editor": "^0.9.4",
         "kris/laravel-form-builder": "^1.30",
         "lab404/laravel-impersonate": "^1.6",
-        "laravel/passport": "^8.4",
+        "laravel/passport": "^9.3",
         "mcamara/laravel-localization": "^1.5",
         "rap2hpoutre/laravel-log-viewer": "^1.4",
-        "santigarcor/laratrust": "^5.",
+        "santigarcor/laratrust": "^.",
         "spatie/laravel-image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^4.3"
     },
