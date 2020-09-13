@@ -3,12 +3,11 @@
 namespace GeoSot\BaseAdmin\App\Models\Media;
 
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
 class MediumVideo extends BaseMediaModel
 {
-    protected static $type = 'video';
+    public const TYPE = 'video';
 
 
     protected $frontEndConfigValues = [
@@ -29,8 +28,12 @@ class MediumVideo extends BaseMediaModel
      *
      * @return string
      */
-    public function getImgHtml(string $typeOfImg = null, string $class = null, string $figureClass = null, string $onclickAction = null)
-    {
+    public function getImgHtml(
+        string $typeOfImg = null,
+        string $class = null,
+        string $figureClass = null,
+        string $onclickAction = null
+    ) {
         //TODO move on views
         $onclick = (is_null($onclickAction)) ? '' : 'onclick = "'.$onclickAction.'"';
         $html = '<figure class="'.$figureClass.'" data-originalimage="'.$this->getFilePath().'" data-originalid="'.$this->getKey().'" '.$onclick.' itemprop="image" itemscope itemtype="http://schema.org/ImageObject">';
@@ -39,8 +42,17 @@ class MediumVideo extends BaseMediaModel
         return $html;
     }
 
-    public function fillData(Model $model, $img, string $directoryName, string $disk, string $displayName = null, int $order = null, string $fileName = null)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function fillData(
+        $img,
+        string $directoryName,
+        string $disk,
+        string $displayName = null,
+        int $order = null,
+        string $fileName = null
+    ) {
         $collection = preg_replace('/[^a-zA-Z0-9]/', '', $directoryName);
 
         $data = ['collection' => $collection];
@@ -50,7 +62,7 @@ class MediumVideo extends BaseMediaModel
             $data = $this->getDataFromString($img, $displayName);
         }
 
-        return self::getFilledData($model, $order, $data);
+        return self::getFilledData($order, $data);
 
     }
 

@@ -6,7 +6,7 @@ namespace GeoSot\BaseAdmin\App\Models\Users;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\EnabledDisabled;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

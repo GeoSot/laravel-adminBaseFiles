@@ -1,7 +1,7 @@
 <?php
 
 
-namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
+namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\MediumGallery;

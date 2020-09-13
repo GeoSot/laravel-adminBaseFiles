@@ -15,7 +15,7 @@ class CreateFilesTable extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('type');
             $table->nullableMorphs('model');
 //            $table->string('title')->nullable();
@@ -38,8 +38,15 @@ class CreateFilesTable extends Migration
             //--Default
             $table->tinyInteger('enabled')->default(1);
             $table->timestamps();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('modified_by')->nullable();
 
+        });
+
+        Schema::create('mediables', function (Blueprint $table) {
+            $table->foreignId('media_id')->index();
+            $table->morphs('mediable');
+
+            $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
         });
 
 
@@ -55,6 +62,7 @@ class CreateFilesTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('media');
+        Schema::dropIfExists('mediables');
         Schema::enableForeignKeyConstraints();
     }
 }

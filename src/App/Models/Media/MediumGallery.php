@@ -4,8 +4,8 @@ namespace GeoSot\BaseAdmin\App\Models\Media;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasImages;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasVideos;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasVideos;
 use Spatie\Translatable\HasTranslations;
 
 
@@ -30,6 +30,7 @@ class MediumGallery extends BaseModel
         'slug',
         'related_type',
         'related_id',
+        'show_details',
 
         'enabled',
         'user_id',
@@ -38,6 +39,7 @@ class MediumGallery extends BaseModel
 
     protected $casts = [
         'enabled' => 'boolean',
+        'show_details' => 'array',
     ];
 
     /*
@@ -89,7 +91,7 @@ class MediumGallery extends BaseModel
     public function ownerModel()
     {
         //morphedByMany
-        return $this->morphTo('model');
+        return $this->morphTo('related');
     }
 
 

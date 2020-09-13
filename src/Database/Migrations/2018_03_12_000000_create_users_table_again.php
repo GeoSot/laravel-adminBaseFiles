@@ -16,7 +16,7 @@ class CreateUsersTableAgain extends Migration
         Schema::dropIfExists('users');
         Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
@@ -35,12 +35,12 @@ class CreateUsersTableAgain extends Migration
             $table->string('country')->nullable();
             $table->text('notes')->nullable();
             $table->text('bio')->nullable();
-            $table->string('notification_types')->default('["mail"]');
-            $table->tinyInteger('enabled')->default(1);
+            $table->text('notification_types')->default('["mail"]');
+            $table->boolean('enabled')->default(1);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('modified_by')->nullable();
         });
     }
 

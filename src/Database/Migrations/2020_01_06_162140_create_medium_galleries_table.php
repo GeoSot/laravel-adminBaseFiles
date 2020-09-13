@@ -16,10 +16,11 @@ class CreateMediumGalleriesTable extends Migration
     {
         Schema::create('media_galleries', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('title')->unique();
             $table->string('slug')->unique();
             $table->text('notes')->nullable();
+            $table->text('show_details')->nullable();
             $table->nullableMorphs('related');
 
 
@@ -28,8 +29,8 @@ class CreateMediumGalleriesTable extends Migration
             $table->timestamps();
 
             //--Foreign keys
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('modified_by')->nullable();
 
             //--Foreign keys RULEs
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');

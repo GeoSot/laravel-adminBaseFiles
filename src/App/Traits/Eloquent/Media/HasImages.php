@@ -1,7 +1,7 @@
 <?php
 
 
-namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
+namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\MediumImage;
@@ -36,7 +36,7 @@ trait HasImages
      */
     public function initializeHasImages()
     {
-        $this->hasImagesHelper = new HasMediaTraitHelper($this, 'image', MediumImage::class);
+        $this->hasImagesHelper = new HasMediaTraitHelper($this, MediumImage::TYPE, MediumImage::class);
     }
 
 

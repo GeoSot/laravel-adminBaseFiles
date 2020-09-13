@@ -6,7 +6,7 @@ namespace GeoSot\BaseAdmin\App\Models\Media;
 
 use Eloquent;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\ManagesFiles;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\ManagesFiles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -29,7 +29,7 @@ abstract class BaseMediaModel extends BaseModel
     {
         parent::boot();
         static::saving(function (BaseMediaModel $model) {
-            $model['type'] = static::$type;
+            $model['type'] = static::TYPE;
         });
         static::addGlobalScope('type', function (Builder $query) {
             return $query->where('type', '=', static::$type);
@@ -49,8 +49,7 @@ abstract class BaseMediaModel extends BaseModel
         'description',
         'alt_attribute',
         'keywords',
-        'model_type',
-        'model_id',
+
         'collection_name',
         'file',
         'disk',
@@ -165,7 +164,6 @@ abstract class BaseMediaModel extends BaseModel
     }
 
     /**
-     * @param  Model  $model
      * @param $file
      * @param  string  $directoryName
      * @param  string  $disk
@@ -173,7 +171,7 @@ abstract class BaseMediaModel extends BaseModel
      * @param  int  $order
      * @return array
      */
-    abstract public function fillData(Model $model, $file, string $directoryName, string $disk, string $displayName = null, int $order = null);
+    abstract public function fillData($file, string $directoryName, string $disk, string $displayName = null, int $order = null);
 
     protected function getDataFromUploadedFile(UploadedFile $file, string $disk, string $collection, string $displayName = null)
     {
@@ -205,12 +203,10 @@ abstract class BaseMediaModel extends BaseModel
     }
 
 
-    final protected function getFilledData(Model $model, float $order = null, array $args = [])
+    final protected function getFilledData(float $order = null, array $args = [])
     {
 
         $data = [
-            'model_type' => get_class($model),
-            'model_id' => $model->getKey(),
             'collection_name' => '',
             'title' => '',
             'file' => '',

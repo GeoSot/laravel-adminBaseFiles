@@ -16,7 +16,7 @@ class CreatePageBlocksTable extends Migration
     {
         Schema::create('page_blocks', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('slug')->unique();
             $table->string('layout')->nullable();
             $table->string('background_color')->nullable();
@@ -35,9 +35,9 @@ class CreatePageBlocksTable extends Migration
             //$table->softDeletes();
 
             //--Foreign keys
-            $table->unsignedBigInteger('page_area_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('page_area_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('modified_by')->nullable();
 
             //--Foreign keys RULEs
             $table->foreign('page_area_id')->references('id')->on('page_areas')->onDelete('set null');

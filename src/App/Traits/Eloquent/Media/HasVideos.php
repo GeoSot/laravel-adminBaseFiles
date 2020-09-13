@@ -1,7 +1,7 @@
 <?php
 
 
-namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
+namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\MediumVideo;
@@ -34,7 +34,7 @@ trait HasVideos
      */
     public function initializeHasVideos()
     {
-        $this->hasVideosHelper = new HasMediaTraitHelper($this, 'video', MediumVideo::class);
+        $this->hasVideosHelper = new HasMediaTraitHelper($this, MediumVideo::TYPE, MediumVideo::class);
     }
 
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
+namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\MediumFile;
@@ -35,7 +35,7 @@ trait HasFiles
      */
     public function initializeHasFiles()
     {
-        $this->hasFilesHelper = new HasMediaTraitHelper($this, 'file', MediumFile::class);
+        $this->hasFilesHelper = new HasMediaTraitHelper($this, MediumFile::TYPE, MediumFile::class);
     }
 
 

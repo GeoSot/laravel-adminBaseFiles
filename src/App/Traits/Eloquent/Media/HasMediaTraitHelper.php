@@ -1,7 +1,7 @@
 <?php
 
 
-namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
+namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class HasMediaTraitHelper
 {
     /**
-     * @var string BaseMediaModel
+     * @var  BaseMediaModel
      */
     private $modelFQN;
 
@@ -28,7 +28,7 @@ class HasMediaTraitHelper
     /**
      * @var Model
      */
-    private $OwnerModel;
+    private $ownerModel;
 
     /**
      * HasMediaTraitHelper constructor.
@@ -40,7 +40,7 @@ class HasMediaTraitHelper
     {
         $this->modelType = $modelType;
         $this->modelFQN = $modelFQN;
-        $this->OwnerModel = $OwnerModel;
+        $this->ownerModel = $OwnerModel;
         $this->testSubClassOfBaseMediaModel($this->getModelFQN());
 
     }
@@ -50,7 +50,7 @@ class HasMediaTraitHelper
      */
     private function getOwnerModel()
     {
-        return $this->OwnerModel;
+        return $this->ownerModel;
     }
 
     /**
@@ -76,7 +76,7 @@ class HasMediaTraitHelper
      */
     public function hasMedia()
     {
-        return (boolean) $this->getOwnerModel()->{$this->getModelType(true)}()->count();
+        return $this->getOwnerModel()->{$this->getModelType(true)}()->isNotEmpty();
     }
 
     /**
@@ -87,7 +87,7 @@ class HasMediaTraitHelper
      */
     public function media()
     {
-        return $this->getOwnerModel()->morphMany($this->getModelFQN(), 'model');
+        return $this->getOwnerModel()->morphMany($this->morphToMany(), 'mediable');
     }
 
     /**
@@ -103,7 +103,6 @@ class HasMediaTraitHelper
     /**
      * Sync An medium to  model
      *
-     * @param  null  $medium
      * @param  string  $directoryName
      * @param  string  $disk
      *
@@ -111,23 +110,28 @@ class HasMediaTraitHelper
      * @param  integer  $order
      * @return BaseMediaModel|null
      */
-    public function syncMedium($medium = null, string $directoryName, string $disk, string $displayName = null, int $order = null)
-    {
+    public function syncMedium(
+        string $directoryName,
+        string $disk,
+        string $displayName = null,
+        int $order = null
+    ) {
         $this->deleteAssociateMedia();
-        return $this->getOwnerModel()->{$this->getModelType(false, 'add')}($medium, $directoryName, $disk, $displayName, $order);
+        return $this->getOwnerModel()->{$this->getModelType(false, 'add')}( $directoryName, $disk, $displayName,
+            $order);
     }
 
     public function deleteAssociateMedia()
     {
-        $this->getOwnerModel()->{$this->getModelType(true)}()->each(function (Model $model) {
+        $this->getOwnerModel()->{$this->getModelType(true)}()->detach();
+  /*      $this->getOwnerModel()->{$this->getModelType(true)}()->each(function (Model $model) {
             $model->delete();
-        });
+        });*/
     }
 
     /**
      * .Add An medium to  model
      *
-     * @param  mixed  $medium
      * @param  string  $directoryName
      * @param  string  $disk
      *
@@ -135,8 +139,12 @@ class HasMediaTraitHelper
      * @param  integer  $order
      * @return BaseMediaModel
      */
-    public function addMedium($medium = null, string $directoryName, string $disk, string $displayName = null, int $order = null)
-    {
+    public function addMedium(
+        string $directoryName,
+        string $disk,
+        string $displayName = null,
+        int $order = null
+    ) {
 
         if (is_null($medium)) {
             return null;
@@ -147,6 +155,8 @@ class HasMediaTraitHelper
         $data = $modelInstance->fillData($this->getOwnerModel(), $medium, $directoryName, $disk, $displayName, $order);
 
         return $this->getModelFQN()::create($data);
+
+        $this->{$this->getModelType(true)}()->attach([$this->getOwnerModel()->getKey()]);
     }
 
 
@@ -177,7 +187,8 @@ class HasMediaTraitHelper
         }
         $collection = collect([]);
         foreach ($media as $index => $medium) {
-            $collection->push($this->{$this->getModelType(false, 'add')}($medium, $directoryName, $disk, null, $index * 10));
+            $collection->push($this->{$this->getModelType(false, 'add')}($medium, $directoryName, $disk, null,
+                $index * 10));
         }
 
         return $collection;
@@ -212,7 +223,8 @@ class HasMediaTraitHelper
             return isset($value);
         });
 
-        $allFields = array_intersect(['first_name', 'last_name', 'title', 'slug'], $this->getOwnerModel()->getFillable());
+        $allFields = array_intersect(['first_name', 'last_name', 'title', 'slug'],
+            $this->getOwnerModel()->getFillable());
 
         $extraText = array_map(function ($field) {
             return optional($this->getOwnerModel())->{$field};
@@ -237,7 +249,8 @@ class HasMediaTraitHelper
 
         $removeIdsArray = array_filter($request->get("remove_$requestFieldName", []));
         $oldIds = array_filter($request->get("old_$requestFieldName", []));
-        $deleteIdsArray = $this->getOwnerModel()->{$this->getModelType(true)}()->whereNotIn('id', $oldIds)->pluck('id')->toArray();
+        $deleteIdsArray = $this->getOwnerModel()->{$this->getModelType(true)}()->whereNotIn('id',
+            $oldIds)->pluck('id')->toArray();
 
         if (!empty($ids = array_merge($removeIdsArray, $deleteIdsArray))) {
             $this->getModelFQN()::deleteIds($ids);

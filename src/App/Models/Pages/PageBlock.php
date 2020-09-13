@@ -4,7 +4,7 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Spatie\Translatable\HasTranslations;
 

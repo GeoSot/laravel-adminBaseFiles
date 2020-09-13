@@ -4,7 +4,6 @@
 namespace GeoSot\BaseAdmin\App\Models\Media;
 
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,7 +11,7 @@ use Illuminate\Support\Str;
 class MediumFile extends BaseMediaModel
 {
 
-    protected static $type = 'file';
+    public const TYPE = 'file';
 
 
     protected $frontEndConfigValues = [
@@ -36,8 +35,14 @@ class MediumFile extends BaseMediaModel
         return $content ?? '';
     }
 
-    public function fillData(Model $model, $img, string $directoryName, string $disk, string $displayName = null, int $order = null, string $fileName = null)
-    {
+    public function fillData(
+        $img,
+        string $directoryName,
+        string $disk,
+        string $displayName = null,
+        int $order = null,
+        string $fileName = null
+    ) {
         $collection = Str::snake($directoryName);
         $data = ['collection' => $collection];
         if ($img instanceof UploadedFile) {
@@ -47,7 +52,7 @@ class MediumFile extends BaseMediaModel
             $data = $this->getDataFromString($img, $displayName);
         }
 
-        return self::getFilledData($model, $order, $data);
+        return self::getFilledData($order, $data);
 
     }
 
