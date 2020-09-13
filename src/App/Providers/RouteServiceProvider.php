@@ -14,6 +14,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Laravel\Passport\Passport;
@@ -78,7 +79,8 @@ class RouteServiceProvider extends ServiceProvider
                 $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->namespace('Admin')->as('admin.')->middleware(['auth'])->group(function () {
                     $this->loadBackendRoutes();
                 });
-                $this->getRouter()->auth(config('baseAdmin.config.authActions'));
+                Route::mixin(new \Laravel\Ui\AuthRouteMethods());
+                Route::auth(config('baseAdmin.config.authActions'));
                 $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->namespace('Site')->group(function () {
                     $this->loadFrontendRoutes();
                 });
