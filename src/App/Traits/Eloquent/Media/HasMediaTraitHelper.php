@@ -7,7 +7,6 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
