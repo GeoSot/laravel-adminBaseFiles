@@ -75,31 +75,32 @@ class MainCommand extends BaseInstallCommand
             'initializeEnv' => ['baseAdmin:install:initializeEnv'],
             'authorization' => ['php artisan ui bootstrap --auth'],
             'publishConf' => ['vendor:publish', ['--provider=GeoSot\Settings\ServiceProvider --tag=config']],
-            'publishConfLaratrust' => ['vendor:publish',['--provider=Laratrust\LaratrustServiceProvider --tag=laratrust']],
+            'publishForeignConfigs' => ['baseAdmin:install:publishForeignConfigs'],
+//            'publishConfLaratrust' => ['vendor:publish',['--provider=Laratrust\LaratrustServiceProvider --tag=laratrust']],
 //            'publishPackageMigrations'  => [
 //                'vendor:publish', [
 //                    '--provider' => 'GeoSot\BaseAdmin\ServiceProvider',
 //                    '--tag'      => 'migrations'
 //                ]
 //            ],
-            'publishEnvEditorConfig'    => [
-                'vendor:publish', [
-                    '--provider' => 'GeoSot\EnvEditor\ServiceProvider',
-                    '--tag' => 'config'
-                ]
-            ],
-            'publishLocalizationConfig' => [
-                'vendor:publish', [
-                    '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
-                    '--tag' => 'config'
-                ]
-            ],
-            'publishTranslationMigrations' => [
-                'vendor:publish', [
-                    '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
-                    '--tag' => 'migrations'
-                ]
-            ],
+            /*           'publishEnvEditorConfig'    => [
+                           'vendor:publish', [
+                               '--provider' => 'GeoSot\EnvEditor\ServiceProvider',
+                               '--tag' => 'config'
+                           ]
+                       ],
+                       'publishLocalizationConfig' => [
+                           'vendor:publish', [
+                               '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
+                               '--tag' => 'config'
+                           ]
+                       ],*/
+//            'publishTranslationMigrations' => [
+//                'vendor:publish', [
+//                    '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
+//                    '--tag' => 'migrations'
+//                ]
+//            ],
             'makePassportKeys' => ['passport:keys'],
             'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
             'publishViews' => ['baseAdmin:install:publishViews'],
