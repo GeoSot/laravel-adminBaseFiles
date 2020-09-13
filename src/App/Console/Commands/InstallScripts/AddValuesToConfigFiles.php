@@ -101,6 +101,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
      */
     protected function addValueToFile(string $filesName, string $keyToChange, $valueToChange): void
     {
+
         return;
         $path = $this->getConfigDirectory($filesName . '.php');
         if (!$this->files->exists($path)) {
