@@ -5,7 +5,7 @@
     @foreach($viewVals->get('roles') as $role)
         <th class="align-top">
 
-             @if($role->name=='god' )<!--and Auth::user()->can('handle-permissions')-->
+             @if($role->name=='god' )<!--and Auth::user()->isAbleTo('handle-permissions')-->
                  <span class=""> {{$role->display_name}}</span>
                  @else
                      <div class="custom-control custom-checkbox mx-2">

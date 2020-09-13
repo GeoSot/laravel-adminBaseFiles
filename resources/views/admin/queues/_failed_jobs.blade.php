@@ -19,7 +19,7 @@
 
         <td>
          <div class="d-flex justify-content-between flex-">
-             @if(auth()->user()->can('admin.retry-job'))
+             @if(auth()->user()->isAbleTo('admin.retry-job'))
                  <form action="{{route( $viewVals->get('modelRoute').".retry",$job->id)}}" method="POST" class="form-inline  ">
                     @method('PATCH')
                      @csrf
@@ -28,7 +28,7 @@
                       </button>
                 </form>
              @endif
-             @if(auth()->user()->can('admin.flush-job'))
+             @if(auth()->user()->isAbleTo('admin.flush-job'))
                  <form action="{{route( $viewVals->get('modelRoute').".flush",$job->id)}}" method="POST" class="form-inline  ">
                     @method('PATCH')
                      @csrf

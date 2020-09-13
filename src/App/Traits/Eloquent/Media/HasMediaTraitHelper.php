@@ -8,6 +8,7 @@ use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -83,11 +84,14 @@ class HasMediaTraitHelper
      * Relation of Medium to parent model. Morph Many To Many relationship
      * Get all media related to the parent model.
      *
-     * @return MorphMany
+     * @return MorphToMany
      */
     public function media()
     {
-        return $this->getOwnerModel()->morphMany($this->morphToMany(), 'mediable');
+//        return $this->getOwnerModel()->morphMany($this->morphToMany(), 'mediable');
+        return $this->getOwnerModel()->morphToMany($this->getModelFQN(), 'mediable', 'mediables', 'media_id',
+            'mediable_id', 'mediable_type');
+
     }
 
     /**
@@ -117,16 +121,16 @@ class HasMediaTraitHelper
         int $order = null
     ) {
         $this->deleteAssociateMedia();
-        return $this->getOwnerModel()->{$this->getModelType(false, 'add')}( $directoryName, $disk, $displayName,
+        return $this->getOwnerModel()->{$this->getModelType(false, 'add')}($directoryName, $disk, $displayName,
             $order);
     }
 
     public function deleteAssociateMedia()
     {
         $this->getOwnerModel()->{$this->getModelType(true)}()->detach();
-  /*      $this->getOwnerModel()->{$this->getModelType(true)}()->each(function (Model $model) {
-            $model->delete();
-        });*/
+        /*      $this->getOwnerModel()->{$this->getModelType(true)}()->each(function (Model $model) {
+                  $model->delete();
+              });*/
     }
 
     /**

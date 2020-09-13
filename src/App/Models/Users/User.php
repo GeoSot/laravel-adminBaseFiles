@@ -143,7 +143,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     public function canImpersonate()
     {
-        return $this->can('admin.*') and !app('impersonate')->isImpersonating();
+        return $this->isAbleTo('admin.*') and !app('impersonate')->isImpersonating();
     }
 
 }

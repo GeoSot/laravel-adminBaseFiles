@@ -20,6 +20,9 @@ use Spatie\Translatable\HasTranslations;
  * */
 abstract class BaseMediaModel extends BaseModel
 {
+
+    public const TYPE = '';
+
     public const  DEFAULT_DISK = 'public';
     protected $table = 'media';
     use ManagesFiles, HasTranslations;
@@ -32,7 +35,7 @@ abstract class BaseMediaModel extends BaseModel
             $model['type'] = static::TYPE;
         });
         static::addGlobalScope('type', function (Builder $query) {
-            return $query->where('type', '=', static::$type);
+            return $query->where('type', '=', static::TYPE);
         });
     }
 

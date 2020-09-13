@@ -17,7 +17,7 @@
 
     @component($packageVariables->get('blades').'admin._components.listingButtons',['viewVals'=>$viewVals, ]  )
         @slot('afterLeft')
-            @if(in_array('save',$viewVals->get('options')->get('editActions')) and auth()->user()->can('admin.update-'.$modelClass) and $allowToHandle)
+            @if(in_array('save',$viewVals->get('options')->get('editActions')) and auth()->user()->isAbleTo('admin.update-'.$modelClass) and $allowToHandle)
                 <button id="save" class="btn btn-success  my-1" data-value="save" onclick="document.getElementById('permissionsForm').submit();">
                     <span class="btn-label"><i class="fa fa-floppy-o"></i></span>
                     <span class="btn_label"> @lang($btnsLang.'.save')</span>

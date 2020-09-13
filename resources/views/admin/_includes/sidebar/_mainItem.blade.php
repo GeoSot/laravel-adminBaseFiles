@@ -12,14 +12,14 @@
    $parentPermission="admin.index-{$parentRoute}";
    $isExcludedFromConfFile= in_array( $parentRoute,Arr::get($node,'excludeFromSideBar',[]));
 
-   $canSeeMenu=(auth()->user()->can($parentPermission) and !$isExcludedFromConfFile );
+   $canSeeMenu=(auth()->user()->isAbleTo($parentPermission) and !$isExcludedFromConfFile );
   if( $hasInnerMenus ){
        $children= array_diff ( $node['menus'] , [$parentRoute]);
        $childPermissions= array_map(function ($child) use ($parentRoute) {
            return 'admin.index-'.$parentRoute.ucfirst($child);
        }, $children);
 
-      $canSeeMenu= auth()->user()->can(array_merge([$parentPermission], $childPermissions));
+      $canSeeMenu= auth()->user()->isAbleTo(array_merge([$parentPermission], $childPermissions));
   }
 //**************
 
@@ -51,7 +51,7 @@
                 @foreach($node['menus'] as $subMenu)
                     @continue($isExcludedFromConfFile= in_array( $subMenu, Arr::get($node,'excludeFromSideBar',[])))
 
-                    @php($canSeeSubMenu=($subMenu == $parentRoute) ?$canSeeMenu:auth()->user()->can('admin.index-'.$parentRoute.ucfirst($subMenu)))
+                    @php($canSeeSubMenu=($subMenu == $parentRoute) ?$canSeeMenu:auth()->user()->isAbleTo('admin.index-'.$parentRoute.ucfirst($subMenu)))
 
                     @if(config($packageVariables->get('package').'.main.permissionsCheckOnSideBar',true)? $canSeeSubMenu :true )
                         @include($packageVariables->get('blades').'admin._includes.sidebar._mainSubItem')

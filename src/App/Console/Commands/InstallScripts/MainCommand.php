@@ -109,6 +109,7 @@ class MainCommand extends BaseInstallCommand
             'seedPackageData' => ['db:seed', ['--class' => 'GeoSot\BaseAdmin\Database\Seeds\DatabaseSeeder']],
             'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
             'symlink'=>['storage:link'],
+//            'perms'=>['baseAdmin:makePermissionsForModel'],
         ];
 
     }

@@ -18,25 +18,25 @@
 
             @isset($before) {!!$before !!} @endisset
 
-            @if(in_array('save',$options) and auth()->user()->can('admin.update-'.$modelClass) and $allowToHandle)
+            @if(in_array('save',$options) and auth()->user()->isAbleTo('admin.update-'.$modelClass) and $allowToHandle)
                 <button id="save" class="btn btn-success  m-1" data-value="save" onclick="submitForm(this)">
                     <span class="btn-label"><i class="fa fa-floppy-o"></i></span>
                     <span class=""> @lang("{$btnsLang}.save")</span>
                 </button>
             @endif
-            @if(in_array('saveAndClose',$options) and auth()->user()->can('admin.update-'.$modelClass) and $allowToHandle)
+            @if(in_array('saveAndClose',$options) and auth()->user()->isAbleTo('admin.update-'.$modelClass) and $allowToHandle)
                 <button id="save_and_close" class="btn btn-light  m-1" data-value="back" onclick="submitForm(this)">
                     <span class="btn-label"><i class="fa fa-check"></i></span>
                     <span class=""> @lang("{$btnsLang}.saveAndClose")</span>
                 </button>
             @endif
-            @if(in_array('saveAndNew',$options) and auth()->user()->can('admin.update-'.$modelClass) and $allowToHandle)
+            @if(in_array('saveAndNew',$options) and auth()->user()->isAbleTo('admin.update-'.$modelClass) and $allowToHandle)
                 <button class="btn btn-light m-1" data-value="new" onclick="submitForm(this)">
                     <span class="btn-label"><i class="fa fa-plus"></i></span>
                     <span class=""> @lang("{$btnsLang}.saveAndNew")</span>
                 </button>
             @endif
-            @if(in_array('makeNewCopy',$options) and auth()->user()->can('admin.create-'.$modelClass) and $allowToHandle)
+            @if(in_array('makeNewCopy',$options) and auth()->user()->isAbleTo('admin.create-'.$modelClass) and $allowToHandle)
                 <button class="btn btn-primary  m-1" data-value="makeCopy" onclick="submitForm(this)">
                     <span class="btn-label"><i class="fa fa-plus"></i></span>
                     <span class=""> @lang("{$btnsLang}.makeCopy")</span>

@@ -3,7 +3,7 @@
         <section class="button_actions card ">
 		<div class=" card-body  py-2 d-flex ">
 
-                @if(auth()->user()->can('admin.retry-job'))
+                @if(auth()->user()->isAbleTo('admin.retry-job'))
                 <form action="{{route( $viewVals->get('modelRoute').".retry",'all')}}" method="POST" class="form-inline  m-1">
                         @method('PATCH')
                     @csrf
@@ -14,7 +14,7 @@
                           </button>
                     </form>
             @endif
-            @if(auth()->user()->can('admin.flush-job'))
+            @if(auth()->user()->isAbleTo('admin.flush-job'))
                 <form action="{{route( $viewVals->get('modelRoute').".flush",'all') }}" method="POST" class="form-inline  m-1">
                           @method('PATCH')
                     @csrf

@@ -31,7 +31,7 @@
                                 {{ auth()->user()->first_name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuProfile">
-                                @if( auth()->user()->can('admin.*') )
+                                @if( auth()->user()->isAbleTo('admin.*') )
                                     <a class=" dropdown-item" href="{{   route('admin.dashboard')}}">
                                         <i class="fa fa-home "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.dashboard')
                                     </a>
