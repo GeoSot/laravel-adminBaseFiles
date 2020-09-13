@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\MediumFile;
+use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
@@ -101,7 +102,7 @@ trait HasFiles
      *
      * @return MediumFile|null
      */
-    public function addFile($file = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    public function addFile($file = null, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK, string $displayName = null, int $order = null)
     {
         return $this->getHasFilesHelper()->addMedium($file, $directoryName, $disk, $displayName, $order);
     }
@@ -116,7 +117,7 @@ trait HasFiles
      *
      * @return  Collection|null
      */
-    public function syncFiles(Collection $files, string $directoryName, string $disk = 'uploads')
+    public function syncFiles(Collection $files, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK)
     {
         return $this->getHasFilesHelper()->syncMedia($files, $directoryName, $disk);
     }
@@ -127,7 +128,7 @@ trait HasFiles
      * @param  string  $disk
      * @return Collection|null
      */
-    public function addFiles(Collection $files, string $directoryName, string $disk = 'uploads')
+    public function addFiles(Collection $files, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK)
     {
         return $this->getHasFilesHelper()->addMedia($files, $directoryName, $disk);
     }

@@ -76,16 +76,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
     protected function getChanges()
     {
         return [
-            'filesystems'         => [
-                'disks' => "[
-                    'uploads' => [
-                        'driver'     => 'local',
-                        'root'       => public_path('uploads'),
-                        'visibility' => 'public',
-                        'url'        => env('APP_URL') . ' / uploads',]
-                ]",
-            ],
-            'database'            => [
+            'database'  => [
                 'mysql' => "[
                         'engine' => 'InnoDB',
                         'modes'  => [
@@ -99,7 +90,6 @@ class AddValuesToConfigFiles extends BaseInstallCommand
                         ],
                     ]"
             ],
-            'translation-manager' => []
 
         ];
     }

@@ -6,6 +6,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 use App\Models\Media\MediumImage;
 use GeoSot\BaseAdmin\App\Jobs\CompressImage;
+use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
@@ -86,7 +87,7 @@ trait HasImages
      *
      * @return MediumImage|null
      */
-    public function syncImage($image = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    public function syncImage($image = null, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK, string $displayName = null, int $order = null)
     {
         return $this->getHasImagesHelper()->syncMedium($image, $directoryName, $disk, $displayName, $order);
     }
@@ -102,7 +103,7 @@ trait HasImages
      *
      * @return MediumImage|null
      */
-    public function addImage($image = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    public function addImage($image = null, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK, string $displayName = null, int $order = null)
     {
         $img = $this->getHasImagesHelper()->addMedium($image, $directoryName, $disk, $displayName, $order);
 
@@ -123,7 +124,7 @@ trait HasImages
      *
      * @return  Collection|null
      */
-    public function syncImages(Collection $images, string $directoryName, string $disk = 'uploads')
+    public function syncImages(Collection $images, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK)
     {
         return $this->getHasImagesHelper()->syncMedia($images, $directoryName, $disk);
     }
@@ -134,7 +135,7 @@ trait HasImages
      * @param  string  $disk
      * @return Collection|null
      */
-    public function addImages(Collection $images, string $directoryName, string $disk = 'uploads')
+    public function addImages(Collection $images, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK)
     {
         return $this->getHasImagesHelper()->addMedia($images, $directoryName, $disk);
     }

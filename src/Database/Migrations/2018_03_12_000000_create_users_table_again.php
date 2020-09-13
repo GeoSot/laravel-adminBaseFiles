@@ -35,7 +35,7 @@ class CreateUsersTableAgain extends Migration
             $table->string('country')->nullable();
             $table->text('notes')->nullable();
             $table->text('bio')->nullable();
-            $table->text('notification_types')->default('["mail"]');
+            $table->string('notification_types')->default('["mail"]');
             $table->boolean('enabled')->default(1);
             $table->rememberToken();
             $table->timestamps();

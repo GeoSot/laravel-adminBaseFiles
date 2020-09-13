@@ -8,7 +8,6 @@ use Eloquent;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\ManagesFiles;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -21,6 +20,7 @@ use Spatie\Translatable\HasTranslations;
  * */
 abstract class BaseMediaModel extends BaseModel
 {
+    public const  DEFAULT_DISK = 'public';
     protected $table = 'media';
     use ManagesFiles, HasTranslations;
     protected static $type = '';

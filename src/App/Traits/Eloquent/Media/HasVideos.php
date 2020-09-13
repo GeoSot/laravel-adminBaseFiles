@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\MediumVideo;
+use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
@@ -84,7 +85,7 @@ trait HasVideos
      *
      * @return MediumVideo|null
      */
-    public function syncVideo($video = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    public function syncVideo($video = null, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK, string $displayName = null, int $order = null)
     {
         return $this->getHasVideosHelper()->syncMedium($video, $directoryName, $disk, $displayName, $order);
     }
@@ -100,7 +101,7 @@ trait HasVideos
      *
      * @return MediumVideo|null
      */
-    public function addVideo($video = null, string $directoryName, string $disk = 'uploads', string $displayName = null, int $order = null)
+    public function addVideo($video = null, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK, string $displayName = null, int $order = null)
     {
         return $this->getHasVideosHelper()->addMedium($video, $directoryName, $disk, $displayName, $order);
     }
@@ -115,7 +116,7 @@ trait HasVideos
      *
      * @return  Collection|null
      */
-    public function syncVideos(Collection $videos, string $directoryName, string $disk = 'uploads')
+    public function syncVideos(Collection $videos, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK)
     {
         return $this->getHasVideosHelper()->syncMedia($videos, $directoryName, $disk);
     }
@@ -126,7 +127,7 @@ trait HasVideos
      * @param  string  $disk
      * @return Collection|null
      */
-    public function addVideos(Collection $videos, string $directoryName, string $disk = 'uploads')
+    public function addVideos(Collection $videos, string $directoryName, string $disk = BaseMediaModel::DEFAULT_DISK)
     {
         return $this->getHasVideosHelper()->addMedia($videos, $directoryName, $disk);
     }
