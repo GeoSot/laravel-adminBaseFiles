@@ -10,6 +10,7 @@ return [
         'title' => 'Name',
         'slug' => 'Url Slug',
         'notes' => 'Description',
-        'enabled' => 'Enabled'
+        'enabled' => 'Enabled',
+        'images' => 'Images'
     ]
 ];

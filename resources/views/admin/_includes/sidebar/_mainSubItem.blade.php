@@ -10,8 +10,8 @@
 
 @php($values=[
 'active'=>Request::is($routePrefix."/{$subMenuPlural}*") or (Request::is($routePrefix) and  $subMenu == $parentRoute),
-'title'=>($subMenu == $parentRoute)?trans_with_fallback('admin/generic.menu.listTitle'):trans_with_fallback('admin/'.$parentPlural.'/'.$parentRoute.ucfirst($subMenu).'.general.menuTitle'),
-'url'=> getCachedRouteAsLink($routeName)
+'title'=>($subMenu == $parentRoute)? \GeoSot\BaseAdmin\Helpers\Base::transWithFallback('admin/generic.menu.listTitle'): \GeoSot\BaseAdmin\Helpers\Base::transWithFallback('admin/'.$parentPlural.'/'.$parentRoute.ucfirst($subMenu).'.general.menuTitle'),
+'url'=> \GeoSot\BaseAdmin\Helpers\Base::getCachedRouteAsLink($routeName)
 ])
 <li class="pl-3 nav-item @if($values['active']) active @endif">
     <a href="{{$values['url']}}" class="nav-link px-3 inner-level-link d-flex align-items-center">

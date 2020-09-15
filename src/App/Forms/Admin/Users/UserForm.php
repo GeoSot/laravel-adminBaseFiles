@@ -47,7 +47,7 @@ class UserForm extends BaseAdminForm
                 'img' => ['class' => ' mbed-responsive-item'],
                 'label' => false,
                 'template' => 'baseAdmin::_subBlades.formTemplates.image',
-                'final_property' => 'file_path'
+                'final_property' => 'url'
             ]
         ])->add('bio', 'textarea', ['attr' => ['rows' => '5']]);
 

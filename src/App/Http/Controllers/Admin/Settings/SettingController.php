@@ -3,10 +3,9 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
 
+use App\Models\Media\Medium;
 use App\Models\Setting;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
-use GeoSot\BaseAdmin\App\Models\Media\MediumFile;
-use GeoSot\BaseAdmin\App\Models\Media\MediumImage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -85,11 +84,11 @@ class SettingController extends BaseAdminController
 
         /* @var Setting $model */
 
-        if (is_subclass_of($request->input('type'), MediumImage::class)) {
+        if (is_subclass_of($request->input('type'), Medium::TYPE_IMAGE)) {
             $result = $model->syncRequestImages($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
-        if (is_subclass_of($request->input('type'), MediumFile::class)) {
+        if (is_subclass_of($request->input('type'), Medium::class)) {
 
             $result = $model->syncRequestFiles($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);

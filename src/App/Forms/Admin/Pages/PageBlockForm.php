@@ -116,7 +116,7 @@ class PageBlockForm extends BaseAdminForm
                 'label' => false,
                 'wrapper' => ['class' => $this->getModel()->hasOneImage() ? 'col-12 col-md-6 col-lg-4' : 'col-auto'.'  form-group'],
                 'template' => 'baseAdmin::_subBlades.formTemplates.image',
-                'final_property' => 'file_path',
+                'final_property' => 'url',
                 //                'data'    => array_merge($this->getFieldOptions(), $data),
             ],
         ]);

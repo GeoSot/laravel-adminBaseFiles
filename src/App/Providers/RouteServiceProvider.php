@@ -9,7 +9,9 @@
 namespace GeoSot\BaseAdmin\App\Providers;
 
 use App\Models\Pages\Page;
+use GeoSot\BaseAdmin\App\Http\Middleware\ForceHttpsProtocol;
 use GeoSot\BaseAdmin\App\Http\Middleware\MinifyHtml;
+use GeoSot\BaseAdmin\App\Http\Middleware\RedirectIfAuthenticatedAtIntended;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
@@ -41,7 +43,9 @@ class RouteServiceProvider extends ServiceProvider
      * @var array
      */
     protected $middlewareToAdd = [
+        'forceHttps' => ForceHttpsProtocol::class,
         'minifyHtml' => MinifyHtml::class,
+        'redirectAtIntended' => RedirectIfAuthenticatedAtIntended::class,
         'localize' => Mcamara\LaravelLocalizationRoutes::class,
         'localizationRedirect' => Mcamara\LaravelLocalizationRedirectFilter::class,
         'localeSessionRedirect' => Mcamara\LocaleSessionRedirect::class,
@@ -54,8 +58,8 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
         Passport::routes();
-        Passport::tokensExpireIn(now()->addDays(15));
-        Passport::refreshTokensExpireIn(now()->addDays(30));
+        Passport::tokensExpireIn(now()->addDays(1));
+        Passport::refreshTokensExpireIn(now()->addDays(2));
     }
 
     /**

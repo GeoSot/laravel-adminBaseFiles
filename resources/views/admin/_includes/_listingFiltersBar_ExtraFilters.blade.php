@@ -22,7 +22,7 @@
         </button>
     </div>
 
-    <div class="collapse {{($requestHasExtraFilters or settings('admin.generic.keepExtraFiltersOpen', false))? 'show':''}}"
+    <div class="collapse {{($requestHasExtraFilters or \GeoSot\BaseAdmin\Helpers\Base::settings('admin.generic.keepExtraFiltersOpen', false))? 'show':''}}"
          id="extraFilters_collapse">
 
         <div class="row">

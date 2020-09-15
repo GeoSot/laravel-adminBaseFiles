@@ -4,21 +4,19 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
-use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
+use GeoSot\BaseAdmin\App\Models\Media\Medium;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Plank\Mediable\Media;
+use Plank\Mediable\Mediable;
+use Plank\Mediable\MediaUploaderFacade;
 
 class HasMediaTraitHelper
 {
-    /**
-     * @var  BaseMediaModel
-     */
-    private $modelFQN;
 
     /**
      * @var string
@@ -26,57 +24,47 @@ class HasMediaTraitHelper
     private $modelType;
 
     /**
-     * @var Model
+     * @var Model|Mediable
      */
     private $ownerModel;
+    private $tags=[];
+    /**
+     * @var []
+     */
+    private $supportedTypes;
 
     /**
      * HasMediaTraitHelper constructor.
      * @param  Model  $OwnerModel
-     * @param  string  $modelType
-     * @param  string  $modelFQN
+     * @param  array  $types
      */
-    public function __construct(Model $OwnerModel, string $modelType, string $modelFQN)
+    public function __construct(Model $OwnerModel, array $types=[])
     {
-        $this->modelType = $modelType;
-        $this->modelFQN = $modelFQN;
         $this->ownerModel = $OwnerModel;
-        $this->testSubClassOfBaseMediaModel($this->getModelFQN());
-
+        $this->supportedTypes = $types;
     }
 
     /**
-     * @mixin BaseMediaModel
+     * @mixin Model
      */
     private function getOwnerModel()
     {
         return $this->ownerModel;
     }
 
-    /**
-     * @return  BaseMediaModel
-     */
-    private function getModelFQN()
+
+    public function getTags($extraTags = [])
     {
-        return $this->modelFQN;
+        return array_merge($this->tags, Arr::wrap($extraTags));
     }
 
-    /**
-     * @param  bool  $plural
-     * @param  string  $prefix
-     * @return string
-     */
-    public function getModelType(bool $plural = false, string $prefix = '')
-    {
-        return $prefix.($plural ? Str::plural($this->modelType) : $this->modelType);
-    }
 
     /**
      * @return bool
      */
-    public function hasMedia()
+    public function hasRelation()
     {
-        return $this->getOwnerModel()->{$this->getModelType(true)}()->isNotEmpty();
+        return $this->relation()->count() > 0;
     }
 
     /**
@@ -85,11 +73,9 @@ class HasMediaTraitHelper
      *
      * @return MorphToMany
      */
-    public function media()
+    public function relation()
     {
-//        return $this->getOwnerModel()->morphMany($this->morphToMany(), 'mediable');
-        return $this->getOwnerModel()->morphToMany($this->getModelFQN(), 'mediable', 'mediables', 'media_id',
-            'mediable_id', 'mediable_type');
+        return $this->getOwnerModel()->media()->whereIn('aggregate_type', $this->supportedTypes);
 
     }
 
@@ -97,104 +83,38 @@ class HasMediaTraitHelper
      * @param  Builder  $builder
      * @return Builder
      */
-    public function mediaEnabled(Builder $builder)
+    public function scopeMediaEnabled(Builder $builder)
     {
-        return $builder->where('enabled', true)->where('the_file_exists', true);
+        return $builder/*->where('enabled', true)*/ ->where('the_file_exists', true);
     }
 
-
-    /**
-     * Sync An medium to  model
-     *
-     * @param  string  $directoryName
-     * @param  string  $disk
-     *
-     * @param  string  $displayName  *
-     * @param  integer  $order
-     * @return BaseMediaModel|null
-     */
-    public function syncMedium(
-        string $directoryName,
-        string $disk,
-        string $displayName = null,
-        int $order = null
-    ) {
-        $this->deleteAssociateMedia();
-        return $this->getOwnerModel()->{$this->getModelType(false, 'add')}($directoryName, $disk, $displayName,
-            $order);
-    }
 
     public function deleteAssociateMedia()
     {
-        $this->getOwnerModel()->{$this->getModelType(true)}()->detach();
-        /*      $this->getOwnerModel()->{$this->getModelType(true)}()->each(function (Model $model) {
-                  $model->delete();
-              });*/
-    }
-
-    /**
-     * .Add An medium to  model
-     *
-     * @param  string  $directoryName
-     * @param  string  $disk
-     *
-     * @param  string  $displayName  *
-     * @param  integer  $order
-     * @return BaseMediaModel
-     */
-    public function addMedium(
-        string $directoryName,
-        string $disk,
-        string $displayName = null,
-        int $order = null
-    ) {
-
-        if (is_null($medium)) {
-            return null;
-        }
-        /* @var BaseMediaModel $modelInstance */
-        $modelInstance = app($this->getModelFQN());
-
-        $data = $modelInstance->fillData($this->getOwnerModel(), $medium, $directoryName, $disk, $displayName, $order);
-
-        return $this->getModelFQN()::create($data);
-
-        $this->{$this->getModelType(true)}()->attach([$this->getOwnerModel()->getKey()]);
+        $this->relation()->detachMediaTags($this->getTags());
     }
 
 
     /**
-     * @param  Collection  $media
-     * @param  string  $directoryName
-     * @param  string  $disk
-     *
-     * @return Collection|null
+     * Replace the existing media collection for the specified tag(s).
+     * @param  string|int|Media|\Illuminate\Database\Eloquent\Collection  $media
+     * @param  string|string[]  $tags
+     * @return void
      */
-    public function syncMedia(Collection $media, string $directoryName, string $disk)
+    public function syncMedia($media, $tags = [])
     {
-        $this->deleteAssociateMedia();
-
-        return $this->{$this->getModelType(true, 'add')}($media, $directoryName, $disk);
+        return $this->getOwnerModel()->syncMedia($media, $this->getTags($tags));
     }
 
     /**
-     * @param  Collection  $media
-     * @param  string  $directoryName
-     * @param  string  $disk
-     * @return Collection|null
+     * Attach a media entity to the model with one or more tags.
+     * @param  string|int|Media|\Illuminate\Database\Eloquent\Collection  $media  Either a string or numeric id, an array of ids, an instance of `Media` or an instance of `Collection`
+     * @param  string|string[]  $tags  One or more tags to define the relation
+     * @return void
      */
-    public function addMedia(Collection $media, string $directoryName, string $disk)
+    public function attachMedia($media, $tags = [])
     {
-        if ($media->isEmpty()) {
-            return null;
-        }
-        $collection = collect([]);
-        foreach ($media as $index => $medium) {
-            $collection->push($this->{$this->getModelType(false, 'add')}($medium, $directoryName, $disk, null,
-                $index * 10));
-        }
-
-        return $collection;
+        $this->getOwnerModel()->attachMedia($media, $this->getTags($tags));
     }
 
 
@@ -205,9 +125,9 @@ class HasMediaTraitHelper
      * @param  bool  $keepFirstOnly
      * @param  string  $requestFieldName
      *
-     * @return BaseMediaModel|null
+     * @return void
      */
-    final public function syncRequestMedia(Request $request, $keepFirstOnly, string $requestFieldName)
+    final public function syncRequestMedia(Request $request, bool $keepFirstOnly, string $requestFieldName)
     {
 
         $this->removeRequestMedia($request, $requestFieldName);
@@ -218,26 +138,23 @@ class HasMediaTraitHelper
             return null;
         }
 
-        if ($request->get("repeatable_$requestFieldName", !$keepFirstOnly)) {
-            return $this->addMedia($media, $this->getOwnerModel()->getTable(), "uploads");
+        if ($request->get("repeatable_$requestFieldName") && !$keepFirstOnly) {
+            $this->attachMedia($media, $requestFieldName);
+            return;
         }
 
-        $file = Arr::first($media, function ($value, $key) {
+        $firstMedium = Arr::first($media, function ($value, $key) {
             return isset($value);
         });
 
-        $allFields = array_intersect(['first_name', 'last_name', 'title', 'slug'],
-            $this->getOwnerModel()->getFillable());
 
-        $extraText = array_map(function ($field) {
-            return optional($this->getOwnerModel())->{$field};
-        }, $allFields);
+        $mediaUploader = MediaUploaderFacade::fromSource($firstMedium)->toDirectory($this->getOwnerModel()->getTable())->setAllowedAggregateTypes($this->supportedTypes);
+        $fileName = $this->getAPossibleFilename();
 
-        $slug = empty($extraText) ? '' : '-'.Str::slug(implode('-', $extraText));
+        $fileName ? $mediaUploader->useFilename($fileName) : $mediaUploader->useHashForFilename();
 
-        $fileName = $this->getOwnerModel()->getKey().$slug;
 
-        return $this->syncMedium($file, $this->getOwnerModel()->getTable(), "uploads", $fileName);
+        $this->syncMedia($mediaUploader->upload(), $requestFieldName);
     }
 
     /**
@@ -252,26 +169,33 @@ class HasMediaTraitHelper
 
         $removeIdsArray = array_filter($request->get("remove_$requestFieldName", []));
         $oldIds = array_filter($request->get("old_$requestFieldName", []));
-        $deleteIdsArray = $this->getOwnerModel()->{$this->getModelType(true)}()->whereNotIn('id',
-            $oldIds)->pluck('id')->toArray();
+        $deleteIdsArray = $this->getOwnerModel()->media()->whereNotIn('id', $oldIds)->pluck('id')->toArray();
+
 
         if (!empty($ids = array_merge($removeIdsArray, $deleteIdsArray))) {
-            $this->getModelFQN()::deleteIds($ids);
-
+            $this->getOwnerModel()->detachMedia($ids, $requestFieldName);
             return true;
         }
 
         return false;
     }
 
+
     /**
-     * @param  string  $modelFQN
+     * @return string
      */
-    private function testSubClassOfBaseMediaModel(string $modelFQN): void
+    public function getAPossibleFilename(): string
     {
-        if (!is_subclass_of($modelFQN, BaseMediaModel::class)) {
-            throw new \InvalidArgumentException($modelFQN.' is not ChildClass of '.BaseMediaModel::class);
-        }
+        $allFields = array_intersect(['first_name', 'last_name', 'title', 'slug'], $this->getOwnerModel()->getFillable());
+
+        $extraText = array_map(function ($field) {
+            return optional($this->getOwnerModel())->{$field};
+        }, $allFields);
+
+        $slug = empty($extraText) ? '' : '-'.Str::slug(implode('-', $extraText));
+
+        return $this->getOwnerModel()->getKey().$slug;
+
     }
 
 

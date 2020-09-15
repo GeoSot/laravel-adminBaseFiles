@@ -31,7 +31,7 @@
     @php($localePrefix=LaravelLocalization::isHiddenDefault(LaravelLocalization::getCurrentLocale())?'':LaravelLocalization::getCurrentLocale().'/')
 
     <li class=" nav-item @if($activeParent=Request::is($localePrefix.config('baseAdmin.config.backEnd.baseRoute')."/$parentPlural*")) active  @endif ">
-        <a class="px-3 nav-link  d-flex align-items-center" href="{{ getCachedRouteAsLink( "admin.$parentPlural.index")}}"
+        <a class="px-3 nav-link  d-flex align-items-center" href="{{ \GeoSot\BaseAdmin\Helpers\Base::getCachedRouteAsLink( "admin.$parentPlural.index")}}"
            @if($activeParent and $hasInnerMenus) aria-expanded="true" @endif
            @if($hasInnerMenus) data-toggle="collapse" data-target="#collapse_{{$parentPlural}}" role="button" aria-expanded="false"
            aria-controls="collapse_{{$parentPlural}}" @endif>
@@ -40,7 +40,7 @@
                 <i class=" {{ Arr::get($icon,'class')}}  mr-2 pt-1 align-self-start"
                    style=" {{ \Illuminate\Support\Arr::get($icon,'style')}}"></i>
             @endisset
-            <span class="title ">{{trans_with_fallback("admin/{$parentPlural}/{$parentRoute}.general.menuTitle")}}</span>
+            <span class="title ">{{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback("admin/{$parentPlural}/{$parentRoute}.general.menuTitle")}}</span>
             @if($hasInnerMenus)
                 <span class="fa arrow-after ml-auto pl-2 fa-angle-left"></span>
             @endif

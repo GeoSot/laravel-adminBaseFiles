@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite">
 <head>
     @includeIf('site._includes.headMetas')
-    <link href="{{baseAdmin_assets("css/site/app.css")}}" rel="stylesheet"/>
+    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/site/app.css")}}" rel="stylesheet"/>
     @foreach(config('baseAdmin.config.site.extraJs') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>
     @endforeach
@@ -44,7 +44,7 @@
 </div>
 
 <span class="js-scripts">
-     <script async src="{{baseAdmin_assets("js/site/app.js")}}"></script>
+     <script async src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/site/app.js")}}"></script>
     @foreach(config('baseAdmin.config.site.extraJs') as $file)
         <script defer src="{{mix($file)}}"></script>
     @endforeach

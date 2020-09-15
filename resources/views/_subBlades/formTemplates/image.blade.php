@@ -36,12 +36,12 @@
                      if( $optionsValue instanceof  \Illuminate\Support\Collection and $optionsValue->count()){
                          $value=$optionsValue->first()->getFilePath();
                      }
-                     if( $optionsValue instanceof  \App\Models\Media\MediumImage){
+                     if( $optionsValue instanceof  \App\Models\Media\Medium && in_array($optionsValue->aggregate_type,[\App\Models\Media\Medium::TYPE_IMAGE,\App\Models\Media\Medium::TYPE_IMAGE_VECTOR])){
                          $value=$optionsValue->getFilePath();
                      }
                 @endphp
                 @if ($value)
-                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\MediumImage::getDummyImageUrl()!!}" data-src="{!! $value !!}" class=" js-lazy img-fluid   {!!$imgClass!!}"/>
+                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\Medium::getDummyImageUrl()!!}" data-src="{!! $value !!}" class=" js-lazy img-fluid   {!!$imgClass!!}"/>
                 @endif
             </div>
 
@@ -66,7 +66,7 @@
 
             @if($val=$options['value'])
                     @php($href=
-                              $options['value'] instanceOf \App\Models\Media\MediumImage
+                              $options['value'] instanceOf \App\Models\Media\Medium
                               ?route($options['value']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['value'])
                               :$val)
                     <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>

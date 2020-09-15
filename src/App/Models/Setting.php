@@ -3,12 +3,9 @@
 namespace GeoSot\BaseAdmin\App\Models;
 
 
-use App\Models\Media\MediumFile;
-use App\Models\Media\MediumImage;
+use App\Models\Media\Medium;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
-use GeoSot\BaseAdmin\App\Models\Media\BaseMediaModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasFiles;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
 use GeoSot\BaseAdmin\Facades\Settings;
 use Illuminate\Database\Query\Builder;
@@ -20,7 +17,7 @@ use Illuminate\Validation\Rule;
  */
 class Setting extends BaseModel
 {
-    use Sluggable, HasImages, HasFiles;
+    use Sluggable, HasImages;
 
     public $choices = [
         'string',
@@ -31,8 +28,7 @@ class Setting extends BaseModel
         'dateTime',
         'collectionSting',
         'collectionNumber',
-        MediumFile::class,
-        MediumImage::class,
+        Medium::class,
     ];
     /**
      * The attributes that are mass assignable.
@@ -204,8 +200,8 @@ class Setting extends BaseModel
         if ($this->type == 'boolean') {
             return (bool) $value;
         }
-        if (in_array($this->type, [MediumFile::class, MediumImage::class])) {
-            /* @var BaseMediaModel $FQN */
+        if ($this->type == Medium::class) {
+            /* @var Medium $FQN */
             $FQN = $this->type;
             return $FQN::find($value);
         }
@@ -233,8 +229,7 @@ class Setting extends BaseModel
             'dateTime' => 'DateTime',
             'collectionSting' => 'Collection of Strings',
             'collectionNumber' => 'Collection of Numbers',
-            MediumFile::class => 'File',
-            MediumImage::class => 'Image',
+            Medium::class => 'Media',
         ];
     }
 }

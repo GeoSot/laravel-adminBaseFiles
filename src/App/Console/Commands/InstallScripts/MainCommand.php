@@ -72,9 +72,9 @@ class MainCommand extends BaseInstallCommand
     {
         return [
             'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
-            'authorization' => ['php artisan ui bootstrap --auth'],
-            'publishConf' => ['vendor:publish', ['--provider=GeoSot\Settings\ServiceProvider --tag=config']],
+//            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
+            'authorization' => ['ui', ['type' => 'bootstrap', '--auth']],
+            'publishConf' => ['vendor:publish', ['--provider' => 'GeoSot\Settings\ServiceProvider', '--tag' => 'config']],
             'publishForeignConfigs' => ['baseAdmin:install:publishForeignConfigs'],
 //            'publishConfLaratrust' => ['vendor:publish',['--provider=Laratrust\LaratrustServiceProvider --tag=laratrust']],
 //            'publishPackageMigrations'  => [
@@ -108,7 +108,7 @@ class MainCommand extends BaseInstallCommand
             'runMigration' => ['migrate',],
             'seedPackageData' => ['db:seed', ['--class' => 'GeoSot\BaseAdmin\Database\Seeds\DatabaseSeeder']],
             'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
-            'symlink'=>['storage:link'],
+            'symlink' => ['storage:link'],
 //            'perms'=>['baseAdmin:makePermissionsForModel'],
         ];
 

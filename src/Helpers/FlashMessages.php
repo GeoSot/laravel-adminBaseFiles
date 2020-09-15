@@ -10,21 +10,21 @@
 /**
  * Display the specified resource.
  *
- * @param  string $alertClass ='info'
- * @param  string $msg
- * @param  string $title
- * @param  string $type ='inline'
- * @param  bool   $dismissible
+ * @param  string  $alertClass  ='info'
+ * @param  string  $msg
+ * @param  string  $title
+ * @param  string  $type  ='inline'
+ * @param  bool  $dismissible
  *
  */
 if (!function_exists('flashMessage')) {
     function flashMessage(string $msg, string $title = null, string $alertClass = 'info', string $type = 'inline', bool $dismissible = false)
     {
         $array = [
-            'msg'   => $msg,
+            'msg' => $msg,
             'class' => $alertClass,
             'title' => $title,
-            'type'  => $type
+            'type' => $type
         ];
         if ($type == 'inline') {
             $array = array_merge($array, ['isDismissible' => $dismissible]);

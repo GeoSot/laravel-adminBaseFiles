@@ -10,10 +10,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 trait HasGalleries
 {
 
-
     public function hasGalleries()
     {
-        return (boolean) $this->galleries()->count();
+        return $this->galleries()->count() > 0;
     }
 
     /**

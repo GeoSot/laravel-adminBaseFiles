@@ -42,8 +42,8 @@
     @endif
     <div class="form-group ml-auto col-auto ">
         <select class="form-control  custom-select " name="num_of_items" data-change="js-submit-form">
-            @php($sessionNum=Session::get('num_of_items', settings('admin.generic.paginationDefaultNumOfItems',100)))
-            @foreach(settings('admin.generic.paginationOptions',[10, 25, 50,100]) as $num)
+            @php($sessionNum=Session::get('num_of_items', \GeoSot\BaseAdmin\Helpers\Base::settings('admin.generic.paginationDefaultNumOfItems',100)))
+            @foreach(\GeoSot\BaseAdmin\Helpers\Base::settings('admin.generic.paginationOptions',[10, 25, 50,100]) as $num)
                 <option value="{{$num}}" {!! ($sessionNum==$num) ? 'selected="selected"': '' !!}>{{$num}}</option>
             @endforeach
         </select>

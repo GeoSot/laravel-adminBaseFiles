@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Laratrust\Traits\LaratrustUserTrait;
 
 
+
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
 

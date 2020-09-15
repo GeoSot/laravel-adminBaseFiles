@@ -2,34 +2,34 @@
 
 namespace GeoSot\BaseAdmin\App\Jobs;
 
-use CURLFile;
-use GeoSot\BaseAdmin\App\Models\Media\MediumImage;
+use GeoSot\BaseAdmin\App\Models\Media\Medium;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\Response;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use League\Flysystem\FileNotFoundException;
+use Plank\Mediable\Helpers\File;
 
 class CompressImage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
-     * @var MediumImage
+     * @var medium
      */
-    private $mediumImage;
+    private $medium;
 
     /**
      * Create a new job instance.
      *
-     * @param  MediumImage  $mediumImage
+     * @param  Medium  $medium
      */
-    public function __construct(MediumImage $mediumImage)
+    public function __construct(Medium $medium)
     {
-
-        $this->mediumImage = $mediumImage;
+        $this->medium = $medium;
     }
 
     /**
@@ -39,69 +39,68 @@ class CompressImage implements ShouldQueue
      */
     public function handle()
     {
-        $img = $this->mediumImage;
-        $filepath = Storage::disk($img->disk)->path($img->file);
-
-        $mime = mime_content_type($filepath);
-        $info = pathinfo($filepath);
-        $name = $info['basename'];
-        $output = new CURLFile($filepath, $mime, $name);
-
-        $data = ["files" => $output];
-
-        $ch = $this->prepareRequest($data);
-
-        $result = curl_exec($ch);
-
-        $error = null;
-        if (curl_errno($ch)) {
-            $result = curl_error($ch);
-        }
-        curl_close($ch);
-
-        if ($error) {
-            Log::error("Image {$img->getKey()}  {$img->file} was not compressed");
+        if (Medium::TYPE_IMAGE !== $this->medium->aggregate_type) {
             return;
         }
-        $arr_result = json_decode($result);
+        $img = $this->medium;
+        $result = $this->makeRequest($img);
 
-// store the optimized version of the image
-        $this->handleSuccess($arr_result, $img);
+        if ($this->isError($result)) {
+            $this->handleError($result, $img);
+            return;
+        }
+
+        $this->handleSuccess($result->json(), $img);
+    }
+
+
+    /**
+     * @param  Medium  $img
+     * @return Response
+     */
+    private function makeRequest(Medium $img)
+    {
+        $request = Http::timeout(10)->attach('files', $img->contents(), $img->basename);
+
+        return $request->post('http://api.resmush.it/?qlty=80');
+
     }
 
     /**
-     * @param  array  $data
-     * @return false|resource
+     * @param  array  $result
+     * @param  Medium  $img
      */
-    private function prepareRequest(array $data)
+    private function handleSuccess(array $result, Medium $img): void
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://api.resmush.it/?qlty=80');
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        return $ch;
+        $oldSize = File::readableSize($result['src_size']);
+
+        $content = file_get_contents($result['dest']);
+
+        file_put_contents($img->getAbsolutePath(), $content);
+
+        $newSize = File::readableSize($result['dest_size']);
+        Log::info("Image {$img->getKey()}  {$img->filename} was compressed by {$result['percent']}%. Old size:{$oldSize} , new Size: {$newSize}");
+
     }
 
     /**
-     * @param $arr_result
-     * @param  MediumImage  $img
-     * @throws FileNotFoundException
+     * @param  Response  $result
+     * @param  Medium  $img
      */
-    private function handleSuccess($arr_result, MediumImage $img): void
+    public function handleError(Response $result, Medium $img): void
     {
-        $filepath = Storage::disk($img->disk)->path($img->file);
-        $ch = curl_init($arr_result->dest);
-        $fp = fopen($filepath, 'wb');
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_exec($ch);
-        curl_close($ch);
-        fclose($fp);
+        $code = $result->failed() ? $result->status() : $result->object()->error;
+        $body = $result->failed() ? $result->body() : $result->object()->error_long;
+        Log::error("Image {$img->getKey()}  {$img->getAbsolutePath()} was not compressed", ['status' => $code, 'body' => $body]);
 
-        $newSize = (float) number_format(Storage::disk($img->disk)->getSize($img->file) / 1048576, 3);
-        Log::info("Image {$img->getKey()}  {$img->file} was compressed. Old size:{$img->size_mb} , new Size: {$newSize}");
-        $img->save(['size_mb' => $newSize]);
+    }
+
+    /**
+     * @param  Response  $result
+     * @return bool
+     */
+    public function isError(Response $result): bool
+    {
+        return $result->failed() || isset($result->object()->error);
     }
 }

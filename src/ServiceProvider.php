@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\RouteServiceProvider;
-use GeoSot\BaseAdmin\App\Providers\SidebarServiceProvider;
 use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Support\Collection;

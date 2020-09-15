@@ -13,6 +13,7 @@ use GeoSot\BaseAdmin\App\Traits\Controller\FiltersHelper;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasActionHooks;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasAllowedActions;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasFields;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
@@ -142,7 +143,7 @@ abstract class BaseAdminController extends BaseController
     protected function getNumberOfListingItems(Request $request)
     {
         $keyName = 'num_of_items';
-        $sessionNumOfItems = session($keyName, settings('admin.generic.paginationDefaultNumOfItems', 100));
+        $sessionNumOfItems = session($keyName, \GeoSot\BaseAdmin\Helpers\Base::settings('admin.generic.paginationDefaultNumOfItems', 100));
         $numOfItems = $request->input($keyName, $sessionNumOfItems);
         if ($numOfItems != $sessionNumOfItems) {
             session([$keyName => $numOfItems]);

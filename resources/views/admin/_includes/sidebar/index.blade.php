@@ -10,7 +10,7 @@
         <li class="  nav-item @if(Route::is("admin.dashboard")) active @endif">
             <a class=" d-flex align-items-center px-3 nav-link" href="{{ route('admin.dashboard') }}">
                 <i class="fa fa-home fa-lg mr-2"></i>
-                <span class="title"> {{trans_with_fallback('admin/generic.menu.dashboard')}}</span>
+                <span class="title"> {{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback('admin/generic.menu.dashboard')}}</span>
             </a>
         </li>
         @include($packageVariables->get('blades').'.admin._includes.sidebar._separatorLine')

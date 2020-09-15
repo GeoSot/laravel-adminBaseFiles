@@ -38,9 +38,9 @@ return [
             'makeFiles' => false,
         ],
         'medium' => [
-            'menus' => ['gallery', 'image', 'video', 'file'],
+            'menus' => ['medium','gallery',],
             'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
-            'excludeFromSideBar' => ['video'],
+//            'excludeFromSideBar' => ['gallery'],
             'order' => 40,
         ],
 

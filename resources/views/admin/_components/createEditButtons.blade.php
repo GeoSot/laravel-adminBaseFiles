@@ -101,7 +101,7 @@
         function cancelButtonClicked() {
             let $hiddenRedirectInput = $('input[name="after_save_redirect_to"]');
 
-            let url = '{!!  getCachedRouteAsLink($viewVals->get('baseRoute').'.index') !!}';
+            let url = '{!!  \GeoSot\BaseAdmin\Helpers\Base::getCachedRouteAsLink($viewVals->get('baseRoute').'.index') !!}';
             if ($hiddenRedirectInput.length && $hiddenRedirectInput.val()) {
                 url = $hiddenRedirectInput.val();
             }

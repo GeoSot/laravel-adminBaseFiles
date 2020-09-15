@@ -3,8 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
 
-use App\Models\Media\MediumFile;
-use App\Models\Media\MediumImage;
+use App\Models\Media\Medium;
 use App\Models\Setting;
 use Illuminate\Support\Arr;
 use Symfony\Component\Finder\Finder;
@@ -158,7 +157,7 @@ class SettingForm extends BaseAdminForm
             ]);
         }
 
-        if (in_array($type, [MediumFile::class, MediumImage::class])) {
+        if (in_array($type, [Medium::TYPE_IMAGE, Medium::class])) {
             $this->add('value_dummy', 'collection', [
                 'type' => 'file',
                 // 'repeatable' => true,
@@ -167,8 +166,8 @@ class SettingForm extends BaseAdminForm
                     'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
                     'img' => ['class' => ' mbed-responsive-item'],
                     'label' => false,
-                    'template' => 'baseAdmin::_subBlades.formTemplates.'.($type == MediumImage::class ? 'image' : 'file'),
-                    'final_property' => 'file_path',
+                    'template' => 'baseAdmin::_subBlades.formTemplates.'.($type == Medium::TYPE_IMAGE ? 'image' : 'file'),
+                    'final_property' => 'url',
                     'value' => function () {
                         $FQN = $this->getModel()->type;
                         $val = $this->getModel()->value;

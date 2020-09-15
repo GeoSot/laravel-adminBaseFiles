@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-@php(baseAdmin_assets("css/admin/app.css"))
+@php(\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/admin/app.css"))
 <html lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}">
 <head>
 
     @include($packageVariables->get('blades').'admin._includes.headMetas')
-    <link href="{{baseAdmin_assets("css/admin/app.css")}}" rel="stylesheet"/>
+    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/admin/app.css")}}" rel="stylesheet"/>
     @foreach(config('baseAdmin.config.backEnd.extraCss') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>
     @endforeach
@@ -47,7 +47,7 @@
 </div>
 
 <span class="js-scripts">
-    <script src="{{baseAdmin_assets("js/admin/app.js")}}"></script>
+    <script src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/admin/app.js")}}"></script>
     @foreach(config('baseAdmin.config.backEnd.extraJs') as $file)
         <script defer src="{{$file}}"></script>
     @endforeach

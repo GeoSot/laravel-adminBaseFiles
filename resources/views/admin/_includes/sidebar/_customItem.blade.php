@@ -43,7 +43,7 @@
                       if ($route and Route::has('admin.'.$route)) {
                           $item['url'] = route('admin.' . $route);
                       }
-                      $item['trans'] = trans_with_fallback('admin/' . Arr::get($item,'trans','no_translation'));
+                      $item['trans'] = \GeoSot\BaseAdmin\Helpers\Base::transWithFallback('admin/' . Arr::get($item,'trans','no_translation'));
 
                       return $item;
                   })->filter(function ($item) {
@@ -64,7 +64,7 @@
                 <i class=" {{ Arr::get($icon,'class')}}  mr-2 pt-1 align-self-start"
                    style=" {{ Arr::get($icon,'style')}}"></i>
             @endisset
-            <span class="title "> {{trans_with_fallback("admin/".Arr::get($node,'trans','no_translation'))}}</span>
+            <span class="title "> {{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback("admin/".Arr::get($node,'trans','no_translation'))}}</span>
             @if($hasInnerMenus)
                 <span class="fa arrow-after ml-auto pl-2 fa-angle-left"></span>
             @endif
