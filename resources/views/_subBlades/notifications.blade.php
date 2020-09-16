@@ -11,17 +11,18 @@
             </ul>
         </div>
     @endif
-    @if ( Session::has('alertMessages'))
-        @foreach(Session::get('alertMessages') as $alert)
+    @if ( Session::has(\GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY))
+        @foreach(Session::get(GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY) as $alert)
             @php
                 $alertType=\Illuminate\Support\Arr::get($alert,'type', false);
                 $isDismissible=\Illuminate\Support\Arr::get($alert,'isDismissible', false);
                 $title=\Illuminate\Support\Arr::get($alert,'title', '');
                 $msg=\Illuminate\Support\Arr::get($alert,'msg', '');
                 $alertClass=\Illuminate\Support\Arr::get($alert,'class', 'info');
+                $uuid='uniqid'.\Illuminate\Support\Arr::get($alert,'uuid', uniqid());
             @endphp
             @if( $alertType== 'inline')
-                <div id="{{$rand=uniqid('alert_')}}" role="alert"
+                <div id="{{$uuid}}" role="alert"
                      class="my-3 alert alert-{{$alertClass}} @if($isDismissible) alert-dismissible @endif fade show">
                  @if($isDismissible)
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -47,7 +48,7 @@
                 @endpush
             @endif
         @endforeach
-        {{  Session::forget('alertMessages')}}
+        {{  Session::forget(GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY)}}
     @endif
 
 </div>

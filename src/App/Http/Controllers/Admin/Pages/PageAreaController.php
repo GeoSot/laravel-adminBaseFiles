@@ -2,6 +2,7 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Pages;
 
+use App\Models\Media\Medium;
 use App\Models\Pages\PageArea;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
@@ -57,7 +58,7 @@ class PageAreaController extends BaseAdminController
     protected function afterSave(Request &$request, $model)
     {
         /* @var PageArea $model */
-        $model->syncRequestImages($request, true);
+        $model->syncRequestMedia($request, true, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
 
 }

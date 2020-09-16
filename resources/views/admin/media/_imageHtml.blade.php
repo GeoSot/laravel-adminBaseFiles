@@ -5,7 +5,7 @@
     {!! $record->getLinkHtml('btn-block'); !!}
     <div class=" my-4 "> {!! $record->getHtml(); !!}</div>
 
-    @if(!$record->thumb)
+    @if($record->thumb)
         <div class="border-top my-4 pt-2"> @lang("{$viewVals->get('modelLang')}.fields.thumb")</div>
         <div>{!!optional($record)->getThumbHtml() !!}</div>
     @endif

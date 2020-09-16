@@ -6,7 +6,7 @@ namespace GeoSot\BaseAdmin\App\Models\Users;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\EnabledDisabled;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -24,7 +24,7 @@ use Laratrust\Traits\LaratrustUserTrait;
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
 
-    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasImages, ModifiedBy, LaratrustUserTrait, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck,Impersonate;
+    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck,Impersonate;
 
     /**
      * The attributes that are mass assignable.

@@ -13,7 +13,7 @@ use GeoSot\BaseAdmin\App\Traits\Controller\FiltersHelper;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasActionHooks;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasAllowedActions;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasFields;
-use GeoSot\BaseAdmin\Helpers\Base;
+use GeoSot\BaseAdmin\Facades\Alert;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
@@ -217,8 +217,7 @@ abstract class BaseAdminController extends BaseController
     public function create(Collection $extraValues = null)
     {
         if (!$this->isAllowedAction('create')) {
-            flashToastr($this->getLang('create.deny'), null, 'danger');
-
+            Alert::error($this->getLang('create.deny'))->typeToast();
             return redirect()->back();
         }
 
@@ -236,8 +235,7 @@ abstract class BaseAdminController extends BaseController
     {
 
         if (!$this->isAllowedAction('create')) {
-            flashToastr($this->getLang('create.deny'), null, 'danger');
-
+            Alert::error($this->getLang('create.deny'))->typeToast();
             return redirect()->back();
         }
         $this->beforeStore($request);
@@ -257,7 +255,7 @@ abstract class BaseAdminController extends BaseController
         $title = $this->getLang($action.'.'.$flag.'Title');
         $message = $this->getLang($action.'.'.$flag.'Msg', $results);
         if ($flag == 'success' and !$request->input('onlyJson', false)) {
-            flashToastr($message, $title, 'success');
+            Alert::success($message,$title)->typeToast();
         }
 
         return response()->json([
@@ -349,13 +347,11 @@ abstract class BaseAdminController extends BaseController
             return $this->store($request);
         }
         if (!$this->isAllowedAction('edit')) {
-            flashToastr($this->getLang('edit.deny'), null, 'danger');
-
+            Alert::error($this->getLang('edit.deny'))->typeToast();
             return redirect()->back();
         }
         if (!$model->allowedToHandle()) {
-            flashToastr($this->getLang('handle.deny'), null, 'danger');
-
+            Alert::error($this->getLang('handle.deny'))->typeToast();
             return redirect()->back();
         }
 
@@ -373,7 +369,7 @@ abstract class BaseAdminController extends BaseController
     protected function checksAndNotificationsAfterSave($record, Request $request, $action)
     {
         if (is_null($record)) {
-            flashToastr($this->getLang("{$action}.errorMsg"), $this->getLang("{$action}.errorTitle"), 'danger');
+            Alert::error("{$action}.errorMsg", $this->getLang("{$action}.errorTitle"))->typeToast();
 
             return back();
         }
@@ -386,7 +382,7 @@ abstract class BaseAdminController extends BaseController
         if ($request->wantsJson()) {
             return response()->json(['record' => $record, 'msg' => $msg]);
         }
-        flashToastr($msg['msg'], $msg['title'], $msg['type']);
+        Alert::message($msg['msg'], $msg['title'], $msg['type'])->typeToast();
 
         $afterSaveVal = $request->input('after_save');
 

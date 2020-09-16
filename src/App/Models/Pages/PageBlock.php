@@ -4,14 +4,14 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Spatie\Translatable\HasTranslations;
 
 
 class PageBlock extends BaseModel
 {
-    use Sluggable, HasTranslations, HasImages;
+    use Sluggable, HasTranslations, HasMedia;
 
     public $translatable = ['title', 'sub_title', 'notes'];
 

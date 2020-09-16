@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 
 
+use App\Models\Media\Medium;
 use App\Models\Users\User;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
@@ -56,7 +57,7 @@ class UserController extends BaseAdminController
     protected function afterSave(Request &$request, $model)
     {
         /* @var User $model */
-        $model->syncRequestImages($request, true);
+        $model->syncRequestMedia($request, true, Medium::REQUEST_FIELD_NAME__IMAGE);
 
         $model->syncRoles($request->get('roles', []));
     }

@@ -21,7 +21,7 @@
                     <span data-trigger="fileinput"
                           class="fileinput-filename  form-control text-truncate  ">
                         @if($options['value'])
-                            {!! is_string($options['value'])?$options['value']:$options['value']->first()->full_name !!}
+                            {!! is_string($options['value'])?$options['value']:$options['value']->first()->basename !!}
                         @endif
                     </span>
                     {!!  Form::input($type, $name,null,  ['hidden'=>true, ] )  !!}

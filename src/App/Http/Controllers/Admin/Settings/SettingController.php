@@ -83,14 +83,12 @@ class SettingController extends BaseAdminController
     {
 
         /* @var Setting $model */
-
-        if (is_subclass_of($request->input('type'), Medium::TYPE_IMAGE)) {
-            $result = $model->syncRequestImages($request, true, 'value_dummy');
+        if ($request->input('type')=== Medium::TYPE_IMAGE) {
+            $result = $model->syncRequestMedia($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
-        if (is_subclass_of($request->input('type'), Medium::class)) {
-
-            $result = $model->syncRequestFiles($request, true, 'value_dummy');
+        if ($request->input('type')=== Medium::class) {
+            $result = $model->syncRequestMedia($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
 
@@ -102,7 +100,7 @@ class SettingController extends BaseAdminController
         $neFields = [
             'linkable' => ['key'],
             'listable' => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
-            'searchable' => [],
+            'searchable' => ['key', 'group',],
             'sortable' => ['key'],
             'orderBy' => ['column' => 'key', 'sort' => 'desc'],
         ];

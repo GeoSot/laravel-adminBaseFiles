@@ -49,7 +49,7 @@ class RedirectIfAuthenticatedAtIntended
     protected function getDefaultUserPath(): string
     {
         $defaultPath = route('home');
-        if (Auth::user()->can('admin.*')) {
+        if (Auth::user()->isAbleTo('admin.*')) {
             $defaultPath = route('admin.dashboard');
         }
 

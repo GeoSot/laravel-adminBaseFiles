@@ -34,10 +34,10 @@
                          $value=$optionsValue;
                      }
                      if( $optionsValue instanceof  \Illuminate\Support\Collection and $optionsValue->count()){
-                         $value=$optionsValue->first()->getFilePath();
+                         $value=$optionsValue->first()->getUrl();
                      }
                      if( $optionsValue instanceof  \App\Models\Media\Medium && in_array($optionsValue->aggregate_type,[\App\Models\Media\Medium::TYPE_IMAGE,\App\Models\Media\Medium::TYPE_IMAGE_VECTOR])){
-                         $value=$optionsValue->getFilePath();
+                         $value=$optionsValue->getUrl();
                      }
                 @endphp
                 @if ($value)

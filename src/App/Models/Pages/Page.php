@@ -5,7 +5,7 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
@@ -13,7 +13,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Page extends BaseModel
 {
-    use Sluggable, HasTranslations, SoftDeletes, HasImages;
+    use Sluggable, HasTranslations, SoftDeletes, HasMedia;
 
     public $translatable = [
         'title',

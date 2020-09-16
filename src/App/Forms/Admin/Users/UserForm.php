@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Users;
 
 
+use App\Models\Media\Medium;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
@@ -38,7 +39,7 @@ class UserForm extends BaseAdminForm
         $this->add('dob', 'text', [
             'template' => 'baseAdmin::_subBlades.formTemplates.dateTime',
             'cast' => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY']
-        ])->add('images', 'collection', [
+        ])->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
             // 'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,

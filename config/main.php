@@ -90,10 +90,10 @@ return [
                     'url' => '/admin/translations'
 
                 ],
-                'job' => [
-                    'trans' => 'queues/queue.general.menuTitle',
-                    'route' => 'queues.index'
-                ],
+//                'job' => [//Enabled only if you use  Database driver for queues
+//                    'trans' => 'queues/queue.general.menuTitle',
+//                    'route' => 'queues.index'
+//                ],
                 'log' => [
                     'trans' => 'generic.sideMenuCustom.logs',
                     'route' => 'logs.index'

@@ -169,9 +169,8 @@ class SettingForm extends BaseAdminForm
                     'template' => 'baseAdmin::_subBlades.formTemplates.'.($type == Medium::TYPE_IMAGE ? 'image' : 'file'),
                     'final_property' => 'url',
                     'value' => function () {
-                        $FQN = $this->getModel()->type;
                         $val = $this->getModel()->value;
-                        return $val ? $FQN::find($val) : '';
+                        return $val ? Medium::find($val) : '';
                     }
                 ]
             ]);

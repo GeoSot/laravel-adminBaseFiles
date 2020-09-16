@@ -2,6 +2,9 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
+use Barryvdh\TranslationManager\ManagerServiceProvider;
+use GeoSot\BaseAdmin\Database\Seeds\DatabaseSeeder;
+use GeoSot\BaseAdmin\ServiceProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Composer;
 
@@ -72,11 +75,10 @@ class MainCommand extends BaseInstallCommand
     {
         return [
             'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-//            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
+            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
             'authorization' => ['ui', ['type' => 'bootstrap', '--auth']],
-            'publishConf' => ['vendor:publish', ['--provider' => 'GeoSot\Settings\ServiceProvider', '--tag' => 'config']],
+            'publishConf' => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
             'publishForeignConfigs' => ['baseAdmin:install:publishForeignConfigs'],
-//            'publishConfLaratrust' => ['vendor:publish',['--provider=Laratrust\LaratrustServiceProvider --tag=laratrust']],
 //            'publishPackageMigrations'  => [
 //                'vendor:publish', [
 //                    '--provider' => 'GeoSot\BaseAdmin\ServiceProvider',
@@ -95,18 +97,18 @@ class MainCommand extends BaseInstallCommand
                                '--tag' => 'config'
                            ]
                        ],*/
-//            'publishTranslationMigrations' => [
-//                'vendor:publish', [
-//                    '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
-//                    '--tag' => 'migrations'
-//                ]
-//            ],
+            'publishTranslationMigrations' => [
+                'vendor:publish', [
+                    '--provider' => ManagerServiceProvider::class,
+                    '--tag' => 'migrations'
+                ]
+            ],
             'makePassportKeys' => ['passport:keys'],
             'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
             'publishViews' => ['baseAdmin:install:publishViews'],
             'publishAssets' => ['baseAdmin:publishAssets'],
             'runMigration' => ['migrate',],
-            'seedPackageData' => ['db:seed', ['--class' => 'GeoSot\BaseAdmin\Database\Seeds\DatabaseSeeder']],
+            'seedPackageData' => ['db:seed', ['--class' => DatabaseSeeder::class]],
             'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
             'symlink' => ['storage:link'],
 //            'perms'=>['baseAdmin:makePermissionsForModel'],

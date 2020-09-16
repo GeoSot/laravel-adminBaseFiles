@@ -6,7 +6,7 @@ namespace GeoSot\BaseAdmin\App\Models;
 use App\Models\Media\Medium;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use GeoSot\BaseAdmin\Facades\Settings;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
@@ -17,7 +17,7 @@ use Illuminate\Validation\Rule;
  */
 class Setting extends BaseModel
 {
-    use Sluggable, HasImages;
+    use Sluggable, HasMedia;
 
     public $choices = [
         'string',
@@ -123,7 +123,7 @@ class Setting extends BaseModel
 
         return array_merge([
             // 'key'  => "required|min:3|unique:{$this->getTable()},key" . $textOnUpdate,
-            'key' => ['required', $uniqueCombinationRule],
+            'key' => ['required','min:3', $uniqueCombinationRule],
             'sub_group' => ['required_with:group', $uniqueCombinationRule],
             'group' => [$uniqueCombinationRule],
             'type' => 'required',
@@ -230,6 +230,7 @@ class Setting extends BaseModel
             'collectionSting' => 'Collection of Strings',
             'collectionNumber' => 'Collection of Numbers',
             Medium::class => 'Media',
+            Medium::TYPE_IMAGE => 'Image',
         ];
     }
 }

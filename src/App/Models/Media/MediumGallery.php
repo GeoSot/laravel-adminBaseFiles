@@ -4,15 +4,14 @@ namespace GeoSot\BaseAdmin\App\Models\Media;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasImages;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasVideos;
-use Plank\Mediable\Mediable;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use Spatie\Translatable\HasTranslations;
 
 
 class MediumGallery extends BaseModel
 {
-    use Sluggable, HasTranslations, Mediable;
+    use Sluggable, HasTranslations, HasMedia;
+
     protected $table = 'media_galleries';
 
     public $translatable = [

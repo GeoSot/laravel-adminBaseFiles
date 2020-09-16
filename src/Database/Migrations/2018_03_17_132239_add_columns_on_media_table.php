@@ -16,11 +16,10 @@ class AddColumnsOnMediaTable extends Migration
         Schema::table('media', function (Blueprint $table) {
             $table->boolean('the_file_exists')->default(true);
             $table->string('thumb')->nullable();
-
             $table->text('custom_properties')->nullable();
 
             $table->string('title')->nullable();
-            $table->string('description')->nullable();
+            $table->string('notes')->nullable();
             $table->string('alt_attribute')->nullable();
             $table->string('keywords')->nullable();
 

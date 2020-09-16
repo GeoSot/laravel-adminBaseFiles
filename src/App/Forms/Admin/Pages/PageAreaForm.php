@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Pages;
 
 
+use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\App\Models\Pages\Page;
 
@@ -32,7 +33,7 @@ class PageAreaForm extends BaseAdminForm
         $this->add('background_color', 'text', [
             'template' => 'baseAdmin::_subBlades.formTemplates.colorPicker',
         ]);
-        $this->add('images', 'collection', [
+        $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
             // 'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,

@@ -2,6 +2,7 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Pages;
 
+use App\Models\Media\Medium;
 use App\Models\Pages\PageBlock;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
@@ -57,7 +58,7 @@ class PageBlockController extends BaseAdminController
     protected function afterSave(Request &$request, $model)
     {
         /* @var PageBlock $model */
-        $model->syncRequestImages($request);
+        $model->syncRequestMedia($request, false, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
 
 }

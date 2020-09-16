@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Pages;
 
 
+use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\App\Models\Pages\PageArea;
 use Illuminate\Support\Facades\File;
@@ -105,7 +106,7 @@ class PageBlockForm extends BaseAdminForm
         $this->add('title', 'text');
         $this->add('sub_title', 'text');
         $this->add('notes', 'textarea');
-        $this->add('images', 'collection', [
+        $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
             'multiple' => true,
             'repeatable' => !$this->getModel()->hasOneImage(),

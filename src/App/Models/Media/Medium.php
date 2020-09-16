@@ -5,8 +5,6 @@ namespace GeoSot\BaseAdmin\App\Models\Media;
 
 
 use GeoSot\BaseAdmin\App\Jobs\CompressImage;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\EnabledDisabled;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Encryptable;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
@@ -27,6 +25,10 @@ class Medium extends Media
 {
     use HasTranslations, OwnedBy, ModifiedBy, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck;
 
+    const REQUEST_FIELD_NAME__IMAGE = 'images';
+    const REQUEST_FIELD_NAME__VIDEO = 'videos';
+    const REQUEST_FIELD_NAME__FILE = 'files';
+
     public $translatable = [
         'title',
         'description',
@@ -36,7 +38,7 @@ class Medium extends Media
 
     protected $fillable = [
         'title',
-        'description',
+        'notes',
         'alt_attribute',
         'keywords',
 
@@ -52,13 +54,13 @@ class Medium extends Media
         'custom_properties' => 'array',
         'size' => 'int',
     ];
-    protected $appends = ['full_name', 'url', 'thumb_html'];
+    protected $appends = [ 'url', 'thumb_html'];
 
     public static function boot()
     {
         parent::boot();
         static::created(function (Medium $model) {
-            dispatch(new CompressImage($model));
+//            dispatch(new CompressImage($model));
         });
     }
 
@@ -67,8 +69,6 @@ class Medium extends Media
     {
         return $builder/*->where('enabled', true)*/ ->where('the_file_exists', true);
     }
-
-
 
 
     /**
@@ -130,24 +130,25 @@ class Medium extends Media
             'wrapperClass',
             'onclickAction',
         ];
-        $sanitizedData = array_map(function (string $key) use ($args) {
-            return Arr::get($args, $key, '');
-        }, $data);
+
+        $options = collect($data)->mapWithKeys(function ($key) use ($args) {
+            return [$key => Arr::get($args, $key, '')];
+        });
+
         $model = $this;
 
         switch ($this->aggregate_type) {
             case Medium::TYPE_VIDEO:
-                return view('baseAdmin::_subBlades.media.video', compact('class', 'onclickAction', 'model'))->render();
+                return view('baseAdmin::_subBlades.media.video', compact('class', 'options', 'model'))->render();
             case Medium::TYPE_IMAGE :
             case Medium::TYPE_IMAGE_VECTOR :
-                return view('baseAdmin::_subBlades.media.image', compact('sanitizedData', 'model'))->render();
+                return view('baseAdmin::_subBlades.media.image', compact('options', 'model'))->render();
             case 2:
                 echo "i equals 2";
                 break;
             default:
                 return $model->getUrl();
         }
-
 
     }
 
@@ -161,7 +162,7 @@ class Medium extends Media
     {
         $downloadAttr = ($download) ? ' download="true" ' : '';
         $class = $class ?? 'btn btn-link';
-        $title = $this->title ?? $this->basename;
+        $title = $this->title ?: $this->basename;
         return '<a data-id="'.$this->getKey().'" class="js-lazy '.$class.'" href="'.$this->getUrl().'" target="_blank" '.$downloadAttr.' title="'.$title.'">'.$title.'</a>';
     }
 

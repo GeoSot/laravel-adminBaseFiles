@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Queues;
 
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
+use GeoSot\BaseAdmin\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
@@ -43,7 +44,7 @@ class QueueController extends BaseController
     public function flashNotification($output)
     {
         $safeString = str_replace('"', '', str_replace('\r\n', '<br>', json_encode($output)));
-        flashToastr($safeString);
+        Alert::info($safeString)->typeToast();
 
         return redirect()->route('admin.queues.index');
     }

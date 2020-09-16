@@ -35,9 +35,6 @@
         "psr-4": {
             "GeoSot\\BaseAdmin\\": "src/"
         },
-        "files": [
-            "src/Helpers/FlashMessages.php"
-        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

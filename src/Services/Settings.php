@@ -84,7 +84,7 @@ class Settings
      * @param  string  $type
      *
      * @param  Model|null  $relatedModel
-     * @return boolean
+     * @return void
      */
     public function set(string $key, $value, $type, Model $relatedModel = null)
     {

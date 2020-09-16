@@ -1,7 +1,10 @@
 @extends($packageVariables->get('adminLayout'))
-@component($packageVariables->get('blades').'admin._components.listingButtons',['viewVals'=>$viewVals, ]  )   @endcomponent
 
+@component($packageVariables->get('blades').'admin._components.listingButtons',['viewVals'=>$viewVals, ]  )   @endcomponent
 @section('content')
+
+
+    {{--            @component($packageVariables->get('blades').'admin._components.listingFiltersBar',['viewVals'=>$viewVals, ] )@endcomponent--}}
 
     <div class="row flex-fill ">
         <aside id="settingsSideBar" class="flex-fill px-1 col-12 col-sm-4 col-md-4 col-lg-3 col-xl-2">

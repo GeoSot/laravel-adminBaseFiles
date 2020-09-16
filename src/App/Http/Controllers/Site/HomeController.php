@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 use App\Forms\Site\ContactForm;
 use App\Http\Controllers\Controller;
+use GeoSot\BaseAdmin\Facades\Alert;
 use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 
@@ -42,7 +43,8 @@ class HomeController extends Controller
         $form = $this->form(ContactForm::class);
         $comingFromUrl = url()->previous().'#'.$form->getFormOption('id');
         $form->redirectIfNotValid($comingFromUrl);
-        flashMessage('Need to Handle message');
+        Alert::info('Need to Handle message');
+
 
         return redirect($comingFromUrl);
     }

@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
 use App\Models\Users\User;
+use GeoSot\BaseAdmin\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -53,7 +54,7 @@ class UserProfileController extends BaseFrontController
         $user->update($request->all());
 
 
-        flashMessage($this->getLang('profileChange.success.msg'));
+        Alert::info($this->getLang('profileChange.success.msg'));
 
         return redirect()->back();
     }

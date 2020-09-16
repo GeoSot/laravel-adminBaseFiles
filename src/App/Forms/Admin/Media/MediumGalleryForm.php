@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Media;
 
 
+use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
 class MediumGalleryForm extends BaseAdminForm
@@ -19,7 +20,7 @@ class MediumGalleryForm extends BaseAdminForm
 //        $this->add('related', 'textarea');
 
 
-        $this->add('images', 'collection', [
+        $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
             'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,

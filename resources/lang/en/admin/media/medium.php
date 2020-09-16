@@ -9,24 +9,25 @@ return [
     'fields' => [
         'id' => 'ID',
         'title' => 'Title',
-        'description' => 'Description',
-        'notes' => 'Notes',
+        'notes' => 'Description',
         'alt_attribute' => 'Alt Attribute',
         'keywords' => 'Keywords',
         'enabled' => 'Enabled',
-        'order' => 'Order',
         'custom_properties' => 'Custom properties',
         'thumb_html' => 'Thumb',
 
-        'collection_name' => 'Album',
-        'file' => 'File',
+
+        'filename' => 'FileName',
+        'directory' => 'Directory',
         'disk' => 'Disk',
-        'size_mb' => 'Size (MB)',
+        'aggregate_type' => 'Type',
         'mime_type' => 'Mime Type',
         'extension' => 'Extension',
         'ownerModel' => ['title' => 'Related Model'],
         'fileLink' => 'Link To File',
-        'thumb' => 'Thumb'
+        'thumb' => 'Thumb',
+        'created_at' => 'Created At',
+        'size' => 'Size',
     ],
 
 
