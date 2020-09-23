@@ -4,6 +4,7 @@ namespace GeoSot\BaseAdmin\App\Forms\Admin\Users;
 
 
 use App\Models\Media\Medium;
+use App\Models\Users\User;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
@@ -68,20 +69,36 @@ class UserForm extends BaseAdminForm
 
         $this->add('slack_webhook_url', 'text');
         $this->addSeparatorLine();
+        /** @var User $user */
+        $user=$this->getModel();
 
+//dd($user->getAll());
         $this->add('address', 'text')->add('city', 'text')->add('postal', 'text')->add('state', 'text')->add('country', 'text')->add('phone1', 'text')->add('phone2', 'text');
         $this->addCheckBox('enabled');
         $this->add('roles', 'entity', [
             'class' => UserRole::class,
             'property' => 'display_name',
             'multiple' => true,
-            'label' => $this->transText('roles.name')
-            //                    'query_builder' => function (App\Language $lang) {
-            //                        // If query builder option is not provided, all data is fetched
-            //                        return $lang->where('active', 1);
-            //                    }
+            'label' => $this->transText('roles.name'),
+            'query_builder' => function (UserRole $role) {
+
+//                return $role->where($this->getModel()->getKeyName(), '<>', optional($this->getModel())->getKey());
+//
+//                // If query builder option is not provided, all data is fetched
+//                return $lang->where('active', 1);
+            }
         ]);
-        $this->add('notes', 'textarea', ['attr' => ['rows' => '3'],]);
+//        $this->add('rolesTeams', 'entity', [
+//            'class' => UserRole::class,
+//            'property' => 'display_name',
+//            'multiple' => true,
+//            'label' => $this->transText('roles.name')
+//            //                    'query_builder' => function (App\Language $lang) {
+//            //                        // If query builder option is not provided, all data is fetched
+//            //                        return $lang->where('active', 1);
+//            //                    }
+//        ]);
+//        $this->add('notes', 'textarea', ['attr' => ['rows' => '3'],]);
 
     }
 }

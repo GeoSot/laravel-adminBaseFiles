@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
-class RefreshDbMigrationsAndSeeds extends Command
+class RefreshDbMigrationsAndSeeders extends Command
 {
     /**
      * The name and signature of the console command.

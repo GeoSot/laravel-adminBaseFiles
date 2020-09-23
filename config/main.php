@@ -26,7 +26,7 @@ return [
 
     'routes' => [
         'user' => [
-            'menus' => ['user', 'role', 'permission',],
+            'menus' => ['user', 'team', 'role', 'permission',],
             'icon' => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
             'order' => 20,
             'makeFiles' => false,
@@ -38,7 +38,7 @@ return [
             'makeFiles' => false,
         ],
         'medium' => [
-            'menus' => ['medium','gallery',],
+            'menus' => ['medium', 'gallery',],
             'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
 //            'excludeFromSideBar' => ['gallery'],
             'order' => 40,

@@ -2,7 +2,8 @@ const mix = require('laravel-mix');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const assetsDirectory = path.normalize('resources/assets/');
 const publicDirectory = path.normalize('./filesToPublish/assets/');
-
+// mix.setPublicPath('public/assets')
+// mix.setResourceRoot('/assets/');
 mix.setPublicPath('./');
 /*
  |--------------------------------------------------------------------------
@@ -25,44 +26,41 @@ mix.sass(assetsDirectory + 'sass/site/app.scss', publicDirectory + 'css/site/app
 mix.sass(assetsDirectory + 'sass/admin/app.scss', publicDirectory + 'css/admin/app.css');
 //mix.babel(),mix.minify('path/to/file.js');
 mix.options({//https://laravel-mix.com/docs/2.1/options
-    postCss: [
-        require('autoprefixer')
-    ],
+    processCssUrls: false,
     cssNano: {
         discardComments: {removeAll: true},
-        discardDuplicates: true
+        discardDuplicates: true,
+        mergeIdents: true
     },
-    processCssUrls: false,
-    autoprefixer: {
-        options: {
-            browsers: ['last 3 versions']
-        }
+    terser: { //https://github.com/webpack-contrib/terser-webpack-plugin#options
+        // cache: true, //Doesn't work with webpack 5!
+        parallel: true, //If you use Circle CI or any other environment that doesn't provide real available count of CPUs then you need to setup explicitly number of CPUs to avoid
+        // sourceMap: true
     },
-    purifyCss: false
 });
 
 
 if (mix.inProduction()) {
-    mix.version()
-        .options({
-            // Optimize JS minification process
-            terser: {
-                cache: true,
-                parallel: true,
-                sourceMap: true
-            }
-        });
+    mix.version();
 } else {
     mix.sourceMaps();
     mix.webpackConfig({
         devtool: 'inline-source-map'
     });
-    //l mix.browserSync('baseAdmin.test');
 }
+mix.babelConfig({
+    plugins: ['@babel/plugin-syntax-dynamic-import'],
+});
+
+
 
 
 // Add this to very bottom of your webpack-mix.js
 mix.webpackConfig({
+    output: {
+        chunkFilename: publicDirectory+"js/chunks/[name].chunk.[hash].js",
+        publicPath: `/assets/`
+    },
     resolve: {
         // modules: [path.resolve(__dirname, '../../../node_modules')],
         alias: {
@@ -70,10 +68,7 @@ mix.webpackConfig({
             pace: 'pace-progress'
         }
     },
-    node: {
-        fs: "empty"
-    },
     plugins: [
-        new CleanWebpackPlugin({verbose: true, cleanOnceBeforeBuildPatterns: [publicDirectory + '**/*']})//prosoxi katharizei ta panta apo to public
+        new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: [publicDirectory + '**/*']})//prosoxi katharizei ta panta apo to public
     ]
 });

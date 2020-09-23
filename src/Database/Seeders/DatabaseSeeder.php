@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoSot\BaseAdmin\Database\Seeds;
+namespace GeoSot\BaseAdmin\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;

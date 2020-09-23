@@ -3,8 +3,34 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+window.BaseAdmin = window.BaseAdmin || {};
+const swal = import('sweetalert');
+const toastr = import('toastr');
 
-require('./bootstrap');
+import('./bootstrap').then(src => {
+
+    window.swal = swal;
+    window.toastr = toastr;
+    window.moment = import('moment').then(src => {
+        import('bootstrap-daterangepicker')
+    });
+
+});
+
+toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "positionClass": "toast-bottom-right",
+    "onclick": null,
+    "showDuration": "1000",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "swing",
+    "showMethod": "slideDown",
+    "hideMethod": "hide"
+};
 
 window.Vue = require('vue');
 if (process.env.MIX_APP_ENV === 'production') {
@@ -37,7 +63,6 @@ const app = new Vue({
     el: '#app'
 });
 
-window.BaseAdmin = window.BaseAdmin || {};
 
 //Generates Unique IDs
 BaseAdmin.uuid = () => {
@@ -48,31 +73,7 @@ BaseAdmin.uuid = () => {
 
 BaseAdmin.debug = require('./_partials/debugCustom');
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover();
-});
 
-window.swal = require('sweetalert');
-window.toastr = require('toastr');
-toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "positionClass": "toast-bottom-right",
-    "onclick": null,
-    "showDuration": "1000",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "swing",
-    "showMethod": "slideDown",
-    "hideMethod": "hide"
-};
-
-
-window.moment = require('moment');
-require('bootstrap-daterangepicker');
 const select2 = require('select2');
 
 $.fn.select2.defaults.set("theme", "bootstrap");

@@ -3,7 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
 use Barryvdh\TranslationManager\ManagerServiceProvider;
-use GeoSot\BaseAdmin\Database\Seeds\DatabaseSeeder;
+use GeoSot\BaseAdmin\Database\Seeders\DatabaseSeeder;
 use GeoSot\BaseAdmin\ServiceProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Composer;
