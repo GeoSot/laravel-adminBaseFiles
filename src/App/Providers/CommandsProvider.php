@@ -17,7 +17,7 @@ use GeoSot\BaseAdmin\App\Console\Commands\{CreateAdminBaseFromFile,
     MakeModel,
     MakeNewMigration,
     MakeView,
-    RefreshDbMigrationsAndSeeds
+    RefreshDbMigrationsAndSeeders
 };
 use Illuminate\Support\ServiceProvider;
 
@@ -61,7 +61,7 @@ class CommandsProvider extends ServiceProvider
             MakeModel::class,
             MakeNewMigration::class,
             MakeView::class,
-            RefreshDbMigrationsAndSeeds::class,
+            RefreshDbMigrationsAndSeeders::class,
         ]);
     }
 

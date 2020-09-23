@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoSot\BaseAdmin\Database\Seeds;
+namespace GeoSot\BaseAdmin\Database\Seeders;
 use App\Models\Users\UserRole;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
@@ -14,7 +14,7 @@ class PermissionsAndRolesSeeder extends BaseSeeder
     protected $class = UserRole::class;
 
     /**
-     * Run the database seeds.
+     * Run the database seeders.
      *
      * @return void
      */

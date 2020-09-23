@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoSot\BaseAdmin\Database\Seeds;
+namespace GeoSot\BaseAdmin\Database\Seeders;
 
 use App\Models\Users\User;
 use Illuminate\Support\Arr;
@@ -10,7 +10,7 @@ class UsersSeeder extends BaseSeeder
     protected $class = User::class;
 
     /**
-     * Run the database seeds.
+     * Run the database seederss.
      */
     public function seedData()
     {

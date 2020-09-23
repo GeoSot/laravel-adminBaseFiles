@@ -58,6 +58,7 @@ class UserRoleController extends BaseAdminController
 
     public function afterSave(Request &$request, $userRole)
     {
+
         if ($userRole->name !== 'god') {
             $userRole->syncPermissions(array_filter($request->get('permissions')));
         }

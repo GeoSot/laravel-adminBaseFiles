@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoSot\BaseAdmin\Database\Seeds;
+namespace GeoSot\BaseAdmin\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
@@ -10,7 +10,7 @@ abstract class BaseSeeder extends Seeder
     protected $class;
 
     /**
-     * Run the database seeds.
+     * Run the database seeders.
      *
      * @return void
      */

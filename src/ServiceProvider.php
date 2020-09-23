@@ -11,6 +11,7 @@ use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Container\Container;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
@@ -54,6 +55,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
+
+        Paginator::useBootstrap();
         $this->registerProviders();
         $configDir = Paths::rootDir('config');
         $this->mergeConfigFrom($configDir.'main.php', $this->package.'.main');
