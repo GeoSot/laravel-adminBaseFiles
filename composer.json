@@ -1,6 +1,6 @@
 {
     "name": "geo-sot/laravel-adminbasefiles",
-    "description": "A laravel Package that Supports the use of global Settings ",
+    "description": "A laravel Package that creates a backend",
     "keywords": [
         "geo-sot",
         "laravel",
