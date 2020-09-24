@@ -21,7 +21,7 @@
         "barryvdh/laravel-translation-manager": "^v0.5.9",
         "cviebrock/eloquent-sluggable": "^8.0.0",
         "geo-sot/laravel-env-editor": "^0.9.4",
-        "kris/laravel-form-builder": "^1.30",
+        "kris/laravel-form-builder": "^dev-master",
         "lab404/laravel-impersonate": "^1.7.1",
         "laravel/passport": "^10.0.1",
         "mcamara/laravel-localization": "^1.6.0",
