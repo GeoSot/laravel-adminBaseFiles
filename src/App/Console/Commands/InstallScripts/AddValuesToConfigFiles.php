@@ -4,17 +4,11 @@ namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class AddValuesToConfigFiles extends BaseInstallCommand
 {
 
-    /**
-     * The filesystem instance.
-     *
-     * @var Filesystem
-     */
-    protected $files;
 
     /**
      * The console command name.
@@ -30,19 +24,6 @@ class AddValuesToConfigFiles extends BaseInstallCommand
      */
     protected $description = 'Adds Configuration Settings to Config Files';
 
-    /**
-     * Create a new controller creator command instance.
-     *
-     * @param  Filesystem  $files
-     *
-     * @return void
-     */
-    public function __construct(Filesystem $files)
-    {
-        parent::__construct();
-
-        $this->files = $files;
-    }
 
     /**
      * Execute the console command.
@@ -52,75 +33,139 @@ class AddValuesToConfigFiles extends BaseInstallCommand
     public function handle()
     {
 
-        foreach ($this->getChanges() as $fileName => $changes) {
-            foreach ($changes as $key => $value) {
-                $this->table(['File', 'Key', 'Value'], [[$fileName, $key, $value]]);
-                $this->addValueToFile($fileName, $key, $value);
-            }
+        $this->replaceInFile("'engine' => null,", $this->getDatabaseChanges(), config_path('database.php'));
+        $this->replaceInFile("App\Models\User", "App\Models\Users\User", config_path('auth.php'));
+
+        $this->changeValuesInfFile($this->getLaratrustValues(), config_path('laratrust.php'));
+        $this->changeValuesInfFile($this->getEnvEditorValues(), config_path('env-editor.php'));
+        $this->changeValuesInfFile($this->getSluggableValues(), config_path('sluggable.php'));
+        $this->changeValuesInfFile($this->getMediableValues(), config_path('mediable.php'));
+        $this->changeValuesInfFile(["'fallback_locale' => null" => "'fallback_locale' => 'en'"], config_path('translatable.php'));
+        $this->changeValuesInfFile($this->getlocalizationValues(), config_path('laravellocalization.php'));
+        $this->changeValuesInfFile($this->getTranslationManagerValues(), config_path('translation-manager.php'));
+
+
+        $this->replaceInFile("/home", "/", app_path('Providers/RouteServiceProvider.php'));
+        if (!Str::contains(file_get_contents(base_path('routes/web.php')), "'/dashboard'")) {
+            (new Filesystem)->append(base_path('routes/web.php'), $this->livewireRouteDefinition());
         }
+
 
     }
 
-
-    protected function getConfigDirectory($arg = '')
+    /**
+     * Get the route definition(s) that should be installed for Livewire.
+     *
+     * @return string
+     */
+    protected function livewireRouteDefinition()
     {
-        return config_path($arg);
+        return <<<'EOF'
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+EOF;
     }
 
 
     /**
-     * Get the stub file for the generator.
-     *
-     * @return array
+     * @return string
      */
-    protected function getChanges()
+    protected function getDatabaseChanges()
+    {
+        return "'engine' => 'InnoDB',".PHP_EOL."
+                'modes'  => [".PHP_EOL."
+                ".self::tab()."//'ONLY_FULL_GROUP_BY', // Disable this to allow grouping by one column
+                ".self::tab()."'STRICT_TRANS_TABLES',".PHP_EOL."
+                ".self::tab()."'NO_ZERO_IN_DATE',".PHP_EOL."
+                ".self::tab()."'NO_ZERO_DATE',".PHP_EOL."
+                ".self::tab()."'ERROR_FOR_DIVISION_BY_ZERO',".PHP_EOL."
+                ".self::tab()."'NO_AUTO_CREATE_USER',".PHP_EOL."
+                ".self::tab()."'NO_ENGINE_SUBSTITUTION'".PHP_EOL."
+                ],".PHP_EOL."";
+
+
+    }
+
+    protected static function tab()
+    {
+        return chr(9);
+    }
+
+    private function getLaratrustValues(): array
     {
         return [
-            'database'  => [
-                'mysql' => "[
-                        'engine' => 'InnoDB',
-                        'modes'  => [
-                            //'ONLY_FULL_GROUP_BY', // Disable this to allow grouping by one column
-                            'STRICT_TRANS_TABLES',
-                            'NO_ZERO_IN_DATE',
-                            'NO_ZERO_DATE',
-                            'ERROR_FOR_DIVISION_BY_ZERO',
-                            'NO_AUTO_CREATE_USER',
-                            'NO_ENGINE_SUBSTITUTION'
-                        ],
-                    ]"
-            ],
+            "\App\Models\User" => "App\Models\Users\User",
+            "\App\Models\Role" => "\App\Models\Users\UserRole",
+            "\App\Models\Permission" => "\App\Models\Users\UserPermission",
+            "\App\Models\Team" => "\App\Models\Users\UserTeam",
+            "'/home'" => "'/'",
+        ];
 
+    }
+
+    protected function changeValuesInfFile(array $data, string $file)
+    {
+
+        if (!(new Filesystem)->exists($file)) {
+            $this->error($file.' not exists');
+            return;
+        }
+
+        foreach ($data as $oldVal => $newVal) {
+            $this->replaceInFile($oldVal, $newVal, $file);
+        }
+    }
+
+    private function getEnvEditorValues()
+    {
+        return [
+            "'prefix' => 'env-editor'" => "'prefix' => 'admin/editor'",
+            "'name' => 'env-editor'" => "'name' => 'admin.env-editor'",
+            "['web']" => "['web', 'auth']",
+            'env-editor::layout' => 'baseAdmin::admin.layout'
         ];
     }
 
+    private function getSluggableValues()
+    {
+        return [
+            "'includeTrashed' => false" => "'includeTrashed' => true"
+        ];
+    }
 
     /**
-     *
-
+     * @return string[]
      */
-    protected function addValueToFile(string $filesName, string $keyToChange, $valueToChange): void
+    private function getMediableValues(): array
     {
-
-        return;
-        $path = $this->getConfigDirectory($filesName . '.php');
-        if (!$this->files->exists($path)) {
-            $this->error("Didn't Find " . $path);
-            return;
-        }
-        $existingValue = config(str_replace('\\', '.', $filesName) . '.' . $keyToChange);
-
-        $newValue = is_array($existingValue) ? array_merge($existingValue, Arr::wrap($valueToChange)) : $valueToChange;
-        //  dd($existingValue);
-        //TODO
-        dd(var_export($existingValue) . ',');
-
-// create the array as a php text string
-        //   $text = "<?php\n\nreturn " . var_export($myarray, true) . ";";
-        $contents = $this->files->get($path);
-
-        $contents .= str_replace('%host%', $host, $contents);
-
-        $this->files->put($path, $contents);
+        return [
+            'Plank\Mediable\Media' => 'App\Models\Media\Medium',
+            'ON_DUPLICATE_INCREMENT' => 'ON_DUPLICATE_UPDATE '
+        ];
     }
+
+    /**
+     * @return string[]
+     */
+    private function getlocalizationValues(): array
+    {
+        return [
+            "//'es'" => "'el'",
+            "'hideDefaultLocaleInURL' => false" => "'hideDefaultLocaleInURL' => true"
+        ];
+    }
+
+    private function getTranslationManagerValues()
+    {
+        return [
+            "'prefix'     => 'translations'"=> "'prefix' => 'admin/translations'",
+            "'auth'" => "['web', 'auth']",
+            "'delete_enabled' => true"=>"'delete_enabled' => true",
+            "'sort_keys'     => false"=>"'sort_keys'     => true"
+        ];
+    }
+
 }

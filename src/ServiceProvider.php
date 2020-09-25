@@ -6,7 +6,6 @@ namespace GeoSot\BaseAdmin;
 use Carbon\Carbon;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
-use GeoSot\BaseAdmin\App\Providers\RouteServiceProvider;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
@@ -89,8 +88,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             __DIR__.'/../resources/views/' => resource_path("views/vendor/{$this->vendor}/{$this->package}"),//resource_path("views/vendor/{$this->vendor}/{$this->package}"),
         ], 'views');
 
+
         $this->publishes([
-            __DIR__.'/Database/Migrations/' => database_path('migrations')
+            __DIR__.'/Database/Migrations/' => database_path('migrations'),
+            __DIR__.'/Database/MigrationsOnPackagesTables/_add_columns_on_media_table.php' => database_path('migrations/'.date('Y_m_d_His').'_add_columns_on_media_table.php'),
+            __DIR__.'/Database/MigrationsOnPackagesTables/_laratrust_add_fields.php.php' => database_path('migrations/'.date('Y_m_d_His').'_laratrust_add_fields.php.php'),
         ], 'migrations');
         $this->publishes([
 //            __DIR__ . '/../resources/lang/' => resource_path("lang"),
@@ -120,7 +122,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $providers = [
             CustomValidationServiceProvider::class,
-            RouteServiceProvider::class,
+//            RouteServiceProvider::class,
             CommandsProvider::class,
 //            ModuleServiceProvider::class,
             CommandsProvider::class,

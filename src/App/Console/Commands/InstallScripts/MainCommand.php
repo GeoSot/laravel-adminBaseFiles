@@ -61,6 +61,9 @@ class MainCommand extends BaseInstallCommand
         foreach ($this->getInstallScripts() as $key => $script) {
             $this->call(Arr::get($script, 0), Arr::get($script, 1, []));
         }
+        unlink( app_path('Models/User.php'));
+        unlink( app_path('Models/Role.php'));
+        unlink( app_path('Models/Permission.php'));
         $this->composer->dumpAutoloads();
 
         $this->info('Platform ready!You can now login with your username and password at / backend');
@@ -75,39 +78,37 @@ class MainCommand extends BaseInstallCommand
     {
         return [
             'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
+//            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
             'authorization' => ['ui', ['type' => 'bootstrap', '--auth']],
+
             'publishConf' => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
-            'publishForeignConfigs' => ['baseAdmin:install:publishForeignConfigs'],
+            'publishLaratrustConf' => ['vendor:publish', ['--tag' => 'laratrust']],
+            'publishEnvConf' => ['vendor:publish', ['--provider' => 'GeoSot\EnvEditor\ServiceProvider','--tag' => 'config']],
+            'publishSluggableConf' => ['vendor:publish', ['--provider' => 'Cviebrock\EloquentSluggable\ServiceProvider','--tag' => 'config']],
+            'publishMediableConf' => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider','--tag' => 'config']],
+            'publishTranslatableConf' => ['vendor:publish', ['--provider' => 'Spatie\Translatable\TranslatableServiceProvider','--tag' => 'config']],
+            'publishLocalizationConf' => ['vendor:publish', ['--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider','--tag' => 'config']],
+            'publishTranslationManagerConf' => ['vendor:publish', ['--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider','--tag' => 'config']],
+
+
 //            'publishPackageMigrations'  => [
 //                'vendor:publish', [
 //                    '--provider' => 'GeoSot\BaseAdmin\ServiceProvider',
 //                    '--tag'      => 'migrations'
 //                ]
 //            ],
-            /*           'publishEnvEditorConfig'    => [
-                           'vendor:publish', [
-                               '--provider' => 'GeoSot\EnvEditor\ServiceProvider',
-                               '--tag' => 'config'
-                           ]
-                       ],
-                       'publishLocalizationConfig' => [
-                           'vendor:publish', [
-                               '--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
-                               '--tag' => 'config'
-                           ]
-                       ],*/
-            'publishTranslationMigrations' => [
+
+         /*   'publishTranslationMigrations' => [
                 'vendor:publish', [
-                    '--provider' => ManagerServiceProvider::class,
+                    '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
                     '--tag' => 'migrations'
                 ]
-            ],
-            'makePassportKeys' => ['passport:keys'],
+            ],*/
+
             'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
-            'publishViews' => ['baseAdmin:install:publishViews'],
-            'publishAssets' => ['baseAdmin:publishAssets'],
-            'runMigration' => ['migrate',],
+            'makePassportKeys' => ['passport:keys'],
+            'laratrust:setup' => ['laratrust:setup',['--force' => true]],
+            'runMigration' => ['migrate'],
             'seedPackageData' => ['db:seed', ['--class' => DatabaseSeeder::class]],
             'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
             'symlink' => ['storage:link'],

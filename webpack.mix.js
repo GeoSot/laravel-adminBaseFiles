@@ -1,7 +1,7 @@
 const mix = require('laravel-mix');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const assetsDirectory = path.normalize('resources/assets/');
-const publicDirectory = path.normalize('./filesToPublish/assets/');
+const publicDirectory = path.normalize('./filesToPublish/public/assets/');
 // mix.setPublicPath('public/assets')
 // mix.setResourceRoot('/assets/');
 mix.setPublicPath('./');

@@ -20,7 +20,7 @@ class PublishInitialFiles extends GenericFileCreateCommand
      *
      * @var string
      */
-    protected $description = 'Publishes all Files to app Directory';
+    protected $description = 'Publishes all Files BaseAdmin Files';
 
     /**
      * The type of class being generated.
@@ -46,7 +46,7 @@ class PublishInitialFiles extends GenericFileCreateCommand
 
     protected function getStubDirectory()
     {
-        return Paths::filesToPublishDir('app');
+        return Paths::filesToPublishDir();
     }
 
 
@@ -58,8 +58,7 @@ class PublishInitialFiles extends GenericFileCreateCommand
      */
     public function getFileWithPath()
     {
-        $file = str_replace('.stub', '', $this->fileName);
-        return base_path("app\\{$file}.php");
+        return base_path($this->fileName);
     }
 
     /**
