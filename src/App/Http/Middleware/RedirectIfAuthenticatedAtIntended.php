@@ -2,6 +2,7 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Middleware;
 
+use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -48,7 +49,7 @@ class RedirectIfAuthenticatedAtIntended
      */
     protected function getDefaultUserPath(): string
     {
-        $defaultPath = route('home');
+        $defaultPath = route(RouteServiceProvider::HOME);
         if (Auth::user()->isAbleTo('admin.*')) {
             $defaultPath = route('admin.dashboard');
         }

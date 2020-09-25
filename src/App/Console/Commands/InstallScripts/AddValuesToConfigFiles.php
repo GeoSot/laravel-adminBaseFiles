@@ -44,11 +44,14 @@ class AddValuesToConfigFiles extends BaseInstallCommand
         $this->changeValuesInfFile($this->getlocalizationValues(), config_path('laravellocalization.php'));
         $this->changeValuesInfFile($this->getTranslationManagerValues(), config_path('translation-manager.php'));
 
+        $this->tweakRoutesFile();
+        $this->tweakConfigAppFile();
+
 
         $this->replaceInFile("/home", "/", app_path('Providers/RouteServiceProvider.php'));
-        if (!Str::contains(file_get_contents(base_path('routes/web.php')), "'/dashboard'")) {
-            (new Filesystem)->append(base_path('routes/web.php'), $this->livewireRouteDefinition());
-        }
+//        if (!Str::contains(file_get_contents(base_path('routes/web.php')), "'/dashboard'")) {
+//            (new Filesystem)->append(base_path('routes/web.php'), $this->livewireRouteDefinition());
+//        }
 
 
     }
@@ -75,16 +78,16 @@ EOF;
      */
     protected function getDatabaseChanges()
     {
-        return "'engine' => 'InnoDB',".PHP_EOL."
-                'modes'  => [".PHP_EOL."
+        return "'engine' => 'InnoDB',
+                'modes'  => [
                 ".self::tab()."//'ONLY_FULL_GROUP_BY', // Disable this to allow grouping by one column
-                ".self::tab()."'STRICT_TRANS_TABLES',".PHP_EOL."
-                ".self::tab()."'NO_ZERO_IN_DATE',".PHP_EOL."
-                ".self::tab()."'NO_ZERO_DATE',".PHP_EOL."
-                ".self::tab()."'ERROR_FOR_DIVISION_BY_ZERO',".PHP_EOL."
-                ".self::tab()."'NO_AUTO_CREATE_USER',".PHP_EOL."
-                ".self::tab()."'NO_ENGINE_SUBSTITUTION'".PHP_EOL."
-                ],".PHP_EOL."";
+                ".self::tab()."'STRICT_TRANS_TABLES',
+                ".self::tab()."'NO_ZERO_IN_DATE',
+                ".self::tab()."'NO_ZERO_DATE',
+                ".self::tab()."'ERROR_FOR_DIVISION_BY_ZERO',
+                ".self::tab()."'NO_AUTO_CREATE_USER',
+                ".self::tab()."'NO_ENGINE_SUBSTITUTION'
+                ],";
 
 
     }
@@ -94,13 +97,19 @@ EOF;
         return chr(9);
     }
 
+    protected static function newLine()
+    {
+        return PHP_EOL;
+    }
+
     private function getLaratrustValues(): array
     {
         return [
-            "\App\Models\User" => "App\Models\Users\User",
-            "\App\Models\Role" => "\App\Models\Users\UserRole",
-            "\App\Models\Permission" => "\App\Models\Users\UserPermission",
-            "\App\Models\Team" => "\App\Models\Users\UserTeam",
+            "\App\Models\User::class" => "App\Models\Users\User::class",
+            "\App\Models\Role::class" => "App\Models\Users\UserRole::class",
+            "\App\Models\Permission::class" => "App\Models\Users\UserPermission::class",
+            "\App\Models\Team::class" => "App\Models\Users\UserTeam::class",
+            "'enabled' => false" => "'enabled' => true",
             "'/home'" => "'/'",
         ];
 
@@ -142,7 +151,7 @@ EOF;
     private function getMediableValues(): array
     {
         return [
-            'Plank\Mediable\Media' => 'App\Models\Media\Medium',
+            'Plank\Mediable\Media::class' => 'App\Models\Media\Medium::class',
             'ON_DUPLICATE_INCREMENT' => 'ON_DUPLICATE_UPDATE '
         ];
     }
@@ -161,11 +170,36 @@ EOF;
     private function getTranslationManagerValues()
     {
         return [
-            "'prefix'     => 'translations'"=> "'prefix' => 'admin/translations'",
+            "'prefix'     => 'translations'" => "'prefix' => 'admin/translations'",
             "'auth'" => "['web', 'auth']",
-            "'delete_enabled' => true"=>"'delete_enabled' => true",
-            "'sort_keys'     => false"=>"'sort_keys'     => true"
+            "'delete_enabled' => true" => "'delete_enabled' => true",
+            "'sort_keys'     => false" => "'sort_keys'     => true"
         ];
+    }
+
+    private function tweakRoutesFile(): void
+    {
+        $this->changeValuesInfFile([
+            "
+Route::get('/', function () {
+    return view('welcome');
+});
+" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".PHP_EOL
+        ], base_path('routes/web.php'));
+
+
+        (new Filesystem)->append(base_path('routes/web.php'), "\Illuminate\Support\Facades\Auth::routes(config('baseAdmin.config.authActions',[]));");
+    }
+
+    private function tweakConfigAppFile()
+    {
+        if (!Str::contains($appConfig = file_get_contents(config_path('app.php')), 'App\\Providers\\BaseAdminServiceProvider::class')) {
+            file_put_contents(config_path('app.php'), str_replace(
+                "App\Providers\AppServiceProvider::class,",
+                "App\\Providers\BaseAdminServiceProvider::class,".PHP_EOL."        App\Providers\AppServiceProvider::class,",
+                $appConfig
+            ));
+        }
     }
 
 }

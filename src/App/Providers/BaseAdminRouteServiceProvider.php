@@ -16,15 +16,13 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use Laravel\Passport\Passport;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Mcamara\LaravelLocalization\Middleware as Mcamara;
 
 
-class RouteServiceProvider extends ServiceProvider
+class BaseAdminRouteServiceProvider extends ServiceProvider
 {
 
 
@@ -53,14 +51,6 @@ class RouteServiceProvider extends ServiceProvider
         'localeViewPath' => Mcamara\LaravelLocalizationViewPath::class
     ];
 
-    public function boot()
-    {
-        parent::boot();
-
-        Passport::routes();
-        Passport::tokensExpireIn(now()->addDays(1));
-        Passport::refreshTokensExpireIn(now()->addDays(2));
-    }
 
     /**
      * Define the routes for the application.
@@ -74,17 +64,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->router = $router;
         $this->registerMiddlewareGroups();
 
-        $router->namespace($this->namespace)->group(function () {
-            $this->loadApiRoutes();
-        });
-
         $router->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
             ->middleware(['web', 'localeSessionRedirect', 'localizationRedirect', 'localize'])->group(function () {
                 $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->namespace('Admin')->as('admin.')->middleware(['auth'])->group(function () {
                     $this->loadBackendRoutes();
                 });
-                Route::mixin(new \Laravel\Ui\AuthRouteMethods());
-                Route::auth(config('baseAdmin.config.authActions'));
+
                 $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->namespace('Site')->group(function () {
                     $this->loadFrontendRoutes();
                 });
@@ -110,20 +95,6 @@ class RouteServiceProvider extends ServiceProvider
         return $this->router;
     }
 
-    private function loadApiRoutes()
-    {
-        //        $api = $this->getApiRoute();
-        //
-        //        if ($api && file_exists($api)) {
-        //            $router->group([
-        //                'namespace'  => 'Api',
-        //                'prefix'     =>  '/api',
-        //                'middleware' =>[],
-        //            ], function (Router $router) use ($api) {
-        //                require $api;
-        //            });
-        //        }
-    }
 
     /**
      */
@@ -212,7 +183,7 @@ class RouteServiceProvider extends ServiceProvider
 
     private function loadFrontendRoutes()
     {
-        $this->getRouter()->get('/', 'HomeController@index')->name('home');
+
         $this->getRouter()->as('site.')->group(function () {
             $this->getRouter()->post('contact-us', 'HomeController@contactUs')->name('contactUs.store');
             $this->getRouter()->middleware(['auth'])->group(function () {

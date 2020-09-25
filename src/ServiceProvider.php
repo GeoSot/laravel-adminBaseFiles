@@ -3,16 +3,14 @@
 namespace GeoSot\BaseAdmin;
 
 
-use Carbon\Carbon;
+use GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Container\Container;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Schema;
 
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -43,7 +41,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishResources();
         $this->registerServices();
         view()->share('packageVariables', $this->getPackageVariables());
-        $this->setSystemDefaults();
 
     }
 
@@ -55,7 +52,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
 
-        Paginator::useBootstrap();
         $this->registerProviders();
         $configDir = Paths::rootDir('config');
         $this->mergeConfigFrom($configDir.'main.php', $this->package.'.main');
@@ -91,8 +87,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->publishes([
             __DIR__.'/Database/Migrations/' => database_path('migrations'),
-            __DIR__.'/Database/MigrationsOnPackagesTables/_add_columns_on_media_table.php' => database_path('migrations/'.date('Y_m_d_His').'_add_columns_on_media_table.php'),
-            __DIR__.'/Database/MigrationsOnPackagesTables/_laratrust_add_fields.php.php' => database_path('migrations/'.date('Y_m_d_His').'_laratrust_add_fields.php.php'),
         ], 'migrations');
         $this->publishes([
 //            __DIR__ . '/../resources/lang/' => resource_path("lang"),
@@ -122,7 +116,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $providers = [
             CustomValidationServiceProvider::class,
-//            RouteServiceProvider::class,
+            BaseAdminRouteServiceProvider::class,
             CommandsProvider::class,
 //            ModuleServiceProvider::class,
             CommandsProvider::class,
@@ -149,19 +143,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->alias('Alert', Facades\Alert::class);
         $this->app->alias('Settings', Facades\Settings::class);
 
-    }
-
-    /**
-     *
-     */
-    protected function setSystemDefaults(): void
-    {
-        Schema::defaultStringLength(191);
-
-        Carbon::setLocale(config('app.locale'));
-//        Carbon::serializeUsing(function ($carbon) {
-//            return $carbon->format('d/m/y H:i:s');
-//        });
     }
 
 }
