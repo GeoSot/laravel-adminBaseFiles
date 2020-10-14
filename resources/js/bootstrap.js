@@ -1,4 +1,5 @@
 window.jQueryHelper = require('./_helpers/jQuery-helper');
+window.loader = require('./_helpers/load-script-style');
 
 
 // try {

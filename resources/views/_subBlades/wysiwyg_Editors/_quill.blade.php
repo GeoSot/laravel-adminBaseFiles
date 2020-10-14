@@ -1,8 +1,4 @@
-<link href="//cdn.quilljs.com/latest/quill.snow.css" rel="stylesheet"/>
-
 @push('scripts')
-
-    <script defer src="//cdn.quilljs.com/latest/quill.min.js"></script>
 
     <script defer data-comment="wysiwyg_Editor quill">
         let quilToolbarOptions = [
@@ -80,10 +76,16 @@
         };
         document.addEventListener("DOMContentLoaded", function (e) {
             let elements = document.querySelectorAll('textarea.withEditor');
-            for (let i = 0; i < elements.length; i++) {
-                new BaseAdmin.initActiveTextEditor(elements[i])
+            if (elements.length) {
+                window.loader.loadStyle('//cdn.quilljs.com/latest/quill.snow.css')
+                window.loader.loadScript('//cdn.quilljs.com/latest/quill.min.js').then(function () {
+                        for (let i = 0; i < elements.length; i++) {
+                            new BaseAdmin.initActiveTextEditor(elements[i])
+                        }
+                    })
+                }
             }
-        });
+        );
 
     </script>
 @endpush

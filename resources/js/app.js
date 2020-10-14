@@ -5,30 +5,14 @@
  */
 window.BaseAdmin = window.BaseAdmin || {};
 const swal = require('sweetalert');
-const toastr = require('toastr');
 
 require('./bootstrap')
 
 window.swal = swal;
-window.toastr = toastr;
+
 window.moment = require('moment');
 require('bootstrap-daterangepicker');
 
-
-toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "positionClass": "toast-bottom-right",
-    "onclick": null,
-    "showDuration": "1000",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "swing",
-    "showMethod": "slideDown",
-    "hideMethod": "hide"
-};
 
 
 //Generates Unique IDs
