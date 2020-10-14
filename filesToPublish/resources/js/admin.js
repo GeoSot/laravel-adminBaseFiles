@@ -30,14 +30,26 @@ BaseAdmin.makeAjax = function (url, type, data, show_message, callback) {
         dataType: 'JSON',
     }).done(function (data) {
         if (data.flag === 'error' || show_message == 1) {
-            return toastr[data.flag](data.message, data.title, {timeOut: 15000});
+            return Swal.fire({
+                title: data.title ? data.title : 'Error!',
+                text: data.message,
+                timer: 15000,
+                icon: data.flag,
+                timerProgressBar: true
+            });
         }
         if (typeof callback !== 'function') {
             location.reload();
         }
     }).fail(function (jqXHR, textStatus) {
         data = jqXHR.responseJSON;
-        return toastr['error'](data.message, data.title?data.title:'Error', {timeOut: 15000});
+        return Swal.fire({
+            title: data.title ? data.title : 'Error!',
+            text: data.message,
+            timer: 15000,
+            icon: 'error',
+            timerProgressBar: true
+        })
 
     }).always(function (data, textStatus) {
         if (typeof callback === 'function') {

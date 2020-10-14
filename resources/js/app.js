@@ -4,15 +4,14 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 window.BaseAdmin = window.BaseAdmin || {};
-const swal = require('sweetalert');
+const Swal = require('sweetalert2')
 
 require('./bootstrap')
 
-window.swal = swal;
+window.Swal = Swal;
 
 window.moment = require('moment');
 require('bootstrap-daterangepicker');
-
 
 
 //Generates Unique IDs

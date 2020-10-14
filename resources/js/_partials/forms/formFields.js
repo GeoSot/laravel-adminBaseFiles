@@ -67,7 +67,7 @@ BaseAdmin.forms.fields = {
                 let file = this.files[0];
                 let allowedExtensions = /(jpg|jpeg|png|gif)$/i;
                 if (!allowedExtensions.exec(file.type) && el.isImage) {
-                    toastr.error(el.invalidMessage);
+                    Swal.fire('Oops...', el.invalidMessage, 'error');
                     el.changeInputAndText(false);
                     return;
                 }

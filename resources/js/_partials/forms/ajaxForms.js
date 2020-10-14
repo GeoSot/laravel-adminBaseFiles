@@ -139,9 +139,13 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
                 _self.errorsObj.appendFormErrors();
                 text = _self.errorsObj.getErrorsAsText() || data.responseJSON.message || text;
             }
-            if (window.toastr != undefined) {
-                toastr.error(text);
-            }
+
+            Swal.fire({
+                title: 'Oups...!',
+                text: text,
+                icon: 'error',
+            })
+
         }).always(function () {
             _self.$form.removeClass('submitting');
             $('#' + _self.spinnerId).remove();
@@ -190,7 +194,11 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
         jqxhr.done(function (data) {
             // BaseAdminDebugMsg(formSelector, instance, 'ajaxifyForm taskForm');
             instance.clearInputs();
-            toastr.success(data.msg.msg, data.msg.title);
+            Swal.fire({
+                title: data.msg.title,
+                text: data.msg.msg,
+                icon: 'success',
+            })
             $(modalSelector).modal('hide');
             BaseAdminajaxLoadWrappers(wrapperToReload);
         });
@@ -207,7 +215,7 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
          jqxhr.done(function (data) {
              BaseAdminDebugMsg('form#newPostForm', instance, 'ajaxifyForm newPostForm');
              instance.clearInputs();
-             toastr.success(data.responseText, '{{  __('message.success_title') }}');
+             Swal.fire('{{  __('message.success_title') }}',data.responseText);
              $('.js-listWrapper').load(location.href + ' .js-listWrapper  > *', function (response) {
                  let paginator = '.js-paginator';
                  $(paginator).html($(response).find(paginator).html());

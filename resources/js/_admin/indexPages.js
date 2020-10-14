@@ -14,14 +14,14 @@ BaseAdmin.listingActions = {
     },
     allOtherActions: function (url, type, data, show_message, keyword, callback = null) {
         //   console.log(keyword)
-        swal({
+        Swal.fire({
             title: $('#confirm_' + keyword).text(),
             text: $('#confirm_' + keyword + '_msg').text(),
             icon: 'warning',
             buttons: true,
             //dangerMode : true,
         }).then(function (continueAction) {
-            if (continueAction) {
+            if (continueAction.value) {
                 BaseAdmin.makeAjax(url, type, data, show_message, callback);
             }
         });
@@ -31,7 +31,7 @@ BaseAdmin.listingActions = {
             return $(this).val();
         }).get();
         if (items.length === 0) {
-            return toastr.warning(jQuery('#no_record_selected_msg').text(), jQuery('#no_record_selected').text());
+            return Swal.fire(jQuery('#no_record_selected').text(), jQuery('#no_record_selected_msg').text(), 'warning');
         }
         let url = $(elem).data('url');
         let type = $(elem).data('method');
