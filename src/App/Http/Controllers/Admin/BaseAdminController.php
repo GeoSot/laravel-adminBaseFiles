@@ -13,17 +13,19 @@ use GeoSot\BaseAdmin\App\Traits\Controller\FiltersHelper;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasActionHooks;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasAllowedActions;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasFields;
-use GeoSot\BaseAdmin\Facades\Alert;
-use Illuminate\Contracts\View\Factory;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 use Kris\LaravelFormBuilder\Form;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 abstract class BaseAdminController extends BaseController
 {
@@ -34,12 +36,17 @@ abstract class BaseAdminController extends BaseController
     protected $_genericLangDir = 'admin/generic';
 
 
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|RedirectResponse|Response|StreamedResponse
+     * @throws \Exception
+     */
     public function index(Request $request)
     {
 
         $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
         if (!is_null($redirectRoute)) {
-            return redirect($redirectRoute);
+            return redirect()->to($redirectRoute);
         }
 
         $extraOptions = collect([]);
@@ -51,6 +58,12 @@ abstract class BaseAdminController extends BaseController
         $this->applyExtraFiltersOnModel($params, $query);
 
         $this->afterFilteringIndex($request, $params, $query, $extraOptions);
+
+        if ($request->input('export')==='csv' && $this->modelIsExportable()) {
+            /** @var IsExportable $model */
+            $model = $this->_hydratedModel;
+            return $model->exportToCsv($query->get());
+        }
 
         $records = $query->paginate($params->get('num_of_items'));
 
@@ -176,6 +189,7 @@ abstract class BaseAdminController extends BaseController
             'options' => collect([
                 'fillable' => $this->_hydratedModel->getFillable(),
                 'modelHasSoftDeletes' => $this->modelHasSoftDeletes(),
+                'modelIsExportable' => $this->modelIsExportable(),
                 'modelIsTranslatable' => $this->modelIsTranslatable(),
                 'modelTraits' => Arr::sortRecursive(array_flip(array_map(function ($i) {
                     return class_basename($i);
@@ -255,7 +269,7 @@ abstract class BaseAdminController extends BaseController
         $title = $this->getLang($action.'.'.$flag.'Title');
         $message = $this->getLang($action.'.'.$flag.'Msg', $results);
         if ($flag == 'success' and !$request->input('onlyJson', false)) {
-            Alert::success($message,$title)->typeToast();
+            Alert::success($message, $title)->typeToast();
         }
 
         return response()->json([
@@ -480,14 +494,14 @@ abstract class BaseAdminController extends BaseController
     /**
      * @param  string  $action
      * @param  array  $data
-     * @return Factory|JsonResponse|View
+     * @return JsonResponse|Response
      */
     protected function sendProperResponse(string $action = 'index', array $data = [])
     {
         if (request()->wantsJson()) {
             return response()->json($data);
         }
-        return view($this->getView($action), $data);
+        return response()->view($this->getView($action), $data);
     }
 
     /**

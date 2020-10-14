@@ -5,7 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\Medium;
-use GeoSot\BaseAdmin\Facades\Alert;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;

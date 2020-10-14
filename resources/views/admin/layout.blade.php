@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-@php(\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/admin/app.css"))
-<html lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}">
+<html lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}"  data-layout="admin">
 <head>
 
     @include($packageVariables->get('blades').'admin._includes.headMetas')
-    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/admin/app.css")}}" rel="stylesheet"/>
+    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/admin.css")}}" rel="stylesheet"/>
     @foreach(config('baseAdmin.config.backEnd.extraCss') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>
     @endforeach
@@ -28,7 +27,7 @@
             @stack('topBar')
         </div>
         <div class="notificationsContainer container-fluid">
-            @include($packageVariables->get('blades').'_subBlades.notifications')
+            @include($packageVariables->get('blades').'_subBlades.notifications.index')
             @stack('notifications')
         </div>
 
@@ -42,12 +41,18 @@
     @include($packageVariables->get('blades').'_subBlades.returnToTopButton')
     @includeIf($packageVariables->get('blades').'admin._includes.footer')
 </section>
+
+<div class="fixed-bottom mb-5 mr-2" aria-live="polite" aria-atomic="true" style="left: auto; max-width: 270px">
+    @stack('toasts')
+</div>
+
 <div class="modals-area">
     @stack('modals')
 </div>
 
+
 <span class="js-scripts">
-    <script src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/admin/app.js")}}"></script>
+    <script src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/admin.js")}}"></script>
     @foreach(config('baseAdmin.config.backEnd.extraJs') as $file)
         <script defer src="{{$file}}"></script>
     @endforeach

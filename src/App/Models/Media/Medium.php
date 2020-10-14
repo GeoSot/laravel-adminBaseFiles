@@ -96,7 +96,7 @@ class Medium extends Media
      */
     public static function getDummyImageUrl()
     {
-        return Base::adminAssets('images/dummy-image.png');
+        return "https://dummyimage.com/600x400/737480/fff.png&text=your+image+is+loading...";
     }
 
     /**

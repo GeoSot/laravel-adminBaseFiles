@@ -1,6 +1,6 @@
 {
-    "/filesToPublish/assets/js/admin/app.js": "/filesToPublish/assets/js/admin/app.js?id=4c358070d6ed4ae8009e",
-    "/filesToPublish/assets/css/site/app.css": "/filesToPublish/assets/css/site/app.css?id=20350b6546fcb69ed910",
-    "/filesToPublish/assets/css/admin/app.css": "/filesToPublish/assets/css/admin/app.css?id=20350b6546fcb69ed910",
-    "/filesToPublish/assets/js/site/app.js": "/filesToPublish/assets/js/site/app.js?id=06bc629ace3761773e8c"
+    "/assets/js/admin.js": "/assets/js/admin.js?id=4685cbd535f42ac377de",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=73bc3940e68c5049eb02",
+    "/assets/css/app.css": "/assets/css/app.css?id=5b8b10f5bc472320aebf",
+    "/assets/js/app.js": "/assets/js/app.js?id=7944c74def19387dc6d2"
 }

@@ -1,33 +1,36 @@
 <?php
+
 return [
 
     /* ------------------------------------------------------------------------------------------------
-    |  Model settings
-    | ------------------------------------------------------------------------------------------------
-    */
+     |  Model settings
+     | ------------------------------------------------------------------------------------------------
+     */
     'models' => [
-        'namespace' => 'App\\Models\\',
         'user' => App\Models\Users\User::class,
         'role' => App\Models\Users\UserRole::class,
         'permission' => App\Models\Users\UserPermission::class,
-        'setting' => App\Models\Setting::class
     ],
 
 
     /*
     |--------------------------------------------------------------------------
-    | Routes group config
+    | Backend Configs
     |--------------------------------------------------------------------------
     |
-    | The default group settings for the Paclage routes.
+    |
     |
     */
     'backEnd' => [
+        //base route for backend
         'baseRoute' => 'admin',
-        'assetsPath' => 'assets\\geo-sot\\base-admin',
+        //published assets path
+        'assetsPath' => 'assets\\',
+        //Add css scripts to back layout
         'extraCss' => [],
+        //Add js scripts to back layout
         'extraJs' => [],
-        //Set Views options
+        //Set back layout
         'layout' => 'baseAdmin::admin.layout',
     ],
 
@@ -50,7 +53,6 @@ return [
         'time' => 15,//  cache time in minutes
     ],
 
-
     'translatables' => [
         /*
         | Locales
@@ -69,12 +71,5 @@ return [
         'label-locale-indicator' => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'
     ],
 
-
-    'authActions' => [
-        'register' => true,
-        'reset' => true,
-        'confirm' => true,
-        'verify' => true,
-    ]
 
 ];

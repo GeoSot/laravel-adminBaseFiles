@@ -52,21 +52,6 @@ class CustomValidationServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     *
-     * Example    'current_password' => 'required|samePassword:' . $user->getAuthPassword(),
-     */
-    public function customRule_samePassword()
-    {
-        $name = 'samePassword';
-        Validator::extend($name, function ($attribute, $value, $parameters, $validator) {
-            return Hash::check($value, Arr::get($parameters, 0));
-        });
-
-        Validator::replacer($name, function ($message, $attribute, $rule, $parameters) {
-            return trans('validation.samePassword', ['attribute' => $attribute]);
-        });
-    }
 
     public static function registerFormCustomRawLabel(): void
     {

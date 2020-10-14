@@ -47,7 +47,7 @@
         </div>
         <div class="col-xl-3 col-md-6 col-12 mb-3">
             @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('baseLang').'.formTitles.advancedSettings')] )
-                {!!form_until($form, 'rolesTeams'); !!}
+                {!!form_until($form, 'roles'); !!}
             @endcomponent
         </div>
         <div class="col-xl-12 col-md-6 col-12 mb-3">

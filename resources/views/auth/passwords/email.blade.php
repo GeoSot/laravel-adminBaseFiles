@@ -1,24 +1,19 @@
 @extends($packageVariables->get('siteLayout'))
 
 @section('content')
-    <div class="container">
+
+    @component('baseAdmin::auth._card')
+        @slot('title')
+            {{ __('Reset Password') }}
+        @endslot
         @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
             </div>
         @endif
-        <div class="row justify-content-center">
-            <div class=" col col-md-8 col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="mb-4 h4 text-primary"> @lang($packageVariables->get('nameSpace').'auth.pages.forgotPassword.title')</div>
-                        {!! form($form) !!}
-                        <div class="text-right">
-                            <a href="{{route('login')}}"> @lang($packageVariables->get('nameSpace').'auth.pages.forgotPassword.loginLink')</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        {!! form($form) !!}
+        <div class="text-right">
+            <a href="{{route('login')}}" class="btn btn-link">{{__('Login')}}</a>
         </div>
-    </div>
+    @endcomponent
 @endsection

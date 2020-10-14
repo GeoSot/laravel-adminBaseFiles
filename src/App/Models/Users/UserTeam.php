@@ -6,11 +6,13 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laratrust\Models\LaratrustTeam;
 
 class UserTeam extends LaratrustTeam
 {
-    use HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Sluggable;
+    use HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Sluggable, IsExportable, HasFactory;
 
     protected $fillable = [
         'name',

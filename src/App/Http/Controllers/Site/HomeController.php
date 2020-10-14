@@ -5,7 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 use App\Forms\Site\ContactForm;
 use App\Http\Controllers\Controller;
-use GeoSot\BaseAdmin\Facades\Alert;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 

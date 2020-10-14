@@ -7,10 +7,12 @@ use GeoSot\BaseAdmin\App\Traits\Eloquent\EnabledDisabled;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,7 +25,7 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
 
-    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate;
+    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate, HasFactory, IsExportable;
 
     /**
      * The attributes that are mass assignable.
@@ -144,35 +146,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     public function canImpersonate()
     {
         return $this->isAbleTo('admin.*') and !app('impersonate')->isImpersonating();
-    }
-
-    public function getAll()
-    {
-        return;
-
-        /*
-         *
-         $teams = $this->rolesTeams()->get()->transform(function (\App\Models\Users\UserTeam $team) {
-            $roles = $this->getRoles($team);
-            \App\Models\Users\UserPermission::all()
-            $perms = collect($roles)->each(function (string $role) {
-
-                $role = \App\Models\Users\UserRole::where('name',$role)->first();
-
-                return (new LaratrustRoleDefaultChecker($role))->currentRoleCachedPermissions();
-             return[
-//                 'perms'=>''
-                    'roles' => $roles;
-                ];
-            });
-            dd($perms);
-            return [
-                $team->name => [
-                    'roles' => $this->getRoles($team),
-                ]
-            ];
-        });;*/
-        dd($teams);
     }
 
 

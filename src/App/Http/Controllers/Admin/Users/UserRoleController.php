@@ -6,7 +6,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
-use GeoSot\BaseAdmin\Facades\Alert;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;

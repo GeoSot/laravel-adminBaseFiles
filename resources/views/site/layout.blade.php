@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite" data-layout="site">
 <head>
-    @includeIf('site._includes.headMetas')
-    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/site/app.css")}}" rel="stylesheet"/>
+    @include($packageVariables->get('blades').'site._includes.headMetas')
+    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/app.css")}}" rel="stylesheet"/>
     @foreach(config('baseAdmin.config.site.extraJs') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>
     @endforeach
@@ -26,7 +26,7 @@
             @stack('topBar')
         </div>
         <div class="notificationsContainer container">
-            @include($packageVariables->get('blades').'_subBlades.notifications')
+            @include($packageVariables->get('blades').'_subBlades.notifications.index')
         </div>
         <main id="mainContent-wrapper" class="{{$containerClass??'container'}}  pt-3 d-flex flex-fill flex-column h-100" role="main" itemprop="mainContentOfPage"
               itemscope="itemscope"
@@ -39,12 +39,16 @@
         @includeIf($packageVariables->get('blades').'site._includes.footer')
     </section>
 </div>
+<div class="fixed-bottom mb-5 mr-2 w-100" aria-live="polite" aria-atomic="true" style="left: auto; max-width: 270px; ">
+    @stack('toasts')
+</div>
+
 <div class="modals-area">
     @stack('modals')
 </div>
 
 <span class="js-scripts">
-     <script async src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/site/app.js")}}"></script>
+     <script  src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/app.js")}}"></script>
     @foreach(config('baseAdmin.config.site.extraJs') as $file)
         <script defer src="{{mix($file)}}"></script>
     @endforeach

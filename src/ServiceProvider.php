@@ -140,7 +140,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             return new Alert($app->make('session'));
         });
 
-        $this->app->alias('Alert', Facades\Alert::class);
         $this->app->alias('Settings', Facades\Settings::class);
 
     }

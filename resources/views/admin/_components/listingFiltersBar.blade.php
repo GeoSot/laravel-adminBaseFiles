@@ -59,6 +59,13 @@
     </div>
 
 </form>
+@if($viewVals->get('options')->get('modelIsExportable'))
+    <a href="{{ request()->fullUrlWithQuery(['export'=>'csv'])}}" class="btn btn-outline-info btn-sm  ">
+        <span class=""> @lang("{$lang}.listFilters.export")</span>
+        <span class="btn-label btn-label-right"><i class="fa fa-download"></i></span>
+    </a>
+@endif
+
 
 
 <!--listingFiltersBar END-->

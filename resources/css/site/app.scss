@@ -1,0 +1,24 @@
+
+// Bootstrap
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/mixins";
+@import "variables";
+@import '~bootstrap/scss/bootstrap';
+
+//Packages
+@import "~font-awesome/scss/font-awesome";
+@import "~select2/src/scss/core";
+@import "~select2-theme-bootstrap4/src/select2-bootstrap";
+@import "~bootstrap-daterangepicker/daterangepicker.css";
+@import "~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+//Our Css
+@import "../_partials/richTextEditors";
+@import "../_partials/standards";
+
+
+a{
+    transition: all 0.3s ease-out;
+    &:hover{
+        opacity: .9;
+    }
+}

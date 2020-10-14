@@ -21,7 +21,6 @@ class Alert
 
     public const TYPE_INLINE = 'inline';
     public const TYPE_TOAST = 'toast';
-    public const TYPE_SWAL = 'swal';
 
     public const  SESSION_KEY = 'alertMessages';
 
@@ -33,18 +32,19 @@ class Alert
 
 
     /**
-     * @var Store
+     * @var string
      */
-    protected $message;
+    protected $type = self::TYPE_INLINE;
 
     /**
      * @var string
      */
-    protected $type = self::TYPE_INLINE;
-    /**
-     * @var string
-     */
     private $uuid;
+
+    /**
+     * @var array
+     */
+    private $data = [];
 
     /**
      * Create a new flash notifier instance.
@@ -60,7 +60,7 @@ class Alert
 
     private function push()
     {
-        $this->session->put($this->getSessionKey(), $this->message);
+        $this->session->put($this->getSessionKey(), $this->data);
     }
 
 
@@ -71,11 +71,9 @@ class Alert
      * @param  string  $title
      * @return self
      */
-    public function info(string $message, string $title = ''): self
+    public static function info(string $message, string $title = ''): self
     {
-        $this->message($message, $title, Color::INFO);
-
-        return $this;
+        return app('alert')->message($message, $title, Color::info());
     }
 
     /**
@@ -85,11 +83,9 @@ class Alert
      * @param  string  $title
      * @return self
      */
-    public function success(string $message, string $title = ''): self
+    public static function success(string $message, string $title = ''): self
     {
-        $this->message($message, $title, Color::SUCCESS);
-
-        return $this;
+        return app('alert')->message($message, $title, Color::success());
     }
 
     /**
@@ -99,11 +95,9 @@ class Alert
      * @param  string  $title
      * @return self
      */
-    public function error(string $message, string $title = ''): self
+    public static function error(string $message, string $title = ''): self
     {
-        $this->message($message, $title, Color::ERROR);
-
-        return $this;
+        return app('alert')->message($message, $title, Color::error());
     }
 
     /**
@@ -113,11 +107,9 @@ class Alert
      * @param  string  $title
      * @return self
      */
-    public function warning(string $message, string $title = ''): self
+    public static function warning(string $message, string $title = ''): self
     {
-        $this->message($message, $title, Color::WARNING);
-
-        return $this;
+        return app('alert')->message($message, $title, Color::warning());
     }
 
 
@@ -126,12 +118,13 @@ class Alert
      *
      * @param  string  $message
      * @param  string  $title
-     * @param  string  $level
+     * @param  Color|null  $level
      * @param  string  $type
      * @return self
      */
-    public function message(string $message, string $title = '', string $level = Color::INFO, string $type = ''): self
+    public function message(string $message, string $title = '', Color $level = null, string $type = ''): self
     {
+        $level = $level ? $level->getType() : (Color::info())->getType();
         $this->setType($type);
 
         $data = [
@@ -141,50 +134,41 @@ class Alert
             'title' => $title,
             'type' => $this->type
         ];
-        if ($this->type == self::TYPE_INLINE) {
-            $data = array_merge($data, ['isDismissible' => true]);
-        }
-        $this->message = $data;
+        $this->data = array_merge($this->data, $data);
+        $this->dismissible($this->type == self::TYPE_INLINE);
 
         $this->push();
         return $this;
     }
 
     /**
-     * @return self
+     * @return void
      */
-    public function typeInline(): self
+    public function typeInline(): void
     {
         $this->setType(self::TYPE_INLINE);
-        return $this;
     }
 
     /**
-     * @return self
+     * @return void
      */
-    public function typeToast(): self
+    public function typeToast(): void
     {
+        $this->dismissible(false);
         $this->setType(self::TYPE_TOAST);
-        return $this;
     }
 
-    /**
-     * @return self
-     */
-    public function typeSwal(): self
-    {
-        $this->setType(self::TYPE_SWAL);
-        return $this;
-    }
 
     /**
      * @param  string  $type
      */
     private function setType(string $type = '')
     {
-        if (in_array($type, [self::TYPE_INLINE, self::TYPE_SWAL, self::TYPE_TOAST])) {
+        if (in_array($type, [self::TYPE_INLINE, self::TYPE_TOAST])) {
             $this->type = $type;
         }
+        $this->data['type'] = $this->type;
+
         $this->push();
         return $this;
     }
@@ -196,6 +180,14 @@ class Alert
     private function getSessionKey(): string
     {
         return self::SESSION_KEY.'.'.$this->uuid;
+    }
+
+    protected function dismissible(bool $dismissible)
+    {
+        $this->data['isDismissible'] = $dismissible;
+
+        $this->push();
+        return $this;
     }
 
 

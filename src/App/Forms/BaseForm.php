@@ -17,6 +17,15 @@ abstract class BaseForm extends Form
      */
     protected $helpTextLang;
 
+    /**
+     * @param  string  $errorBag
+     * @return $this
+     */
+    public function setErrorBag(string $errorBag)
+    {
+        $this->errorBag = $errorBag;
+        return $this;
+    }
 
     abstract public function getFormFields();
 

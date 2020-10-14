@@ -6,6 +6,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -96,6 +97,14 @@ abstract class BaseController extends Controller
     protected function modelHasSoftDeletes()
     {
         return in_array(SoftDeletes::class, class_uses_recursive($this->_hydratedModel));
+    }
+
+    /**
+     * @return bool
+     */
+    protected function modelIsExportable()
+    {
+        return in_array(IsExportable::class, class_uses_recursive($this->_hydratedModel));
     }
 
 

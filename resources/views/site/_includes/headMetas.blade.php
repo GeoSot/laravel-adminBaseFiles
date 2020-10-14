@@ -24,8 +24,8 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <script type="text/javascript">
-    window.Laravel ={!! json_decode(([
+    window.Laravel =@json([
 		'csrfToken' => csrf_token(),
 		'debug' => config('app.debug'),
-	])) !!}
+	])
 </script>

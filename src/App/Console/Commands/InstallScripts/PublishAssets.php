@@ -21,6 +21,15 @@ class PublishAssets extends PublishInitialFiles
      */
     protected $description = 'Publishes all admin Js & Css Files';
 
+
+    public function handle()
+    {
+        if ($this->option('force')){
+            $this->files->cleanDirectory(public_path(config('baseAdmin.config.backEnd.assetsPath')));
+        }
+        parent::handle();
+    }
+
     /**
      * Get the view full path.
      *
@@ -34,7 +43,7 @@ class PublishAssets extends PublishInitialFiles
 
     protected function getStubDirectory()
     {
-        return Paths::filesToPublishDir('assets');
+        return Paths::rootDir('assets');
     }
 
 

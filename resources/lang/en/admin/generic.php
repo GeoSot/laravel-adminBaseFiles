@@ -109,6 +109,7 @@ return [
         'statusEnabled' => 'Enabled',
         'statusDisabled' => 'Disabled',
         'cleanFilters' => 'Clear Filters',
+        'export' => 'Export',
         'true' => 'True',
         'false' => 'False',
     ],

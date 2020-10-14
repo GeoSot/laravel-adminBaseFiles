@@ -34,7 +34,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
     {
 
         $this->replaceInFile("'engine' => null,", $this->getDatabaseChanges(), config_path('database.php'));
-        $this->replaceInFile("App\Models\User", "App\Models\Users\User", config_path('auth.php'));
+        $this->replaceInFile("App\Models\Users\User::class", "App\Models\Users\User::class", config_path('auth.php'));
 
         $this->changeValuesInfFile($this->getLaratrustValues(), config_path('laratrust.php'));
         $this->changeValuesInfFile($this->getEnvEditorValues(), config_path('env-editor.php'));
@@ -97,17 +97,21 @@ EOF;
         return chr(9);
     }
 
-    protected static function newLine()
+    protected static function newLine(int $count = 1)
     {
-        return PHP_EOL;
+        $text = '';
+        for ($i = 0; $i <= $count, $i++;) {
+            $text .= PHP_EOL;
+        }
+        return $text;
     }
 
     private function getLaratrustValues(): array
     {
         return [
-            "\App\Models\User::class" => "App\Models\Users\User::class",
-            "\App\Models\Role::class" => "App\Models\Users\UserRole::class",
-            "\App\Models\Permission::class" => "App\Models\Users\UserPermission::class",
+            "\App\Models\User::class" => config('baseAdmin.config.models.user'),
+            "\App\Models\Role::class" => config('baseAdmin.config.models.role'),
+            "\App\Models\Permission::class" => config('baseAdmin.config.models.permission'),
             "\App\Models\Team::class" => "App\Models\Users\UserTeam::class",
             "'enabled' => false" => "'enabled' => true",
             "'/home'" => "'/'",
@@ -171,7 +175,7 @@ EOF;
     {
         return [
             "'prefix'     => 'translations'" => "'prefix' => 'admin/translations'",
-            "'auth'" => "['web', 'auth']",
+            "'middleware' => 'auth'" => "'middleware' => ['web', 'auth']",
             "'delete_enabled' => true" => "'delete_enabled' => true",
             "'sort_keys'     => false" => "'sort_keys'     => true"
         ];
@@ -184,19 +188,20 @@ EOF;
 Route::get('/', function () {
     return view('welcome');
 });
-" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".PHP_EOL
+" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".self::newLine(2)
         ], base_path('routes/web.php'));
 
 
-        (new Filesystem)->append(base_path('routes/web.php'), "\Illuminate\Support\Facades\Auth::routes(config('baseAdmin.config.authActions',[]));");
     }
 
     private function tweakConfigAppFile()
     {
+        $this->replaceInFile("UTC", "Europe/Athens", config_path('app.php'));
+
         if (!Str::contains($appConfig = file_get_contents(config_path('app.php')), 'App\\Providers\\BaseAdminServiceProvider::class')) {
             file_put_contents(config_path('app.php'), str_replace(
                 "App\Providers\AppServiceProvider::class,",
-                "App\\Providers\BaseAdminServiceProvider::class,".PHP_EOL."        App\Providers\AppServiceProvider::class,",
+                "App\\Providers\BaseAdminServiceProvider::class,".self::newLine()."        App\Providers\AppServiceProvider::class,",
                 $appConfig
             ));
         }

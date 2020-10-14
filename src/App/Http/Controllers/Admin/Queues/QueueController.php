@@ -3,7 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Queues;
 
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
-use GeoSot\BaseAdmin\Facades\Alert;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;

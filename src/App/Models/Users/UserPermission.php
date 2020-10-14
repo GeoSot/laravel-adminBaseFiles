@@ -5,13 +5,16 @@ namespace GeoSot\BaseAdmin\App\Models\Users;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Laratrust\Models\LaratrustPermission;
 
 class UserPermission extends LaratrustPermission
 {
-    use HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck;
+    use HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, IsExportable, HasFactory;
+
     protected $fillable = [
         'name',
         'display_name',

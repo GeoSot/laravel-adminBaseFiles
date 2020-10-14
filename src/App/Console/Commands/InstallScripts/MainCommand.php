@@ -83,8 +83,7 @@ class MainCommand extends BaseInstallCommand
     {
         return [
             'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-//            'iniyestializeEnv' => ['baseAdmin:install:initializeEnv'],
-            'authorization' => ['ui', ['type' => 'bootstrap', '--auth']],
+            'iniyestializeEnv' => ['baseAdmin:install:initializeEnv'],  'authorization' => ['vendor:publish', ['--provider' => 'Laravel\\Fortify\\FortifyServiceProvider', '--tag' => 'config']],
             'publishConf' => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
             'publishLaratrustConf' => ['vendor:publish', ['--tag' => 'laratrust']],
             'publishEnvConf' => ['vendor:publish', ['--provider' => 'GeoSot\EnvEditor\ServiceProvider', '--tag' => 'config']],
