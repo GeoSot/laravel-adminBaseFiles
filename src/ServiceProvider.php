@@ -6,6 +6,7 @@ namespace GeoSot\BaseAdmin;
 use GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\FortifyViewsServiceProvider;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
@@ -118,8 +119,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             CustomValidationServiceProvider::class,
             BaseAdminRouteServiceProvider::class,
             CommandsProvider::class,
+            FortifyViewsServiceProvider::class
 //            ModuleServiceProvider::class,
-            CommandsProvider::class,
         ];
 
         array_map(function ($provider) {

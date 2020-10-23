@@ -1,6 +1,6 @@
 @extends($packageVariables->get('adminLayout'))
 
-@push('documentTitle') Laravel Log Viewer @endpush
+@section('documentTitle') Laravel Log Viewer @endsection
 @push('topBar')
     @include('vendor.laravel-log-viewer._buttons')
 @endpush

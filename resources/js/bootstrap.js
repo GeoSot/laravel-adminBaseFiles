@@ -29,7 +29,7 @@ require('bootstrap');
 
 $('[data-toggle="popover"]').popover();
 $('[data-toggle="tooltip"]').tooltip();
-$('[data-toggle="toast"]').toast('show');
+$('.toast').toast('show');
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that

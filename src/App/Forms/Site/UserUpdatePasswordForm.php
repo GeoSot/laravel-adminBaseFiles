@@ -1,8 +1,6 @@
 <?php
 
 namespace GeoSot\BaseAdmin\App\Forms\Site;
-use GeoSot\BaseAdmin\Helpers\Alert;
-use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class UserUpdatePasswordForm extends BaseFrontForm
 {

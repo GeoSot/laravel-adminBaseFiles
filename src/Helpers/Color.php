@@ -12,7 +12,7 @@ class Color
     public const SUCCESS = 'success';
     public const WARNING = 'warning';
     public const DEFAULT = 'default';
-    public const DANGER = 'primary';
+    public const DANGER = 'danger';
     public const PRIMARY = 'primary';
     public const SECONDARY = 'secondary';
     public const LIGHT = 'light';

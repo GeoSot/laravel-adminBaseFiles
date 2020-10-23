@@ -6,7 +6,18 @@
      * @var Collection $viewVals
      */
 @endphp
-@component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals]    ) @endcomponent
+@component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals]    )
+
+    @if ($viewVals->get('record') )
+        @slot('after')
+            <a class="btn btn-outline-info btn-sm ml-auto" target="_blank" href="{{$viewVals->get('record')->getPreviewLink()}}">
+                <span class="btn-label"><i class="fa fa-chain"></i></span>
+                @lang($viewVals->get('modelLang').'.general.view')
+            </a>
+        @endslot
+    @endif
+
+@endcomponent
 
 @section('content')
     @php($form=$viewVals->get('extraValues')->get('form'))

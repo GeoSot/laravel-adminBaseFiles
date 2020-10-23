@@ -9,7 +9,7 @@
 @php
     $nameSpace=$packageVariables->get('nameSpace');
         $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($nameSpace.$viewVals->get('modelLang').'.general.menuTitle'): __($nameSpace.'admin/generic.menu.dashboard');
-        $pushedTitle=$__env->yieldPushContent('documentTitle', $title)
+        $pushedTitle=$__env->getSection('documentTitle', $title)
 @endphp
 
 <title>{!! $pushedTitle !!} | @lang($nameSpace.'admin/app.title')</title>

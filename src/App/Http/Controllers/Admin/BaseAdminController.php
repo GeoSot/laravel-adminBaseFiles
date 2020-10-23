@@ -396,7 +396,7 @@ abstract class BaseAdminController extends BaseController
         if ($request->wantsJson()) {
             return response()->json(['record' => $record, 'msg' => $msg]);
         }
-        Alert::message($msg['msg'], $msg['title'], $msg['type'])->typeToast();
+        Alert::success($msg['msg'], $msg['title'])->typeToast();
 
         $afterSaveVal = $request->input('after_save');
 

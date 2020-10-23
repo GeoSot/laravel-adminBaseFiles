@@ -2,38 +2,25 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Auth;
 
-use GeoSot\BaseAdmin\App\Forms\Site\BaseFrontForm;
-
-class ForgotPasswordForm extends BaseFrontForm
+class ForgotPasswordForm extends AuthForm
 {
 
     public function getFormFields()
     {
-        $this->setFormOptions($this->getThisFormOptions());
 
-        $this
-            ->add('email', 'email', [
-                'rules' => 'required|email',
-                'value' => request()->input('email')
-            ])
-            ->add('forgotPass_btn', 'submit', [
-                'wrapper' => ['class' => 'form-group text-center'],
-                'attr' => ['class' => 'btn btn-outline-primary'],
-            ]);
+        $this->add('email', 'email', [
+            'rules' => 'required|email',
+            'value' => request()->input('email')
+        ]);
+        $this->addSubmitBtn('forgotPass_btn');
+
 
     }
 
-    /**
-     * @return array
-     */
-    protected function getThisFormOptions(): array
+
+    protected function actionUrl(): string
     {
-        return [
-            'method' => 'POST',
-            'url' => route('password.email'),
-            'language_name' => 'baseAdmin::auth.fields'
-        ];
+        return route('password.email');
     }
-
 
 }

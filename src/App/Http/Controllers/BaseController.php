@@ -21,6 +21,7 @@ use Spatie\Translatable\HasTranslations;
 abstract class BaseController extends Controller
 {
     use FormBuilderTrait, AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     //
     protected $_genericLangDir = 'generic';
     /* @var BaseModel $_class */
@@ -81,6 +82,11 @@ abstract class BaseController extends Controller
     protected function getLang(string $langPath, $count = 1)
     {
         return trans_choice($this->_modelsLangDir.'.'.$langPath, $count, ['num' => $count]);
+    }
+
+    protected function getBaseAdminLang(string $langPath, $count = 1)
+    {
+        return trans_choice($this->addPackagePrefix($this->_modelsLangDir).'.'.$langPath, $count, ['num' => $count]);
     }
 
     /**

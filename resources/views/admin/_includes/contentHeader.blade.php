@@ -6,7 +6,7 @@
      * @var Factory $__env
      */
 $title= ( isset($viewVals) and $viewVals->has('modelLang'))? __($viewVals->get('modelLang').'.general.menuTitle'):
-$pushedTitle=$__env->yieldPushContent('documentTitle', __($packageVariables->get('nameSpace').'admin/generic.menu.dashboard'))
+$pushedTitle=$__env->getSection('documentTitle', __($packageVariables->get('nameSpace').'admin/generic.menu.dashboard'))
 @endphp
 
 

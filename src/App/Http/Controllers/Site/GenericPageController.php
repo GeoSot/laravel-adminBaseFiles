@@ -3,15 +3,34 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
-use App\Http\Controllers\Controller;
 use App\Models\Pages\Page;
+use GeoSot\BaseAdmin\Helpers\Alert;
 
-class GenericPageController extends Controller
+class GenericPageController extends BaseFrontController
 {
+
+
+    protected $_class = Page::class;
+
+
     //
     public function show(Page $page)
     {
-        $page->load('pageAreas.blocks');
-        return view('site._includes.blockLayouts.genericPage', compact('page'));
+        if (!$page->userCanSee()) {
+            return abort(404);
+        }
+
+
+        $page->load([
+            'pageAreas' => function ($q) {
+                $q->enabled();
+            }
+        ], [
+            'pageAreas.blocks' => function ($q) {
+                $q->enabled()->active();
+            }
+        ]);
+
+        return view('baseAdmin::site.blockLayouts.genericPage', compact('page'));
     }
 }

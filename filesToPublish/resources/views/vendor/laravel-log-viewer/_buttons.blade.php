@@ -37,14 +37,13 @@
     <script defer data-comment="logActions">
         $('[data-toggle="logAction"]').click(function (e) {
             let $btn = $(this);
-            swal({
+            Swal.fire({
                 title: $btn.data('title'),
                 text: "Are you sure?",
                 icon: 'warning',
-                buttons: true,
                 // dangerMode : true,
             }).then(function (continueAction) {
-                if (continueAction) {
+                if (continueAction.isConfirmed) {
                     location.href = $btn.data('href');
                 }
             });

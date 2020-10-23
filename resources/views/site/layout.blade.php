@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite" data-layout="site">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite"
+      data-layout="site">
 <head>
     @include($packageVariables->get('blades').'site._includes.headMetas')
     <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/app.css")}}" rel="stylesheet"/>
@@ -14,11 +15,9 @@
 <div class=" d-flex flex-column justify-content-between min-vh-100">
     @includeIf($packageVariables->get('blades').'site._includes.header')
     <div id="app" class="mainWrapper  d-flex flex-column h-100  mt-4">
-        @hasSection ('documentTitle')
-            <div class="page-header   container-fluid">
-                <div class=" ">
-                    <h1 class="" itemscope itemprop="mainEntity" itemtype="http://schema.org/Thing">@yield('documentTitle')</h1>
-                </div>
+        @hasSection('documentTitle')
+            <div class="page-header container">
+                <h1 class="text-muted" itemscope itemprop="mainEntity" itemtype="http://schema.org/Thing">@yield('documentTitle')</h1>
             </div>
         @endif
         <div id="topBar" class="container">
@@ -48,7 +47,7 @@
 </div>
 
 <span class="js-scripts">
-     <script  src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/app.js")}}"></script>
+     <script src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/app.js")}}"></script>
     @foreach(config('baseAdmin.config.site.extraJs') as $file)
         <script defer src="{{mix($file)}}"></script>
     @endforeach

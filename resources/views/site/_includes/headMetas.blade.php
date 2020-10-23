@@ -11,8 +11,12 @@
 {{--<meta name="theme-color" content="#309CC0">--}}
 
 @php
-    $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.general.menuTitle'): __($packageVariables->get('nameSpace').'site/generic.app.title');
-    $pushedTitle=$__env->yieldPushContent('documentTitle', $title)
+    /**
+     * @var \Illuminate\View\Factory $__env
+     */
+
+        $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($packageVariables->get('nameSpace').$viewVals->get('modelLang').'.general.menuTitle'): __($packageVariables->get('nameSpace').'site/generic.app.title');
+        $pushedTitle=$__env->getSection('documentTitle', $title);
 @endphp
 
 <title>{!! strip_tags( $pushedTitle) !!} | @lang($packageVariables->get('nameSpace').'site/app.title')</title>

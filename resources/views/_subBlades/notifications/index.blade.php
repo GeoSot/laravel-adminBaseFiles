@@ -12,7 +12,7 @@
         </div>
     @endif
     @if ( Session::has(\GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY))
-        @php $toasts=false @endphp
+
         @foreach(Session::get(GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY) as $alert)
             @php
                 $alertType=\Illuminate\Support\Arr::get($alert,'type', false);
@@ -24,27 +24,23 @@
                              ]
             @endphp
 
-            @if( $alertType== \GeoSot\BaseAdmin\Helpers\Alert::TYPE_INLINE)
+            @switch($alertType)
+                @case(\GeoSot\BaseAdmin\Helpers\Alert::TYPE_SWEET_ALERT)
+                @include($packageVariables->get('blades').'_subBlades.notifications.swal',$alertData)
+                @break
+
+                @case(\GeoSot\BaseAdmin\Helpers\Alert::TYPE_INLINE)
                 @include($packageVariables->get('blades').'_subBlades.notifications.inline',$alertData)
-            @else
-                    @php $toasts=true @endphp
-                @push('toasts')
-                    @include($packageVariables->get('blades').'_subBlades.notifications.toast',$alertData)
-                @endpush
-            @endif
+                @break
+
+                @default
+                @include($packageVariables->get('blades').'_subBlades.notifications.toast',$alertData)
+            @endswitch
+
+
         @endforeach
 
 
-
-        @if($toasts)
-            @push('scripts')
-                <script>
-                    window.jQueryHelper.execute(function ($) {
-                        $('.toast').toast('show')
-                    })
-                </script>
-            @endpush
-        @endif
         {{  Session::forget(GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY)}}
     @endif
 

@@ -3,18 +3,16 @@
 namespace GeoSot\BaseAdmin\App\Forms\Auth;
 
 
-use GeoSot\BaseAdmin\App\Forms\Site\BaseFrontForm;
-
-class ResetPasswordForm extends BaseFrontForm
+class ResetPasswordForm extends AuthForm
 {
 
 
     public function getFormFields()
     {
 
-        $emailDefault=request()->input('email');
-        $token=request()->input('token');
-        return $this->setFormOptions($this->getThisFormOptions())
+        $emailDefault = request()->input('email');
+        $token = request()->input('token');
+        $this
             ->add('token', 'hidden', ['value' => $token])
             ->add('email', 'email', [
                 'value' => $emailDefault,
@@ -26,24 +24,16 @@ class ResetPasswordForm extends BaseFrontForm
             ])
             ->add('password_confirmation', 'password', [
                 'rules' => 'required'
-            ])
-            ->add('resetPass_btn', 'submit', [
-                'wrapper' => ['class' => 'form-group text-center'],
-                'attr' => ['class' => 'btn btn-outline-primary'],
             ]);
+
+        $this->addSubmitBtn('resetPass_btn');
+
 
     }
 
-    /**
-     * @return array
-     */
-    protected function getThisFormOptions(): array
+    protected function actionUrl(): string
     {
-        return [
-            'method' => 'POST',
-            'url' => route('password.update'),
-            'language_name' => 'baseAdmin::auth.fields'
-        ];
+        return route('password.update');
     }
 
 }

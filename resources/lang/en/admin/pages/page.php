@@ -4,6 +4,10 @@ return [
         'menuTitle' => 'Pages',
         'singular' => 'Page',
         'plural' => 'Pages',
+        'view' => 'View Page',
+        'isPreviewMsg' => 'You see only a preview of this page. visitors Cannot see this',
+        'createNewArea' => 'Create new Content Area',
+        'createNewBlock' => 'Create new Page Block',
     ],
     'fields' => [
         'id' => 'ID',

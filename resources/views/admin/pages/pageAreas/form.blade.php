@@ -7,7 +7,14 @@
      */
 @endphp
 
-@component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals]    ) @endcomponent
+@component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals] )
+    @if ($viewVals->get('record') )
+        @slot('after')
+           {!!  $viewVals->get('record')->page->getDashBoardLink(__($viewVals->get('modelLang').'.general.pageLink'),false,['class'=>'ml-auto btn btn-sm btn-outline-admin']) !!}
+        @endslot
+    @endif
+
+@endcomponent
 
 @section('content')
     @php($form=$viewVals->get('extraValues')->get('form'))

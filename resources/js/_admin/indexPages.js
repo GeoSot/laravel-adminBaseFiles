@@ -18,10 +18,9 @@ BaseAdmin.listingActions = {
             title: $('#confirm_' + keyword).text(),
             text: $('#confirm_' + keyword + '_msg').text(),
             icon: 'warning',
-            buttons: true,
             //dangerMode : true,
         }).then(function (continueAction) {
-            if (continueAction.value) {
+            if (continueAction.isConfirmed) {
                 BaseAdmin.makeAjax(url, type, data, show_message, callback);
             }
         });

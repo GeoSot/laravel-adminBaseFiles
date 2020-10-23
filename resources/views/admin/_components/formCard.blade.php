@@ -9,14 +9,18 @@
         </span>
         </div>
     @endisset
-    @isset($title)
-        <div class="collapse @if(!isset($show) or $show==true) show @endif" id="{{$randId}}">
-            @endisset
+
+    <div class="collapse @if($show??true) show @endif @if(!isset($title)) show @endif" id="{{$randId}}">
+        @isset($slot)
             <div class="card-body">
                 {!! $slot !!}
             </div>
-            @isset($title)
-        </div>
-    @endisset
+        @endisset
+        @isset($footer)
+            <div class="card-footer d-flex flex-wrap">
+                {!! $footer !!}
+            </div>
+        @endisset
+    </div>
 </div>
 <!--com_formCard.blade end-->

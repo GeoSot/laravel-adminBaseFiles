@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
+use Illuminate\Contracts\Support\Renderable;
 use Spatie\Translatable\HasTranslations;
 
 
@@ -31,8 +32,8 @@ class PageArea extends BaseModel
         'enabled',
         'user_id',
         'modified_by',
-
     ];
+    protected $appends = ['background_image'];
 
     protected $casts = [
         'enabled' => 'boolean',
@@ -57,6 +58,12 @@ class PageArea extends BaseModel
     {
         return ['slug' => ['source' => 'en.title']];
     }
+
+    public function getBackgroundImageAttribute()
+    {
+        return $this->images()->first();
+    }
+
 
 
     /*

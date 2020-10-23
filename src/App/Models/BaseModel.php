@@ -22,5 +22,5 @@ use Illuminate\Database\Eloquent\Model;
  * */
 abstract class BaseModel extends Model
 {
-    use EnabledDisabled, OwnedBy, ModifiedBy, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Encryptable, HasFactory,IsExportable;
+    use EnabledDisabled, OwnedBy, ModifiedBy, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Encryptable, HasFactory, IsExportable;
 }

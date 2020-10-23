@@ -130,6 +130,8 @@ trait HasFrontEndConfigs
             return $key.'="'.$value.'"';
         }, array_keys($options), $options);
 
-        return '<a  href="'.route($this->getFrontEndConfigPrefixed($side, 'route').'.edit', $this).'" '.implode('   ', $flatClasses).'>'.$text.'</a>';
+        $action = $this->exists ? 'edit' : 'create';
+        return '<a  href="'.route($this->getFrontEndConfigPrefixed($side, 'route').".{$action}", $this).'" '.implode('   ', $flatClasses).'>'.$text.'</a>';
     }
+
 }

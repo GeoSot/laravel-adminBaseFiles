@@ -14,7 +14,7 @@ class PageForm extends BaseAdminForm
     {
         $this->addCheckBox('enabled');
         $this->add('title', 'text');
-//        $this->add('sub_title', 'text');
+        $this->add('sub_title', 'text');
         $this->add('parent_id', 'entity', [
             'class' => Page::class,
             'property' => 'slug',

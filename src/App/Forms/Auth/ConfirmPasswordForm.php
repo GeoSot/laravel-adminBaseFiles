@@ -2,36 +2,24 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Auth;
 
-use GeoSot\BaseAdmin\App\Forms\Site\BaseFrontForm;
 
-class ConfirmPasswordForm extends BaseFrontForm
+class ConfirmPasswordForm extends AuthForm
 {
 
     public function getFormFields()
     {
-        $this->setFormOptions($this->getThisFormOptions());
 
-        $this
-            ->add('password', 'password', [
-                'rules' => 'required',
-            ])
-            ->add('confirm_btn', 'submit', [
-                'wrapper' => ['class' => 'form-group text-center'],
-                'attr' => ['class' => 'btn btn-outline-primary'],
-            ]);
+        $this->add('password', 'password', [
+            'rules' => 'required',
+        ]);
+        $this->addSubmitBtn('confirm_btn');
 
     }
 
-    /**
-     * @return array
-     */
-    protected function getThisFormOptions(): array
+
+    protected function actionUrl(): string
     {
-        return [
-            'method' => 'POST',
-            'url' => route('password.confirm'),
-            'language_name' => 'baseAdmin::auth.fields'
-        ];
+        return route('password.confirm');
     }
 
 

@@ -1,8 +1,8 @@
 @extends($packageVariables->get('adminLayout'))
 
-@push('documentTitle')
+@section('documentTitle')
     Translation Manager
-@endpush
+@endsection
 
 @include('translation-manager::_notifications')
 @section('content')

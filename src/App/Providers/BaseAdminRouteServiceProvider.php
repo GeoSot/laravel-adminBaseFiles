@@ -194,12 +194,12 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
             });
 
             $this->getRouter()->get('{page}', function ($page) {
-                $pg = Page::whereSlug($page);
+                $pg = Page::where('slug', $page);
                 if ($pg->exists()) {
                     return App::call('App\Http\Controllers\Site\GenericPageController@show', ['page' => $pg->first()]);
                 }
                 return abort(404);
-            })->name('pages.index');
+            })->name('pages');
 
         });
 

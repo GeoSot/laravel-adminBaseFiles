@@ -19,8 +19,10 @@ use Illuminate\Support\Str;
 class Alert
 {
 
+    public const AUTO_HIDE_TIME = 1500;
     public const TYPE_INLINE = 'inline';
     public const TYPE_TOAST = 'toast';
+    public const TYPE_SWEET_ALERT = 'sweet_alert';
 
     public const  SESSION_KEY = 'alertMessages';
 
@@ -135,7 +137,6 @@ class Alert
             'type' => $this->type
         ];
         $this->data = array_merge($this->data, $data);
-        $this->dismissible($this->type == self::TYPE_INLINE);
 
         $this->push();
         return $this;
@@ -149,12 +150,20 @@ class Alert
         $this->setType(self::TYPE_INLINE);
     }
 
+
+    /**
+     * @return void
+     */
+    public function typeSwal(): void
+    {
+        $this->setType(self::TYPE_SWEET_ALERT);
+    }
+
     /**
      * @return void
      */
     public function typeToast(): void
     {
-        $this->dismissible(false);
         $this->setType(self::TYPE_TOAST);
     }
 
@@ -164,9 +173,10 @@ class Alert
      */
     private function setType(string $type = '')
     {
-        if (in_array($type, [self::TYPE_INLINE, self::TYPE_TOAST])) {
+        if (in_array($type, [self::TYPE_INLINE, self::TYPE_TOAST, self::TYPE_SWEET_ALERT])) {
             $this->type = $type;
         }
+        $this->dismissible($type !== self::TYPE_TOAST);
         $this->data['type'] = $this->type;
 
         $this->push();

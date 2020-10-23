@@ -1,7 +1,8 @@
 <?php
 
 namespace GeoSot\BaseAdmin\App\Forms\Site;
-use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class UserProfileForm extends BaseFrontForm
 {
@@ -13,7 +14,7 @@ class UserProfileForm extends BaseFrontForm
         $this->add('preferred_lang', 'select', [
             'choices' => array_map(function ($el) {
                 return $el['native'];
-            },  LaravelLocalization::getSupportedLocales()),
+            }, LaravelLocalization::getSupportedLocales()),
             'empty_value' => $this->getSelectEmptyValueLabel(),
         ]);
 

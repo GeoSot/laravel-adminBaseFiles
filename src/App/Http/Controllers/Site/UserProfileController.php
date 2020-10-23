@@ -8,6 +8,7 @@ use App\Models\Users\User;
 use GeoSot\BaseAdmin\App\Forms\Site\UserProfileForm;
 use GeoSot\BaseAdmin\App\Forms\Site\UserUpdatePasswordForm;
 use Illuminate\Http\Response;
+use Laravel\Fortify\Features;
 
 class UserProfileController extends BaseFrontController
 {
@@ -26,8 +27,17 @@ class UserProfileController extends BaseFrontController
 
         /** @var User $user */
         $user = auth()->user();
-        $form = $this->makeForm(UserProfileForm::class, $user)->setErrorBag('updateProfileInformation');
-        $form2 = $this->makeForm(UserUpdatePasswordForm::class, $user)->setErrorBag('updatePassword');
+        $form = null;
+        $form2 = null;
+
+        if (Features::enabled(Features::updateProfileInformation())) {
+            $form = $this->makeForm(UserProfileForm::class, $user)->setErrorBag('updateProfileInformation');
+        }
+        if (Features::enabled(Features::updatePasswords())) {
+            $form2 = $this->makeForm(UserUpdatePasswordForm::class, $user)->setErrorBag('updatePassword');
+        }
+
+
         $roles = $user->roles()->where('front_users_can_see', true)->get();
 
         $extraValues = collect(compact('form', 'form2', 'roles'));
