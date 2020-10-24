@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Spatie\Translatable\HasTranslations;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 abstract class BaseController extends Controller
 {
@@ -94,7 +95,7 @@ abstract class BaseController extends Controller
      */
     protected function modelIsTranslatable()
     {
-        return in_array(HasTranslations::class, class_uses_recursive($this->_hydratedModel));
+        return $this->usesTrait(HasTranslations::class);
     }
 
     /**
@@ -102,7 +103,15 @@ abstract class BaseController extends Controller
      */
     protected function modelHasSoftDeletes()
     {
-        return in_array(SoftDeletes::class, class_uses_recursive($this->_hydratedModel));
+        return $this->usesTrait(SoftDeletes::class);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function modelIsRevisionable()
+    {
+        return $this->usesTrait(RevisionableTrait::class);
     }
 
     /**
@@ -110,7 +119,16 @@ abstract class BaseController extends Controller
      */
     protected function modelIsExportable()
     {
-        return in_array(IsExportable::class, class_uses_recursive($this->_hydratedModel));
+        return $this->usesTrait(IsExportable::class);
+    }
+
+    /**
+     * @param  string  $trait
+     * @return bool
+     */
+    protected function usesTrait(string $trait)
+    {
+        return in_array($trait, class_uses_recursive($this->_hydratedModel));
     }
 
 

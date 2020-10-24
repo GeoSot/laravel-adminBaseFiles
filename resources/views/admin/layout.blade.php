@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}"  data-layout="admin">
 <head>
-
-    @include($packageVariables->get('blades').'admin._includes.headMetas')
+    <meta name="robots" content="noindex, nofollow">
+    @include($packageVariables->get('blades').'_subBlades.headMetas')
     <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/admin.css")}}" rel="stylesheet"/>
     @foreach(config('baseAdmin.config.backEnd.extraCss') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>

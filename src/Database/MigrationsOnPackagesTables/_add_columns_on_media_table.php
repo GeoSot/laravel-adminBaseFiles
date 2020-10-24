@@ -15,16 +15,10 @@ class AddColumnsOnMediaTable extends Migration
     {
         Schema::table('media', function (Blueprint $table) {
             $table->boolean('the_file_exists')->default(true);
-            $table->string('thumb')->nullable();
-            $table->text('custom_properties')->nullable();
 
             $table->string('title')->nullable();
-            $table->string('notes')->nullable();
             $table->string('alt_attribute')->nullable();
             $table->string('keywords')->nullable();
-
-            //--Default
-            $table->foreignId('modified_by')->nullable();
 
         });
 
@@ -40,7 +34,7 @@ class AddColumnsOnMediaTable extends Migration
     public function down()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->dropColumn(['the_file_exists', 'thumb', 'custom_properties', 'title', 'description', 'alt_attribute', 'keywords', 'modified_by']);
+            $table->dropColumn(['the_file_exists', 'title', 'alt_attribute', 'keywords',]);
 
         });
 

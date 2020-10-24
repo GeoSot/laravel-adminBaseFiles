@@ -191,6 +191,7 @@ abstract class BaseAdminController extends BaseController
                 'modelHasSoftDeletes' => $this->modelHasSoftDeletes(),
                 'modelIsExportable' => $this->modelIsExportable(),
                 'modelIsTranslatable' => $this->modelIsTranslatable(),
+                'modelIsRevisionable' => $this->modelIsRevisionable(),
                 'modelTraits' => Arr::sortRecursive(array_flip(array_map(function ($i) {
                     return class_basename($i);
                 }, class_uses_recursive($this->_class)))),

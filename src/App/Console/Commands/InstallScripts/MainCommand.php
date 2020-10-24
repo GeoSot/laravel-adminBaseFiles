@@ -81,9 +81,11 @@ class MainCommand extends BaseInstallCommand
      */
     protected function getInstallScripts(): array
     {
+
         return [
             'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-            'iniyestializeEnv' => ['baseAdmin:install:initializeEnv'],  'authorization' => ['vendor:publish', ['--provider' => 'Laravel\\Fortify\\FortifyServiceProvider', '--tag' => 'config']],
+            'iniyestializeEnv' => ['baseAdmin:install:initializeEnv'],
+            'authorization' => ['vendor:publish', ['--provider' => 'Laravel\\Fortify\\FortifyServiceProvider', '--tag' => 'config']],
             'publishConf' => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
             'publishLaratrustConf' => ['vendor:publish', ['--tag' => 'laratrust']],
             'publishEnvConf' => ['vendor:publish', ['--provider' => 'GeoSot\EnvEditor\ServiceProvider', '--tag' => 'config']],
@@ -93,7 +95,8 @@ class MainCommand extends BaseInstallCommand
             'publishTranslatableConf' => ['vendor:publish', ['--provider' => 'Spatie\Translatable\TranslatableServiceProvider', '--tag' => 'config']],
             'publishLocalizationConf' => ['vendor:publish', ['--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider', '--tag' => 'config']],
             'publishTranslationManagerConf' => ['vendor:publish', ['--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider', '--tag' => 'config']],
-
+            'publishRevisionableConf' => ['vendor:publish', ['--provider' => 'Venturecraft\Revisionable\RevisionableServiceProvider']],
+//            'publishChunkUploadConf' => ['vendor:publish', ['--provider' => 'Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider']],
 
 
             /*   'publishTranslationMigrations' => [

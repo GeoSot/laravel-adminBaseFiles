@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
 use App\Models\Pages\Page;
-use GeoSot\BaseAdmin\Helpers\Alert;
 
 class GenericPageController extends BaseFrontController
 {
@@ -21,7 +20,7 @@ class GenericPageController extends BaseFrontController
         }
 
 
-        $page->load([
+        $page->with([
             'pageAreas' => function ($q) {
                 $q->enabled();
             }

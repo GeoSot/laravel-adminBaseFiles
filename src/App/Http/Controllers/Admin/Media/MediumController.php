@@ -39,4 +39,11 @@ class MediumController extends BaseAdminController
 
         return array_merge(parent::listFields(), $neFields);
     }
+
+    public function tusUpload(Request $request)
+    {
+
+    }
+
+
 }

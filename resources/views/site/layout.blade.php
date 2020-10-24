@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite"
       data-layout="site">
 <head>
-    @include($packageVariables->get('blades').'site._includes.headMetas')
+    @include($packageVariables->get('blades').'_subBlades.headMetas')
     <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/app.css")}}" rel="stylesheet"/>
     @foreach(config('baseAdmin.config.site.extraJs') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>

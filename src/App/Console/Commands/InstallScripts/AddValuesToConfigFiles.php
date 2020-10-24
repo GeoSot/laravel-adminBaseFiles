@@ -97,15 +97,6 @@ EOF;
         return chr(9);
     }
 
-    protected static function newLine(int $count = 1)
-    {
-        $text = '';
-        for ($i = 0; $i <= $count, $i++;) {
-            $text .= PHP_EOL;
-        }
-        return $text;
-    }
-
     private function getLaratrustValues(): array
     {
         return [

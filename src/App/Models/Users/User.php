@@ -20,13 +20,16 @@ use Illuminate\Support\Facades\Hash;
 use Lab404\Impersonate\Models\Impersonate;
 use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Passport\HasApiTokens;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
 
-    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate, HasFactory, IsExportable;
+    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel;
+    use HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate, HasFactory, IsExportable, RevisionableTrait;
 
+    protected $dontKeepRevisionOf = ['modified_by'];
     /**
      * The attributes that are mass assignable.
      *

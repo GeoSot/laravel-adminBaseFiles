@@ -78,6 +78,7 @@ return [
     'button' => [
         'cancel' => 'Cancel',
         'change' => 'Change',
+        'close' => 'Close',
         'clearFilters' => 'Clear filters',
         'clearExtraFilters' => 'Clear extra filters',
         'create' => 'Create',
@@ -90,6 +91,7 @@ return [
         'permDelete' => 'Delete Permanently',
         'remove' => 'Remove',
         'restore' => 'Restore',
+        'revisions' => 'History',
         'save' => 'Save',
         'saveAndClose' => 'Save & Close',
         'saveAndNew' => 'Save & New',
@@ -143,6 +145,16 @@ return [
         'relatedSettings' => 'Settings Related to this',
         'advancedSettings' => 'Advanced Settings',
         'formSelectPlaceHolder' => '- - Choose - -'
+    ],
+    'revisions'=>[
+        'restore'=>'Restore',
+        'title'=>'Revision History',
+        'noHistoryRecords'=>'No History Records',
+        'label'=>'Field',
+        'oldValue'=>'Old value',
+        'newValue'=>'New value',
+        'user'=>'User',
+        'changedAt'=>'Changed date',
     ]
 
 

@@ -100,6 +100,10 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      */
     private function loadBackendRoutes()
     {
+
+        Route::any('/tus/{any?}','Media\MediumController@tusUpload')->where('any', '.*')->name('media.tusUpload');
+        Route::post('restore/{revision}','RestoreController@restore')->name('restore');
+
         Route::impersonate();
         $this->getRouter()->get('log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs.index');
         $this->getRouter()->get('', 'DashboardController@index')->name('dashboard')->middleware(['permission:admin.*']);
@@ -194,9 +198,9 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
             });
 
             $this->getRouter()->get('{page}', function ($page) {
-                $pg = Page::where('slug', $page);
-                if ($pg->exists()) {
-                    return App::call('App\Http\Controllers\Site\GenericPageController@show', ['page' => $pg->first()]);
+                $pg = Page::where('slug', $page)->first();
+                if ($pg) {
+                    return App::call('App\Http\Controllers\Site\GenericPageController@show', ['page' => $pg]);
                 }
                 return abort(404);
             })->name('pages');
