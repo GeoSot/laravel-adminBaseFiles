@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Spatie\Translatable\HasTranslations;
 
-
 class PageBlock extends BaseModel
 {
-    use Sluggable, HasTranslations, HasMedia;
+    use Sluggable;
+    use HasTranslations;
+    use HasMedia;
 
     public $translatable = ['title', 'sub_title', 'notes'];
 
@@ -38,23 +39,22 @@ class PageBlock extends BaseModel
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'enabled'             => 'boolean',
         'has_multiple_images' => 'boolean',
-        'starts_at' => 'datetime:d/m/Y',
-        'expires_at' => 'datetime:d/m/Y',
-        'order' => 'integer',
+        'starts_at'           => 'datetime:d/m/Y',
+        'expires_at'          => 'datetime:d/m/Y',
+        'order'               => 'integer',
     ];
-
 
     protected function rules(array $merge = [])
     {
-        $rules = ['slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),]];
+        $rules = ['slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate()]];
         if (!is_null($this->getKey())) {
             $rules = array_merge($rules, ['layout' => ['required']]);
         }
+
         return array_merge($rules, $merge, $this->rules);
     }
-
 
     /**
      * Return the sluggable configuration array for this model.
@@ -66,12 +66,10 @@ class PageBlock extends BaseModel
         return ['slug' => ['source' => 'en.title']];
     }
 
-
     public function scopeActive(Builder $builder)
     {
         return $builder->where('expires_at', '>', Carbon::now())->where('starts_at', '<', Carbon::now());
     }
-
 
     /*
     *
@@ -89,12 +87,10 @@ class PageBlock extends BaseModel
         return $this->belongsTo(\App\Models\Pages\PageArea::class);
     }
 
-
     //*********  M E T H O D S  ***************
 
     public function hasOneImage()
     {
         return !$this->has_multiple_images;
     }
-
 }

@@ -21,7 +21,6 @@ class InitializeEnv extends BaseInstallCommand
      */
     protected $description = 'Command description';
 
-
     protected $envValuesToSet = [
         'APP_NAME'          => 'Application Name',
         'APP_URL'           => 'Application Url (Include http(s)://)',
@@ -38,7 +37,6 @@ class InitializeEnv extends BaseInstallCommand
         'MAIL_FROM_ADDRESS' => 'Mail Address',
         'MAIL_FROM_NAME'    => 'Mail "From Name"',
     ];
-
 
     /**
      *  Execute the console command.
@@ -57,30 +55,31 @@ class InitializeEnv extends BaseInstallCommand
         $env = new EnvEditor();
 
         foreach ($this->envValuesToSet as $key => $text) {
-            $value = $this->ask('Set the ' . $text, env($key));
+            $value = $this->ask('Set the '.$text, env($key));
             $group = explode('_', $key, 2)[0];
             $env->keyExists($key) ? $env->editKey($key, $value) : $env->addKey($key, $value, ['group' => $group]);
-
         }
         $this->databaseConnectionIsValid();
+
         return true;
     }
 
     /**
      * Is the database connection valid?
+     *
      * @return bool
      */
     protected function databaseConnectionIsValid()
     {
         $dbName = DB::connection()->getDatabaseName();
+
         try {
             DB::connection()->reconnect(env('DB_DATABASE'));
-            $this->info("Connected successfully to Database: " . $dbName);
+            $this->info('Connected successfully to Database: '.$dbName);
 
             return true;
-
         } catch (\Exception $e) {
-            $this->error("Check Database Settings. App couldn't connect to Database: " . $dbName);
+            $this->error("Check Database Settings. App couldn't connect to Database: ".$dbName);
 
             return false;
         }

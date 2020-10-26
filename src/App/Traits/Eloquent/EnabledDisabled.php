@@ -15,7 +15,7 @@ trait EnabledDisabled
     }
 
     /**
-     * @param  Builder  $builder
+     * @param Builder $builder
      *
      * @return Builder
      */
@@ -25,7 +25,7 @@ trait EnabledDisabled
     }
 
     /**
-     * @param  Builder  $builder
+     * @param Builder $builder
      *
      * @return Builder
      */

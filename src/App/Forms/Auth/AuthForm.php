@@ -6,7 +6,6 @@ use GeoSot\BaseAdmin\App\Forms\Site\BaseFrontForm;
 
 abstract class AuthForm extends BaseFrontForm
 {
-
     protected function initializeValues(): void
     {
         parent::initializeValues();
@@ -17,7 +16,7 @@ abstract class AuthForm extends BaseFrontForm
     {
         $this->add($name, 'submit', [
             'wrapper' => ['class' => 'form-group text-center'],
-            'attr' => ['class' => 'btn btn-outline-primary'],
+            'attr'    => ['class' => 'btn btn-outline-primary'],
         ]);
     }
 
@@ -29,10 +28,9 @@ abstract class AuthForm extends BaseFrontForm
     protected function getThisFormOptions(): array
     {
         return [
-            'method' => 'POST',
-            'url' => $this->actionUrl(),
-            'language_name' => 'baseAdmin::auth.fields'
+            'method'        => 'POST',
+            'url'           => $this->actionUrl(),
+            'language_name' => 'baseAdmin::auth.fields',
         ];
     }
-
 }

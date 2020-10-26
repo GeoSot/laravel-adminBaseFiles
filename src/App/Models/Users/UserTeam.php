@@ -12,7 +12,12 @@ use Laratrust\Models\LaratrustTeam;
 
 class UserTeam extends LaratrustTeam
 {
-    use HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Sluggable, IsExportable, HasFactory;
+    use HasRulesOnModel;
+    use HasFrontEndConfigs;
+    use HasAllowedToHandleCheck;
+    use Sluggable;
+    use IsExportable;
+    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -20,25 +25,23 @@ class UserTeam extends LaratrustTeam
         'description',
     ];
 
-
 //    public function getRouteKeyName()
 //    {
 //        return 'name';
 //    }
 
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  array  $merge
+     * @param array $merge
      *
      * @return array
      */
     protected function rules(array $merge = [])
     {
-
         return array_merge([
-            'name' => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
-            "display_name" => "required",
+            'name'         => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
+            'display_name' => 'required',
         ], $merge);
     }
 
@@ -51,6 +54,4 @@ class UserTeam extends LaratrustTeam
     {
         return ['name' => ['source' => 'display_name']];
     }
-
-
 }

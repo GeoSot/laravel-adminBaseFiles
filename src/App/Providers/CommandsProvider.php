@@ -2,19 +2,17 @@
 
 namespace GeoSot\BaseAdmin\App\Providers;
 
-
-use GeoSot\BaseAdmin\App\Console\Commands\{CreateAdminBaseFromFile,
-    InstallScripts\AddValuesToConfigFiles,
-    InstallScripts\InitializeEnv,
-    InstallScripts\MainCommand,
-    InstallScripts\PublishAssets,
-    InstallScripts\PublishInitialFiles,
-    MakeAdminController,
-    MakeAdminPermissions,
-    MakeLanguage,
-    MakeModel,
-    MakeView,
-};
+use GeoSot\BaseAdmin\App\Console\Commands\CreateAdminBaseFromFile;
+use GeoSot\BaseAdmin\App\Console\Commands\InstallScripts\AddValuesToConfigFiles;
+use GeoSot\BaseAdmin\App\Console\Commands\InstallScripts\InitializeEnv;
+use GeoSot\BaseAdmin\App\Console\Commands\InstallScripts\MainCommand;
+use GeoSot\BaseAdmin\App\Console\Commands\InstallScripts\PublishAssets;
+use GeoSot\BaseAdmin\App\Console\Commands\InstallScripts\PublishInitialFiles;
+use GeoSot\BaseAdmin\App\Console\Commands\MakeAdminController;
+use GeoSot\BaseAdmin\App\Console\Commands\MakeAdminPermissions;
+use GeoSot\BaseAdmin\App\Console\Commands\MakeLanguage;
+use GeoSot\BaseAdmin\App\Console\Commands\MakeModel;
+use GeoSot\BaseAdmin\App\Console\Commands\MakeView;
 use Illuminate\Support\ServiceProvider;
 
 class CommandsProvider extends ServiceProvider
@@ -26,7 +24,6 @@ class CommandsProvider extends ServiceProvider
      */
     public function boot()
     {
-
         if ($this->app->runningInConsole()) {
             $this->registerConsoleCommands();
             $this->registerInstallCommands();
@@ -45,7 +42,7 @@ class CommandsProvider extends ServiceProvider
     }
 
     /**
-     * Register Package Console Commands
+     * Register Package Console Commands.
      */
     private function registerConsoleCommands()
     {
@@ -69,5 +66,4 @@ class CommandsProvider extends ServiceProvider
             AddValuesToConfigFiles::class,
         ]);
     }
-
 }

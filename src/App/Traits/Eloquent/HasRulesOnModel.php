@@ -1,6 +1,5 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 use Illuminate\Support\Arr;
@@ -9,12 +8,11 @@ use Spatie\Translatable\HasTranslations;
 
 trait HasRulesOnModel
 {
-
     protected $rules = [];
     protected $errorMessages = [];
 
     /**
-     * @param  array  $mergeRules
+     * @param array $mergeRules
      *
      * @return array
      */
@@ -24,7 +22,8 @@ trait HasRulesOnModel
     }
 
     /**
-     * @param  array  $mergeMessages  *
+     * @param array $mergeMessages *
+     *
      * @return array
      */
     final public function getErrorMessages(array $mergeMessages = [])
@@ -33,8 +32,8 @@ trait HasRulesOnModel
     }
 
     /**
-     * @param  string|null  $langPrefix
-     * @param  array  $mergeMessages
+     * @param string|null $langPrefix
+     * @param array       $mergeMessages
      *
      * @return array
      */
@@ -49,11 +48,10 @@ trait HasRulesOnModel
         return $array;
     }
 
-
     /**
-     * Get rule by field name
+     * Get rule by field name.
      *
-     * @param  string  $field
+     * @param string $field
      *
      * @return array
      */
@@ -62,11 +60,10 @@ trait HasRulesOnModel
         return Arr::get($this->getRules(), $this->fieldNameToDot($field), []);
     }
 
-
     /**
-     * Get rule by field name
+     * Get rule by field name.
      *
-     * @param  string  $field
+     * @param string $field
      *
      * @return array
      */
@@ -74,11 +71,12 @@ trait HasRulesOnModel
     {
         $messages = $this->getErrorMessages();
         $fieldName = $this->fieldNameToDot($field);
+
         return isset($messages[$fieldName]) ? Arr::dot([$fieldName => $messages[$fieldName]]) : [];
     }
 
     /**
-     * Get rule with custom error messages by field name
+     * Get rule with custom error messages by field name.
      *
      * @param $field
      *
@@ -90,17 +88,16 @@ trait HasRulesOnModel
     }
 
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  string  $attr
+     * @param string $attr
      *
      * @return string
      */
     final protected function getIgnoreTextOnUpdate(string $attr = 'id')
     {
-        return (is_null($this->{$attr}) ? '' : ','.$this->{$attr});
+        return is_null($this->{$attr}) ? '' : ','.$this->{$attr};
     }
-
 
     private function prepareTranslatedRulesOrMessages(array $arrayValues)
     {
@@ -117,12 +114,10 @@ trait HasRulesOnModel
                 }
                 Arr::forget($arrayValues, $attribute);
             }
-
         }
 
         return $arrayValues;
     }
-
 
     /**
      * @return array
@@ -132,11 +127,10 @@ trait HasRulesOnModel
         return LaravelLocalization::getSupportedLocales();
     }
 
-
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  array  $merge
+     * @param array $merge
      *
      * @return array
      */
@@ -146,9 +140,9 @@ trait HasRulesOnModel
     }
 
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  array  $merge
+     * @param array $merge
      *
      * @return array
      */
@@ -157,9 +151,8 @@ trait HasRulesOnModel
         return array_merge($this->errorMessages, $merge);
     }
 
-
     /**
-     * @param  string  $field
+     * @param string $field
      *
      * @return string
      */

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Controller;
-
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -10,8 +8,6 @@ use Illuminate\Support\Collection;
 
 trait HasActionHooks
 {
-
-
     protected function beforeFilteringIndex(Request &$request, Collection &$params, Collection &$extraOptions)
     {
         //
@@ -46,5 +42,4 @@ trait HasActionHooks
     {
         //
     }
-
 }

@@ -2,14 +2,13 @@
 
 namespace GeoSot\BaseAdmin\Helpers;
 
-
 class Paths
 {
-
-
     /**
-     * Return Directory path
-     * @param  string  $path
+     * Return Directory path.
+     *
+     * @param string $path
+     *
      * @return string
      */
     public static function srcDir(string $path = '')
@@ -20,18 +19,22 @@ class Paths
     }
 
     /**
-     * Return Directory path
-     * @param  string  $path
+     * Return Directory path.
+     *
+     * @param string $path
+     *
      * @return string
      */
     public static function rootDir(string $path = '')
     {
-        return self::srcDir("..".self::sanitizePath($path));
+        return self::srcDir('..'.self::sanitizePath($path));
     }
 
     /**
-     * Return Directory path
-     * @param  string  $path
+     * Return Directory path.
+     *
+     * @param string $path
+     *
      * @return string
      */
     public static function filesToPublishDir(string $path = '')
@@ -40,8 +43,10 @@ class Paths
     }
 
     /**
-     * Return Resources path
-     * @param  string  $path
+     * Return Resources path.
+     *
+     * @param string $path
+     *
      * @return string
      */
     public static function resourcesDir(string $path = '')
@@ -50,12 +55,12 @@ class Paths
     }
 
     /**
-     * @param  string  $path
+     * @param string $path
+     *
      * @return string
      */
     protected static function sanitizePath(string $path): string
     {
         return DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR);
     }
-
 }

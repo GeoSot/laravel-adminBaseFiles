@@ -1,8 +1,6 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
-
 
 use Illuminate\Support\Facades\Auth;
 

@@ -1,8 +1,8 @@
 <?php
+
 return [
 
-    'title' => 'Example Dash',
-    'version' => '.v1'
-
+    'title'   => 'Example Dash',
+    'version' => '.v1',
 
 ];

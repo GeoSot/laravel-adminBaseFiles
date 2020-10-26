@@ -18,17 +18,15 @@ trait FieldsHelper
      *
      * @return bool
      */
-
     private function fieldExists(Builder $query, Collection $fieldData)
     {
-
         $table = $this->dbData->get('modelTable') ?? $this->dbData->put('modelTable', Schema::getColumnListing($query->getModel()->getTable()))->get('modelTable');
 
         if (in_array($fieldData->get('column'), $table) and !$fieldData->has('relationName')) {
             return true;
         }
         if ($fieldData->has('relationName')) {
-            $relTable     = $fieldData->get('table');
+            $relTable = $fieldData->get('table');
             $tableColumns = $this->dbData->get('tables')->get($relTable) ?? $this->dbData->get('tables')->put($relTable, Schema::getColumnListing($relTable))->get($relTable);
             if (in_array($fieldData->get('column'), $tableColumns)) {
                 return true;
@@ -36,7 +34,6 @@ trait FieldsHelper
         }
 
         return false;
-
     }
 
     /**
@@ -51,17 +48,15 @@ trait FieldsHelper
 
         if ($fieldData->has('relationName')) {
             $className = $fieldData->get('fullClass');
-            $model     = new $className;
+            $model = new $className();
         }
 
         return Arr::has($model, $fieldData->get('column'));
-
     }
 
-
     /**
-     * @param      Builder $query
-     * @param     string   $field
+     * @param Builder $query
+     * @param string  $field
      *
      * @return Collection
      */
@@ -71,7 +66,7 @@ trait FieldsHelper
             $this->dbData = collect(['tables' => collect([])]);
         }
         $fieldData = explode('.', $field);
-        $col       = collect(['column' => last($fieldData)]);
+        $col = collect(['column' => last($fieldData)]);
 
         if (isset($fieldData[1])) {
             $relation = $query->getRelation(head($fieldData));
@@ -95,13 +90,12 @@ trait FieldsHelper
             $col->put('table', $query->getQuery()->from);
         }
 
-        $col->put('columnFullName', $col->get('table') . '.' . $col->get('column'));
+        $col->put('columnFullName', $col->get('table').'.'.$col->get('column'));
         $fieldExists = $this->fieldExists($query, $col);
         $col->put('exists', $fieldExists);
         $col->put('isAppended', $fieldExists ? false : $this->isAppended($query, $col));
 
         return $col;
-
     }
 
     /**
@@ -114,13 +108,11 @@ trait FieldsHelper
     private function sortByRelation(Builder $query, Collection $fieldData, $sort)
     {
         $joins = $fieldData->get('joins');
-        $query->selectSub($joins['query']->where($joins['parentTable'] . '.' . $joins['parentKey'], '=', DB::raw($fieldData->get('table') . '.' . $joins['foreignKey']))
-            ->select($fieldData->get('column'))->limit(1), 'pseudo-' . $fieldData->get('column'));
+        $query->selectSub($joins['query']->where($joins['parentTable'].'.'.$joins['parentKey'], '=', DB::raw($fieldData->get('table').'.'.$joins['foreignKey']))
+            ->select($fieldData->get('column'))->limit(1), 'pseudo-'.$fieldData->get('column'));
 
-        return $query->orderBy('pseudo-' . $fieldData->get('column'), $sort);
-
+        return $query->orderBy('pseudo-'.$fieldData->get('column'), $sort);
     }
-
 
     /**
      * @param Builder $query
@@ -136,6 +128,4 @@ trait FieldsHelper
 
         return $query;
     }
-
-
 }

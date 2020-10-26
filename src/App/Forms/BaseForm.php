@@ -13,17 +13,19 @@ abstract class BaseForm extends Form
     protected $isCreate;
 
     /**
-     *  HelpText Language Prefix
+     *  HelpText Language Prefix.
      */
     protected $helpTextLang;
 
     /**
-     * @param  string  $errorBag
+     * @param string $errorBag
+     *
      * @return $this
      */
     public function setErrorBag(string $errorBag)
     {
         $this->errorBag = $errorBag;
+
         return $this;
     }
 
@@ -31,10 +33,8 @@ abstract class BaseForm extends Form
 
     public function buildForm()
     {
-
         $this->initializeValues();
         $this->getFormFields();
-
 
         if (!in_array('after_save', array_keys($this->getFields())) and $this->addAfterSaveInput) {
             $this->add('after_save', 'hidden');
@@ -43,7 +43,6 @@ abstract class BaseForm extends Form
         //            $this->add('formClass', 'hidden', ['value' => get_class($this)]);
         //        }
     }
-
 
     protected function initializeValues(): void
     {
@@ -70,33 +69,30 @@ abstract class BaseForm extends Form
         return __('baseAdmin::admin/generic.formTitles.formSelectPlaceHolder');
     }
 
-
     /**
      * Create translation text (modelLang.fields.).
      *
-     * @param  string  $text
+     * @param string $text
      *
-     * @return  string
+     * @return string
      */
     public function transText(string $text)
     {
         return __($this->getLanguageName().'.'.$text);
     }
 
-
     /**
      * Create translation Help Text (modelLang.fieldsHelpTexts.).
      *
-     * @param  string  $text  *
-     * @param  array  $replace
+     * @param string $text    *
+     * @param array  $replace
      *
-     * @return  string
+     * @return string
      */
     public function transHelpText(string $text, $replace = [])
     {
         return __($this->getHelpTextLanguageName().'.'.$text, $replace);
     }
-
 
     public function getHelpTextLanguageName()
     {
@@ -106,16 +102,16 @@ abstract class BaseForm extends Form
     /**
      * Create a new separator line.
      *
-     * @param  string  $class
-     * @param  array  $options
+     * @param string $class
+     * @param array  $options
      *
-     * @return  Form
+     * @return Form
      */
     public function addSeparatorLine($class = 'my-4 border-bottom border-primary', array $options = [])
     {
         $this->add(uniqid('separator_'), 'static', array_merge([
             'label' => false,
-            'attr' => ['class' => $class]
+            'attr'  => ['class' => $class],
         ], $options));
 
         return $this;
@@ -126,30 +122,29 @@ abstract class BaseForm extends Form
         return $this->addSeparatorLine('mb-5 py-4 border-bottom border-primary', $options);
     }
 
-
     /**
-     * @param  string  $text
-     * @param  string  $addClass
-     * @param  array  $options
+     * @param string $text
+     * @param string $addClass
+     * @param array  $options
      *
      * @return $this
      */
     public function addStaticTextTitle($text = '', $addClass = '', $options = [])
     {
         $this->add(Str::random(30), 'static', array_merge([
-            'tag' => 'div',
+            'tag'   => 'div',
             'label' => false,
-            'attr' => ['class' => 'form-control-static '.$addClass], // This is the default
-            'value' => $text
+            'attr'  => ['class' => 'form-control-static '.$addClass], // This is the default
+            'value' => $text,
         ], $options));
 
         return $this;
     }
 
-
     /**
-     * @param  string  $name
-     * @param  array  $options
+     * @param string $name
+     * @param array  $options
+     *
      * @return $this
      */
     public function addSlug(string $name = 'slug', $options = [])
@@ -157,18 +152,20 @@ abstract class BaseForm extends Form
         $this->add($name, 'text', array_merge([
             'attr' => ['readonly' => $this->isCreate ? 'false' : 'readonly'],
         ], $options));
+
         return $this;
     }
 
     /**
-     * @param  string  $name
-     * @param  array  $options
+     * @param string $name
+     * @param array  $options
+     *
      * @return $this
      */
     public function addCheckBox(string $name, $options = [])
     {
         $this->add($name, 'checkbox', array_merge([
-            'template' => 'baseAdmin::_subBlades.formTemplates.checkbox',
+            'template'      => 'baseAdmin::_subBlades.formTemplates.checkbox',
             'includeHidden' => true,
         ], $options));
 

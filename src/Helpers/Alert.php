@@ -8,7 +8,6 @@
 
 namespace GeoSot\BaseAdmin\Helpers;
 
-
 use Illuminate\Session\SessionManager;
 use Illuminate\Session\Store;
 use Illuminate\Support\Str;
@@ -18,7 +17,6 @@ use Illuminate\Support\Str;
  */
 class Alert
 {
-
     public const AUTO_HIDE_TIME = 1500;
     public const TYPE_INLINE = 'inline';
     public const TYPE_TOAST = 'toast';
@@ -26,12 +24,10 @@ class Alert
 
     public const  SESSION_KEY = 'alertMessages';
 
-
     /**
      * @var Store
      */
     protected $session;
-
 
     /**
      * @var string
@@ -51,7 +47,7 @@ class Alert
     /**
      * Create a new flash notifier instance.
      *
-     * @param  SessionManager  $session
+     * @param SessionManager $session
      */
     public function __construct(SessionManager $session)
     {
@@ -59,18 +55,17 @@ class Alert
         $this->uuid = Str::uuid()->toString();
     }
 
-
     private function push()
     {
         $this->session->put($this->getSessionKey(), $this->data);
     }
 
-
     /**
      * Flash an information message.
      *
-     * @param  string  $message
-     * @param  string  $title
+     * @param string $message
+     * @param string $title
+     *
      * @return self
      */
     public static function info(string $message, string $title = ''): self
@@ -81,8 +76,9 @@ class Alert
     /**
      * Flash a success message.
      *
-     * @param  string  $message
-     * @param  string  $title
+     * @param string $message
+     * @param string $title
+     *
      * @return self
      */
     public static function success(string $message, string $title = ''): self
@@ -93,8 +89,9 @@ class Alert
     /**
      * Flash an error message.
      *
-     * @param  string  $message
-     * @param  string  $title
+     * @param string $message
+     * @param string $title
+     *
      * @return self
      */
     public static function error(string $message, string $title = ''): self
@@ -105,8 +102,9 @@ class Alert
     /**
      * Flash a warning message.
      *
-     * @param  string  $message  *
-     * @param  string  $title
+     * @param string $message *
+     * @param string $title
+     *
      * @return self
      */
     public static function warning(string $message, string $title = ''): self
@@ -114,14 +112,14 @@ class Alert
         return app('alert')->message($message, $title, Color::warning());
     }
 
-
     /**
      * Flash a general message.
      *
-     * @param  string  $message
-     * @param  string  $title
-     * @param  Color|null  $level
-     * @param  string  $type
+     * @param string     $message
+     * @param string     $title
+     * @param Color|null $level
+     * @param string     $type
+     *
      * @return self
      */
     public function message(string $message, string $title = '', Color $level = null, string $type = ''): self
@@ -130,15 +128,16 @@ class Alert
         $this->setType($type);
 
         $data = [
-            'uuid' => $this->uuid,
-            'msg' => $message,
+            'uuid'  => $this->uuid,
+            'msg'   => $message,
             'class' => $level,
             'title' => $title,
-            'type' => $this->type
+            'type'  => $this->type,
         ];
         $this->data = array_merge($this->data, $data);
 
         $this->push();
+
         return $this;
     }
 
@@ -149,7 +148,6 @@ class Alert
     {
         $this->setType(self::TYPE_INLINE);
     }
-
 
     /**
      * @return void
@@ -167,9 +165,8 @@ class Alert
         $this->setType(self::TYPE_TOAST);
     }
 
-
     /**
-     * @param  string  $type
+     * @param string $type
      */
     private function setType(string $type = '')
     {
@@ -180,9 +177,9 @@ class Alert
         $this->data['type'] = $this->type;
 
         $this->push();
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -197,10 +194,7 @@ class Alert
         $this->data['isDismissible'] = $dismissible;
 
         $this->push();
+
         return $this;
     }
-
-
 }
-
-

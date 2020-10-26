@@ -22,7 +22,6 @@ class MakeView extends GenericFileCreateCommand
 
     protected $type = 'View File';
 
-
     /**
      * Get the view full path.
      *
@@ -30,11 +29,9 @@ class MakeView extends GenericFileCreateCommand
      */
     public function getFileWithPath()
     {
-        $view = str_replace('.', '/', $this->getNameInput()) . '.blade.php';
+        $view = str_replace('.', '/', $this->getNameInput()).'.blade.php';
 
         return "resources/views/{$view}";
-
-
     }
 
     /**
@@ -44,7 +41,7 @@ class MakeView extends GenericFileCreateCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/View.stub';
+        return __DIR__.'/../stubs/View.stub';
     }
 
     protected function buildParentReplacements($stub)
@@ -60,6 +57,4 @@ class MakeView extends GenericFileCreateCommand
 
         return $stub;
     }
-
-
 }

@@ -1,13 +1,11 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Controller;
 
 use Illuminate\Support\Arr;
 
 trait HasFields
 {
-
     private function getSearchableFields()
     {
         return Arr::get($this->listFields(), 'searchable', []);
@@ -16,11 +14,11 @@ trait HasFields
     protected function listFields()
     {
         return [
-            'listable' => ['title', 'enabled', 'id'],
-            'searchable' => ['title', 'enabled',],
-            'sortable' => ['title', 'enabled', 'id'],
-            'linkable' => ['title'],
-            'orderBy' => ['column' => 'created_at', 'sort' => 'desc'],
+            'listable'   => ['title', 'enabled', 'id'],
+            'searchable' => ['title', 'enabled'],
+            'sortable'   => ['title', 'enabled', 'id'],
+            'linkable'   => ['title'],
+            'orderBy'    => ['column' => 'created_at', 'sort' => 'desc'],
         ];
     }
 
@@ -35,8 +33,8 @@ trait HasFields
     }
 
     /**
-     * @param  string|null  $arg
-     * @param  string|null  $default
+     * @param string|null $arg
+     * @param string|null $default
      *
      * @return mixed
      */
@@ -46,5 +44,4 @@ trait HasFields
 
         return is_null($arg) ? $options : Arr::get($options, $arg, $default);
     }
-
 }

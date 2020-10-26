@@ -1,8 +1,6 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
-
 
 use Exception;
 use GeoSot\BaseAdmin\App\Forms\Admin\BasicForm;
@@ -31,21 +29,26 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 abstract class BaseAdminController extends BaseController
 {
-    use HasFields, FieldsHelper, FiltersHelper, CachesRouteParameters, HasActionHooks, HasAllowedActions;
+    use HasFields;
+    use FieldsHelper;
+    use FiltersHelper;
+    use CachesRouteParameters;
+    use HasActionHooks;
+    use HasAllowedActions;
 
     protected $_useGenericLang = true;
     protected $_genericViewsDir = 'admin.generic';
     protected $_genericLangDir = 'admin/generic';
 
-
     /**
-     * @param  Request  $request
-     * @return JsonResponse|RedirectResponse|Response|StreamedResponse
+     * @param Request $request
+     *
      * @throws Exception
+     *
+     * @return JsonResponse|RedirectResponse|Response|StreamedResponse
      */
     public function index(Request $request)
     {
-
         $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
         if (!is_null($redirectRoute)) {
             return redirect()->to($redirectRoute);
@@ -64,6 +67,7 @@ abstract class BaseAdminController extends BaseController
         if ($request->input('export') === 'csv' && $this->modelIsExportable()) {
             /** @var IsExportable $model */
             $model = $this->_hydratedModel;
+
             return $model->exportToCsv($query->get());
         }
 
@@ -75,13 +79,12 @@ abstract class BaseAdminController extends BaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Collection
      */
     protected function makeParams(Request $request)
     {
-
         $params = collect([]);
         $params->put('num_of_items', $this->getNumberOfListingItems($request));
         $params->put('keyword', $request->input('keyword'));
@@ -111,7 +114,6 @@ abstract class BaseAdminController extends BaseController
                 foreach ($this->getSearchableFields() as $field) {
                     $fieldDt = $this->getFieldData($query, $field);
                     if ($fieldDt->get('exists')) {
-
                         if (!$fieldDt->has('relationName')) {
                             $query->orWhere($field, 'LIKE', '%'.$params->get('keyword').'%');
                         } else {
@@ -123,10 +125,10 @@ abstract class BaseAdminController extends BaseController
                 }
             });
         }
-        if ($params->get('status') == "-1") {
+        if ($params->get('status') == '-1') {
             $query->disabled();
         }
-        if ($params->get('status') == "1") {
+        if ($params->get('status') == '1') {
             $query->enabled();
         }
         if ($this->modelHasSoftDeletes()) {
@@ -137,7 +139,6 @@ abstract class BaseAdminController extends BaseController
         }
 
         $fieldDt = $this->getFieldData($query, $params->get('order_by'));
-
 
         if ($fieldDt->has('relationName') and in_array($fieldDt->has('relationType'), ['HasOne'])) {
             $query = $this->sortByRelation($query, $fieldDt, $params->get('sort'));
@@ -150,10 +151,7 @@ abstract class BaseAdminController extends BaseController
 
             return;
         }
-
-
     }
-
 
     protected function getNumberOfListingItems(Request $request)
     {
@@ -167,7 +165,6 @@ abstract class BaseAdminController extends BaseController
         return $numOfItems;
     }
 
-
     protected function getView(string $finalView)
     {
         return $this->chooseProperViewFile($finalView).'.'.$finalView;
@@ -175,31 +172,30 @@ abstract class BaseAdminController extends BaseController
 
     protected function variablesToView(Collection $extraValues = null, $action = 'index', $merge = [])
     {
-
         $vals = array_merge([
-            'action' => $action,
-            'packagePrefix' => $this->addPackagePrefix(),
-            'baseRoute' => $this->_modelRoute,
-            'baseView' => $this->chooseProperViewFile($action),
-            'baseLang' => $this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir),
-            'modelView' => $this->getView($action),
-            'modelLang' => $this->chooseProperLangFile(),
-            'modelClass' => $this->_class,
-            'modelClassShort' => class_basename($this->_class),
+            'action'           => $action,
+            'packagePrefix'    => $this->addPackagePrefix(),
+            'baseRoute'        => $this->_modelRoute,
+            'baseView'         => $this->chooseProperViewFile($action),
+            'baseLang'         => $this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir),
+            'modelView'        => $this->getView($action),
+            'modelLang'        => $this->chooseProperLangFile(),
+            'modelClass'       => $this->_class,
+            'modelClassShort'  => class_basename($this->_class),
             'modelPermissions' => $this->_hydratedModel->modelPermissionsFromDB(),
-            'extraValues' => $extraValues,
-            'options' => collect([
-                'fillable' => $this->_hydratedModel->getFillable(),
+            'extraValues'      => $extraValues,
+            'options'          => collect([
+                'fillable'            => $this->_hydratedModel->getFillable(),
                 'modelHasSoftDeletes' => $this->modelHasSoftDeletes(),
-                'modelIsExportable' => $this->modelIsExportable(),
+                'modelIsExportable'   => $this->modelIsExportable(),
                 'modelIsTranslatable' => $this->modelIsTranslatable(),
                 'modelIsRevisionable' => $this->modelIsRevisionable(),
-                'modelTraits' => Arr::sortRecursive(array_flip(array_map(function ($i) {
+                'modelTraits'         => Arr::sortRecursive(array_flip(array_map(function ($i) {
                     return class_basename($i);
                 }, class_uses_recursive($this->_class)))),
-                'indexActions' => $this->allowedActionsOnIndex,
+                'indexActions'  => $this->allowedActionsOnIndex,
                 'createActions' => $this->allowedActionsOnCreate,
-                'editActions' => $this->allowedActionsOnEdit,
+                'editActions'   => $this->allowedActionsOnEdit,
             ]),
             'breadCrumb' => $this->makeBreadCrumb($action),
         ], $merge);
@@ -219,7 +215,6 @@ abstract class BaseAdminController extends BaseController
             $parentsRoute = "$routeSplit[0].$routeSplit[1].index";
 
             $collection->put($baseLangRoute.Str::singular(explode('/', $baseLangRoute)[1]).'.general.menuTitle', Route::has($parentsRoute) ? route($parentsRoute) : '');
-
         }
 
         $collection->put($this->chooseProperLangFile('.general.menuTitle'), route("{$this->_modelRoute}.index"));
@@ -235,6 +230,7 @@ abstract class BaseAdminController extends BaseController
     {
         if (!$this->isAllowedAction('create')) {
             Alert::error($this->getLang('create.deny'))->typeToast();
+
             return redirect()->back();
         }
 
@@ -250,9 +246,9 @@ abstract class BaseAdminController extends BaseController
 
     public function store(Request $request)
     {
-
         if (!$this->isAllowedAction('create')) {
             Alert::error($this->getLang('create.deny'))->typeToast();
+
             return redirect()->back();
         }
         $this->beforeStore($request);
@@ -265,7 +261,6 @@ abstract class BaseAdminController extends BaseController
         return $this->checksAndNotificationsAfterSave($model, $request, 'store');
     }
 
-
     protected function jsonResponse($results, $action, Request $request)
     {
         $flag = $results == 0 ? 'error' : 'success';
@@ -276,12 +271,12 @@ abstract class BaseAdminController extends BaseController
         }
 
         return response()->json([
-            'flag' => $flag,
-            'count' => $results,
-            'title' => $title,
+            'flag'    => $flag,
+            'count'   => $results,
+            'title'   => $title,
             'message' => $message,
-            'model' => $this->_class,
-            'success' => ($flag == 'success')
+            'model'   => $this->_class,
+            'success' => ($flag == 'success'),
         ]);
     }
 
@@ -296,7 +291,6 @@ abstract class BaseAdminController extends BaseController
 
         return $this->jsonResponse($results, 'changeStatus', $request);
     }
-
 
     public function delete(Request $request)
     {
@@ -335,7 +329,6 @@ abstract class BaseAdminController extends BaseController
 
     protected function genericEdit(Model $model, Collection $extraValues = null)
     {
-
         if (is_null($extraValues)) {
             $extraValues = collect([]);
         }
@@ -361,21 +354,23 @@ abstract class BaseAdminController extends BaseController
             if ($model->slug == $request->input('slug')) {
                 $request->replace($request->except(['slug']));
             }
+
             return $this->store($request);
         }
         if (!$this->isAllowedAction('edit')) {
             Alert::error($this->getLang('edit.deny'))->typeToast();
+
             return redirect()->back();
         }
         if (!$model->allowedToHandle()) {
             Alert::error($this->getLang('handle.deny'))->typeToast();
+
             return redirect()->back();
         }
 
         $this->beforeUpdate($request, $model);
         $this->validate($request, $model->getRules(), $this->getModelValidationMessages());
         $model->update($request->all());
-
 
         $this->afterUpdate($request, $model);
         $this->afterSave($request, $model);
@@ -391,9 +386,9 @@ abstract class BaseAdminController extends BaseController
             return back();
         }
         $msg = [
-            'type' => 'success',
-            'msg' => $this->getLang("{$action}.successMsg"),
-            'title' => $this->getLang("{$action}.successTitle")
+            'type'  => 'success',
+            'msg'   => $this->getLang("{$action}.successMsg"),
+            'title' => $this->getLang("{$action}.successTitle"),
         ];
 
         if ($request->wantsJson()) {
@@ -420,32 +415,35 @@ abstract class BaseAdminController extends BaseController
     }
 
     /**
-     * @param  null  $model
+     * @param null $model
+     *
      * @return Form
      */
     protected function makeForm($model = null)
     {
-
         $options = [
-            'method' => $model ? 'PATCH' : 'POST',
-            'url' => route($this->_modelRoute.'.'.($model ? 'update' : 'store'), $model),
+            'method'        => $model ? 'PATCH' : 'POST',
+            'url'           => route($this->_modelRoute.'.'.($model ? 'update' : 'store'), $model),
             'language_name' => $this->chooseProperLangFile('.fields'),
-            'id' => 'mainForm',
-            'model' => $model ?? $this->_hydratedModel,
+            'id'            => 'mainForm',
+            'model'         => $model ?? $this->_hydratedModel,
         ];
 
         return $this->chooseProperForm($options);
     }
 
-
     protected function getLang(string $langPath, $count = 1)
     {
-        return trans_choice($this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir).'.messages.crud.'.$langPath, $count,
-            ['num' => $count]);
+        return trans_choice(
+            $this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir).'.messages.crud.'.$langPath,
+            $count,
+            ['num' => $count]
+        );
     }
 
     /**
-     * @param  string  $string
+     * @param string $string
+     *
      * @return string
      */
     protected function chooseProperLangFile(string $string = ''): string
@@ -459,24 +457,24 @@ abstract class BaseAdminController extends BaseController
         /**
          * Or in LangPath/vendor/package/locale/etc
          * Example: resources/lang/vendor/baseAdmin/en/admin/pages/page.php
-         * $file = app()->langPath().DIRECTORY_SEPARATOR.app()->getLocale().DIRECTORY_SEPARATOR.$this->_modelsLangDir.'.php';
+         * $file = app()->langPath().DIRECTORY_SEPARATOR.app()->getLocale().DIRECTORY_SEPARATOR.$this->_modelsLangDir.'.php';.
          * */
         $langFile = $this->_modelsLangDir.$string;
         $this->debugMsg("Return Lang: {$langFile}");
-        return $this->addPackagePrefix($langFile);
 
+        return $this->addPackagePrefix($langFile);
     }
 
     /**
      * Searches For Proper View File
-     * Searches model Directory, Package Model Directory andFallBacks to Default
+     * Searches model Directory, Package Model Directory andFallBacks to Default.
+     *
      * @param $action
      *
      * @return string
      */
     protected function chooseProperViewFile($action): string
     {
-
         $suffix = '.'.($action == 'index' ? 'index' : 'form');
 
         $modelView = $this->_modelsViewsDir;
@@ -493,13 +491,14 @@ abstract class BaseAdminController extends BaseController
 
         $view = $this->addPackagePrefix($this->_genericViewsDir);
         $this->debugMsg("Return View: {$view}");
+
         return $view;
     }
 
-
     /**
-     * @param  string  $action
-     * @param  array  $data
+     * @param string $action
+     * @param array  $data
+     *
      * @return JsonResponse|Response
      */
     protected function sendProperResponse(string $action = 'index', array $data = [])
@@ -507,13 +506,16 @@ abstract class BaseAdminController extends BaseController
         if (request()->wantsJson()) {
             return response()->json(view($this->getView($action), $data)->render());
         }
+
         return response()->view($this->getView($action), $data);
     }
 
     /**
      * Searches For Proper Form
-     * Searches model Directory, Package Model Directory and FallBacks to Default
-     * @param  array  $options
+     * Searches model Directory, Package Model Directory and FallBacks to Default.
+     *
+     * @param array $options
+     *
      * @return Form
      */
     protected function chooseProperForm(array $options): Form
@@ -532,7 +534,7 @@ abstract class BaseAdminController extends BaseController
         }
         $formName = BasicForm::class;
         $this->debugMsg("Return Form: {$formName}");
+
         return $this->form($formName, $options);
     }
-
 }

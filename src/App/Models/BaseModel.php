@@ -1,6 +1,5 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Models;
 
 use Eloquent;
@@ -16,12 +15,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * GeoSot\BaseAdmin\App\Models\BaseModel
+ * GeoSot\BaseAdmin\App\Models\BaseModel.
  *
  * @mixin Eloquent
  * */
 abstract class BaseModel extends Model
 {
-    use EnabledDisabled, OwnedBy, ModifiedBy, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, Encryptable, HasFactory, IsExportable;
+    use EnabledDisabled;
+    use OwnedBy;
+    use ModifiedBy;
+    use HasRulesOnModel;
+    use HasFrontEndConfigs;
+    use HasAllowedToHandleCheck;
+    use Encryptable;
+    use HasFactory;
+    use IsExportable;
     protected $dontKeepRevisionOf = ['modified_by'];
 }

@@ -8,10 +8,7 @@ use Kris\LaravelFormBuilder\Fields\FormField;
 
 abstract class BaseAdminForm extends BaseForm
 {
-
-
     protected $addAfterSaveInput = true;
-
 
     public function buildForm()
     {
@@ -21,12 +18,10 @@ abstract class BaseAdminForm extends BaseForm
             $this->getRulesAndCustomMessagesForFields($this->getModel());
             $this->includeModelRelatedSettings($this->getModel());
         }
-
     }
 
-
     /**
-     * Handle the creation of translatable extra fields
+     * Handle the creation of translatable extra fields.
      */
     protected function createTranslatableFields()
     {
@@ -50,18 +45,15 @@ abstract class BaseAdminForm extends BaseForm
             }
             $this->remove($fieldName);
         }
-
-
     }
 
     /**
-     * @param  FormField  $field
-     * @param  string  $locale
-     * @param  string  $originalName
+     * @param FormField $field
+     * @param string    $locale
+     * @param string    $originalName
      */
     protected function addAttributesToTranslatableField(FormField $field, string $locale, string $originalName)
     {
-
         $field->setOption('label', $this->getTranslatableLabel($field, $locale));
         $field->setOption('attr', array_merge($field->getOption('attr'), [config('baseAdmin.translatables.input-locale-attribute', 'data-language') => $locale]));
         $field->setOption('wrapper.class', $field->getOption('wrapper.class').'  '.config('baseAdmin.translatables.form-group-class', 'form-group-translation '));
@@ -70,8 +62,8 @@ abstract class BaseAdminForm extends BaseForm
     }
 
     /**
-     * @param  FormField  $field
-     * @param  string  $locale
+     * @param FormField $field
+     * @param string    $locale
      *
      * @return mixed
      */
@@ -81,7 +73,6 @@ abstract class BaseAdminForm extends BaseForm
         $localizedLabel = str_replace('%label%', $field->getOption('label'), $labelLocaleIndicator);
 
         return str_replace('%locale%', $locale, $localizedLabel);
-
     }
 
     /**
@@ -107,7 +98,6 @@ abstract class BaseAdminForm extends BaseForm
         }
         $subForm = $this->formBuilder->plain();
         foreach ($modelInstance->settings as $setting) {
-
             $subForm->add($setting->key, 'static', [
                 'label' => false,
                 'value' => $setting->getDashBoardLink($setting->key, true, ['class' => 'mr-2 d-block']).$setting->value_parsed_to_human,
@@ -115,8 +105,5 @@ abstract class BaseAdminForm extends BaseForm
         }
 
         $this->add('related_settings', 'form', ['wrapper' => ['class' => ''], 'label' => false, 'class' => $subForm]);
-
     }
-
-
 }

@@ -2,14 +2,11 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
-
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
 class AddValuesToConfigFiles extends BaseInstallCommand
 {
-
-
     /**
      * The console command name.
      *
@@ -24,15 +21,11 @@ class AddValuesToConfigFiles extends BaseInstallCommand
      */
     protected $description = 'Adds Configuration Settings to Config Files';
 
-
     /**
      * Execute the console command.
-     *
-
      */
     public function handle()
     {
-
         $this->replaceInFile("'engine' => null,", $this->getDatabaseChanges(), config_path('database.php'));
         $this->replaceInFile("App\Models\Users\User::class", "App\Models\Users\User::class", config_path('auth.php'));
 
@@ -47,13 +40,10 @@ class AddValuesToConfigFiles extends BaseInstallCommand
         $this->tweakRoutesFile();
         $this->tweakConfigAppFile();
 
-
-        $this->replaceInFile("/home", "/", app_path('Providers/RouteServiceProvider.php'));
+        $this->replaceInFile('/home', '/', app_path('Providers/RouteServiceProvider.php'));
 //        if (!Str::contains(file_get_contents(base_path('routes/web.php')), "'/dashboard'")) {
 //            (new Filesystem)->append(base_path('routes/web.php'), $this->livewireRouteDefinition());
 //        }
-
-
     }
 
     /**
@@ -72,7 +62,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 EOF;
     }
 
-
     /**
      * @return string
      */
@@ -88,8 +77,6 @@ EOF;
                 ".self::tab()."'NO_AUTO_CREATE_USER',
                 ".self::tab()."'NO_ENGINE_SUBSTITUTION'
                 ],";
-
-
     }
 
     protected static function tab()
@@ -100,21 +87,20 @@ EOF;
     private function getLaratrustValues(): array
     {
         return [
-            "\App\Models\User::class" => config('baseAdmin.config.models.user'),
-            "\App\Models\Role::class" => config('baseAdmin.config.models.role'),
+            "\App\Models\User::class"       => config('baseAdmin.config.models.user'),
+            "\App\Models\Role::class"       => config('baseAdmin.config.models.role'),
             "\App\Models\Permission::class" => config('baseAdmin.config.models.permission'),
-            "\App\Models\Team::class" => "App\Models\Users\UserTeam::class",
-            "'enabled' => false" => "'enabled' => true",
-            "'/home'" => "'/'",
+            "\App\Models\Team::class"       => "App\Models\Users\UserTeam::class",
+            "'enabled' => false"            => "'enabled' => true",
+            "'/home'"                       => "'/'",
         ];
-
     }
 
     protected function changeValuesInfFile(array $data, string $file)
     {
-
-        if (!(new Filesystem)->exists($file)) {
+        if (!(new Filesystem())->exists($file)) {
             $this->error($file.' not exists');
+
             return;
         }
 
@@ -127,16 +113,16 @@ EOF;
     {
         return [
             "'prefix' => 'env-editor'" => "'prefix' => 'admin/editor'",
-            "'name' => 'env-editor'" => "'name' => 'admin.env-editor'",
-            "['web']" => "['web', 'auth']",
-            'env-editor::layout' => 'baseAdmin::admin.layout'
+            "'name' => 'env-editor'"   => "'name' => 'admin.env-editor'",
+            "['web']"                  => "['web', 'auth']",
+            'env-editor::layout'       => 'baseAdmin::admin.layout',
         ];
     }
 
     private function getSluggableValues()
     {
         return [
-            "'includeTrashed' => false" => "'includeTrashed' => true"
+            "'includeTrashed' => false" => "'includeTrashed' => true",
         ];
     }
 
@@ -147,7 +133,7 @@ EOF;
     {
         return [
             'Plank\Mediable\Media::class' => 'App\Models\Media\Medium::class',
-            'ON_DUPLICATE_INCREMENT' => 'ON_DUPLICATE_UPDATE '
+            'ON_DUPLICATE_INCREMENT'      => 'ON_DUPLICATE_UPDATE ',
         ];
     }
 
@@ -157,8 +143,8 @@ EOF;
     private function getlocalizationValues(): array
     {
         return [
-            "//'es'" => "'el'",
-            "'hideDefaultLocaleInURL' => false" => "'hideDefaultLocaleInURL' => true"
+            "//'es'"                            => "'el'",
+            "'hideDefaultLocaleInURL' => false" => "'hideDefaultLocaleInURL' => true",
         ];
     }
 
@@ -166,9 +152,9 @@ EOF;
     {
         return [
             "'prefix'     => 'translations'" => "'prefix' => 'admin/translations'",
-            "'middleware' => 'auth'" => "'middleware' => ['web', 'auth']",
-            "'delete_enabled' => true" => "'delete_enabled' => true",
-            "'sort_keys'     => false" => "'sort_keys'     => true"
+            "'middleware' => 'auth'"         => "'middleware' => ['web', 'auth']",
+            "'delete_enabled' => true"       => "'delete_enabled' => true",
+            "'sort_keys'     => false"       => "'sort_keys'     => true",
         ];
     }
 
@@ -179,15 +165,13 @@ EOF;
 Route::get('/', function () {
     return view('welcome');
 });
-" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".self::newLine(2)
+" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".self::newLine(2),
         ], base_path('routes/web.php'));
-
-
     }
 
     private function tweakConfigAppFile()
     {
-        $this->replaceInFile("UTC", "Europe/Athens", config_path('app.php'));
+        $this->replaceInFile('UTC', 'Europe/Athens', config_path('app.php'));
 
         if (!Str::contains($appConfig = file_get_contents(config_path('app.php')), 'App\\Providers\\BaseAdminServiceProvider::class')) {
             file_put_contents(config_path('app.php'), str_replace(
@@ -197,5 +181,4 @@ Route::get('/', function () {
             ));
         }
     }
-
 }

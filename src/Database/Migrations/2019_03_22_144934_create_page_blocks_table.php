@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 class CreatePageBlocksTable extends Migration
 {
     /**
@@ -27,7 +26,6 @@ class CreatePageBlocksTable extends Migration
             $table->string('title')->nullable();
             $table->string('sub_title')->nullable();
             $table->text('notes')->nullable();
-
 
             //--Defaults
             $table->boolean('enabled')->default(1);

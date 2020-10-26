@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 
-
 use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
@@ -12,13 +11,11 @@ use Illuminate\Support\Arr;
 
 class UserPermissionController extends BaseAdminController
 {
-
     protected $_class = UserPermission::class;
 
     //OVERRIDES
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
     protected $allowedActionsOnIndex = ['create', 'edit'];
-
 
     public function index(Request $request)
     {
@@ -28,20 +25,21 @@ class UserPermissionController extends BaseAdminController
         $roles = UserRole::orderBy('id', 'ASC')->get()->load('permissions');
 
         $form = $this->plain([
-            'url' => route($this->_modelRoute.'.change.status'),
+            'url'    => route($this->_modelRoute.'.change.status'),
             'method' => 'POST',
-            'id' => 'permissionsForm',
+            'id'     => 'permissionsForm',
         ]);
 
-        return view($this->getView('index'),
-            $this->variablesToView(collect($this->listFields()), 'index', ['records' => $records, 'params' => $params, 'roles' => $roles, 'form' => $form]));
-
+        return view(
+            $this->getView('index'),
+            $this->variablesToView(collect($this->listFields()), 'index', ['records' => $records, 'params' => $params, 'roles' => $roles, 'form' => $form])
+        );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  UserPermission  $userPermission
+     * @param UserPermission $userPermission
      *
      * @return Response
      */
@@ -53,8 +51,8 @@ class UserPermissionController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  UserPermission  $userPermission
+     * @param Request        $request
+     * @param UserPermission $userPermission
      *
      * @return Response
      */
@@ -70,15 +68,11 @@ class UserPermissionController extends BaseAdminController
 
     public function changeStatus(Request $request)
     {
-
         foreach (UserRole::where('name', '<>', 'god')->get() as $role) {
-
             $perms = $request->get('role_permissions');
             $role->syncPermissions(Arr::get($perms, $role->getKey(), []));
         }
+
         return redirect()->back();
-
     }
-
-
 }

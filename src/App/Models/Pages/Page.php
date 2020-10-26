@@ -1,6 +1,5 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Models\Pages;
 
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -12,12 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\URL;
 use Spatie\Translatable\HasTranslations;
 
-
 class Page extends BaseModel
 {
-
     public const SESSION_PREVIEW_KEY = 'previewPage';
-    use Sluggable, HasTranslations, SoftDeletes, HasMedia;
+    use Sluggable;
+    use HasTranslations;
+    use SoftDeletes;
+    use HasMedia;
 
     public $translatable = [
         'title',
@@ -54,15 +54,13 @@ class Page extends BaseModel
         'enabled' => 'boolean',
     ];
 
-
     protected function rules(array $merge = [])
     {
         return array_merge([
             'title' => ['required', 'min:3'],
-            'slug' => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
+            'slug'  => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
         ], $merge, $this->rules);
     }
-
 
     /**
      * Return the sluggable configuration array for this model.
@@ -87,6 +85,7 @@ class Page extends BaseModel
     public function getPreviewLink()
     {
         session()->put(self::SESSION_PREVIEW_KEY, $this->slug);
+
         return URL::signedRoute('site.pages', ['page' => $this->getRouteKey()], now()->addMinutes(45));
     }
 
@@ -101,12 +100,12 @@ class Page extends BaseModel
         if (session()->get(Page::SESSION_PREVIEW_KEY) == $this->slug) {
             $lang = 'baseAdmin::'.$this->getFrontEndConfigPrefixed('site', 'langDir').'.';
             Alert::info(__("{$lang}general.isPreview.msg"), __("{$lang}general.isPreview.title"));
+
             return true;
         }
+
         return false;
-
     }
-
 
     /**
      * Get the contracts that owns.
@@ -128,5 +127,5 @@ class Page extends BaseModel
         return $this->belongsTo(\App\Models\Pages\Page::class, 'parent_id');
     }
 
-//*********  M E T H O D S  ***************
+    //*********  M E T H O D S  ***************
 }

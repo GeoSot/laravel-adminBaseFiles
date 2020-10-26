@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
-
 use App\Models\Media\Medium;
 use App\Models\Setting;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
@@ -17,9 +16,8 @@ class SettingController extends BaseAdminController
 
     //OVERRIDES
     protected $allowedActionsOnIndex = ['create', 'edit', 'delete', 'forceDelete', 'restore'];
-    protected $allowedActionsOnCreate = ['save',];
+    protected $allowedActionsOnCreate = ['save'];
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy'];
-
 
     public function afterFilteringIndex(Request &$request, Collection &$params, Builder &$query, &$extraOptions)
     {
@@ -43,10 +41,10 @@ class SettingController extends BaseAdminController
         $settings = Setting::enabled()->get();
         $extraValues = collect([
             'settingsExistingValues' => [
-                'keys' => $settings->whereNotIn('key', [''])->pluck('key')->unique()->sort(),
-                'groups' => $settings->whereNotIn('group', [''])->pluck('group')->unique()->sort(),
+                'keys'      => $settings->whereNotIn('key', [''])->pluck('key')->unique()->sort(),
+                'groups'    => $settings->whereNotIn('group', [''])->pluck('group')->unique()->sort(),
                 'subGroups' => $settings->whereNotIn('sub_group', [''])->pluck('sub_group')->unique()->sort(),
-            ]
+            ],
         ]);
 
         return $extraValues;
@@ -55,7 +53,7 @@ class SettingController extends BaseAdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Setting  $setting
+     * @param Setting $setting
      *
      * @return Response
      */
@@ -69,8 +67,8 @@ class SettingController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Setting  $setting
+     * @param Request $request
+     * @param Setting $setting
      *
      * @return Response
      */
@@ -91,18 +89,16 @@ class SettingController extends BaseAdminController
             $result = $model->syncRequestMedia($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
-
     }
-
 
     protected function listFields()//Can be omitted
     {
         $neFields = [
-            'linkable' => ['key'],
-            'listable' => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
-            'searchable' => ['key', 'group',],
-            'sortable' => ['key'],
-            'orderBy' => ['column' => 'key', 'sort' => 'desc'],
+            'linkable'   => ['key'],
+            'listable'   => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
+            'searchable' => ['key', 'group'],
+            'sortable'   => ['key'],
+            'orderBy'    => ['column' => 'key', 'sort' => 'desc'],
         ];
 
         return array_merge(parent::listFields(), $neFields);
@@ -111,10 +107,8 @@ class SettingController extends BaseAdminController
     protected function filters()//Can be omitted
     {
         return [
-            'group' => ['type' => 'select'],
+            'group'     => ['type' => 'select'],
             'sub_group' => ['type' => 'multiSelect'],
         ];
     }
-
-
 }

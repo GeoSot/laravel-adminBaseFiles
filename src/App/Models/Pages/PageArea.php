@@ -5,15 +5,15 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
-use Illuminate\Contracts\Support\Renderable;
 use Spatie\Translatable\HasTranslations;
-
 
 class PageArea extends BaseModel
 {
-    use Sluggable, HasTranslations, HasMedia;
+    use Sluggable;
+    use HasTranslations;
+    use HasMedia;
 
-    public $translatable = ['title', 'sub_title',];
+    public $translatable = ['title', 'sub_title'];
 
     /**
      * The attributes that are mass assignable.
@@ -37,17 +37,15 @@ class PageArea extends BaseModel
 
     protected $casts = [
         'enabled' => 'boolean',
-        'order' => 'integer',
+        'order'   => 'integer',
     ];
-
 
     protected function rules(array $merge = [])
     {
         return array_merge([
-            'slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),],
+            'slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate()],
         ], $merge, $this->rules);
     }
-
 
     /**
      * Return the sluggable configuration array for this model.
@@ -64,8 +62,6 @@ class PageArea extends BaseModel
         return $this->images()->first();
     }
 
-
-
     /*
     *
     * - - -  R E L A T I O N S H I P S  - - -
@@ -76,7 +72,6 @@ class PageArea extends BaseModel
     {
         return $this->belongsTo(\App\Models\Pages\Page::class);
     }
-
 
     public function blocks()
     {

@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Models;
 
-
 use App\Models\Media\Medium;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -13,11 +12,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 /**
- * GeoSot\BaseAdmin\App\Models\Setting
+ * GeoSot\BaseAdmin\App\Models\Setting.
  */
 class Setting extends BaseModel
 {
-    use Sluggable, HasMedia;
+    use Sluggable;
+    use HasMedia;
 
     public $choices = [
         'string',
@@ -49,7 +49,6 @@ class Setting extends BaseModel
         'modified_by',
     ];
 
-
     protected $appends = [
         'value_parsed',
         'value_parsed_to_human',
@@ -62,24 +61,22 @@ class Setting extends BaseModel
     ];
 
     protected $errorMessages = [
-        'key' => ['unique' => 'keySubGroupGroupUnique'],
+        'key'       => ['unique' => 'keySubGroupGroupUnique'],
         'sub_group' => ['unique' => 'keySubGroupGroupUnique'],
-        'group' => ['unique' => 'keySubGroupGroupUnique']
+        'group'     => ['unique' => 'keySubGroupGroupUnique'],
     ];
 
     public static function boot()
     {
         parent::boot();
         static::saving(function ($model) {
-
-            foreach (['key', 'sub_group', 'group',] as $name) {
+            foreach (['key', 'sub_group', 'group'] as $name) {
                 $model[$name] = lcfirst($model[$name]);
             }
 
             if (is_array($model->value)) {
                 $model->value = json_encode($model->value);
             }
-
         });
         static::saved(function ($model) {
             Settings::flushKey($model->slug);
@@ -92,7 +89,7 @@ class Setting extends BaseModel
         $settings = parent::orderBy('key', 'ASC')->get();
         $grouped = $settings->groupBy([
             'group',
-            'sub_group'
+            'sub_group',
             //            function ($item, $key) {
             //                return (empty($item->group) or is_null($item->group)) ? 'Uncategorised':$item->group;
             //            },
@@ -123,11 +120,11 @@ class Setting extends BaseModel
 
         return array_merge([
             // 'key'  => "required|min:3|unique:{$this->getTable()},key" . $textOnUpdate,
-            'key' => ['required','min:3', $uniqueCombinationRule],
+            'key'       => ['required', 'min:3', $uniqueCombinationRule],
             'sub_group' => ['required_with:group', $uniqueCombinationRule],
-            'group' => [$uniqueCombinationRule],
-            'type' => 'required',
-            'slug' => "min:3|unique:{$this->getTable()},slug".$textOnUpdate,
+            'group'     => [$uniqueCombinationRule],
+            'type'      => 'required',
+            'slug'      => "min:3|unique:{$this->getTable()},slug".$textOnUpdate,
         ], $merge, $this->rules);
     }
 
@@ -140,16 +137,15 @@ class Setting extends BaseModel
     {
         return [
             'slug' => [
-                'source' => ['group', 'sub_group', 'slug_key'],
+                'source'    => ['group', 'sub_group', 'slug_key'],
                 'separator' => '.',
-                'onUpdate' => true,
-                'method' => function ($string, $sep) {
+                'onUpdate'  => true,
+                'method'    => function ($string, $sep) {
                     return preg_replace('/[^a-zA-Z0-9-]+/i', $sep, trim($string));
                 },
-            ]
+            ],
         ];
     }
-
 
     /*
     *
@@ -165,7 +161,6 @@ class Setting extends BaseModel
 
         return $this->key.'-'.lcfirst(class_basename($this->model_type)).'-'.$this->model_id;
     }
-
 
     //*********  M E T H O D S  ***************
 
@@ -203,11 +198,11 @@ class Setting extends BaseModel
         if ($this->type == Medium::class) {
             /* @var Medium $FQN */
             $FQN = $this->type;
+
             return $FQN::find($value);
         }
 
         return $value;
-
     }
 
     public function getTypeToHumanAttribute()
@@ -221,15 +216,15 @@ class Setting extends BaseModel
     public static function getSettingTypes()
     {
         return [
-            'string' => 'String',
-            'textarea' => 'Textarea',
-            'boolean' => 'Boolean',
-            'number' => 'Number',
-            'timeToMinutes' => 'Time To Minutes',
-            'dateTime' => 'DateTime',
-            'collectionSting' => 'Collection of Strings',
+            'string'           => 'String',
+            'textarea'         => 'Textarea',
+            'boolean'          => 'Boolean',
+            'number'           => 'Number',
+            'timeToMinutes'    => 'Time To Minutes',
+            'dateTime'         => 'DateTime',
+            'collectionSting'  => 'Collection of Strings',
             'collectionNumber' => 'Collection of Numbers',
-            Medium::class => 'Media',
+            Medium::class      => 'Media',
             Medium::TYPE_IMAGE => 'Image',
         ];
     }

@@ -1,16 +1,17 @@
 <?php
+
 return [
     'general' => [
         'menuTitle' => 'Galleries',
-        'singular' => 'Gallery',
-        'plural' => 'Galleries',
+        'singular'  => 'Gallery',
+        'plural'    => 'Galleries',
     ],
     'fields' => [
-        'id' => 'ID',
-        'title' => 'Name',
-        'slug' => 'Url Slug',
-        'notes' => 'Description',
+        'id'      => 'ID',
+        'title'   => 'Name',
+        'slug'    => 'Url Slug',
+        'notes'   => 'Description',
         'enabled' => 'Enabled',
-        'images' => 'Images'
-    ]
+        'images'  => 'Images',
+    ],
 ];

@@ -1,19 +1,20 @@
 <?php
+
 return [
     'defaults' => [
-        'wrapper_class' => 'form-group',
+        'wrapper_class'       => 'form-group',
         'wrapper_error_class' => 'has-error ',
-        'label_class' => 'control-label',
-        'field_class' => 'form-control',
-        'field_error_class' => 'is-invalid',
-        'help_block_class' => 'help-block small form-text text-muted',
-        'error_class' => 'd-block  invalid-feedback',
-        'required_class' => 'required',
+        'label_class'         => 'control-label',
+        'field_class'         => 'form-control',
+        'field_error_class'   => 'is-invalid',
+        'help_block_class'    => 'help-block small form-text text-muted',
+        'error_class'         => 'd-block  invalid-feedback',
+        'required_class'      => 'required',
 
         'checkbox' => [
             'wrapper_class' => 'custom-control custom-checkbox form-group',
-            'label_class' => 'custom-control-label',
-            'field_class' => 'custom-control-input',
+            'label_class'   => 'custom-control-label',
+            'field_class'   => 'custom-control-input',
         ],
         'static' => [
             'field_class' => 'form-control-plaintext',
@@ -37,20 +38,19 @@ return [
         //],
     ],
 
-
     // Templates
     'form' => 'laravel-form-builder::form',
     // 'text'            => 'laravel-form-builder::text',
-    'text' => 'baseAdmin::_subBlades.formTemplates.text',
-    'textarea' => 'laravel-form-builder::textarea',
-    'button' => 'laravel-form-builder::button',
+    'text'        => 'baseAdmin::_subBlades.formTemplates.text',
+    'textarea'    => 'laravel-form-builder::textarea',
+    'button'      => 'laravel-form-builder::button',
     'buttongroup' => 'laravel-form-builder::buttongroup',
-    'radio' => 'laravel-form-builder::radio',
-    'checkbox' => 'baseAdmin::_subBlades.formTemplates.checkbox',
+    'radio'       => 'laravel-form-builder::radio',
+    'checkbox'    => 'baseAdmin::_subBlades.formTemplates.checkbox',
     //    'checkbox'        => 'laravel-form-builder::checkbox',
-    'select' => 'laravel-form-builder::select',
-    'choice' => 'laravel-form-builder::choice',
-    'repeated' => 'laravel-form-builder::repeated',
+    'select'     => 'laravel-form-builder::select',
+    'choice'     => 'laravel-form-builder::choice',
+    'repeated'   => 'laravel-form-builder::repeated',
     'child_form' => 'baseAdmin::_subBlades.formTemplates.child_form',
     //    'child_form'      => 'laravel-form-builder::child_form',
     'collection' => 'baseAdmin::_subBlades.formTemplates.collection',
@@ -64,5 +64,5 @@ return [
     'default_namespace' => '',
 
     'custom_fields' => [//'datetime' => App\Forms\Fields\Datetime::class
-    ]
+    ],
 ];

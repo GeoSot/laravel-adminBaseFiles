@@ -1,5 +1,6 @@
 <?php
+
 return [
-    'title' => 'Example Site',
+    'title'      => 'Example Site',
     'copyrights' => 'Example Copyrights',
 ];

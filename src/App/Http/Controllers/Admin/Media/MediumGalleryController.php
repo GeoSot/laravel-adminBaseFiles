@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Media;
 
-
 use App\Models\Media\MediumGallery;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
@@ -12,7 +11,6 @@ class MediumGalleryController extends BaseAdminController
     protected $_class = MediumGallery::class;
 
     //OVERRIDES
-
 
     public function edit(MediumGallery $mediumGallery)
     {
@@ -24,15 +22,13 @@ class MediumGalleryController extends BaseAdminController
         return $this->genericUpdate($request, $mediumGallery);
     }
 
-
     protected function listFields()
     {
         $neFields = [
-            'listable' => ['title', 'ownerModel', 'enabled', 'id'],
+            'listable'   => ['title', 'ownerModel', 'enabled', 'id'],
             'searchable' => ['title', 'slug', 'related_type', 'enabled', 'id'],
         ];
 
         return array_merge(parent::listFields(), $neFields);
     }
-
 }

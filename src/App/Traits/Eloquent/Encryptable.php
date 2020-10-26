@@ -15,7 +15,6 @@ trait Encryptable
 {
     protected $encryptable = [];
 
-
     /**
      * If the attribute is in the encryptable array
      * then decrypt it.
@@ -34,7 +33,6 @@ trait Encryptable
 
         return $value;
     }
-
 
     private function isEncryptable($key)
     {
@@ -77,6 +75,7 @@ trait Encryptable
     //
     //        return $attributes;
     //    }
+
     /**
      * @param $value
      *
@@ -87,7 +86,6 @@ trait Encryptable
         try {
             $value = (empty($value) or is_null($value)) ? $value : Crypt::decrypt($value);
         } catch (DecryptException $e) {
-
         }
 
         return $value;

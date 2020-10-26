@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin;
 
-
 use GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
@@ -13,10 +12,8 @@ use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 
-
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-
     /**
      * Vendor name.
      *
@@ -30,7 +27,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected $package = 'baseAdmin';
 
-
     /**
      * Bootstrap services.
      *
@@ -42,7 +38,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishResources();
         $this->registerServices();
         view()->share('packageVariables', $this->getPackageVariables());
-
     }
 
     /**
@@ -52,16 +47,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-
         $this->registerProviders();
         $configDir = Paths::rootDir('config');
         $this->mergeConfigFrom($configDir.'main.php', $this->package.'.main');
         $this->mergeConfigFrom($configDir.'config.php', $this->package.'.config');
-
     }
 
     /**
-     * Register Package Resources
+     * Register Package Resources.
      */
     private function loadResources()
     {
@@ -72,29 +65,26 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
-     * Make Resources Available to Publish
+     * Make Resources Available to Publish.
      */
     private function publishResources()
     {
-
         $this->publishes([
-            __DIR__."/../config" => config_path($this->package)
+            __DIR__.'/../config' => config_path($this->package),
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../resources/views/' => resource_path("views/vendor/{$this->vendor}/{$this->package}"),//resource_path("views/vendor/{$this->vendor}/{$this->package}"),
+            __DIR__.'/../resources/views/' => resource_path("views/vendor/{$this->vendor}/{$this->package}"), //resource_path("views/vendor/{$this->vendor}/{$this->package}"),
         ], 'views');
-
 
         $this->publishes([
             __DIR__.'/Database/Migrations/' => database_path('migrations'),
         ], 'migrations');
         $this->publishes([
-//            __DIR__ . '/../resources/lang/' => resource_path("lang"),
+            //            __DIR__ . '/../resources/lang/' => resource_path("lang"),
             __DIR__.'/../resources/lang/' => resource_path("lang/vendor/{$this->package}"),
         ], 'translations');
     }
-
 
     /**
      * @return Collection
@@ -102,11 +92,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     private function getPackageVariables()
     {
         return collect([
-            'package' => $this->package,
-            'nameSpace' => $this->package.'::',
-            'adminLayout' => config($this->package.".config.backEnd.layout"),
-            'siteLayout' => config($this->package.".config.site.layout"),
-            'blades' => $this->package."::",
+            'package'     => $this->package,
+            'nameSpace'   => $this->package.'::',
+            'adminLayout' => config($this->package.'.config.backEnd.layout'),
+            'siteLayout'  => config($this->package.'.config.site.layout'),
+            'blades'      => $this->package.'::',
         ]);
     }
 
@@ -119,14 +109,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             CustomValidationServiceProvider::class,
             BaseAdminRouteServiceProvider::class,
             CommandsProvider::class,
-            FortifyViewsServiceProvider::class
-//            ModuleServiceProvider::class,
+            FortifyViewsServiceProvider::class,
+            //            ModuleServiceProvider::class,
         ];
 
         array_map(function ($provider) {
             $this->app->register($provider);
         }, $providers);
-
     }
 
     /**
@@ -142,7 +131,5 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
         $this->app->alias('Settings', Facades\Settings::class);
-
     }
-
 }

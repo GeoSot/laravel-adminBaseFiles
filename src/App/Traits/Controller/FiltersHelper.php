@@ -1,6 +1,5 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Controller;
 
 use Carbon\Carbon;
@@ -11,7 +10,6 @@ use Illuminate\Support\Collection;
 
 trait FiltersHelper
 {
-
     protected function filters()
     {
 
@@ -27,24 +25,22 @@ trait FiltersHelper
         return [];
     }
 
-
     /**
      * @return Collection
      */
     private function getExtraFiltersData()
     {
         $filters = $this->filters();
-        $query = (new $this->_class())->newQuery();///newModelQuery
+        $query = (new $this->_class())->newQuery(); ///newModelQuery
 
         foreach ($filters as $key => $filterVals) {
             if (in_array($filterVals['type'], ['select', 'multiSelect'])) {
-                $filters [$key]['values'] = $this->getValuesForSelectTypeFilters($this->getFieldData($query, $key), $key);
+                $filters[$key]['values'] = $this->getValuesForSelectTypeFilters($this->getFieldData($query, $key), $key);
             }
         }
 
         return collect($filters);
     }
-
 
     /**
      * @param $fieldDt
@@ -54,19 +50,17 @@ trait FiltersHelper
      */
     private function getValuesForSelectTypeFilters(Collection $fieldDt, string $key)
     {
-
         if (Arr::has($this->filters()[$key], 'values')) {
             return Arr::get($this->filters()[$key], 'values');
         }
         if ($fieldDt->get('exists') and !$fieldDt->has('relationName')) {
-            return $this->_hydratedModel->newQuery()->groupBy($key)->pluck($key, $key)->toArray();//newModelQuery
+            return $this->_hydratedModel->newQuery()->groupBy($key)->pluck($key, $key)->toArray(); //newModelQuery
         }
         if ($fieldDt->has('relationName')) {
             return $fieldDt->get('fullClass')::all()->pluck($fieldDt->get('column'), Arr::get($this->filters()[$key], 'relation_key', 'id'))->unique();
         }
 
         return [];
-
     }
 
     /**
@@ -76,7 +70,6 @@ trait FiltersHelper
      */
     private function getExtraFiltersParams(Request $request)
     {
-
         $params = collect([]);
         $requestFilters = $request->input('extra_filters', []);
 
@@ -95,7 +88,6 @@ trait FiltersHelper
 
         return $params;
     }
-
 
     /**
      * @param Collection $params
@@ -118,18 +110,18 @@ trait FiltersHelper
 
             // RELATIONSHIP FIELD
             if ($fieldDt->has('relationName') and ($fieldDt->get('exists') or $fieldDt->get('isAppended'))) {
-                $query->whereHas($fieldDt->get('relationName'), function ($q) use ($fieldDt, $params, $field, $data, $value) {
+                $query->whereHas($fieldDt->get('relationName'), function ($q) use ($fieldDt  , $data, $value) {
                     $foreignTableColumn = $fieldDt->get('table').'.'.Arr::get($data, 'relation_key', 'id');
+
                     return $this->makeExtraFiltersQuery($q, $data, $fieldDt->get('column'), $value, $foreignTableColumn);
                 });
             }
         }
     }
 
-
     /**
-     * @param  Builder  $query
-     * @param  string  $column
+     * @param Builder $query
+     * @param string  $column
      * @param         $value
      *
      * @return Builder|\Illuminate\Database\Query\Builder
@@ -139,10 +131,9 @@ trait FiltersHelper
         return $query->whereDate($column, optional($value)->toDateString());
     }
 
-
     /**
-     * @param  Builder  $query
-     * @param  string  $field
+     * @param Builder $query
+     * @param string  $field
      * @param         $value
      *
      * @return Builder|\Illuminate\Database\Query\Builder
@@ -151,12 +142,11 @@ trait FiltersHelper
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN) ?
             $query->whereNotNull($field) : $query->whereNull($field);
-
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $field
+     * @param Builder $query
+     * @param string  $field
      * @param         $value
      *
      * @return Builder|\Illuminate\Database\Query\Builder
@@ -165,12 +155,10 @@ trait FiltersHelper
     {
         return $query->whereDate($field, '>', optional(Arr::get($value, 'start'))->toDateString())
             ->whereDate($field, '<', optional(Arr::get($value, 'end'))->toDateString());
-
     }
 
-
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      * @param         $data
      * @param         $field
      * @param         $value
@@ -181,20 +169,19 @@ trait FiltersHelper
     private function makeExtraFiltersQuery(Builder $query, $data, string $field, $value, string $fallBackWhereIn = null)
     {
         $type = Arr::get($data, 'type');
-        if ("dateTime" == $type) {
+        if ('dateTime' == $type) {
             return $this->askDate($query, $field, $value);
         }
-        if ("dateRange" == $type) {
+        if ('dateRange' == $type) {
             return $this->askDateRange($query, $field, $value);
         }
-        if ("hasValueInside" == $type) {
+        if ('hasValueInside' == $type) {
             return $this->askHasValueInside($query, $value, $field);
         }
         if ($fallBackWhereIn) {
             return $query->whereIn($fallBackWhereIn, (array) $value);
-
         }
+
         return $query;
     }
-
 }

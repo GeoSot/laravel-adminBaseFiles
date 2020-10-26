@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Users;
 
-
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\App\Models\Users\UserPermission;
 
@@ -14,14 +13,13 @@ class UserRoleForm extends BaseAdminForm
     //
     public function getFormFields()
     {
-
         $modelInstance = $this->getModel();
 
         $this->add('display_name', 'text')->add('name', 'text');
 
         if ($modelInstance->id) {
             $this->modify('name', 'text', [
-                'attr' => ['readonly' => true]
+                'attr' => ['readonly' => true],
             ]);
         }
         $this->add('description', 'textarea');
@@ -32,19 +30,17 @@ class UserRoleForm extends BaseAdminForm
         $this->addCheckBox('is_protected');
 
         $this->add('permissions', 'entity', [
-            'choices' => UserPermission::all()->pluck('name', 'id')->toArray(),
+            'choices'        => UserPermission::all()->pluck('name', 'id')->toArray(),
             'choice_options' => [
-                'wrapper' => ['class' => 'custom-control custom-checkbox'],
-                'label_class' => 'custom-control-label',
-                'field_class' => 'custom-control-input',
+                'wrapper'       => ['class' => 'custom-control custom-checkbox'],
+                'label_class'   => 'custom-control-label',
+                'field_class'   => 'custom-control-input',
                 'includeHidden' => true,
             ],
             'selected' => $modelInstance->permissions->pluck('id')->toArray(),
             'expanded' => true,
             'multiple' => true,
-            'label' => false
+            'label'    => false,
         ]);
-
-
     }
 }

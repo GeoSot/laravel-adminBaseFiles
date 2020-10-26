@@ -10,14 +10,12 @@ use Illuminate\Http\Response;
 
 class PageAreaController extends BaseAdminController
 {
-
     protected $_class = PageArea::class;
-
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  PageArea  $pageArea
+     * @param PageArea $pageArea
      *
      * @return Response
      */
@@ -29,8 +27,8 @@ class PageAreaController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  PageArea  $pageArea
+     * @param Request  $request
+     * @param PageArea $pageArea
      *
      * @return Response
      */
@@ -42,9 +40,10 @@ class PageAreaController extends BaseAdminController
     protected function listFields()//Can be omitted
     {
         $newFields = [
-            'listable' => ['title', 'page.slug', 'order', 'blocks.slug', 'enabled', 'id'],
+            'listable'   => ['title', 'page.slug', 'order', 'blocks.slug', 'enabled', 'id'],
             'searchable' => ['title', 'enabled', 'id'],
         ];
+
         return array_merge(parent::listFields(), $newFields);
     }
 
@@ -60,5 +59,4 @@ class PageAreaController extends BaseAdminController
         /* @var PageArea $model */
         $model->syncRequestMedia($request, true, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
-
 }

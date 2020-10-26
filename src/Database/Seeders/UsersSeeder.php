@@ -17,14 +17,11 @@ class UsersSeeder extends BaseSeeder
         $static = new $this->class();
 
         foreach ($this->data() as $index => $userData) {
-
             $user = $static::create(Arr::except($userData, 'roles'));
             $user->attachRoles($userData['roles']);
-            $this->creatingDataMsg($userData['first_name'] . ' ' . $userData['last_name']);
+            $this->creatingDataMsg($userData['first_name'].' '.$userData['last_name']);
         }
-
     }
-
 
     /**
      * @return array
@@ -33,11 +30,11 @@ class UsersSeeder extends BaseSeeder
     {
         return [
             'admin' => [
-                'email' => 'admin@example.com',
-                'password' => bcrypt('123456'),
+                'email'      => 'admin@example.com',
+                'password'   => bcrypt('123456'),
                 'first_name' => 'Admin',
-                'last_name' => 'AdminLast',
-                'roles' => ['god', 'user'],
+                'last_name'  => 'AdminLast',
+                'roles'      => ['god', 'user'],
             ],
         ];
     }

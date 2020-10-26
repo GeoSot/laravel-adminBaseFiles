@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Providers;
 
 use Form;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,7 +35,7 @@ class CustomValidationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Checks if A richTextEditor Field is empty After Strips its html
+     * Checks if A richTextEditor Field is empty After Strips its html.
      */
     public function customRule_requiredRichTextArea()
     {
@@ -52,7 +51,6 @@ class CustomValidationServiceProvider extends ServiceProvider
         });
     }
 
-
     public static function registerFormCustomRawLabel(): void
     {
         /* @var Form $form */
@@ -61,10 +59,11 @@ class CustomValidationServiceProvider extends ServiceProvider
             $escape = !Arr::get($options, 'raw', true);
             if (isset($options['for']) && $for = $options['for']) {
                 unset($options['for']);
+
                 return $form->label($for, $value, $options, $escape);
             }
+
             return $form->label($name, $value, $options, $escape);
         });
     }
-
 }

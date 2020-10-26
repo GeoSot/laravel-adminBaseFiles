@@ -2,13 +2,10 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Site;
 
-
 use GeoSot\BaseAdmin\App\Forms\BaseForm;
 
 abstract class BaseFrontForm extends BaseForm
 {
-
-
 //    public function buildForm()
 //    {
 //        parent::buildForm();
@@ -29,6 +26,4 @@ abstract class BaseFrontForm extends BaseForm
 //    }
 //
 //
-
-
 }

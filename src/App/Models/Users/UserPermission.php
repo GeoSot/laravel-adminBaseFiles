@@ -13,18 +13,21 @@ use Laratrust\Models\LaratrustPermission;
 
 class UserPermission extends LaratrustPermission
 {
-    use HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, IsExportable, HasFactory;
+    use HasRulesOnModel;
+    use HasFrontEndConfigs;
+    use HasAllowedToHandleCheck;
+    use IsExportable;
+    use HasFactory;
 
     protected $fillable = [
         'name',
         'display_name',
         'description',
-        'permission_group_id'
+        'permission_group_id',
     ];
 
     public static function getAsGroups($modelName = null)
     {
-
         $query = parent::orderBy('name', 'ASC');
         /* @var Builder $query */
         if (!is_null($modelName)) {
@@ -39,7 +42,7 @@ class UserPermission extends LaratrustPermission
                 $newKey = Str::after($item1->name, '-');
 
                 return $newKey;
-            }
+            },
         ])->sortKeys()->map(function ($value, $key) {
             return $value->sortKeys();
         });
@@ -53,17 +56,17 @@ class UserPermission extends LaratrustPermission
     }
 
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  array  $merge
+     * @param array $merge
      *
      * @return array
      */
     protected function rules(array $merge = [])
     {
         return array_merge([
-            'name' => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
-            "display_name" => "required"
+            'name'         => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
+            'display_name' => 'required',
         ], $merge);
     }
 }

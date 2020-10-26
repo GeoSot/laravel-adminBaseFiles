@@ -12,7 +12,12 @@ use Laratrust\Models\LaratrustRole;
 
 class UserRole extends LaratrustRole
 {
-    use SoftDeletes, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, HasFactory, IsExportable;
+    use SoftDeletes;
+    use HasRulesOnModel;
+    use HasFrontEndConfigs;
+    use HasAllowedToHandleCheck;
+    use HasFactory;
+    use IsExportable;
 
     protected $fillable = [
         'name',
@@ -23,11 +28,10 @@ class UserRole extends LaratrustRole
         'is_protected',
     ];
     protected $casts = [
-        'front_users_can_see' => 'boolean',
+        'front_users_can_see'    => 'boolean',
         'front_users_can_choose' => 'boolean',
-        'is_protected' => 'boolean',
+        'is_protected'           => 'boolean',
     ];
-
 
     public function getRouteKeyName()
     {
@@ -35,21 +39,19 @@ class UserRole extends LaratrustRole
     }
 
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  array  $merge
+     * @param array $merge
      *
      * @return array
      */
     protected function rules(array $merge = [])
     {
-
         return array_merge([
-            'name' => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
-            "display_name" => "required",
+            'name'         => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
+            'display_name' => 'required',
         ], $merge);
     }
-
 
     public function scopeFrontUsersCanSee($builder)
     {
@@ -60,5 +62,4 @@ class UserRole extends LaratrustRole
     {
         return $builder->where('front_users_can_choose', true);
     }
-
 }

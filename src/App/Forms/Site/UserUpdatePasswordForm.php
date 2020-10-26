@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Forms\Site;
 
 class UserUpdatePasswordForm extends BaseFrontForm
 {
-
     public function getFormFields()
     {
         $this->setFormOptions($this->getThisFormOptions());
@@ -14,20 +13,17 @@ class UserUpdatePasswordForm extends BaseFrontForm
             'value' => false,
         ])->add('password_confirmation', 'password');
 
-
         $this->add('submit', 'submit', [
-            'attr' => ['class' => 'btn btn-outline-primary mt-3'],
+            'attr'    => ['class' => 'btn btn-outline-primary mt-3'],
             'wrapper' => ['class' => 'form-group text-center'],
         ]);
-
     }
-
 
     protected function getThisFormOptions(): array
     {
         return [
             'method' => 'PUT',
-            'url' => route('user-password.update'),
+            'url'    => route('user-password.update'),
         ];
     }
 }

@@ -2,10 +2,8 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Auth;
 
-
 class LoginForm extends AuthForm
 {
-
     public function getFormFields()
     {
         $this
@@ -13,19 +11,15 @@ class LoginForm extends AuthForm
                 'rules' => 'required|email',
             ])
             ->add('password', 'password', [
-                'rules' => 'required|string'
+                'rules' => 'required|string',
             ])
             ->add('remember', 'checkbox');
 
         $this->addSubmitBtn('login_btn');
-
-
     }
 
     protected function actionUrl(): string
     {
         return route('login');
     }
-
-
 }

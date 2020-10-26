@@ -1,6 +1,5 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Http\Middleware;
 
 use Closure;
@@ -8,7 +7,6 @@ use Illuminate\Support\Facades\App;
 
 class ForceHttpsProtocol
 {
-
     public function handle($request, Closure $next)
     {
         if (!$request->secure() && App::environment() === 'production') {

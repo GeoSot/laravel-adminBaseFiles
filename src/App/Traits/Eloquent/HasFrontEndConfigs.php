@@ -8,7 +8,6 @@
 
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -21,7 +20,6 @@ trait HasFrontEndConfigs
      */
     public function getDefaultFrontEndConfigValues()
     {
-
         $shortClassName = class_basename($this);
         $namespace = ltrim(str_replace('App\\Models', '', (new ReflectionClass($this))->getNamespaceName()), '\\');
         $namespace_low = lcfirst($namespace);
@@ -33,21 +31,20 @@ trait HasFrontEndConfigs
         $base = [
             'langDir' => (($namespace_low) ? $namespace_low.'/' : '').$singular,
             'viewDir' => (($namespace_low) ? $namespace_low.'.' : '').$plural,
-            'route' => $routePrefix.$routeSuffix,
+            'route'   => $routePrefix.$routeSuffix,
         ];
 
         return [
             'admin' => $base,
-            'site' => $base,
+            'site'  => $base,
         ];
-
     }
 
     /**
-     * Gets the model Configuration Strings
+     * Gets the model Configuration Strings.
      *
-     * @param  string  $side
-     * @param  string|null  $arg
+     * @param string      $side
+     * @param string|null $arg
      *
      * @return bool|Collection|mixed
      */
@@ -64,58 +61,55 @@ trait HasFrontEndConfigs
     }
 
     /**
-     * @param  string  $side
-     * @param  string|null  $arg
+     * @param string      $side
+     * @param string|null $arg
      *
      * @return bool|Collection|mixed
      */
     public function getFrontEndConfigPrefixed(string $side = 'admin', string $arg = null)
     {
         $collection = $this->getFrontEndConfig($side)->map(function ($item, $key) use ($side) {
-
             if ($key == 'langDir') {
                 return $side.'/'.$item;
             }
             if (in_array($key, ['viewDir', 'route'])) {
                 return $side.'.'.$item;
             }
-            return $item;
 
+            return $item;
         });
 
         return ($arg) ? $collection->get($arg) : $collection;
     }
 
     /**
-     * @param  string  $linkTitle
-     * @param  bool  $appendAsString
-     * @param  array  $options
+     * @param string $linkTitle
+     * @param bool   $appendAsString
+     * @param array  $options
      *
      * @return string
      */
     public function getDashBoardLink(string $linkTitle = 'id', bool $appendAsString = false, $options = [])
     {
         return $this->getLink($linkTitle, $appendAsString, 'admin', $options);
-
     }
 
     /**
-     * @param  string  $linkTitle
-     * @param  bool  $appendAsString
+     * @param string $linkTitle
+     * @param bool   $appendAsString
      *
      * @return string
      */
     public function getSiteLink(string $linkTitle = 'id', bool $appendAsString = false)
     {
         return $this->getLink($linkTitle, $appendAsString, 'site');
-
     }
 
     /**
-     * @param  string  $linkTitle
-     * @param  bool  $appendAsString
-     * @param  string  $side
-     * @param  array  $options
+     * @param string $linkTitle
+     * @param bool   $appendAsString
+     * @param string $side
+     * @param array  $options
      *
      * @return string
      */
@@ -131,7 +125,7 @@ trait HasFrontEndConfigs
         }, array_keys($options), $options);
 
         $action = $this->exists ? 'edit' : 'create';
+
         return '<a  href="'.route($this->getFrontEndConfigPrefixed($side, 'route').".{$action}", $this).'" '.implode('   ', $flatClasses).'>'.$text.'</a>';
     }
-
 }

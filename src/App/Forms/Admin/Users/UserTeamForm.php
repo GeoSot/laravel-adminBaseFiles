@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Users;
 
-
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
 class UserTeamForm extends BaseAdminForm
@@ -13,18 +12,15 @@ class UserTeamForm extends BaseAdminForm
     //
     public function getFormFields()
     {
-
         $modelInstance = $this->getModel();
 
         $this->add('display_name', 'text')->add('name', 'text');
 
         if ($modelInstance->id) {
             $this->modify('name', 'text', [
-                'attr' => ['readonly' => true]
+                'attr' => ['readonly' => true],
             ]);
         }
         $this->add('description', 'textarea');
-
-
     }
 }

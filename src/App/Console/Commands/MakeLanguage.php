@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands;
 
-
 use GeoSot\BaseAdmin\App\Console\Commands\InstallScripts\GenericFileCreateCommand;
 use Illuminate\Support\Str;
 
@@ -24,7 +23,6 @@ class MakeLanguage extends GenericFileCreateCommand
 
     protected $type = 'Language File';
 
-
     /**
      * Get the view full path.
      *
@@ -38,7 +36,6 @@ class MakeLanguage extends GenericFileCreateCommand
 
     protected function buildParentReplacements($stub)
     {
-
         $name = ucfirst(class_basename($this->getNameInput()));
         $nameWithSpaces = trim(implode(' ', preg_split('/(?=[A-Z])/', $name)));
 
@@ -56,7 +53,6 @@ class MakeLanguage extends GenericFileCreateCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/LanguageFile.stub';
+        return __DIR__.'/../stubs/LanguageFile.stub';
     }
-
 }

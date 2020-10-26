@@ -9,9 +9,9 @@ use Symfony\Component\Console\Input\InputOption;
 
 abstract class GenericFileCreateCommand extends GeneratorCommand
 {
-
     /**
      * Get the view full path.
+     *
      * @return string
      */
     abstract protected function getFileWithPath();
@@ -21,7 +21,6 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
         parent::__construct($files);
         $this->addOption('--force', null, InputOption::VALUE_NONE, 'Publish the files, even if already exists');
     }
-
 
     /**
      * @param $stub
@@ -33,7 +32,6 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
         return $stub;
     }
 
-
     /**
      * @throws FileNotFoundException
      */
@@ -44,16 +42,15 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
         $this->populateStub($this->getFileWithPath(), $stub);
     }
 
-
     /**
-     * @return string
      * @throws FileNotFoundException
+     *
+     * @return string
      */
     protected function getStubContent()
     {
         return $this->files->get($this->getStub());
     }
-
 
     /**
      * @param string $path
@@ -65,6 +62,7 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
     {
         if ($this->alreadyExists($path) and !$this->option('force')) {
             $this->warn("{$this->type} {$path} already exists!");
+
             return false;
         }
 
@@ -81,7 +79,7 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
     /**
      * Determine if the class already exists.
      *
-     * @param  string $rawName
+     * @param string $rawName
      *
      * @return bool
      */
@@ -101,5 +99,4 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
             ['force', null, InputOption::VALUE_NONE, 'Publish the files, even if already exists'],
         ];
     }
-
 }

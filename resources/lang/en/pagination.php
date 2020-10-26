@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -11,7 +12,7 @@ return [
     |
     */
     'previous' => '&laquo; Previous',
-    'next' => 'Next &raquo;',
-    'pages' => 'Page :currentpage from :lastpage',
-    'items' => 'Displaying :pageitems from :totalitems records',
+    'next'     => 'Next &raquo;',
+    'pages'    => 'Page :currentpage from :lastpage',
+    'items'    => 'Displaying :pageitems from :totalitems records',
 ];

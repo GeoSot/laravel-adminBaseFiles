@@ -1,8 +1,6 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Models\Media;
-
 
 use GeoSot\BaseAdmin\App\Jobs\CompressImage;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
@@ -10,7 +8,6 @@ use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\OwnedBy;
-use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -18,12 +15,16 @@ use Plank\Mediable\Media;
 use Spatie\Translatable\HasTranslations;
 
 /**
- *
  * @mixin Eloquent
  * */
 class Medium extends Media
 {
-    use HasTranslations, OwnedBy, ModifiedBy, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck;
+    use HasTranslations;
+    use OwnedBy;
+    use ModifiedBy;
+    use HasRulesOnModel;
+    use HasFrontEndConfigs;
+    use HasAllowedToHandleCheck;
 
     const REQUEST_FIELD_NAME__IMAGE = 'images';
     const REQUEST_FIELD_NAME__VIDEO = 'videos';
@@ -33,7 +34,7 @@ class Medium extends Media
         'title',
         'description',
         'alt_attribute',
-        'keywords'
+        'keywords',
     ];
 
     protected $fillable = [
@@ -42,7 +43,6 @@ class Medium extends Media
         'alt_attribute',
         'keywords',
 
-
         'the_file_exists',
         'thumb',
         'custom_properties',
@@ -50,11 +50,11 @@ class Medium extends Media
     ];
 
     protected $casts = [
-        'the_file_exists' => 'boolean',
+        'the_file_exists'   => 'boolean',
         'custom_properties' => 'array',
-        'size' => 'int',
+        'size'              => 'int',
     ];
-    protected $appends = [ 'url', 'thumb_html'];
+    protected $appends = ['url', 'thumb_html'];
 
     public static function boot()
     {
@@ -64,12 +64,10 @@ class Medium extends Media
         });
     }
 
-
     public function scopeEnabled(Builder $builder)
     {
         return $builder/*->where('enabled', true)*/ ->where('the_file_exists', true);
     }
-
 
     /**
      * @return string
@@ -79,7 +77,6 @@ class Medium extends Media
         return $this->getUrl();
     }
 
-
     /**
      * @return string
      */
@@ -88,6 +85,7 @@ class Medium extends Media
         if ($this->disk == 'public' && $this->thumb) {
             return Storage::disk($this->disk)->url($this->thumb);
         }
+
         return $this->getUrl();
     }
 
@@ -96,7 +94,7 @@ class Medium extends Media
      */
     public static function getDummyImageUrl()
     {
-        return "https://dummyimage.com/600x400/737480/fff.png&text=your+image+is+loading...";
+        return 'https://dummyimage.com/600x400/737480/fff.png&text=your+image+is+loading...';
     }
 
     /**
@@ -108,7 +106,8 @@ class Medium extends Media
     }
 
     /**
-     * @param  string  $width
+     * @param string $width
+     *
      * @return string
      */
     public function getThumbHtml(string $width = '')
@@ -116,12 +115,10 @@ class Medium extends Media
         return '<img class="lazyload img-fluid" style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbUrl().'" />';
     }
 
-
     /**
+     * @param array $args
      *
-     * @param  array  $args
      * @return string
-     *
      */
     public function getHtml($args = [])
     {
@@ -140,21 +137,20 @@ class Medium extends Media
         switch ($this->aggregate_type) {
             case Medium::TYPE_VIDEO:
                 return view('baseAdmin::_subBlades.media.video', compact('class', 'options', 'model'))->render();
-            case Medium::TYPE_IMAGE :
-            case Medium::TYPE_IMAGE_VECTOR :
+            case Medium::TYPE_IMAGE:
+            case Medium::TYPE_IMAGE_VECTOR:
                 return view('baseAdmin::_subBlades.media.image', compact('options', 'model'))->render();
             case 2:
-                echo "i equals 2";
+                echo 'i equals 2';
                 break;
             default:
                 return $model->getUrl();
         }
-
     }
 
     /**
-     * @param  null  $class
-     * @param  bool  $download
+     * @param null $class
+     * @param bool $download
      *
      * @return string
      */
@@ -163,8 +159,7 @@ class Medium extends Media
         $downloadAttr = ($download) ? ' download="true" ' : '';
         $class = $class ?? 'btn btn-link';
         $title = $this->title ?: $this->basename;
+
         return '<a data-id="'.$this->getKey().'" class="'.$class.'" href="'.$this->getUrl().'" target="_blank" '.$downloadAttr.' title="'.$title.'">'.$title.'</a>';
     }
-
-
 }

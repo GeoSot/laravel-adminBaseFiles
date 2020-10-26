@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Users;
 
-
 use App\Models\Media\Medium;
 use App\Models\Users\User;
 use App\Models\Users\UserRole;
@@ -10,11 +9,8 @@ use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
 class UserForm extends BaseAdminForm
 {
-
     public function getFormFields()
     {
-
-
         $this->getMainFields();
 
         $this->add('gender', 'choice', [
@@ -23,13 +19,13 @@ class UserForm extends BaseAdminForm
                 'F' => $this->transText('gender_F'),
             ],
             'choice_options' => [
-                'wrapper' => ['class' => 'ml-3 custom-control custom-radio custom-control-inline'],
+                'wrapper'    => ['class' => 'ml-3 custom-control custom-radio custom-control-inline'],
                 'label_attr' => ['class' => 'custom-control-label'],
-                'attr' => ['class' => 'custom-control-input'],
+                'attr'       => ['class' => 'custom-control-input'],
             ],
             //  'selected' => $this->model->fields
             'expanded' => true,
-            'multiple' => false
+            'multiple' => false,
         ]);
         $this->add('preferred_lang', 'select', [
             'choices' => array_map(function ($el) {
@@ -40,35 +36,33 @@ class UserForm extends BaseAdminForm
 
         $this->add('dob', 'text', [
             'template' => 'baseAdmin::_subBlades.formTemplates.dateTime',
-            'cast' => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY']
+            'cast'     => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY'],
         ]);
         $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
             // 'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,
             'options' => [
-                'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
-                'img' => ['class' => ' mbed-responsive-item'],
-                'label' => false,
-                'template' => 'baseAdmin::_subBlades.formTemplates.image',
-                'final_property' => 'url'
-            ]
+                'img_wrapper'    => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
+                'img'            => ['class' => ' mbed-responsive-item'],
+                'label'          => false,
+                'template'       => 'baseAdmin::_subBlades.formTemplates.image',
+                'final_property' => 'url',
+            ],
         ]);
         $this->add('bio', 'textarea', ['attr' => ['rows' => '5']]);
 
-
         $this->add('notification_types', 'choice', [
-            'choices' => ['mail' => 'Email', 'slack' => 'Slack'],
-            'expanded' => true,
-            'multiple' => true,
+            'choices'        => ['mail' => 'Email', 'slack' => 'Slack'],
+            'expanded'       => true,
+            'multiple'       => true,
             'choice_options' => [
-                'wrapper' => ['class' => 'ml-3 custom-control custom-checkbox custom-control-inline'],
+                'wrapper'    => ['class' => 'ml-3 custom-control custom-checkbox custom-control-inline'],
                 'label_attr' => ['class' => 'custom-control-label'],
-                'attr' => ['class' => 'custom-control-input'],
+                'attr'       => ['class' => 'custom-control-input'],
             ],
             'selected' => ['mail'],
         ]);
-
 
         $this->add('slack_webhook_url', 'text');
         $this->addSeparatorLine();
@@ -79,17 +73,17 @@ class UserForm extends BaseAdminForm
 
         $this->addCheckBox('enabled');
         $this->add('roles', 'entity', [
-            'class' => UserRole::class,
-            'property' => 'display_name',
-            'multiple' => true,
-            'label' => $this->transText('roles.name'),
+            'class'         => UserRole::class,
+            'property'      => 'display_name',
+            'multiple'      => true,
+            'label'         => $this->transText('roles.name'),
             'query_builder' => function (UserRole $role) {
                 return $role;
 //                return $role->where($this->getModel()->getKeyName(), '<>', optional($this->getModel())->getKey());
 //
 //                // If query builder option is not provided, all data is fetched
 //                return $lang->where('active', 1);
-            }
+            },
         ]);
 //        $this->add('rolesTeams', 'entity', [
 //            'class' => UserRole::class,
@@ -102,7 +96,6 @@ class UserForm extends BaseAdminForm
 //            //                    }
 //        ]);
 //        $this->add('notes', 'textarea', ['attr' => ['rows' => '3'],]);
-
     }
 
     private function getAddressFields(): void

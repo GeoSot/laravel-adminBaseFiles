@@ -1,26 +1,27 @@
 <?php
+
 return [
 
     'menu' => [
         'dashboard' => 'Dashboard',
-        'user' => [
+        'user'      => [
             'profile' => 'My Profile',
-            'logout' => 'Logout',
-            'login' => 'Login',
+            'logout'  => 'Logout',
+            'login'   => 'Login',
         ],
     ],
     'errorPages' => [
         'returnHomeBtn' => 'Return Home',
-        'codeTitles' => [
-            '404' => 'Page Not Found'
+        'codeTitles'    => [
+            '404' => 'Page Not Found',
         ],
         'codeMessages' => [
-            '404' => 'Wooops Page Not Found, error 404'
-        ]
+            '404' => 'Wooops Page Not Found, error 404',
+        ],
     ],
     'formTitles' => [
-        'formSelectPlaceHolder' => '- - Choose - -'
-    ]
+        'formSelectPlaceHolder' => '- - Choose - -',
+    ],
     //    'messages'       => [
     //        'crud' => [
     //            'create'       => [
@@ -127,6 +128,5 @@ return [
     //        'title' => 'Warning',
     //        'msg'   => "You don't have the proper Permission",
     //    ],
-
 
 ];

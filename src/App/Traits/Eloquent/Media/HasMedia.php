@@ -1,8 +1,6 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
-
 
 use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\Helpers\Alert;
@@ -17,11 +15,9 @@ use Plank\Mediable\Media;
 use Plank\Mediable\Mediable;
 use Plank\Mediable\MediaUploaderFacade;
 
-
 trait HasMedia
 {
     use Mediable;
-
 
     /**
      * Relation of Images to parent model. Morph Many To Many relationship
@@ -34,7 +30,6 @@ trait HasMedia
         return $this->media()->whereIn('aggregate_type', [Medium::TYPE_IMAGE, Medium::TYPE_IMAGE_VECTOR]);
     }
 
-
     /**
      * Relation of Videos to parent model. Morph Many To Many relationship
      * Get all videos related to the parent model.
@@ -46,14 +41,13 @@ trait HasMedia
         return $this->media()->whereIn('aggregate_type', [Medium::TYPE_VIDEO]);
     }
 
-
     /**
-     * Save a Users Profile Picture
+     * Save a Users Profile Picture.
      *
-     * @param  Request  $request
-     * @param  bool  $keepFirstOnly
-     * @param  string  $requestFieldName  *
-     * @param  array  $tags
+     * @param Request $request
+     * @param bool    $keepFirstOnly
+     * @param string  $requestFieldName *
+     * @param array   $tags
      *
      * @return Media|Collection|null
      */
@@ -73,24 +67,21 @@ trait HasMedia
             return null;
         }
 
-
         // ---
         try {
             $mediaUploader = MediaUploaderFacade::toDirectory($this->getTable())
                 ->setAllowedAggregateTypes(Arr::get($supportedTypes, $requestFieldName, []));
 
-
             //SAVE MANY
             if ($request->get("repeatable_$requestFieldName") && !$keepFirstOnly) {
-
                 $mediaCollection = \Illuminate\Database\Eloquent\Collection::make($files)->map(function (UploadedFile $file) use ($mediaUploader) {
                     return $mediaUploader->fromSource($file)->upload();
                 });
 
                 $this->attachMedia($mediaCollection, $requestFieldName);
+
                 return $mediaCollection;
             }
-
 
             //SAVE ONE
             $firstMedium = Arr::first($files, function ($value, $key) {
@@ -100,7 +91,6 @@ trait HasMedia
             $this->syncMedia($medium, $requestFieldName);
 
             return $medium;
-
         } catch (\Exception $e) {
             if (isset($mediaCollection)) {
                 Medium::destroy($mediaCollection);
@@ -114,17 +104,16 @@ trait HasMedia
             Alert::error($msg);
             Log::error($msg, ['msg' => $e->getMessage()]);
         }
-        return null;
 
+        return null;
     }
 
-
     /**
-     * @param  Request  $request
-     * @param  string  $requestFieldName
-     * @param  array  $tags
+     * @param Request $request
+     * @param string  $requestFieldName
+     * @param array   $tags
      *
-     * @return boolean
+     * @return bool
      */
     final protected function removeRequestMedia(Request $request, string $requestFieldName = Medium::REQUEST_FIELD_NAME__FILE, array $tags = [])
     {
@@ -132,9 +121,9 @@ trait HasMedia
         $oldIds = array_filter($request->get("old_$requestFieldName", []));
         $deleteIdsArray = $this->media()->whereNotIn('id', $oldIds)->pluck('id')->toArray();
 
-
         if (!empty($ids = array_merge($removeIdsArray, $deleteIdsArray))) {
             $this->detachMedia($ids, array_merge([$requestFieldName], $tags));
+
             return true;
         }
 
@@ -153,9 +142,7 @@ trait HasMedia
         }, $allFields);
 
         $parts = array_merge([$this->getKey()], $text, [now()->toDateTimeString()]);
+
         return Str::slug(implode('-', $parts));
-
-
     }
-
 }

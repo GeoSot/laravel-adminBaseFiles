@@ -19,18 +19,16 @@ class UserProfileForm extends BaseFrontForm
         ]);
 
         $this->add('submit', 'submit', [
-            'attr' => ['class' => 'btn btn-outline-primary mt-3'],
+            'attr'    => ['class' => 'btn btn-outline-primary mt-3'],
             'wrapper' => ['class' => 'form-group text-center'],
         ]);
-
     }
 
     protected function getThisFormOptions(): array
     {
         return [
             'method' => 'PUT',
-            'url' => route('user-profile-information.update'),
+            'url'    => route('user-profile-information.update'),
         ];
     }
-
 }

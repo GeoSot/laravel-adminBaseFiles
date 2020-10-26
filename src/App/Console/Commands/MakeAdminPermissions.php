@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands;
 
-
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -59,12 +58,10 @@ class MakeAdminPermissions extends Command
             'admin.forceDelete',
             'admin.restore',
         ];
-
     }
 
     protected function createPermissionsForAllAdminModels()
     {
-
         $adminRoutes = config('baseAdmin.main.routes');
         foreach ($adminRoutes as $parentRoute => $node) {
             $this->createPermissionsForModel($parentRoute);
@@ -78,7 +75,6 @@ class MakeAdminPermissions extends Command
                 }
                 $this->createPermissionsForModel($parentRoute.ucfirst($name));
             }
-
         }
     }
 
@@ -89,12 +85,10 @@ class MakeAdminPermissions extends Command
     {
         $this->info('');
         foreach ($this->getPermissionsMapping() as $el) {
-
             $friendlyName = ucwords(str_replace('.', ' ', $el)).' '.ucfirst(Str::plural($nameInput));
             $name = $el.'-'.$nameInput;
             $permission = $this->updateOrCreatePermissionModel($name, $friendlyName);
         }
-
     }
 
     protected function createPermissionFromString(string $permName)
@@ -103,7 +97,6 @@ class MakeAdminPermissions extends Command
 
         $friendlyName = ucwords(str_replace(['.', '-'], ' ', $permName));
         $permission = $this->updateOrCreatePermissionModel($permName, $friendlyName);
-
     }
 
     protected function assignAllPermissionsToGodRole(): void
@@ -116,26 +109,22 @@ class MakeAdminPermissions extends Command
     }
 
     /**
-     * @param  string  $name
-     * @param  string  $friendlyName
+     * @param string $name
+     * @param string $friendlyName
      *
      * @return mixed
      */
     protected function updateOrCreatePermissionModel(string $name, string $friendlyName)
     {
-
-
         $permission = config('baseAdmin.config.models.permission')::updateOrCreate(['name' => $name], [
             'display_name' => $friendlyName,
-            'description' => $friendlyName,
+            'description'  => $friendlyName,
             //                'permission_group_id'
         ]);
 
         $this->info(($permission->wasRecentlyCreated ? 'Creating' : 'Existing').'  Permission '.$permission->name);
 
-
         return $permission;
-
     }
 
     protected function makeAllPermissions(): void
@@ -151,5 +140,4 @@ class MakeAdminPermissions extends Command
             $this->createPermissionFromString('admin.index-'.$parentRoute);
         }
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
-
 use App\Models\Media\Medium;
 use App\Models\Setting;
 use Illuminate\Support\Arr;
@@ -10,43 +9,37 @@ use Symfony\Component\Finder\Finder;
 
 class SettingForm extends BaseAdminForm
 {
-
     public function getFormFields()
     {
-
         $this->isCreate ? $this->getCreateFields() : $this->getEditFields();
-
     }
 
     protected function getCreateFields()
     {
-
-        $this->add('key', 'text', ['attr' => ['list' => "keys"]]);
-        $this->add('sub_group', 'text', ['attr' => ['list' => "subGroups"]]);
-        $this->add('group', 'text', ['attr' => ['list' => "groups"]]);
-
+        $this->add('key', 'text', ['attr' => ['list' => 'keys']]);
+        $this->add('sub_group', 'text', ['attr' => ['list' => 'subGroups']]);
+        $this->add('group', 'text', ['attr' => ['list' => 'groups']]);
 
         $this->add('settingsFieldsInfo', 'static', [
-            'label' => false,
+            'label'   => false,
             'wrapper' => ['class' => 'form-group  my-4 px-3 py-2 small'],
-            'value' => $this->transHelpText('settingsFieldsInfo') // If nothing is passed, data is pulled from model if any
+            'value'   => $this->transHelpText('settingsFieldsInfo'), // If nothing is passed, data is pulled from model if any
         ]);
 
-
         $this->add('type', 'choice', [
-            'choices' => Arr::sort(Setting::getSettingTypes()),
+            'choices'     => Arr::sort(Setting::getSettingTypes()),
             'empty_value' => $this->getSelectEmptyValueLabel(),
-            'help_block' => [
+            'help_block'  => [
                 'text' => $this->transHelpText('type'),
             ],
         ]);
         $this->addSeparatorLine();
         $this->add('model_type', 'select', [
-            'choices' => $this->getModelNames()->toArray(),
+            'choices'     => $this->getModelNames()->toArray(),
             'empty_value' => $this->getSelectEmptyValueLabel(),
-            'help_block' => [
-                'text' => $this->transHelpText('model_type')
-            ]
+            'help_block'  => [
+                'text' => $this->transHelpText('model_type'),
+            ],
         ]);
     }
 
@@ -57,7 +50,7 @@ class SettingForm extends BaseAdminForm
 
         $modelsList = collect([]);
 
-        collect($files)->each(function ($item) use ($modelsList, $modelPath) {
+        collect($files)->each(function ($item) use ($modelsList) {
             $modelCleanName = str_replace('.php', '', $item->getFilename());
             $modelsList['App\\Models\\'.str_replace('/', '\\', $item->getRelativePath()).'\\'.$modelCleanName] = $modelCleanName;
         });
@@ -72,7 +65,6 @@ class SettingForm extends BaseAdminForm
         $this->getEditSecondFields();
         $this->getEditRelatedModelFields();
         $this->add('notes', 'textarea');
-
     }
 
     protected function getEditFirstFields()
@@ -81,7 +73,6 @@ class SettingForm extends BaseAdminForm
         $this->add('slug', 'text', $attr);
         $this->add('type_to_human', 'text', $attr);
         $this->add('type', 'hidden');
-
     }
 
     protected function getEditValueField()
@@ -101,12 +92,11 @@ class SettingForm extends BaseAdminForm
         if ($type == 'dateTime') {
             $this->add('value', 'text', [
                 'template' => 'baseAdmin::_subBlades.formTemplates.dateTime',
-                'cast' => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY']
+                'cast'     => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY'],
             ]);
         }
 
         $this->getValueField($type);
-
     }
 
     protected function getEditSecondFields()
@@ -117,28 +107,23 @@ class SettingForm extends BaseAdminForm
         $this->add('group', 'text', $attr);
     }
 
-
     protected function getEditRelatedModelFields()
     {
-
         $relatedModelName = $this->getModel()->model_type;
         if ($relatedModelName) {
-
             $this->add('model_type', 'select', [
-                'choices' => $this->getModelNames()->toArray(),
+                'choices'     => $this->getModelNames()->toArray(),
                 'empty_value' => $this->getSelectEmptyValueLabel(),
-                'attr' => ['disabled']
+                'attr'        => ['disabled'],
             ]);
 
             $this->add('model_id', 'entity', [
-                'class' => $relatedModelName,
-                'property' => 'title',
-                'attr' => ['disabled'],
+                'class'       => $relatedModelName,
+                'property'    => 'title',
+                'attr'        => ['disabled'],
                 'empty_value' => $this->getSelectEmptyValueLabel(),
             ]);
         }
-
-
     }
 
     /**
@@ -148,12 +133,12 @@ class SettingForm extends BaseAdminForm
     {
         if (in_array($type, ['collectionSting', 'collectionNumber'])) {
             $this->add('value', 'collection', [
-                'type' => ('collectionSting' == $type) ? 'text' : 'number',
+                'type'       => ('collectionSting' == $type) ? 'text' : 'number',
                 'repeatable' => true,
-                'options' => [    // these are options for a single type
+                'options'    => [    // these are options for a single type
                     'label' => false,
                 ],
-                'data' => collect(json_decode($this->getModel()->value))
+                'data' => collect(json_decode($this->getModel()->value)),
             ]);
         }
 
@@ -163,18 +148,20 @@ class SettingForm extends BaseAdminForm
                 // 'repeatable' => true,
                 //   'viewAndRemoveOnly'=>true,
                 'options' => [
-                    'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
-                    'img' => ['class' => ' mbed-responsive-item'],
-                    'label' => false,
-                    'template' => 'baseAdmin::_subBlades.formTemplates.'.($type == Medium::TYPE_IMAGE ? 'image' : 'file'),
+                    'img_wrapper'    => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
+                    'img'            => ['class' => ' mbed-responsive-item'],
+                    'label'          => false,
+                    'template'       => 'baseAdmin::_subBlades.formTemplates.'.($type == Medium::TYPE_IMAGE ? 'image' : 'file'),
                     'final_property' => 'url',
-                    'value' => function () {
+                    'value'          => function () {
                         $val = $this->getModel()->value;
+
                         return $val ? Medium::find($val) : '';
-                    }
-                ]
+                    },
+                ],
             ]);
             $this->add('value', 'hidden');
+
             return;
         }
 

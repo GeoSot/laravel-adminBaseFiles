@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 class CreatePageAreasTable extends Migration
 {
     /**
@@ -25,7 +24,6 @@ class CreatePageAreasTable extends Migration
 
             $table->string('title')->nullable();
             $table->string('sub_title')->nullable();
-
 
             //--Defaults
             $table->boolean('enabled')->default(1);

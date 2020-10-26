@@ -10,7 +10,6 @@ class BasicForm extends BaseAdminForm
     //
     public function getFormFields()
     {
-
         $modelInstance = $this->getModel();
         // $rules         = collect($modelInstance->rules());
         //        if ($modelInstance->id) {

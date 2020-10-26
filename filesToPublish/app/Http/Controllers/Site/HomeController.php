@@ -6,5 +6,4 @@ use GeoSot\BaseAdmin\App\Http\Controllers\Site\HomeController as InitialControll
 
 class HomeController extends InitialController
 {
-
 }

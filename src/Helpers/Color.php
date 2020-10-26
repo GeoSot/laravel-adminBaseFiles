@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace GeoSot\BaseAdmin\Helpers;
-
 
 class Color
 {
@@ -26,7 +24,6 @@ class Color
     {
         $this->type = $type;
     }
-
 
     public static function info()
     {
@@ -90,6 +87,4 @@ class Color
     {
         return $this->type;
     }
-
-
 }

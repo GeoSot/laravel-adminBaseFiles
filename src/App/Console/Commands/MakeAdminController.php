@@ -27,7 +27,6 @@ class MakeAdminController extends ControllerMakeCommand
      */
     protected $type = 'Controller';
 
-
     /**
      * Get the stub file for the generator.
      *
@@ -35,20 +34,18 @@ class MakeAdminController extends ControllerMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/AdminControllerWithModel.stub';
+        return __DIR__.'/../stubs/AdminControllerWithModel.stub';
     }
-
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string $rootNamespace
+     * @param string $rootNamespace
      *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\Controllers\Admin';
+        return $rootNamespace.'\Http\Controllers\Admin';
     }
-
 }

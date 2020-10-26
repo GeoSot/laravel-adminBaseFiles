@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Models\Users;
 
-
 use GeoSot\BaseAdmin\App\Traits\Eloquent\EnabledDisabled;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
@@ -22,12 +21,22 @@ use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Passport\HasApiTokens;
 use Venturecraft\Revisionable\RevisionableTrait;
 
-
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
-
-    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel;
-    use HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate, HasFactory, IsExportable, RevisionableTrait;
+    use Notifiable;
+    use HasApiTokens;
+    use SoftDeletes;
+    use EnabledDisabled;
+    use HasMedia;
+    use ModifiedBy;
+    use LaratrustUserTrait;
+    use HasRulesOnModel;
+    use HasFrontEndConfigs;
+    use HasAllowedToHandleCheck;
+    use Impersonate;
+    use HasFactory;
+    use IsExportable;
+    use RevisionableTrait;
 
     protected $historyLimit = 50;
     protected $revisionCleanup = true;
@@ -69,8 +78,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         'remember_token',
     ];
     protected $casts = [
-        'dob' => 'date',
-        'notification_types' => 'array'
+        'dob'                => 'date',
+        'notification_types' => 'array',
     ];
     protected $appends = [
         'full_name',
@@ -110,9 +119,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     }
 
     /**
-     * Validation RULES
+     * Validation RULES.
      *
-     * @param  array  $merge
+     * @param array $merge
      *
      * @return array
      */
@@ -120,20 +129,20 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     {
         if (is_null($this->id) or !is_null(request()->input('password'))) {
             $merge = array_merge($merge, [
-                'password' => 'required|min:6|confirmed'
+                'password' => 'required|min:6|confirmed',
             ]);
         }
         if (in_array('slack', request()->input('notification_types', []))) {
             $merge = array_merge($merge, [
-                'slack_webhook_url' => 'required'
+                'slack_webhook_url' => 'required',
             ]);
         }
 
         return array_merge([
-            'email' => ['required', 'email', 'max:190', "unique:{$this->getTable()},email".$this->getIgnoreTextOnUpdate(),],
+            'email' => ['required', 'email', 'max:190', "unique:{$this->getTable()},email".$this->getIgnoreTextOnUpdate()],
             //            "images.*"      => "required|nullable|mimes:jpg,jpeg,bmp,png|max:100",
             'first_name' => 'required|min:3',
-            'last_name' => 'required|min:3',
+            'last_name'  => 'required|min:3',
         ], $merge);
     }
 
@@ -141,7 +150,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     {
         return $this->first_name.' '.$this->last_name;
     }
-
 
     public function routeNotificationForSlack($notification)
     {
@@ -152,6 +160,4 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     {
         return $this->isAbleTo('admin.*') and !app('impersonate')->isImpersonating();
     }
-
-
 }

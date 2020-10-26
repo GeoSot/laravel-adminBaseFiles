@@ -19,12 +19,8 @@ class AddColumnsOnMediaTable extends Migration
             $table->string('title')->nullable();
             $table->string('alt_attribute')->nullable();
             $table->string('keywords')->nullable();
-
         });
-
-
     }
-
 
     /**
      * Reverse the migrations.
@@ -34,10 +30,7 @@ class AddColumnsOnMediaTable extends Migration
     public function down()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->dropColumn(['the_file_exists', 'title', 'alt_attribute', 'keywords',]);
-
+            $table->dropColumn(['the_file_exists', 'title', 'alt_attribute', 'keywords']);
         });
-
-
     }
 }

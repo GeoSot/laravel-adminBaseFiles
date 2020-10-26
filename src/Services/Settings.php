@@ -8,7 +8,6 @@
 
 namespace GeoSot\BaseAdmin\Services;
 
-
 use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Repository;
@@ -18,11 +17,10 @@ use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class Settings
+ * Class Settings.
  */
 class Settings
 {
-
     /**
      * @var bool
      */
@@ -33,7 +31,6 @@ class Settings
      */
     protected $settingsModel;
 
-
     public function __construct()
     {
         $this->settingsModel = Setting::class;
@@ -41,12 +38,12 @@ class Settings
         $this->cachedTime = Carbon::now()->addMinutes(config('baseAdmin.config.cacheSettings.time', 15));
     }
 
-
     /**
-     * @param  string  $groupKey
+     * @param string $groupKey
+     *
+     * @throws InvalidArgumentException
      *
      * @return mixed|null
-     * @throws InvalidArgumentException
      */
     public function getGroup(string $groupKey)
     {
@@ -61,30 +58,28 @@ class Settings
         }
 
         return $this->cacheKey($this->getSafeGroupKey($groupKey), $rows);
-
     }
 
-
     /**
-     * @param  string  $key
+     * @param string $key
+     *
+     * @throws InvalidArgumentException
      *
      * @return bool
-     * @throws InvalidArgumentException
      */
     public function hasGroup(string $key)
     {
         return $this->has($this->getSafeGroupKey($key));
     }
 
-
     /**
      * Store value into registry.
      *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  string  $type
+     * @param string     $key
+     * @param mixed      $value
+     * @param string     $type
+     * @param Model|null $relatedModel
      *
-     * @param  Model|null  $relatedModel
      * @return void
      */
     public function set(string $key, $value, $type, Model $relatedModel = null)
@@ -112,12 +107,12 @@ class Settings
 //        return true;
     }
 
-
     /**
-     * @param  string  $key
+     * @param string $key
+     *
+     * @throws InvalidArgumentException
      *
      * @return bool
-     * @throws InvalidArgumentException
      */
     public function has(string $key)
     {
@@ -137,13 +132,13 @@ class Settings
         return Cache::store('file');
     }
 
-
     /**
-     * @param  string  $key
-     * @param  null  $default
+     * @param string $key
+     * @param null   $default
+     *
+     * @throws InvalidArgumentException
      *
      * @return mixed
-     * @throws InvalidArgumentException
      */
     public function get(string $key, $default = null)
     {
@@ -167,10 +162,10 @@ class Settings
     }
 
     /**
-     * REFRESH THE Cache Key
+     * REFRESH THE Cache Key.
      *
-     * @param  string  $key
-     * @param  mixed  $value  *
+     * @param string $key
+     * @param mixed  $value *
      *
      * @return mixed
      */
@@ -184,7 +179,7 @@ class Settings
     }
 
     /**
-     * @param  string  $key
+     * @param string $key
      *
      * @return string
      */
@@ -202,27 +197,32 @@ class Settings
             $this->getSettingsModelInstance()::all()->each(function ($item) {
                 $this->cacheKey($item->slug, $item->parsed_value);
             });
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * Deletes the SETTING
+     * Deletes the SETTING.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     public function deleteKey(string $key)
     {
         $this->flushKey($key);
+
         return $this->getSettingsModelInstance()::where('slug', $key)->delete();
     }
 
     /**
-     * REFRESH THE Cache Key
+     * REFRESH THE Cache Key.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     public function flushKey(string $key)

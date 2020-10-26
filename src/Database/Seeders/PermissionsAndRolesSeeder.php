@@ -1,16 +1,15 @@
 <?php
 
 namespace GeoSot\BaseAdmin\Database\Seeders;
+
 use App\Models\Users\UserRole;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-
 class PermissionsAndRolesSeeder extends BaseSeeder
 {
-
     protected $class = UserRole::class;
 
     /**
@@ -35,9 +34,7 @@ class PermissionsAndRolesSeeder extends BaseSeeder
             $this->creatingDataMsg(ucfirst($index));
         }
 
-
         $this->seedPermissions();
-
     }
 
     /**
@@ -67,28 +64,27 @@ class PermissionsAndRolesSeeder extends BaseSeeder
                 'is_protected'           => true,
             ],
         ];
-
     }
 
     protected function seedPermissions()
     {
         Artisan::call('baseAdmin:makePermissionsForModel', [
-            'name' => 'all'
+            'name' => 'all',
         ]);
         $this->command->line(Artisan::output());
         $this->command->info('Permissions table seeded ');
     }
 
     /**
-     * Truncates all the model  tables
+     * Truncates all the model  tables.
      *
-     * @return    void
+     * @return void
      */
     public function truncateTables()
     {
-        $this->command->info('Truncating ' . (new $this->class ())->getTable() . ' Table');
+        $this->command->info('Truncating '.(new $this->class())->getTable().' Table');
         $this->command->info('Truncating Permissions Table');
-        $this->command->info('Truncating  Tables ' . config('laratrust.tables.permission_role') . ' ' . config('laratrust.tables.permission_user') . ' ' . config('laratrust.tables.role_user'));
+        $this->command->info('Truncating  Tables '.config('laratrust.tables.permission_role').' '.config('laratrust.tables.permission_user').' '.config('laratrust.tables.role_user'));
         Schema::disableForeignKeyConstraints();
         DB::table(config('laratrust.tables.permission_role'))->truncate();
         DB::table(config('laratrust.tables.permission_user'))->truncate();
@@ -97,6 +93,4 @@ class PermissionsAndRolesSeeder extends BaseSeeder
         config('baseAdmin.config.models.permission')::truncate();
         Schema::enableForeignKeyConstraints();
     }
-
-
 }

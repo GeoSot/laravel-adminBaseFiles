@@ -10,13 +10,12 @@ use Illuminate\Http\Response;
 
 class PageBlockController extends BaseAdminController
 {
-
     protected $_class = PageBlock::class;
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  PageBlock  $pageBlock
+     * @param PageBlock $pageBlock
      *
      * @return Response
      */
@@ -28,8 +27,8 @@ class PageBlockController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  PageBlock  $pageBlock
+     * @param Request   $request
+     * @param PageBlock $pageBlock
      *
      * @return Response
      */
@@ -41,16 +40,17 @@ class PageBlockController extends BaseAdminController
     protected function listFields()//Can be omitted
     {
         $newFields = [
-            'listable' => ['title', 'pageArea.slug', 'order', 'has_multiple_images', 'enabled', 'id'],
+            'listable'   => ['title', 'pageArea.slug', 'order', 'has_multiple_images', 'enabled', 'id'],
             'searchable' => ['title', 'enabled', 'id'],
         ];
+
         return array_merge(parent::listFields(), $newFields);
     }
 
     protected function filters()
     {
         return [
-            'pageArea.slug' => ['type' => 'multiSelect'],
+            'pageArea.slug'       => ['type' => 'multiSelect'],
             'has_multiple_images' => ['type' => 'boolean'],
         ];
     }
@@ -60,5 +60,4 @@ class PageBlockController extends BaseAdminController
         /* @var PageBlock $model */
         $model->syncRequestMedia($request, false, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
-
 }

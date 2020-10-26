@@ -10,31 +10,30 @@ use Illuminate\Http\Response;
 
 class PageController extends BaseAdminController
 {
-
     protected $_class = Page::class;
 
     //OVERRIDES
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
 
-
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Page  $page
+     * @param Page $page
      *
      * @return Response
      */
     public function edit(Page $page)
     {
         $page->load('pageAreas.blocks');
+
         return $this->genericEdit($page);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Page  $page
+     * @param Request $request
+     * @param Page    $page
      *
      * @return Response
      */
@@ -46,9 +45,10 @@ class PageController extends BaseAdminController
     protected function listFields()//Can be omitted
     {
         $newFields = [
-            'listable' => ['title', 'slug', 'parentPage.title', 'childrenPages.title', 'enabled', 'id'],
+            'listable'   => ['title', 'slug', 'parentPage.title', 'childrenPages.title', 'enabled', 'id'],
             'searchable' => ['title', 'enabled', 'id'],
         ];
+
         return array_merge(parent::listFields(), $newFields);
     }
 
@@ -59,11 +59,9 @@ class PageController extends BaseAdminController
         ];
     }
 
-
     protected function afterSave(Request &$request, $model)
     {
         /* @var Page $model */
         $model->syncRequestMedia($request, true, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
-
 }

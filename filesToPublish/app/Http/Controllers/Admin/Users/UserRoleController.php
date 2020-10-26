@@ -6,6 +6,4 @@ use GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users\UserRoleController as Init
 
 class UserRoleController extends InitialController
 {
-
-
 }

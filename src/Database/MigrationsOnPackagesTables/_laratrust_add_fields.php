@@ -20,7 +20,6 @@ class LaratrustAddFields extends Migration
             $table->boolean('is_protected')->default(false);
             $table->softDeletes();
         });
-
     }
 
     /**

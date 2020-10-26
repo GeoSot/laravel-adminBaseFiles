@@ -2,14 +2,11 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands;
 
-
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-
 class MakeModel extends ModelMakeCommand
 {
-
     /**
      * The console command name.
      *
@@ -53,23 +50,23 @@ class MakeModel extends ModelMakeCommand
             ['langBase', null, InputOption::VALUE_NONE, 'langBase.'],
             ['routeBase', null, InputOption::VALUE_NONE, 'routeBase.'],
         ];
-        return array_merge(parent::getOptions(), $extendedOptions);
 
+        return array_merge(parent::getOptions(), $extendedOptions);
     }
 
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return string
      */
     protected function buildClass($name)
     {
-
         $replacePatterns = [
             'routeBase' => '_BASE_ROUTE_',
-            'langBase' => '_MODEL_LANG_DIR_',
-            'viewBase' => '_MODEL_VIEWS_DIR_',
+            'langBase'  => '_MODEL_LANG_DIR_',
+            'viewBase'  => '_MODEL_VIEWS_DIR_',
         ];
 
         $replace = [];
@@ -80,7 +77,6 @@ class MakeModel extends ModelMakeCommand
             }
         }
 
-
         //		if ($this->option('model')) {
         //		$stub = $this->buildModelReplacements($stub);
         //	}
@@ -89,9 +85,9 @@ class MakeModel extends ModelMakeCommand
         //		$stub = str_replace('DummyRootNamespace', $this->rootNamespace(), $stub);
 
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
         );
-
     }
-
 }

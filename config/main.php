@@ -27,20 +27,20 @@ return [
 
     'routes' => [
         'user' => [
-            'menus' => ['user', 'team', 'role', 'permission',],
-            'icon' => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
-            'order' => 20,
+            'menus'     => ['user', 'team', 'role', 'permission'],
+            'icon'      => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3'],
+            'order'     => 20,
             'makeFiles' => false,
         ],
         'page' => [
-            'menus' => ['page', 'block', 'area'],
-            'icon' => ['class' => 'fa  fa-file-text-o', 'style' => 'color:#52c1dc',],
-            'order' => 30,
+            'menus'     => ['page', 'block', 'area'],
+            'icon'      => ['class' => 'fa  fa-file-text-o', 'style' => 'color:#52c1dc'],
+            'order'     => 30,
             'makeFiles' => false,
         ],
         'medium' => [
-            'menus' => ['medium', 'gallery',],
-            'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
+            'menus' => ['medium', 'gallery'],
+            'icon'  => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc'],
 //            'excludeFromSideBar' => ['gallery'],
             'order' => 40,
         ],
@@ -65,8 +65,8 @@ return [
 //
 
         'setting' => [//I use it to autoRegister Routes
-            'makeFiles' => false,
-            'excludeFromSideBar' => ['setting']
+            'makeFiles'          => false,
+            'excludeFromSideBar' => ['setting'],
         ],
 
     ],
@@ -77,18 +77,18 @@ return [
             'menus' => [
                 'setting' => [
                     'trans' => 'settings/setting.general.menuTitle',
-                    'route' => 'settings.index'
+                    'route' => 'settings.index',
                     //'url'=>'www.klkk'
                 ],
                 'dotenveditor' => [
                     'trans' => 'sideMenu.custom.dotenveditor',
                     // 'url' => '/admin/configurations/enveditor',
-                    'route' => 'env-editor.index'
+                    'route' => 'env-editor.index',
 
                 ],
                 'translation' => [
                     'trans' => 'sideMenu.custom.translation',
-                    'url' => '/admin/translations'
+                    'url'   => '/admin/translations',
 
                 ],
 //                'job' => [//Enabled only if you use  Database driver for queues
@@ -97,16 +97,16 @@ return [
 //                ],
                 'log' => [
                     'trans' => 'generic.sideMenuCustom.logs',
-                    'route' => 'logs.index'
+                    'route' => 'logs.index',
                 ],
                 //                'test'                 => [
                 //                    'trans' => 'tests/test.menuTitle',
                 //                    'url'   => 'test.gr'
                 //                ],
             ],
-            'icon' => ['class' => 'fa  fa-cog', 'style' => 'color:#ff887c',],
+            'icon'  => ['class' => 'fa  fa-cog', 'style' => 'color:#ff887c'],
             'order' => 150,
-            'trans' => 'sideMenu.custom.configurations'
+            'trans' => 'sideMenu.custom.configurations',
         ],
         //        'testCustomMenu'      => [
         //            'trans' => 'settings/setting.general.menuTitle',
@@ -120,12 +120,10 @@ return [
         //        ]
     ],
 
-
     //Listing of Extra  Permissions In Order To Be able to Create them from baseAdmin:makePermissionsForModel
     'extraPermissions' => [
         'dotenveditor' => ['index'],
-        'job' => ['index', 'retry', 'flush'],
-        'log' => ['index', 'delete'],
-    ]
+        'job'          => ['index', 'retry', 'flush'],
+        'log'          => ['index', 'delete'],
+    ],
 ];
-

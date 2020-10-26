@@ -13,27 +13,24 @@ class RedirectIfAuthenticatedAtIntended
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @param  string|null  $guard
+     * @param Request     $request
+     * @param Closure     $next
+     * @param string|null $guard
      *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-
         if (Auth::guard($guard)->check()) {
 
             //LaravelLocalization::setLocale(\auth()->user()->preferredLocale());
             $defaultPath = $this->getDefaultUserPath();
 
             return (in_array(session()->get('url.intended', '/'), $this->getAvailableHomeRoutes())) ? redirect()->to($defaultPath) : redirect()->intended($defaultPath);
-
         }
 
         return $next($request);
     }
-
 
     /**
      * @return array

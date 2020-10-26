@@ -6,6 +6,4 @@ use GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users\UserTeamController as Init
 
 class UserTeamController extends InitialController
 {
-
-
 }

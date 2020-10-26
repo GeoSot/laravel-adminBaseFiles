@@ -6,5 +6,4 @@ use GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users\UserController as InitialC
 
 class UserController extends InitialController
 {
-
 }

@@ -6,5 +6,4 @@ use GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users\UserPermissionController a
 
 class UserPermissionController extends InitialController
 {
-
 }

@@ -16,18 +16,18 @@ class QueueController extends BaseController
     {
         $records = collect([
             'jobs' => collect([
-                'records' => $this->getPendingJobs(),
+                'records'  => $this->getPendingJobs(),
                 'listable' => ['id', 'name', 'queue', 'attempts', 'reserved_at', 'available_at', 'created_at', 'actions'],
             ]),
             'failed_jobs' => collect([
-                'records' => $this->getFailedJobs(),
+                'records'  => $this->getFailedJobs(),
                 'listable' => ['id', 'name', 'connection', 'queue', 'failed_at', 'actions'],
             ]),
         ]);
 
         $viewVals = collect([
-            'records' => $records,
-            'modelLang' => $this->addPackagePrefix('admin/queues/queue'),
+            'records'    => $records,
+            'modelLang'  => $this->addPackagePrefix('admin/queues/queue'),
             'modelRoute' => 'admin.queues',
         ]);
 
@@ -66,6 +66,7 @@ class QueueController extends BaseController
     protected function getPendingJobs(): Collection
     {
         $table = config('queue.connections.database.table');
+
         return Schema::hasTable($table) ? DB::table($table)->latest()->get() : collect();
     }
 
@@ -75,7 +76,7 @@ class QueueController extends BaseController
     protected function getFailedJobs(): Collection
     {
         $table = config('queue.failed.table');
+
         return Schema::hasTable($table) ? DB::table($table)->latest()->get() : collect();
     }
-
 }

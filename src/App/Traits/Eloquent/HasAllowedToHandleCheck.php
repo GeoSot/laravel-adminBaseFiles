@@ -8,7 +8,6 @@
 
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -31,7 +30,7 @@ trait HasAllowedToHandleCheck
      */
     public function modelPermissionsFromDB(bool $onlyNames = true)
     {
-        $modelName = lcfirst(class_basename(static::class));//get_called_class()
+        $modelName = lcfirst(class_basename(static::class)); //get_called_class()
         $permissions = config('baseAdmin.config.models.permission')::getAsGroups($modelName)->map(function ($group) use ($onlyNames, $modelName) {
             if (!$onlyNames) {
                 return $group->flatten();
@@ -42,11 +41,8 @@ trait HasAllowedToHandleCheck
 
                 return [Arr::get($matches, 1) => $item['name']];
             });
-
-
-        });;
+        });
 
         return $permissions;
     }
-
 }

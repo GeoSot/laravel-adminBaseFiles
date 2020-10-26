@@ -8,7 +8,6 @@
 
 namespace GeoSot\BaseAdmin\App\Providers;
 
-
 use Illuminate\Support\ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider
@@ -23,7 +22,7 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         if (is_dir(app_path().'/Modules/')) {
-            $modules = config("modules.enable") ?: array_map('class_basename',$this->files->directories(app_path().'/Modules/'));
+            $modules = config('modules.enable') ?: array_map('class_basename', $this->files->directories(app_path().'/Modules/'));
             foreach ($modules as $module) {
                 $modulePath = app_path().'/Modules/'.$module;
                 // Allow routes to be cached

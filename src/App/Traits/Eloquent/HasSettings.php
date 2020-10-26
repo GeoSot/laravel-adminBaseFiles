@@ -1,15 +1,11 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
-
-
 
 use App\Models\Setting;
 
 trait HasSettings
 {
-
     public static function bootHasSettings()
     {
         // Delete associated images if they exist.
@@ -18,10 +14,9 @@ trait HasSettings
         });
     }
 
-
     public function hasSettings()
     {
-        return (boolean)$this->settings()->count();
+        return (bool) $this->settings()->count();
     }
 
     /**
@@ -35,13 +30,10 @@ trait HasSettings
         return $this->morphMany(Setting::class, 'model');
     }
 
-
     public function getSetting(string $arg, string $searchField = 'slug', $default = null)
     {
         $setting = $this->settings()->where($searchField, $arg)->first();
 
         return (!$setting) ? $default : $setting->value_parsed;
     }
-
-
 }

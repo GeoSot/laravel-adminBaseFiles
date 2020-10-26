@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Pages;
 
-
 use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\App\Models\Pages\Page;
@@ -15,18 +14,16 @@ class PageAreaForm extends BaseAdminForm
     //
     public function getFormFields()
     {
-
         $this->addCheckBox('enabled');
         $this->add('title', 'text');
         $this->add('sub_title', 'text');
         $this->add('slug', 'text');
         $this->add('page_id', 'entity', [
-            'class' => Page::class,
-            'property' => 'slug',
-            'label' => $this->transText('parentPage'),
+            'class'       => Page::class,
+            'property'    => 'slug',
+            'label'       => $this->transText('parentPage'),
             'empty_value' => $this->getSelectEmptyValueLabel(),
         ]);
-
 
         $this->add('order', 'number');
         $this->add('css_class', 'text');
@@ -38,14 +35,13 @@ class PageAreaForm extends BaseAdminForm
             // 'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,
             'options' => [
-                'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
-                'img' => ['class' => ' mbed-responsive-item'],
-                'label' => false,
-                'template' => 'baseAdmin::_subBlades.formTemplates.image',
+                'img_wrapper'    => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
+                'img'            => ['class' => ' mbed-responsive-item'],
+                'label'          => false,
+                'template'       => 'baseAdmin::_subBlades.formTemplates.image',
                 'final_property' => 'url',
             ],
         ]);
-
 
 //        $this->add('fields', 'collection', [
 //            'type'       => 'form',
@@ -64,7 +60,5 @@ class PageAreaForm extends BaseAdminForm
 //        ]);
 
         $this->add('notes', 'textarea', ['attr' => ['rows' => '3']]);
-
-
     }
 }

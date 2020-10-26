@@ -1,6 +1,5 @@
 <?php
 
-
 namespace GeoSot\BaseAdmin\App\Providers;
 
 use GeoSot\BaseAdmin\App\Forms\Auth\ConfirmPasswordForm;
@@ -24,7 +23,6 @@ class FortifyViewsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         Fortify::loginView(function () {
             return view('baseAdmin::auth.login', ['form' => $this->form(LoginForm::class)]);
         });
@@ -47,7 +45,6 @@ class FortifyViewsServiceProvider extends ServiceProvider
         Fortify::twoFactorChallengeView(function () {
             return view('baseAdmin::auth.two-factor-challenge', ['form' => $this->form(TwoFactorsChallengeForm::class)]);
         });
-
     }
 
     /**
@@ -57,6 +54,5 @@ class FortifyViewsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
     }
 }

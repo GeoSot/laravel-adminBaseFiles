@@ -19,7 +19,6 @@ class DashboardController extends Controller
             return;
         }
 
-
         //CleanNotificationsTable::dispatch()
         // User::first()->notify(new TicketNewMessageCustomer(Ticket::first(), 'newTicketToCustomer'));
     }
@@ -29,4 +28,3 @@ class DashboardController extends Controller
         return view('admin.chooseBackOrFront');
     }
 }
-

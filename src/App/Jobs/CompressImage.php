@@ -15,7 +15,10 @@ use Plank\Mediable\Helpers\File;
 
 class CompressImage implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var medium
@@ -25,7 +28,7 @@ class CompressImage implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  Medium  $medium
+     * @param Medium $medium
      */
     public function __construct(Medium $medium)
     {
@@ -47,15 +50,16 @@ class CompressImage implements ShouldQueue
 
         if ($this->isError($result)) {
             $this->handleError($result, $img);
+
             return;
         }
 
         $this->handleSuccess($result->json(), $img);
     }
 
-
     /**
-     * @param  Medium  $img
+     * @param Medium $img
+     *
      * @return Response
      */
     private function makeRequest(Medium $img)
@@ -63,12 +67,11 @@ class CompressImage implements ShouldQueue
         $request = Http::timeout(10)->attach('files', $img->contents(), $img->basename);
 
         return $request->post('http://api.resmush.it/?qlty=80');
-
     }
 
     /**
-     * @param  array  $result
-     * @param  Medium  $img
+     * @param array  $result
+     * @param Medium $img
      */
     private function handleSuccess(array $result, Medium $img): void
     {
@@ -80,23 +83,22 @@ class CompressImage implements ShouldQueue
 
         $newSize = File::readableSize($result['dest_size']);
         Log::info("Image {$img->getKey()}  {$img->filename} was compressed by {$result['percent']}%. Old size:{$oldSize} , new Size: {$newSize}");
-
     }
 
     /**
-     * @param  Response  $result
-     * @param  Medium  $img
+     * @param Response $result
+     * @param Medium   $img
      */
     public function handleError(Response $result, Medium $img): void
     {
         $code = $result->failed() ? $result->status() : $result->object()->error;
         $body = $result->failed() ? $result->body() : $result->object()->error_long;
         Log::error("Image {$img->getKey()}  {$img->getAbsolutePath()} was not compressed", ['status' => $code, 'body' => $body]);
-
     }
 
     /**
-     * @param  Response  $result
+     * @param Response $result
+     *
      * @return bool
      */
     public function isError(Response $result): bool

@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 
-
 use App\Models\Media\Medium;
 use App\Models\Users\User;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
@@ -16,11 +15,10 @@ class UserController extends BaseAdminController
     //OVERRIDES
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
 
-
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  User  $user
+     * @param User $user
      *
      * @return Response
      */
@@ -32,8 +30,8 @@ class UserController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  User  $user
+     * @param Request $request
+     * @param User    $user
      *
      * @return Response
      */
@@ -45,10 +43,10 @@ class UserController extends BaseAdminController
     protected function listFields()
     {
         $neFields = [
-            'listable' => ['full_name', 'enabled', 'roles.display_name', 'id'],
+            'listable'   => ['full_name', 'enabled', 'roles.display_name', 'id'],
             'searchable' => ['first_name', 'last_name', 'enabled', 'id'],
-            'sortable' => ['full_name', 'id'],
-            'linkable' => ['full_name'],
+            'sortable'   => ['full_name', 'id'],
+            'linkable'   => ['full_name'],
         ];
 
         return array_merge(parent::listFields(), $neFields);
@@ -76,5 +74,4 @@ class UserController extends BaseAdminController
             'roles.name' => ['type' => 'multiSelect'],
         ];
     }
-
 }

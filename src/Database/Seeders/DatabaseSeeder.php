@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         if (app()->environment(['production', 'live'])) {
-            $this->command->info('Seeder is DISABLED on "' . app()->environment() . '" Environment');
+            $this->command->info('Seeder is DISABLED on "'.app()->environment().'" Environment');
 
             return;
         }
@@ -25,8 +25,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UsersSeeder::class);
 
-
         Schema::enableForeignKeyConstraints();
-
     }
 }

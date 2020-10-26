@@ -34,7 +34,7 @@ class MainCommand extends BaseInstallCommand
     /**
      * Create a new migration install command instance.
      *
-     * @param  Composer  $composer
+     * @param Composer $composer
      *
      * @return void
      */
@@ -45,7 +45,7 @@ class MainCommand extends BaseInstallCommand
     }
 
     /**
-     * Execute the actions
+     * Execute the actions.
      *
      * @return mixed
      */
@@ -73,7 +73,6 @@ class MainCommand extends BaseInstallCommand
         $this->info($adminRoute);
 
         return true;
-
     }
 
     /**
@@ -81,23 +80,21 @@ class MainCommand extends BaseInstallCommand
      */
     protected function getInstallScripts(): array
     {
-
         return [
-            'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-            'iniyestializeEnv' => ['baseAdmin:install:initializeEnv'],
-            'authorization' => ['vendor:publish', ['--provider' => 'Laravel\\Fortify\\FortifyServiceProvider', '--tag' => 'config']],
-            'publishConf' => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
-            'publishLaratrustConf' => ['vendor:publish', ['--tag' => 'laratrust']],
-            'publishEnvConf' => ['vendor:publish', ['--provider' => 'GeoSot\EnvEditor\ServiceProvider', '--tag' => 'config']],
-            'publishSluggableConf' => ['vendor:publish', ['--provider' => 'Cviebrock\EloquentSluggable\ServiceProvider', '--tag' => 'config']],
-            'publishMediableConf' => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider', '--tag' => 'config']],
-            'publishMediableMigrations' => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider', '--tag' => 'migrations']],
-            'publishTranslatableConf' => ['vendor:publish', ['--provider' => 'Spatie\Translatable\TranslatableServiceProvider', '--tag' => 'config']],
-            'publishLocalizationConf' => ['vendor:publish', ['--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider', '--tag' => 'config']],
+            'publishFiles'                  => ['baseAdmin:install:publishInitialFiles'],
+            'iniyestializeEnv'              => ['baseAdmin:install:initializeEnv'],
+            'authorization'                 => ['vendor:publish', ['--provider' => 'Laravel\\Fortify\\FortifyServiceProvider', '--tag' => 'config']],
+            'publishConf'                   => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
+            'publishLaratrustConf'          => ['vendor:publish', ['--tag' => 'laratrust']],
+            'publishEnvConf'                => ['vendor:publish', ['--provider' => 'GeoSot\EnvEditor\ServiceProvider', '--tag' => 'config']],
+            'publishSluggableConf'          => ['vendor:publish', ['--provider' => 'Cviebrock\EloquentSluggable\ServiceProvider', '--tag' => 'config']],
+            'publishMediableConf'           => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider', '--tag' => 'config']],
+            'publishMediableMigrations'     => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider', '--tag' => 'migrations']],
+            'publishTranslatableConf'       => ['vendor:publish', ['--provider' => 'Spatie\Translatable\TranslatableServiceProvider', '--tag' => 'config']],
+            'publishLocalizationConf'       => ['vendor:publish', ['--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider', '--tag' => 'config']],
             'publishTranslationManagerConf' => ['vendor:publish', ['--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider', '--tag' => 'config']],
-            'publishRevisionableConf' => ['vendor:publish', ['--provider' => 'Venturecraft\Revisionable\RevisionableServiceProvider']],
+            'publishRevisionableConf'       => ['vendor:publish', ['--provider' => 'Venturecraft\Revisionable\RevisionableServiceProvider']],
 //            'publishChunkUploadConf' => ['vendor:publish', ['--provider' => 'Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider']],
-
 
             /*   'publishTranslationMigrations' => [
                    'vendor:publish', [
@@ -106,14 +103,12 @@ class MainCommand extends BaseInstallCommand
                    ]
                ],*/
 
-            'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
-            'clearConf' => ['config:clear'],
+            'editConfigFiles'    => ['baseAdmin:install:editConfigFiles'],
+            'clearConf'          => ['config:clear'],
             'laratrustMigration' => ['laratrust:migration'],
 
         ];
-
     }
-
 
     private function makeFreshMigrationsForForeignPackages(): void
     {
@@ -130,13 +125,10 @@ class MainCommand extends BaseInstallCommand
                 array_map(function ($filename) {
                     unlink($filename);
                 }, $results);
-
             }
             $date = now()->addHour()->format('Y_m_d_His');
             copy($dbDir."MigrationsOnPackagesTables/{$file}", "{$dbDir}Migrations/{$date}{$file}");
         }
-
-
     }
 
     private function deleteFiles(): void
@@ -146,7 +138,7 @@ class MainCommand extends BaseInstallCommand
             app_path('Models/User.php'),
             app_path('Models/Role.php'),
             app_path('Models/Permission.php'),
-            app_path('Models/Team.php')
+            app_path('Models/Team.php'),
         ];
 
         foreach ($files as $file) {
@@ -154,21 +146,17 @@ class MainCommand extends BaseInstallCommand
                 unlink($file);
             }
         }
-
-
     }
 
     private function scriptsAfterBasicScripts(): array
     {
         return [
             'makePassportKeys' => ['passport:keys'],
-            'runMigration' => ['migrate'],
-            'seedPackageData' => ['db:seed', ['--class' => DatabaseSeeder::class]],
-            'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
-            'symlink' => ['storage:link'],
+            'runMigration'     => ['migrate'],
+            'seedPackageData'  => ['db:seed', ['--class' => DatabaseSeeder::class]],
+            'installPassport'  => ['passport:install'], //after migrate /https://laravel.com/docs/passport
+            'symlink'          => ['storage:link'],
 //            'perms'=>['baseAdmin:makePermissionsForModel'],
         ];
     }
-
-
 }

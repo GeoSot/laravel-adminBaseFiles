@@ -13,8 +13,8 @@ class MinifyHtml
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
-     * @param  Closure  $next
+     * @param Request $request
+     * @param Closure $next
      *
      * @return mixed
      */
@@ -61,29 +61,27 @@ class MinifyHtml
         return [
             //                        '/(\r?\n)/'                                           => '',   // Collapse new lines
             //   '/(\s)+/s'=> '\\1',         // shorten multiple whitespace sequences
-            '/\>[^\S ]+/s' => '>', // strip whitespaces after tags, except space
+            '/\>[^\S ]+/s'              => '>', // strip whitespaces after tags, except space
             '/<!--[^\[](.*?)[^\]]-->/s' => '',
-            '/[^\S ]+\</s' => '<', // strip whitespaces before tags, except space
-            "/\n([\S])/" => ' $1',
-            '/<!--(.|\s)*?-->/' => '',// Remove HTML comments
+            '/[^\S ]+\</s'              => '<', // strip whitespaces before tags, except space
+            "/\n([\S])/"                => ' $1',
+            '/<!--(.|\s)*?-->/'         => '', // Remove HTML comments
             //            '/<!--[^]><!\[](.*?)[^\]]-->/s'                       => '',// Remove HTML comments
             '/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/s' => '',  // Remove HTML comments except IE conditions
-            "/\r/" => ' ',
-            '/(?<!\S)\/\/\s*[^\r\n]*/' => '', // Remove comments in the form /* */
-            '/([\t ])+/s' => ' ',
-            '/^([\t ])+/m' => '',
-            '/([\t ])+$/m' => '',
-            '~//[a-zA-Z0-9 ]+$~m' => '',
-            '/[\r\n]+([\t ]?[\r\n]+)+/s' => "\n",
-            '/\>[\r\n\t ]+\</s' => '><',
-            '/}[\r\n\t ]+/s' => '}',
-            '/}[\r\n\t ]+,[\r\n\t ]+/s' => '},',
-            '/\)[\r\n\t ]?{[\r\n\t ]+/s' => '){',
-            '/,[\r\n\t ]?{[\r\n\t ]+/s' => ',{',
-            '/\),[\r\n\t ]+/s' => '),',
-//            '~([\r\n\t ])?([a-zA-Z0-9]+)=\"([a-zA-Z0-9_\\-]+)\"([\r\n\t ])?~s' => '$1$2=$3$4',
+            "/\r/"                                                => ' ',
+            '/(?<!\S)\/\/\s*[^\r\n]*/'                            => '', // Remove comments in the form /* */
+            '/([\t ])+/s'                                         => ' ',
+            '/^([\t ])+/m'                                        => '',
+            '/([\t ])+$/m'                                        => '',
+            '~//[a-zA-Z0-9 ]+$~m'                                 => '',
+            '/[\r\n]+([\t ]?[\r\n]+)+/s'                          => "\n",
+            '/\>[\r\n\t ]+\</s'                                   => '><',
+            '/}[\r\n\t ]+/s'                                      => '}',
+            '/}[\r\n\t ]+,[\r\n\t ]+/s'                           => '},',
+            '/\)[\r\n\t ]?{[\r\n\t ]+/s'                          => '){',
+            '/,[\r\n\t ]?{[\r\n\t ]+/s'                           => ',{',
+            '/\),[\r\n\t ]+/s'                                    => '),',
+            //            '~([\r\n\t ])?([a-zA-Z0-9]+)=\"([a-zA-Z0-9_\\-]+)\"([\r\n\t ])?~s' => '$1$2=$3$4',
         ];
-
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -11,7 +12,7 @@ return [
     |
     */
     'previous' => '&laquo; Προηγούμενη',
-    'next' => 'Επόμενη &raquo;',
-    'pages' => 'Σελίδα :currentpage από :lastpage',
-    'items' => 'Προβάλονται :pageitems από :totalitems εγγραφές',
+    'next'     => 'Επόμενη &raquo;',
+    'pages'    => 'Σελίδα :currentpage από :lastpage',
+    'items'    => 'Προβάλονται :pageitems από :totalitems εγγραφές',
 ];

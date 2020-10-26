@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Forms\Site;
 
 class ContactForm extends BaseFrontForm
 {
-
     public function getFormFields()
     {
         $this->setFormOptions($this->contactFormOptions());
@@ -18,14 +17,13 @@ class ContactForm extends BaseFrontForm
 
         $this->addCheckBox('agree_with_terms', array_merge($rules, [
             'help_block' => [
-                'text' => $this->transHelpText('agree_with_terms')
-            ]
+                'text' => $this->transHelpText('agree_with_terms'),
+            ],
         ]));
 
         $this->add('submit', 'submit', [
             'attr' => ['class' => 'btn btn-outline-primary'],
         ]);
-
     }
 
     /**
@@ -34,10 +32,10 @@ class ContactForm extends BaseFrontForm
     protected function contactFormOptions(): array
     {
         return [
-            'method' => 'POST',
-            'url' => route('site.contactUs.store'),
+            'method'        => 'POST',
+            'url'           => route('site.contactUs.store'),
             'language_name' => 'baseAdmin::site/contact',
-            'id' => 'contactForm',
+            'id'            => 'contactForm',
         ];
     }
 }

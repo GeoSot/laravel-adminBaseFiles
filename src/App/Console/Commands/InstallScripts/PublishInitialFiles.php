@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
-
 use GeoSot\BaseAdmin\Helpers\Paths;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
@@ -48,7 +47,6 @@ class PublishInitialFiles extends GenericFileCreateCommand
     {
         return Paths::filesToPublishDir();
     }
-
 
     /**
      * Get the view full path.

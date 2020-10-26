@@ -2,16 +2,13 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Media;
 
-
 use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 
 class MediumGalleryForm extends BaseAdminForm
 {
-
     public function getFormFields()
     {
-
         $this->addCheckBox('enabled');
         $this->add('title', 'text');
         $this->add('notes', 'textarea');
@@ -19,20 +16,17 @@ class MediumGalleryForm extends BaseAdminForm
 
 //        $this->add('related', 'textarea');
 
-
         $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
-            'type' => 'file',
+            'type'       => 'file',
             'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,
             'options' => [
-                'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
-                'img' => ['class' => ' mbed-responsive-item'],
-                'label' => false,
-                'template' => 'baseAdmin::_subBlades.formTemplates.image',
-                'final_property' => 'url'
-            ]
+                'img_wrapper'    => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
+                'img'            => ['class' => ' mbed-responsive-item'],
+                'label'          => false,
+                'template'       => 'baseAdmin::_subBlades.formTemplates.image',
+                'final_property' => 'url',
+            ],
         ]);
-
-
     }
 }

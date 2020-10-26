@@ -12,11 +12,11 @@ use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-
 class Base
 {
     /**
-     * @param  string  $path
+     * @param string $path
+     *
      * @return string
      */
     public static function adminAssets(string $path)
@@ -36,7 +36,6 @@ class Base
             if (isset($manifestData[$dummyPath.$path])) {
                 return str_replace($dummyPath, "/$assetsPath", $manifestData[$dummyPath.$path]);
             }
-
         }
 
         return "/$fullPath";
@@ -44,6 +43,7 @@ class Base
 
     /**
      * @param $arg
+     *
      * @return string
      */
     public static function minutesToHuman($arg)
@@ -62,6 +62,7 @@ class Base
 
     /**
      * @param $routeName
+     *
      * @return string
      */
     public static function getCachedRouteAsLink($routeName)
@@ -71,21 +72,22 @@ class Base
         }
         $saveName = 'routesParameters.'.str_replace('.', '_', $routeName);
 
-
         return session()->has($saveName) ? route($routeName, session()->get($saveName)) : route($routeName);
     }
 
     /**
      * Translate the given message with a fallback string if none exists.
      *
-     * @param  string  $key
-     * @param  array  $replace
-     * @param  string|null  $locale
+     * @param string      $key
+     * @param array       $replace
+     * @param string|null $locale
+     *
      * @return string
      */
     public static function transWithFallback(string $key, array $replace = [], string $locale = null)
     {
         $translation = __($key, $replace, $locale);
+
         return ($key === $translation) ? __("baseAdmin::{$key}", $replace, $locale) : $translation;
     }
 
@@ -99,8 +101,4 @@ class Base
 
         return $settings->get($key, $default);
     }
-
-
 }
-
-

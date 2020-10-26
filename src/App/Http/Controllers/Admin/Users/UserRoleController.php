@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 
-
 use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
@@ -17,7 +16,6 @@ class UserRoleController extends BaseAdminController
     //OVERRIDES
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
 
-
     public function create(Collection $extraValues = null)
     {
         $extraValues = collect(['permissionsGrouped' => UserPermission::getAsGroups()]);
@@ -28,7 +26,7 @@ class UserRoleController extends BaseAdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  UserRole  $userRole
+     * @param UserRole $userRole
      *
      * @return Response
      */
@@ -36,7 +34,7 @@ class UserRoleController extends BaseAdminController
     {
         $userRole->load('users');
         $extraValues = collect([
-            'permissionsGrouped' => UserPermission::getAsGroups()
+            'permissionsGrouped' => UserPermission::getAsGroups(),
         ]);
 
         return $this->genericEdit($userRole, $extraValues);
@@ -45,8 +43,8 @@ class UserRoleController extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  UserRole  $userRole
+     * @param Request  $request
+     * @param UserRole $userRole
      *
      * @return Response
      */
@@ -57,7 +55,6 @@ class UserRoleController extends BaseAdminController
 
     public function afterSave(Request &$request, $userRole)
     {
-
         if ($userRole->name !== 'god') {
             $userRole->syncPermissions(array_filter($request->get('permissions')));
         }
@@ -65,12 +62,10 @@ class UserRoleController extends BaseAdminController
 
     public function delete(Request $request)
     {
-
         $protectedRoles = $this->_class::where('is_protected', true)->pluck('id')->toArray();
 
         $originalSentIds = $request->get('ids');
         $request['ids'] = array_diff($originalSentIds, $protectedRoles);
-
 
         if (count($request['ids']) and count($originalSentIds) > count($request['ids'])) {
             Alert::warning(__('admin/'.$this->_modelsLangDir.'.some_roles_where_not_deleted_cause_they_are_protected'))->typeToast();
@@ -82,13 +77,12 @@ class UserRoleController extends BaseAdminController
     protected function listFields()//Can be omitted
     {
         $neFields = [
-            'listable' => ['display_name', 'name', 'id'],
+            'listable'   => ['display_name', 'name', 'id'],
             'searchable' => ['name', 'display_name', 'id'],
-            'sortable' => ['display_name', 'id'],
-            'linkable' => ['display_name'],
+            'sortable'   => ['display_name', 'id'],
+            'linkable'   => ['display_name'],
         ];
 
         return array_merge(parent::listFields(), $neFields);
     }
-
 }

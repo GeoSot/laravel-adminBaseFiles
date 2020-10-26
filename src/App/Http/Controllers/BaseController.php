@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers;
 
-
 use Barryvdh\Debugbar\Facade;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
@@ -22,7 +21,10 @@ use Venturecraft\Revisionable\RevisionableTrait;
 
 abstract class BaseController extends Controller
 {
-    use FormBuilderTrait, AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use FormBuilderTrait;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     //
     protected $_genericLangDir = 'generic';
@@ -44,8 +46,6 @@ abstract class BaseController extends Controller
 
     public function initializeModelValues()
     {
-
-
         if (is_subclass_of($this->_class, Model::class) and Arr::has(class_uses_recursive($this->_class), HasFrontEndConfigs::class)) {
             $this->_hydratedModel = new $this->_class();
             $modelConfigs = $this->_hydratedModel->getFrontEndConfigPrefixed((is_subclass_of($this, BaseAdminController::class)) ? 'admin' : 'site');
@@ -53,20 +53,17 @@ abstract class BaseController extends Controller
             $this->_modelsLangDir = $modelConfigs->get('langDir');
             $this->_modelsViewsDir = $modelConfigs->get('viewDir');
         }
-
-
     }
 
     protected function variablesToView(Collection $extraValues = null, $action = 'index', $merge = [])
     {
-
         $vals = array_merge([
-            'action' => $action,
-            'baseLang' => $this->_genericLangDir,
-            'modelLang' => $this->_modelsLangDir,
-            'modelRoute' => $this->_modelRoute,
-            'modelView' => $this->_modelsViewsDir,
-            'modelClass' => $this->_class,
+            'action'      => $action,
+            'baseLang'    => $this->_genericLangDir,
+            'modelLang'   => $this->_modelsLangDir,
+            'modelRoute'  => $this->_modelRoute,
+            'modelView'   => $this->_modelsViewsDir,
+            'modelClass'  => $this->_class,
             'extraValues' => $extraValues,
 
         ], $merge);
@@ -74,12 +71,10 @@ abstract class BaseController extends Controller
         return ['viewVals' => collect($vals)];
     }
 
-
     protected function getModelValidationMessages()
     {
         return $this->_hydratedModel->getErrorMessagesTranslated($this->_modelsLangDir.'.errorMessages.');
     }
-
 
     protected function getLang(string $langPath, $count = 1)
     {
@@ -124,7 +119,8 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @param  string  $trait
+     * @param string $trait
+     *
      * @return bool
      */
     protected function usesTrait(string $trait)
@@ -132,9 +128,9 @@ abstract class BaseController extends Controller
         return in_array($trait, class_uses_recursive($this->_hydratedModel));
     }
 
-
     /**
-     * @param  string  $string
+     * @param string $string
+     *
      * @return string
      */
     protected function addPackagePrefix(string $string = ''): string
@@ -143,7 +139,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @param  string  $string
+     * @param string $string
      */
     protected function debugMsg(string $string): void
     {

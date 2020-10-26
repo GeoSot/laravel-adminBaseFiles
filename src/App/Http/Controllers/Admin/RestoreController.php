@@ -17,6 +17,7 @@ class RestoreController extends BaseAdminController
 
         if (!$request->user()->hasPermission('admin.restore-'.lcfirst(class_basename($modelToRestore)))) {
             Alert::error(__('baseAdmin::admin/generic.messages.crud.restore.deny'), __('baseAdmin::admin/generic.messages.crud.restore.errorTitle'))->typeToast();
+
             return redirect()->back();
         }
         $modelToRestore->disableRevisionField($revision->fieldName());
@@ -25,7 +26,6 @@ class RestoreController extends BaseAdminController
 //        $revision->delete();
 
         return $this->checksAndNotificationsAfterSave($modelToRestore, $request, 'restore');
-
     }
 
     public function clearHistory(Request $request, Revision $revision)
@@ -34,13 +34,12 @@ class RestoreController extends BaseAdminController
         $modelToRestore = $revision->historyOf();
         if (!$request->user()->hasPermission('admin.restore-'.lcfirst(class_basename($modelToRestore)))) {
             Alert::error(__('baseAdmin::admin/generic.messages.crud.restore.deny'), __('baseAdmin::admin/generic.messages.crud.restore.errorTitle'))->typeToast();
+
             return redirect()->back();
         }
         /** @var RevisionableTrait $modelToRestore */
         $modelToRestore->revisionHistory()->delete();
+
         return $this->checksAndNotificationsAfterSave($modelToRestore, $request, 'restoreClear');
-
-
     }
 }
-

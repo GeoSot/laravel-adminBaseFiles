@@ -7,11 +7,10 @@ return [
      | ------------------------------------------------------------------------------------------------
      */
     'models' => [
-        'user' => App\Models\Users\User::class,
-        'role' => App\Models\Users\UserRole::class,
+        'user'       => App\Models\Users\User::class,
+        'role'       => App\Models\Users\UserRole::class,
         'permission' => App\Models\Users\UserPermission::class,
     ],
-
 
     /*
     |--------------------------------------------------------------------------
@@ -34,23 +33,21 @@ return [
         'layout' => 'baseAdmin::admin.layout',
     ],
 
-
     'site' => [
         'baseRoute' => '',
-        'extraCss' => [],
-        'extraJs' => [],
+        'extraCss'  => [],
+        'extraJs'   => [],
         //Set Views options
         'layout' => 'baseAdmin::site.layout',
     ],
 
-
     /* ------------------------------------------------------------------------------------------------
-	 |  Cache settings (minutes)
-	 | ------------------------------------------------------------------------------------------------
-	 */
+     |  Cache settings (minutes)
+     | ------------------------------------------------------------------------------------------------
+     */
     'cacheSettings' => [
         'enable' => true,
-        'time' => 15,//  cache time in minutes
+        'time'   => 15, //  cache time in minutes
     ],
 
     'translatables' => [
@@ -66,10 +63,9 @@ return [
         ],
 
         'enable-TranslatableFields-OnModel' => true,
-        'input-locale-attribute' => 'data-language',
-        'form-group-class' => 'form-group-translation',
-        'label-locale-indicator' => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'
+        'input-locale-attribute'            => 'data-language',
+        'form-group-class'                  => 'form-group-translation',
+        'label-locale-indicator'            => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>',
     ],
-
 
 ];

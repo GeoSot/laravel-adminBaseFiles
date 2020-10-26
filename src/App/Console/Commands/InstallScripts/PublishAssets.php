@@ -2,7 +2,6 @@
 
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
-
 use GeoSot\BaseAdmin\Helpers\Paths;
 
 class PublishAssets extends PublishInitialFiles
@@ -21,10 +20,9 @@ class PublishAssets extends PublishInitialFiles
      */
     protected $description = 'Publishes all admin Js & Css Files';
 
-
     public function handle()
     {
-        if ($this->option('force')){
+        if ($this->option('force')) {
             $this->files->cleanDirectory(public_path(config('baseAdmin.config.backEnd.assetsPath')));
         }
         parent::handle();
@@ -45,6 +43,4 @@ class PublishAssets extends PublishInitialFiles
     {
         return Paths::rootDir('assets');
     }
-
-
 }

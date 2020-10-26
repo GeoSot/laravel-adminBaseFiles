@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 class CreateMediumGalleriesTable extends Migration
 {
     /**
@@ -22,7 +21,6 @@ class CreateMediumGalleriesTable extends Migration
             $table->text('notes')->nullable();
             $table->text('show_details')->nullable();
             $table->nullableMorphs('related');
-
 
             //--Defaults
             $table->boolean('enabled')->default(1);

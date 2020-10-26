@@ -7,10 +7,11 @@ use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use Spatie\Translatable\HasTranslations;
 
-
 class MediumGallery extends BaseModel
 {
-    use Sluggable, HasTranslations, HasMedia;
+    use Sluggable;
+    use HasTranslations;
+    use HasMedia;
 
     protected $table = 'media_galleries';
 
@@ -38,7 +39,7 @@ class MediumGallery extends BaseModel
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'enabled'      => 'boolean',
         'show_details' => 'array',
     ];
 
@@ -51,21 +52,18 @@ class MediumGallery extends BaseModel
         ],
     ];*/
 
-
     /* protected $errorMessages = [ //Can use ":attribute"
                'title' => ['required' => 'The title field is mandatory.']
        ];
     */
 
-
     protected function rules(array $merge = [])
     {
         return array_merge([
-            'title' => "required|min:3|",
-            'slug' => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
+            'title' => 'required|min:3|',
+            'slug'  => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
         ], $merge, $this->rules);
     }
-
 
     /**
      * Return the sluggable configuration array for this model.
@@ -93,7 +91,6 @@ class MediumGallery extends BaseModel
         //morphedByMany
         return $this->morphTo('related');
     }
-
 
     //*********  M E T H O D S  ***************
 }
