@@ -2,14 +2,15 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Request;
 use Venturecraft\Revisionable\Revision;
+use Venturecraft\Revisionable\RevisionableTrait;
 
-class RestoreController extends Controller
+class RestoreController extends BaseAdminController
 {
-    public function restore(Request $request, Revision $revision)
+    public function restoreHistory(Request $request, Revision $revision)
     {
         /** @var BaseModel $modelToRestore */
         $modelToRestore = $revision->historyOf();;
@@ -21,14 +22,25 @@ class RestoreController extends Controller
         $modelToRestore->disableRevisionField($revision->fieldName());
 
         $modelToRestore->update([$revision->fieldName() => $revision->oldValue()]);
-        $revision->delete();
+//        $revision->delete();
 
-        Alert::success(trans_choice('baseAdmin::admin/generic.messages.crud.restore.successMsg', 1),
-            __('baseAdmin::admin/generic.messages.crud.restore.successTitle'))->typeToast();
+        return $this->checksAndNotificationsAfterSave($modelToRestore, $request, 'restore');
 
-        return redirect()->back();
     }
 
+    public function clearHistory(Request $request, Revision $revision)
+    {
+        /** @var BaseModel $modelToRestore */
+        $modelToRestore = $revision->historyOf();
+        if (!$request->user()->hasPermission('admin.restore-'.lcfirst(class_basename($modelToRestore)))) {
+            Alert::error(__('baseAdmin::admin/generic.messages.crud.restore.deny'), __('baseAdmin::admin/generic.messages.crud.restore.errorTitle'))->typeToast();
+            return redirect()->back();
+        }
+        /** @var RevisionableTrait $modelToRestore */
+        $modelToRestore->revisionHistory()->delete();
+        return $this->checksAndNotificationsAfterSave($modelToRestore, $request, 'restoreClear');
 
+
+    }
 }
 

@@ -75,3 +75,19 @@
     <!--com_listingButtons END-->
     @include($packageVariables->get('blades').'admin._includes.listingHiddenMessages')
 @endpush
+
+
+{{--@push('scripts')--}}
+{{--    <script defer data-comment="formSubmitButtons">--}}
+{{--        jsHelper.base.execute(() => {--}}
+{{--            new BaseAdmin.forms.ajaxify("form#tableForm").onSubmit(function (instance, jqxhr) {--}}
+{{--                jqxhr.done(function (data) {--}}
+{{--                    console.log(data)--}}
+{{--// jsHelBper.debug('form#mainForm', instance, 'ajaxifyForm newPostForm');--}}
+
+{{--                    BaseAdmin.ajaxLoadWrappers('#app, .js-scripts, #js-notifications');--}}
+{{--                });--}}
+{{--            });--}}
+{{--        })--}}
+{{--    </script>--}}
+{{--@endpush--}}

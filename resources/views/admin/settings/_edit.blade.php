@@ -1,4 +1,3 @@
-
 <div class="col-md-6 col-12 mb-3">
     @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('modelLang').'.formTitles.value')] )
         {!! form_until($form, 'value') !!}
@@ -38,17 +37,19 @@
 </div>
 @push('scripts')
     <script defer data-comment="enableDevFields">
-        $(document).on('click', '[data-toggle="enableDevFields"]', function (e) {
+        jsHelper.base.execute(() => {
+            $(document).on('click', '[data-toggle="enableDevFields"]', function (e) {
 
-            $(this).parents('.card-body').find('input , select').each(function (i, el) {
-                let $el = $(el);
-                // if ($el.is('[disabled]')) {
-                $el.removeAttr('disabled');
-                $el.removeAttr('readonly');
-                // } else {
-                //     $el.attr('disabled', true);
-                // }
-            })
+                $(this).parents('.card-body').find('input , select').each(function (i, el) {
+                    let $el = $(el);
+                    // if ($el.is('[disabled]')) {
+                    $el.removeAttr('disabled');
+                    $el.removeAttr('readonly');
+                    // } else {
+                    //     $el.attr('disabled', true);
+                    // }
+                })
+            });
         });
     </script>
 

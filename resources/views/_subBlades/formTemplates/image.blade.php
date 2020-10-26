@@ -41,7 +41,7 @@
                      }
                 @endphp
                 @if ($value)
-                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\Medium::getDummyImageUrl()!!}" data-src="{!! $value !!}" class=" js-lazy img-fluid   {!!$imgClass!!}"/>
+                    <img src="{!! \GeoSot\BaseAdmin\App\Models\Media\Medium::getDummyImageUrl()!!}" data-src="{!! $value !!}" class="lazyload img-fluid   {!!$imgClass!!}"/>
                 @endif
             </div>
 

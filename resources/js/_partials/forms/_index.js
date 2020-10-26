@@ -2,8 +2,7 @@ window.BaseAdmin = window.BaseAdmin || {};
 window.BaseAdmin.forms = window.BaseAdmin.forms || {};
 
 
-require('bootstrap-colorpicker');
-window.Sortable = require('sortablejs');
+
 require('./formFields');
 require('./ajaxForms');
 BaseAdmin.forms.fields.Init();

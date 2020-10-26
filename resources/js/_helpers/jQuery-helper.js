@@ -10,7 +10,7 @@ const isJqLoaded = ()=>{
     return getJquery() !== undefined && jQuery.fn.popover !== undefined
 }
 
-const triggerJqIsLoaded = ()=>{
+const triggerIsLoaded = ()=>{
     document.dispatchEvent(isLoadedEvent);
 }
 
@@ -27,4 +27,4 @@ const execute = (callback)=>{
     });
 }
 
-module.exports = {triggerJqIsLoaded, execute}
+module.exports = {triggerIsLoaded, execute}

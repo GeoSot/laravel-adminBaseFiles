@@ -119,12 +119,14 @@
 
     @push('scripts')
         <script defer data-comment="extra_filters on index page">
-            let clearFiltersBrn = '[data-toggle="clearExtraFilters"]';
-            $(document).on('click', clearFiltersBrn, function () {
-                let $filterInputs = $('[name^="extra_filters\["]');
-                $filterInputs.val('').trigger('change');
-                $(clearFiltersBrn).parents('form').submit();
-            });
+            jsHelper.base.execute(() => {
+                let clearFiltersBrn = '[data-toggle="clearExtraFilters"]';
+                $(document).on('click', clearFiltersBrn, function () {
+                    let $filterInputs = $('[name^="extra_filters\["]');
+                    $filterInputs.val('').trigger('change');
+                    $(clearFiltersBrn).parents('form').submit();
+                });
+            })
         </script>
     @endpush
 @endif

@@ -31,7 +31,7 @@
     <div class=" card row">
         <div class=" card-body col-12">
               <div class="table-responsive">
-                    <table class="table table-striped table-hover table-sm table-bordered ">
+                    <table id="recordsList" class="table table-striped table-hover table-sm table-bordered ">
                          <thead class="bg-info text-white ">
                              @include($packageVariables->get('blades').'admin.users.userPermissions._listingTableHead')
                          </thead>

@@ -1,7 +1,15 @@
-window.jQueryHelper = require('./_helpers/jQuery-helper');
-window.loader = require('./_helpers/load-script-style');
-
-
+window.jsHelper = {
+    loader: require('./_helpers/load-script-style'),
+    jQuery: require('./_helpers/jQuery-helper'),
+    base: require('./_helpers/js-helper'),
+    debug: require('./_helpers/debugCustom'),
+    uuid : () => {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
+    }
+}
+window.BaseAdmin = window.BaseAdmin || {};
 // try {
 //     window.Popper = require('popper.js').default;
 //     window.$ = window.jQuery = require('jquery');
@@ -20,7 +28,7 @@ window.axios = require('axios');
 //
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //
-window.$ = window.jQuery =  require('jquery')
+window.$ = window.jQuery = require('jquery')
 
 window.Popper = require('popper.js').default;
 
@@ -51,7 +59,7 @@ if (token) {
 }
 
 
-jQueryHelper.triggerJqIsLoaded()
+jsHelper.jQuery.triggerIsLoaded()
 
 
 /**
@@ -72,3 +80,29 @@ jQueryHelper.triggerJqIsLoaded()
 // });
 
 
+
+
+/*
+
+import('jquery').then(src=>{
+    window.Popper = import('popper.js').then(src=>src.default);
+    window.$ = window.jQuery = src.default;
+    import('../components/offcanvas');
+
+    import('bootstrap').then(src=>{
+        $('[data-toggle="popover"]').popover();
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="toast"]').toast('show');
+
+        JQueryHelperDynamic().then(src=>{
+            src.triggerJqIsLoaded()
+        });
+
+        import('./navbar').then(src=>{
+            src.init('js-navigation-menu')
+        });
+
+    });
+
+})
+*/

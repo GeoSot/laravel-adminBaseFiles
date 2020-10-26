@@ -29,6 +29,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel;
     use HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate, HasFactory, IsExportable, RevisionableTrait;
 
+    protected $historyLimit = 50;
+    protected $revisionCleanup = true;
     protected $dontKeepRevisionOf = ['modified_by'];
     /**
      * The attributes that are mass assignable.

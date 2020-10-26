@@ -38,7 +38,7 @@
         @includeIf($packageVariables->get('blades').'site._includes.footer')
     </section>
 </div>
-<div class="fixed-bottom mb-5 mr-2 w-100" aria-live="polite" aria-atomic="true" style="left: auto; max-width: 270px; ">
+<div id="js-notifications" class="fixed-bottom mb-5 mr-2 w-100" aria-live="polite" aria-atomic="true" style="left: auto; max-width: 270px; ">
     @stack('toasts')
 </div>
 

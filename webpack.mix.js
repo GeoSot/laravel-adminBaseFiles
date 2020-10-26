@@ -39,6 +39,7 @@ if (mix.inProduction()) {
 }
 mix.babelConfig({
     // plugins: ['@babel/plugin-syntax-dynamic-import'],
+    "plugins": ["@babel/plugin-proposal-class-properties"]
 });
 
 

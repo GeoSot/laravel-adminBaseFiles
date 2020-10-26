@@ -1,5 +1,5 @@
 window.BaseAdmin = window.BaseAdmin || {};
-BaseAdminajaxLoadWrappers = function (wrappersToReload) {
+BaseAdmin.ajaxLoadWrappers = function (wrappersToReload) {
     let wrappersArray = wrappersToReload.split(',');
 
     if ($(wrappersArray[0]).length) {
@@ -9,8 +9,8 @@ BaseAdminajaxLoadWrappers = function (wrappersToReload) {
             $.each(wrappersArray, function (key, selector) {
                 let $selector = $(selector);
                 $selector.html($(response).find(selector).html());
-                $selector.trigger('BaseAdminajaxLoadWrappers');
-                BaseAdminhandleSelectInputs($selector);
+                $selector.trigger('BaseAdmin.ajaxLoadWrappers');
+                BaseAdmin.handleSelectInputs($selector);
             });
         });
     }

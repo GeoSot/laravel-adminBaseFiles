@@ -23,7 +23,7 @@
                 {!! form_until($form,'language') !!}
                 <hr class="my-5">
                 <div class="row">
-                         {!! form_until($form,'salutation') !!}
+                    {!! form_until($form,'salutation') !!}
                 </div>
             @endcomponent
         </div>
@@ -45,16 +45,18 @@
 
 @push('scripts')
     <script defer data-comment="enableDevFields">
-        const $devFields = JSON.parse($('[name="dev_fields"]').val());
-        $(document).on('click', '[data-toggle="enableDevFields"]', function (e) {
-            $.each($devFields, function (i, name) {
-                let $el = $('[name="' + name + '"]').first();
-                if ($el.is('[disabled]')) {
-                    $el.removeAttr('disabled');
-                } else {
-                    $el.attr('disabled', true);
-                }
-            })
+        jsHelper.base.execute(() => {
+            const $devFields = JSON.parse($('[name="dev_fields"]').val());
+            $(document).on('click', '[data-toggle="enableDevFields"]', function (e) {
+                $.each($devFields, function (i, name) {
+                    let $el = $('[name="' + name + '"]').first();
+                    if ($el.is('[disabled]')) {
+                        $el.removeAttr('disabled');
+                    } else {
+                        $el.attr('disabled', true);
+                    }
+                })
+            });
         });
     </script>
 

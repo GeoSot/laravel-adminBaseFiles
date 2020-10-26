@@ -102,7 +102,8 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     {
 
         Route::any('/tus/{any?}','Media\MediumController@tusUpload')->where('any', '.*')->name('media.tusUpload');
-        Route::post('restore/{revision}','RestoreController@restore')->name('restore');
+        Route::post('restore/{revision}','RestoreController@restoreHistory')->name('restore');
+        Route::post('restore/clear/{revision}','RestoreController@clearHistory')->name('restore.clear');
 
         Route::impersonate();
         $this->getRouter()->get('log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs.index');

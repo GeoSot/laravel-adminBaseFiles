@@ -38,7 +38,7 @@
                 return item;
             };
             this.getId = function () {
-                return _this.el.id + '_editor_' + BaseAdmin.uuid();
+                return _this.el.id + '_editor_' + jsHelper.uuid();
             };
             this.getOptions = function () {
                 let options = {
@@ -77,8 +77,8 @@
         document.addEventListener("DOMContentLoaded", function (e) {
             let elements = document.querySelectorAll('textarea.withEditor');
             if (elements.length) {
-                window.loader.loadStyle('//cdn.quilljs.com/latest/quill.snow.css')
-                window.loader.loadScript('//cdn.quilljs.com/latest/quill.min.js').then(function () {
+                window.jsHelper.loader.loadStyle('//cdn.quilljs.com/latest/quill.snow.css')
+                window.jsHelper.loader.loadScript('//cdn.quilljs.com/latest/quill.min.js').then(function () {
                         for (let i = 0; i < elements.length; i++) {
                             new BaseAdmin.initActiveTextEditor(elements[i])
                         }

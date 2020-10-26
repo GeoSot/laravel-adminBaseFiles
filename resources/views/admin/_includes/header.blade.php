@@ -1,4 +1,4 @@
-<header class="js-mainHeader  fixed-top  shadow-sm">
+<header class="js-mainHeader sticky-top  shadow-sm">
     <nav class="navbar navbar-expand  navbar-dark bg-admin ">
         <div class="container-fluid flex-wrap">
             <div class=" {{$leftSideClasses}} text-center">

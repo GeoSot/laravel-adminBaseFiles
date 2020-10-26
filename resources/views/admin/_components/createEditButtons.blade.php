@@ -88,6 +88,16 @@
             $form.submit();
         }
 
+        {{--jsHelper.base.execute(() => {--}}
+        {{--    new BaseAdmin.forms.ajaxify("form#mainForm").onSubmit(function (instance, jqxhr) {--}}
+        {{--        jqxhr.done(function (data) {--}}
+        {{--            // jsHelper.debug('form#mainForm', instance, 'ajaxifyForm newPostForm');--}}
+
+        {{--            Swal.fire('{{  __('message.success_title') }}', data.responseText);--}}
+        {{--            BaseAdmin.ajaxLoadWrappers('#app, .js-scripts, #js-notifications');--}}
+        {{--        });--}}
+        {{--    });--}}
+        {{--})--}}
 
     </script>
 @endpush

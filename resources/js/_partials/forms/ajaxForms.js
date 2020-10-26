@@ -89,7 +89,7 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
     this.id = $(formSelector).attr('id');
     this._callback = null;
     this.errorsObj = null;
-    this.spinnerId = 'formSpinner_' + BaseAdmin.uuid();
+    this.spinnerId = 'formSpinner_' + jsHelper.uuid();
 
     let destroyListeners = function () {
         $(_self.form).off("submit.ajaxify");
@@ -133,7 +133,7 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
         }).fail(function (data) {
             console.log(data);
             //  console.log(data);
-            let text = data.statusText + '<br>  Error Code: ' + data.status;
+            let text = data.statusText + '  Error Code: ' + data.status;
             if (data.responseJSON) {
                 _self.errorsObj = new BaseAdmin.forms.errors(_self.$form).setErrors(data.responseJSON.errors);
                 _self.errorsObj.appendFormErrors();
@@ -192,7 +192,7 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
 
     form.onSubmit(function (instance, jqxhr) {
         jqxhr.done(function (data) {
-            // BaseAdminDebugMsg(formSelector, instance, 'ajaxifyForm taskForm');
+            // jsHelper.debug(formSelector, instance, 'ajaxifyForm taskForm');
             instance.clearInputs();
             Swal.fire({
                 title: data.msg.title,
@@ -200,7 +200,7 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
                 icon: 'success',
             })
             $(modalSelector).modal('hide');
-            BaseAdminajaxLoadWrappers(wrapperToReload);
+            BaseAdmin.ajaxLoadWrappers(wrapperToReload);
         });
     });
 };
@@ -213,7 +213,7 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
 
      new BaseAdmin.forms.ajaxify("form#newPostForm").onSubmit(function (instance, jqxhr) {
          jqxhr.done(function (data) {
-             BaseAdminDebugMsg('form#newPostForm', instance, 'ajaxifyForm newPostForm');
+             jsHelper.debug('form#newPostForm', instance, 'ajaxifyForm newPostForm');
              instance.clearInputs();
              Swal.fire('{{  __('message.success_title') }}',data.responseText);
              $('.js-listWrapper').load(location.href + ' .js-listWrapper  > *', function (response) {

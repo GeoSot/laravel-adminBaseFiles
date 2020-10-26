@@ -113,7 +113,7 @@ class Medium extends Media
      */
     public function getThumbHtml(string $width = '')
     {
-        return '<img class="js-lazy img-fluid" style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbUrl().'" />';
+        return '<img class="lazyload img-fluid" style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbUrl().'" />';
     }
 
 
@@ -163,7 +163,7 @@ class Medium extends Media
         $downloadAttr = ($download) ? ' download="true" ' : '';
         $class = $class ?? 'btn btn-link';
         $title = $this->title ?: $this->basename;
-        return '<a data-id="'.$this->getKey().'" class="js-lazy '.$class.'" href="'.$this->getUrl().'" target="_blank" '.$downloadAttr.' title="'.$title.'">'.$title.'</a>';
+        return '<a data-id="'.$this->getKey().'" class="'.$class.'" href="'.$this->getUrl().'" target="_blank" '.$downloadAttr.' title="'.$title.'">'.$title.'</a>';
     }
 
 

@@ -59,7 +59,7 @@ abstract class BaseAdminController extends BaseController
 
         $this->afterFilteringIndex($request, $params, $query, $extraOptions);
 
-        if ($request->input('export')==='csv' && $this->modelIsExportable()) {
+        if ($request->input('export') === 'csv' && $this->modelIsExportable()) {
             /** @var IsExportable $model */
             $model = $this->_hydratedModel;
             return $model->exportToCsv($query->get());
@@ -404,14 +404,17 @@ abstract class BaseAdminController extends BaseController
         if (in_array($afterSaveVal, ['back', 'save_and_close']) and $request->has('after_save_redirect_to')) {
             return redirect()->to($request->input('after_save_redirect_to'));
         }
+
+        $route = $record->getFrontEndConfigPrefixed('admin','route');
+
         if ($afterSaveVal == 'back') {
-            return redirect()->route("{$this->_modelRoute}.index");
+            return redirect()->route("{$route}.index");
         }
         if ($afterSaveVal == 'new') {
-            return redirect()->route("{$this->_modelRoute}.create");
+            return redirect()->route("{$route}.create");
         }
 
-        return redirect()->route("{$this->_modelRoute}.edit", $record);
+        return redirect()->route("{$route}.edit", $record);
     }
 
     /**
@@ -500,7 +503,7 @@ abstract class BaseAdminController extends BaseController
     protected function sendProperResponse(string $action = 'index', array $data = [])
     {
         if (request()->wantsJson()) {
-            return response()->json($data);
+            return response()->json(view($this->getView($action), $data)->render());
         }
         return response()->view($this->getView($action), $data);
     }

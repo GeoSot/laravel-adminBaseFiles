@@ -1,4 +1,4 @@
-<header class="js-mainHeader  fixed-top ">
+<header class="js-mainHeader  sticky-top ">
     <nav class="navbar navbar-expand-lg  bg-white navbar-light shadow-sm " style="font-size: 1rem">
         <div class="container-fluid px-0 ">
             <a href="{{ \App\Providers\RouteServiceProvider::HOME }}" class="navbar-brand  px-sm-2 rounded"
