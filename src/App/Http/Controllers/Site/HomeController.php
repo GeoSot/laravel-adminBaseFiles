@@ -4,6 +4,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 
@@ -38,7 +39,7 @@ class HomeController extends Controller
      */
     public function contactUs()
     {
-        throw new \Exception('Form Is not handled');
+        throw new Exception('Form Is not handled');
         /*  $form = $this->form(ContactForm::class);
           $comingFromUrl = url()->previous().'#'.$form->getFormOption('id');
           $form->redirectIfNotValid($comingFromUrl);

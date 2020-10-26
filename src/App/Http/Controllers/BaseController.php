@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers;
 
 
+use Barryvdh\Debugbar\Facade;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
@@ -146,9 +147,9 @@ abstract class BaseController extends Controller
      */
     protected function debugMsg(string $string): void
     {
-        if (!class_exists(\Barryvdh\Debugbar\Facade::class)) {
+        if (!class_exists(Facade::class)) {
             return;
         }
-        \Barryvdh\Debugbar\Facade::debug($string);
+        Facade::debug($string);
     }
 }

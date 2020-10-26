@@ -18,7 +18,6 @@ class UserRoleController extends BaseAdminController
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
 
 
-
     public function create(Collection $extraValues = null)
     {
         $extraValues = collect(['permissionsGrouped' => UserPermission::getAsGroups()]);

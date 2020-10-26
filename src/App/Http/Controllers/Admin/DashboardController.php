@@ -20,7 +20,6 @@ class DashboardController extends Controller
         }
 
 
-
         //CleanNotificationsTable::dispatch()
         // User::first()->notify(new TicketNewMessageCustomer(Ticket::first(), 'newTicketToCustomer'));
     }

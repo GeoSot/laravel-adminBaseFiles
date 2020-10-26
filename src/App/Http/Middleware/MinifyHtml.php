@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class MinifyHtml
@@ -12,8 +13,8 @@ class MinifyHtml
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param  Request  $request
+     * @param  Closure  $next
      *
      * @return mixed
      */

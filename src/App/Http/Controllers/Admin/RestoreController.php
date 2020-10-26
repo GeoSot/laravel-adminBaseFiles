@@ -13,7 +13,7 @@ class RestoreController extends BaseAdminController
     public function restoreHistory(Request $request, Revision $revision)
     {
         /** @var BaseModel $modelToRestore */
-        $modelToRestore = $revision->historyOf();;
+        $modelToRestore = $revision->historyOf();
 
         if (!$request->user()->hasPermission('admin.restore-'.lcfirst(class_basename($modelToRestore)))) {
             Alert::error(__('baseAdmin::admin/generic.messages.crud.restore.deny'), __('baseAdmin::admin/generic.messages.crud.restore.errorTitle'))->typeToast();

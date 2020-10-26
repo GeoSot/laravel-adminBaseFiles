@@ -83,11 +83,11 @@ class SettingController extends BaseAdminController
     {
 
         /* @var Setting $model */
-        if ($request->input('type')=== Medium::TYPE_IMAGE) {
+        if ($request->input('type') === Medium::TYPE_IMAGE) {
             $result = $model->syncRequestMedia($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
-        if ($request->input('type')=== Medium::class) {
+        if ($request->input('type') === Medium::class) {
             $result = $model->syncRequestMedia($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }

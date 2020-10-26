@@ -4,6 +4,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
 
+use Exception;
 use GeoSot\BaseAdmin\App\Forms\Admin\BasicForm;
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
@@ -15,6 +16,7 @@ use GeoSot\BaseAdmin\App\Traits\Controller\HasAllowedActions;
 use GeoSot\BaseAdmin\App\Traits\Controller\HasFields;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Alert;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -39,7 +41,7 @@ abstract class BaseAdminController extends BaseController
     /**
      * @param  Request  $request
      * @return JsonResponse|RedirectResponse|Response|StreamedResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request)
     {
@@ -156,7 +158,7 @@ abstract class BaseAdminController extends BaseController
     protected function getNumberOfListingItems(Request $request)
     {
         $keyName = 'num_of_items';
-        $sessionNumOfItems = session($keyName, \GeoSot\BaseAdmin\Helpers\Base::settings('admin.generic.paginationDefaultNumOfItems', 100));
+        $sessionNumOfItems = session($keyName, Base::settings('admin.generic.paginationDefaultNumOfItems', 100));
         $numOfItems = $request->input($keyName, $sessionNumOfItems);
         if ($numOfItems != $sessionNumOfItems) {
             session([$keyName => $numOfItems]);
@@ -405,7 +407,7 @@ abstract class BaseAdminController extends BaseController
             return redirect()->to($request->input('after_save_redirect_to'));
         }
 
-        $route = $record->getFrontEndConfigPrefixed('admin','route');
+        $route = $record->getFrontEndConfigPrefixed('admin', 'route');
 
         if ($afterSaveVal == 'back') {
             return redirect()->route("{$route}.index");

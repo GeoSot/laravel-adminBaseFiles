@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class MediumGalleryController extends BaseAdminController
 {
     protected $_class = MediumGallery::class;
+
     //OVERRIDES
 
 
