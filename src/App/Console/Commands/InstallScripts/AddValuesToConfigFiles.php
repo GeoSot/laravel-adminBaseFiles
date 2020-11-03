@@ -99,10 +99,13 @@ EOF;
 
     private function getLaratrustValues(): array
     {
+        $user = config('baseAdmin.config.models.user');
+        $role = config('baseAdmin.config.models.role');
+        $permission = config('baseAdmin.config.models.permission');
         return [
-            "\App\Models\User::class" => config('baseAdmin.config.models.user'),
-            "\App\Models\Role::class" => config('baseAdmin.config.models.role'),
-            "\App\Models\Permission::class" => config('baseAdmin.config.models.permission'),
+            "\App\Models\User::class" => "{$user}",
+            "\App\Models\Role::class" => "{$role}",
+            "\App\Models\Permission::class" => "{$permission}",
             "\App\Models\Team::class" => "App\Models\Users\UserTeam::class",
             "'enabled' => false" => "'enabled' => true",
             "'/home'" => "'/'",
