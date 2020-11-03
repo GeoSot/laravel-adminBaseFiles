@@ -1,6 +1,7 @@
 <?php
 
 namespace GeoSot\BaseAdmin\Database\Seeders;
+
 use App\Models\Users\UserRole;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
@@ -24,12 +25,12 @@ class PermissionsAndRolesSeeder extends BaseSeeder
         foreach ($this->data() as $index => $el) {
             $nameParts = preg_split('/(?=[A-Z])/', $index, -1, PREG_SPLIT_NO_EMPTY);
             $role = $static->create([
-                'name'                   => $index,
-                'display_name'           => ucwords(implode(' ', $nameParts)),
-                'description'            => ucwords(implode(' ', $nameParts)),
-                'front_users_can_see'    => Arr::get($el, 'front_users_can_see', false),
+                'name' => $index,
+                'display_name' => ucwords(implode(' ', $nameParts)),
+                'description' => ucwords(implode(' ', $nameParts)),
+                'front_users_can_see' => Arr::get($el, 'front_users_can_see', false),
                 'front_users_can_choose' => Arr::get($el, 'front_users_can_choose', false),
-                'is_protected'           => Arr::get($el, 'is_protected', false),
+                'is_protected' => Arr::get($el, 'is_protected', false),
             ]);
 
             $this->creatingDataMsg(ucfirst($index));
@@ -46,25 +47,17 @@ class PermissionsAndRolesSeeder extends BaseSeeder
     protected function data()
     {
         return [
-            'god'                => [
+            'god' => [
                 'is_protected' => true,
             ],
-            'invoicesManager'    => [
+            'moderator' => [
                 'front_users_can_see' => true,
-                'is_protected'        => true,
+                'is_protected' => true,
             ],
-            'firstLineSupporter' => [
+            'user' => [
                 'front_users_can_see' => true,
-                'is_protected'        => true,
-            ],
-            'supporter'          => [
-                'front_users_can_see' => true,
-                'is_protected'        => true,
-            ],
-            'user'               => [
-                'front_users_can_see'    => true,
                 'front_users_can_choose' => true,
-                'is_protected'           => true,
+                'is_protected' => true,
             ],
         ];
 
@@ -86,9 +79,9 @@ class PermissionsAndRolesSeeder extends BaseSeeder
      */
     public function truncateTables()
     {
-        $this->command->info('Truncating ' . (new $this->class ())->getTable() . ' Table');
+        $this->command->info('Truncating '.(new $this->class ())->getTable().' Table');
         $this->command->info('Truncating Permissions Table');
-        $this->command->info('Truncating  Tables ' . config('laratrust.tables.permission_role') . ' ' . config('laratrust.tables.permission_user') . ' ' . config('laratrust.tables.role_user'));
+        $this->command->info('Truncating  Tables '.config('laratrust.tables.permission_role').' '.config('laratrust.tables.permission_user').' '.config('laratrust.tables.role_user'));
         Schema::disableForeignKeyConstraints();
         DB::table(config('laratrust.tables.permission_role'))->truncate();
         DB::table(config('laratrust.tables.permission_user'))->truncate();
