@@ -106,8 +106,8 @@ EOF;
             "\App\Models\User::class" => "'{$user}'",
             "\App\Models\Role::class" => "'{$role}'",
             "\App\Models\Permission::class" => "'{$permission}'",
-            "\App\Models\Team::class" => "App\Models\Users\UserTeam::class",
-            "'enabled' => false" => "'enabled' => true",
+            "\App\Models\Team::class" => "'App\Models\Users\UserTeam'",
+//            "'enabled' => false" => "'enabled' => true",
             "'/home'" => "'/'",
         ];
 
@@ -195,7 +195,7 @@ Route::get('/', function () {
         if (!Str::contains($appConfig = file_get_contents(config_path('app.php')), 'App\\Providers\\BaseAdminServiceProvider::class')) {
             file_put_contents(config_path('app.php'), str_replace(
                 "App\Providers\AppServiceProvider::class,",
-                "App\\Providers\BaseAdminServiceProvider::class,".self::newLine()."        App\Providers\AppServiceProvider::class,",
+                "App\\Providers\BaseAdminServiceProvider::class,".self::newLine(1)."        App\Providers\AppServiceProvider::class,",
                 $appConfig
             ));
         }
