@@ -7,7 +7,7 @@ return [
     |  then the menu item will not appear on sidebar
     | ------------------------------------------------------------------------------------------------
     */
-    'permissionsCheckOnSideBar' => false,
+    'permissionsCheckOnSideBar' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ return [
 
     'routes' => [
         'user' => [
-            'menus' => ['user', 'team', 'role', 'permission',],
+            'menus' => ['user', /*'team',*/ 'role', 'permission',],
             'icon' => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
             'order' => 20,
             'makeFiles' => false,
