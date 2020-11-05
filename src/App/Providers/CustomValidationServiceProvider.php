@@ -2,6 +2,7 @@
 
 namespace GeoSot\BaseAdmin\App\Providers;
 
+use Collective\Html\FormBuilder;
 use Form;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,6 @@ class CustomValidationServiceProvider extends ServiceProvider
         foreach ($method_names as $class) {
             $this->$class();
         }
-        static::registerFormCustomRawLabel();
     }
 
     /**
@@ -55,8 +55,8 @@ class CustomValidationServiceProvider extends ServiceProvider
 
     public static function registerFormCustomRawLabel(): void
     {
-        /* @var Form $form */
-        $form = app()->app['form'];
+        /* @var FormBuilder $form */
+        $form = app('form');
         $form->macro('customLabel', function ($name, $value, $options = []) use ($form) {
             $escape = !Arr::get($options, 'raw', true);
             if (isset($options['for']) && $for = $options['for']) {

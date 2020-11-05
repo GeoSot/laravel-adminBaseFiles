@@ -24,8 +24,8 @@ class CreatePageBlocksTable extends Migration
             $table->string('css_class')->nullable();
             $table->unsignedInteger('order')->nullable();
 
-            $table->string('title')->nullable();
-            $table->string('sub_title')->nullable();
+            $table->text('title')->nullable();
+            $table->text('sub_title')->nullable();
             $table->text('notes')->nullable();
 
 

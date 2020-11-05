@@ -24,11 +24,11 @@ class CreatePagesTable extends Migration
             $table->unsignedInteger('order')->nullable();
 
 
-            $table->string('title')->nullable();
-            $table->string('sub_title')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
-            $table->string('keywords')->nullable();
+            $table->text('title')->nullable();
+            $table->text('sub_title')->nullable();
+            $table->text('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->text('keywords')->nullable();
             $table->text('meta_tags')->nullable();
 
             //--Defaults

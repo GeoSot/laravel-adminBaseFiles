@@ -56,7 +56,7 @@ class PageArea extends BaseModel
      */
     public function sluggable()
     {
-        return ['slug' => ['source' => 'en.title']];
+        return ['slug' => ['source' => ['en.title','title']]];
     }
 
     public function getBackgroundImageAttribute()

@@ -23,8 +23,8 @@ class CreatePageAreasTable extends Migration
             $table->text('notes')->nullable();
             $table->unsignedInteger('order')->nullable();
 
-            $table->string('title')->nullable();
-            $table->string('sub_title')->nullable();
+            $table->text('title')->nullable();
+            $table->text('sub_title')->nullable();
 
 
             //--Defaults

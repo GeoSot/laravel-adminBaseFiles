@@ -166,6 +166,7 @@ class MainCommand extends BaseInstallCommand
             'seedPackageData' => ['db:seed', ['--class' => DatabaseSeeder::class]],
             'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
             'symlink' => ['storage:link'],
+            'publishAssets' => ['baseAdmin:publishAssets'],
 //            'perms'=>['baseAdmin:makePermissionsForModel'],
         ];
     }

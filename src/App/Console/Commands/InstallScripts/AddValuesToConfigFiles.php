@@ -34,7 +34,7 @@ class AddValuesToConfigFiles extends BaseInstallCommand
     {
 
         $this->replaceInFile("'engine' => null,", $this->getDatabaseChanges(), config_path('database.php'));
-        $this->replaceInFile("App\Models\Users\User::class", "App\Models\Users\User::class", config_path('auth.php'));
+        $this->replaceInFile("App\Models\User::class", "App\Models\Users\User::class", config_path('auth.php'));
 
         $this->changeValuesInfFile($this->getLaratrustValues(), config_path('laratrust.php'));
         $this->changeValuesInfFile($this->getEnvEditorValues(), config_path('env-editor.php'));
@@ -182,7 +182,8 @@ EOF;
 Route::get('/', function () {
     return view('welcome');
 });
-" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".self::newLine(2)
+" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".self::newLine(2)."\GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider::dynamicPages();
+"
         ], base_path('routes/web.php'));
 
 

@@ -24,7 +24,8 @@ use Mcamara\LaravelLocalization\Middleware as Mcamara;
 
 class BaseAdminRouteServiceProvider extends ServiceProvider
 {
-
+    protected const APP_NS = 'App\Http\Controllers';
+    protected const BASE_NS = 'GeoSot\BaseAdmin\App\Http\Controllers';
 
     protected $router;
     /**
@@ -32,7 +33,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
+    protected $namespace = '';
 
 
     /**
@@ -66,11 +67,11 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
 
         $router->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
             ->middleware(['web', 'localeSessionRedirect', 'localizationRedirect', 'localize'])->group(function () {
-                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->namespace('Admin')->as('admin.')->middleware(['auth'])->group(function () {
+                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->as('admin.')->middleware(['auth'])->group(function () {
                     $this->loadBackendRoutes();
                 });
 
-                $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->namespace('Site')->group(function () {
+                $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->group(function () {
                     $this->loadFrontendRoutes();
                 });
             });
@@ -101,22 +102,24 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     private function loadBackendRoutes()
     {
 
-        Route::any('/tus/{any?}','Media\MediumController@tusUpload')->where('any', '.*')->name('media.tusUpload');
-        Route::post('restore/{revision}','RestoreController@restoreHistory')->name('restore');
-        Route::post('restore/clear/{revision}','RestoreController@clearHistory')->name('restore.clear');
+
+        Route::any('/tus/{any?}', $this->getContoller('Media\MediumController').'@tusUpload')->where('any', '.*')->name('media.tusUpload');
+        Route::post('restore/{revision}', $this->getContoller('RestoreController').'@restoreHistory')->name('restore');
+        Route::post('restore/clear/{revision}', $this->getContoller('RestoreController').'@clearHistory')->name('restore.clear');
 
         Route::impersonate();
         $this->getRouter()->get('log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs.index');
-        $this->getRouter()->get('', 'DashboardController@index')->name('dashboard')->middleware(['permission:admin.*']);
-        $this->getRouter()->get('admin.or-site', 'DashboardController@choosePage')->name('choosePage');
+        $this->getRouter()->get('', $this->getContoller('DashboardController').'@index')->name('dashboard')->middleware(['permission:admin.*']);
+        $this->getRouter()->get('admin.or-site', $this->getContoller('DashboardController').'@choosePage')->name('choosePage');
 
 
         //QUEUES
-        $this->getRouter()->prefix('queues')->name('queues.')->namespace('Queues')->group(function () {
-            $this->getRouter()->get('', "QueueController@index")->name('index')->middleware(['permission:admin.index-job']);
-            $this->getRouter()->patch('retry/{id}', "QueueController@retry")->name('retry')->middleware(['permission:admin.retry-job']);
-            $this->getRouter()->patch('flush/{id}', "QueueController@flush")->name('flush')->middleware(['permission:admin.flush-job']);
+        $this->getRouter()->prefix('queues')->name('queues.')->group(function () {
+            $this->getRouter()->get('', $this->getContoller('Queues\QueueController').'@index')->name('index')->middleware(['permission:admin.index-job']);
+            $this->getRouter()->patch('retry/{id}', $this->getContoller('Queues\QueueController').'@retry')->name('retry')->middleware(['permission:admin.retry-job']);
+            $this->getRouter()->patch('flush/{id}', $this->getContoller('Queues\QueueController').'@flush')->name('flush')->middleware(['permission:admin.flush-job']);
         });
+
 
         //ALL
         $this->registerRoutesFromConfigurationFile();
@@ -131,11 +134,16 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      * @param  string  $side
      * @param  string|null  $controller
      */
-    protected function makeCrudRoutes($name, $plural = null, $parentRoute = '', $side = 'admin', string $controller = null)
+    protected function makeCrudRoutes($name, $plural = null, $parentRoute = '', string $namespace)
     {
+        $side = 'admin';
         $permissionPrefix = 'permission:'.strtolower($side);
-        $controller = $controller ?? ucfirst($parentRoute).ucfirst($name).'Controller';
+        $controller = $namespace.'\\'.ucfirst($parentRoute).ucfirst($name).'Controller';
+
+        $controller = $this->getContoller($controller);
+
         $model = ($parentRoute) ? $parentRoute.ucfirst($name) : $name;
+
 
         $this->getRouter()->get('',
             "{$controller}@index")->name('index')->middleware([$permissionPrefix.'.index-'.$model]);
@@ -167,18 +175,19 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
         foreach ($adminRoutes as $parentRoute => $node) {
             $parentPlural = Arr::get($node, 'plural', Str::plural($parentRoute));
 
-            $this->getRouter()->prefix($parentPlural)->as($parentPlural.'.')->namespace(ucfirst($parentPlural))->group(function () use ($parentRoute, $node, $parentPlural) {
+            $this->getRouter()->prefix($parentPlural)->as($parentPlural.'.')->group(function () use ($parentRoute, $node, $parentPlural) {
 
+                $nameSpace = ucfirst($parentPlural);
                 if (!Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
-                    $this->makeCrudRoutes($parentRoute, $parentPlural, '', 'admin');
+                    $this->makeCrudRoutes($parentRoute, $parentPlural, '', $nameSpace);
                 }
 
                 foreach (Arr::get($node, 'menus', []) as $name) {
                     if ($name == $parentRoute) {
                         continue;
                     }
-                    $this->getRouter()->prefix(Str::plural($name))->as(Str::plural($name).'.')->group(function () use ($parentRoute, $name) {
-                        $this->makeCrudRoutes($name, null, $parentRoute, 'admin');
+                    $this->getRouter()->prefix(Str::plural($name))->as(Str::plural($name).'.')->group(function () use ($parentRoute, $name, $nameSpace) {
+                        $this->makeCrudRoutes($name, null, $parentRoute, $nameSpace);
                     });
 
                 }
@@ -190,23 +199,37 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     {
 
         $this->getRouter()->as('site.')->group(function () {
-            $this->getRouter()->post('contact-us', 'HomeController@contactUs')->name('contactUs.store');
+            $this->getRouter()->post('contact-us', $this->getContoller('HomeController', 'Site').'@contactUs')->name('contactUs.store');
             $this->getRouter()->middleware(['auth'])->group(function () {
                 $this->getRouter()->as('users.')->prefix('profile')->group(function () {
-                    $this->getRouter()->get('', "UserProfileController@edit")->name('edit');
-                    $this->getRouter()->patch('', "UserProfileController@update")->name('update');
+                    $this->getRouter()->get('', $this->getContoller('UserProfileController', 'Site').'@edit')->name('edit');
+                    $this->getRouter()->patch('', $this->getContoller('UserProfileController', 'Site').'@update')->name('update');
                 });
             });
 
-            $this->getRouter()->get('{page}', function ($page) {
-                $pg = Page::where('slug', $page)->first();
-                if ($pg) {
-                    return App::call('App\Http\Controllers\Site\GenericPageController@show', ['page' => $pg]);
-                }
-                return abort(404);
-            })->name('pages');
-
         });
+
+    }
+
+    public static function dynamicPages()
+    {
+        Route::get('{page}', function ($page) {
+            $pg = Page::where('slug', $page)->first();
+            if ($pg) {
+                return App::call($this->getContoller('GenericPageController', 'Site'), '@show', ['page' => $pg]);
+            }
+            return abort(404);
+        })->name('site.pages');
+    }
+
+    /**
+     * @param  string  $controller
+     * @return string
+     */
+    protected function getContoller(string $controller, string $side = 'Admin'): string
+    {
+        $appController = self::APP_NS.DIRECTORY_SEPARATOR.$side.'\\'.$controller;
+        return class_exists($appController) ? $appController : self::BASE_NS.DIRECTORY_SEPARATOR.$side.'\\'.$controller;
 
     }
 }

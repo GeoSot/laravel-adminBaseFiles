@@ -39,6 +39,7 @@ abstract class BaseController extends Controller
      */
     public function __construct()
     {
+        $this->infoMsg('using: '.static::class);
         $this->initializeModelValues();
     }
 
@@ -151,5 +152,16 @@ abstract class BaseController extends Controller
             return;
         }
         Facade::debug($string);
+    }
+
+    /**
+     * @param  string  $string
+     */
+    protected function infoMsg(string $string): void
+    {
+        if (!class_exists(Facade::class)) {
+            return;
+        }
+        Facade::info($string);
     }
 }

@@ -42,6 +42,7 @@ return [
             'menus' => ['medium', 'gallery',],
             'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
 //            'excludeFromSideBar' => ['gallery'],
+            'makeFiles' => false,
             'order' => 40,
         ],
 

@@ -63,7 +63,7 @@ class PageBlock extends BaseModel
      */
     public function sluggable()
     {
-        return ['slug' => ['source' => 'en.title']];
+        return ['slug' => ['source' =>['en.title','title']]];
     }
 
 

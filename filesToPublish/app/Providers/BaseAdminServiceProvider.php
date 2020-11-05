@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,7 @@ class BaseAdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        CustomValidationServiceProvider::registerFormCustomRawLabel();
         Paginator::useBootstrap();
         Schema::defaultStringLength(191);
 

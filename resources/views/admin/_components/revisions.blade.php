@@ -12,7 +12,7 @@
 @endphp
 
 
-@if($viewVals->get('options')->get('modelIsRevisionable') && auth()->user()->isAbleTo('admin.edit-'.$modelClass) && $allowToHandle && $record->exists)
+@if($viewVals->get('options')->get('modelIsRevisionable') && auth()->user()->isAbleTo('admin.edit-'.$modelClass) && $allowToHandle && $record)
     <div class="mr-auto">
         @component($packageVariables->get('blades').'_subBlades._components.modal',['id'=>'revisionsModal','animation'=>'','dialogClass' =>'modal-xl'] )
             @slot('triggerBtn')

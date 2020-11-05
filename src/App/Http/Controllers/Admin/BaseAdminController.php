@@ -462,7 +462,7 @@ abstract class BaseAdminController extends BaseController
          * $file = app()->langPath().DIRECTORY_SEPARATOR.app()->getLocale().DIRECTORY_SEPARATOR.$this->_modelsLangDir.'.php';
          * */
         $langFile = $this->_modelsLangDir.$string;
-        $this->debugMsg("Return Lang: {$langFile}");
+        $this->infoMsg("Return Lang: {$langFile}");
         return $this->addPackagePrefix($langFile);
 
     }
@@ -492,7 +492,7 @@ abstract class BaseAdminController extends BaseController
         }
 
         $view = $this->addPackagePrefix($this->_genericViewsDir);
-        $this->debugMsg("Return View: {$view}");
+        $this->infoMsg("Return View: {$view}");
         return $view;
     }
 
@@ -531,7 +531,7 @@ abstract class BaseAdminController extends BaseController
             return $this->form($formName, $options);
         }
         $formName = BasicForm::class;
-        $this->debugMsg("Return Form: {$formName}");
+        $this->infoMsg("Return Form: {$formName}");
         return $this->form($formName, $options);
     }
 
