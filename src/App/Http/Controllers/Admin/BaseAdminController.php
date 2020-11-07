@@ -36,6 +36,13 @@ abstract class BaseAdminController extends BaseController
      */
     protected $filtersHelper;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
+        $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
+    }
+
 
     /**
      * @param  Request  $request
@@ -49,8 +56,6 @@ abstract class BaseAdminController extends BaseController
         if (!is_null($redirectRoute)) {
             return redirect()->to($redirectRoute);
         }
-        $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
-        $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
 
         $extraOptions = collect([]);
         $query = $this->_class::select();
@@ -290,7 +295,7 @@ abstract class BaseAdminController extends BaseController
 
     public function delete(Request $request)
     {
-        if (!$this->isAllowedAction('index', ['delete'])) {
+        if (!($this->isAllowedAction('index', ['delete']) || $this->isAllowedAction('edit', ['delete']))) {
             abort(403, $this->getLang('delete.deny'));
         }
         $ids = $request->input('ids', []);

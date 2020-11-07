@@ -30,6 +30,6 @@ class GenericPageController extends BaseFrontController
             }
         ]);
 
-        return view('baseAdmin::site.blockLayouts.genericPage', compact('page'));
+        return view('baseAdmin::site.blockLayouts.genericPage', ['record'=>$page]);
     }
 }

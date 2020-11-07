@@ -10,7 +10,7 @@ const triggers = {
 };
 
 
-let fileInput_OBJ = (el) => {
+let fileInput_OBJ = function (el) {
     this.$wrapper = $(el).parents('[data-toggle="imageInput"], [data-toggle="fileInput"]');
     this.$input = this.$wrapper.find('input:file');
     this.isImage = (this.$wrapper.attr('data-toggle') === 'imageInput');

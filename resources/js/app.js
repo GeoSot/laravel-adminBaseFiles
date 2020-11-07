@@ -17,7 +17,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         require('./_partials/lazyImages');
     }
     if (document.querySelectorAll(".UppyModalOpenerBtn, .UppyDashboardContainer").length) {
-        require('./_partials/uppy');
+        // require('./_partials/uppy');
     }
     jsHelper.base.triggerIsLoaded()
 });

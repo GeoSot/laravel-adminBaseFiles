@@ -54,12 +54,23 @@
 
             @isset($after) {!!  $after  !!} @endisset
 
+            @if($viewVals->get('record') && in_array('delete',$options) && auth()->user()->isAbleTo('admin.delete-'.$modelClass) && $allowToHandle)
+                <button id="delete-items" data-toggle="listing-actions" data-method="DELETE" data-keyword="delete" class="btn btn-danger m-1 ml-auto"
+                        data-after_save_redirect_to="{{$viewVals->get('record')->frontConfigs->getRoute('index','admin')}}"
+                        type="button" data-url="{{ $viewVals->get('record')->frontConfigs->getRoute('delete','admin') }}">
+                    <span class="btn-label"><i class="fa fa-trash-o"></i></span>
+                    <span class="btn_text"> @lang("{$btnsLang}.delete")</span>
+                    <input id="record_{{$viewVals->get('record')->id}}" type="checkbox" class=""hidden checked  value="{{$viewVals->get('record')->id}}"/>
+
+                </button>
+            @endif
+
         </div>
     </section>
     <!--com_createEditButtons END-->
 
 @endprepend
-
+@include($packageVariables->get('blades').'admin._includes.listingHiddenMessages')
 @include($packageVariables->get('blades').'admin._components.createEditSmallButtons')
 
 @push('scripts')

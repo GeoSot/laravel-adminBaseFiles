@@ -12,5 +12,9 @@ return [
         'notes' => 'Description',
         'enabled' => 'Enabled',
         'images' => 'Images'
-    ]
+    ],
+    'modal' => [
+        'title' => 'Media Library',
+        'button' => 'Library',
+    ],
 ];

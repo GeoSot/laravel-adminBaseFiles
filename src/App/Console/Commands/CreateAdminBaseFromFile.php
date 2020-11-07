@@ -36,7 +36,6 @@ class CreateAdminBaseFromFile extends Command
     {
         parent::__construct();
 
-
         $this->composer = $composer;
     }
 
@@ -111,9 +110,7 @@ class CreateAdminBaseFromFile extends Command
             if ($this->confirm("Make {$langBase} LanguageFile?")) {
                 $this->makeLanguage($langBase);
             }
-            if ($this->confirm("Make {$model} ViewFile?")) {
-                $this->makeView($parentRoute, $model, $viewBaseDir, 'index');
-            }
+
         }
         $this->info('------------------------------------------');
         $this->info('');
@@ -127,13 +124,7 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makeModel($fullModelClass, string $viewBase, string $langBase, string $routeBase)
     {
-        //Model
-        $this->call('baseAdmin:makeModel', [
-            'name' => $fullModelClass,
-            '--viewBase' => $viewBase,
-            '--langBase' => $langBase,
-            '--routeBase' => $routeBase,
-        ]);
+        $this->call('make:model', ['name' => $fullModelClass,]);
     }
 
     /**
@@ -141,7 +132,6 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makePermissions($model)
     {
-        //Permissions
         $this->call('baseAdmin:makePermissionsForModel', [
             'name' => $model
         ]);
@@ -154,7 +144,6 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makeController($plural, $controllerName, $fullModelClass)
     {
-        //Controller
         $this->call('baseAdmin:makeAdminController', [
             'name' => ucfirst($plural).'\\'.$controllerName,
             '--model' => $fullModelClass,
@@ -168,7 +157,6 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makeMigration($name, $parentRoute, $model)
     {
-        //Migration
         $this->call('make:migration', [
             'name' => Str::plural($model),
             '--create' => (($parentRoute) ? $parentRoute.'_' : '').Str::plural($name),
@@ -181,7 +169,6 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makeFactory($model, $fullModelClass)
     {
-        //Factory
         $this->call('make:factory', [
             'name' => $model.'Factory',
             '--model' => $fullModelClass
@@ -193,27 +180,10 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makeLanguage($langBase)
     {
-        //Language
         $this->call('baseAdmin:makeLanguageFile', [
             'name' => 'admin/'.$langBase
         ]);
     }
 
-    /**
-     * @param $parentRoute
-     * @param $model
-     * @param $viewBase
-     * @param $viewName
-     *
-     */
-    protected function makeView($parentRoute, $model, $viewBase, $viewName)
-    {
-        //View
-        $this->call('baseAdmin:nameView', [
-            'name' => 'admin/'.$viewBase.'/'.$viewName,
-            '--textInside' => $parentRoute.'   '.$model,
-            '--layout' => 'admin.layout'
-        ]);
-    }
 
 }

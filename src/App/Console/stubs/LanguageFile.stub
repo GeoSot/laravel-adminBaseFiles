@@ -1,9 +1,9 @@
 <?php
 return [
     'general' => [
-        'menuTitle' => 'DummyMenu',
-        'singular' => 'DummySingle',
-        'plural' => 'DummyPlural',
+        'menuTitle' => '{{ menu }}',
+        'singular' => '{{ single }}',
+        'plural' => '{{ plural }}',
     ],
     'fields' => [
         'id' => 'ID',

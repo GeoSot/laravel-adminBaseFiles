@@ -5,28 +5,12 @@
   */
 
 /*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-
-/*!
  * Bootstrap Colorpicker - Bootstrap Colorpicker is a modular color picker plugin for Bootstrap 4.
  * @package bootstrap-colorpicker
  * @version v3.2.0
  * @license MIT
  * @link https://itsjavi.com/bootstrap-colorpicker/
  * @link https://github.com/itsjavi/bootstrap-colorpicker.git
- */
-
-/*!
- * Cropper.js v1.5.7
- * https://fengyuanchen.github.io/cropperjs
- *
- * Copyright 2015-present Chen Fengyuan
- * Released under the MIT license
- *
- * Date: 2020-05-23T05:23:00.081Z
  */
 
 /*!
@@ -46,27 +30,6 @@
  *
  * Date: 2020-03-14
  */
-
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <http://feross.org>
- * @license  MIT
- */
-
-/*! https://mths.be/utf8js v2.1.2 by @mathias */
-
-/**
-   * Takes a string with placeholder variables like `%{smart_count} file selected`
-   * and replaces it with values from options `{smart_count: 5}`
-   *
-   * @license https://github.com/airbnb/polyglot.js/blob/master/LICENSE
-   * taken from https://github.com/airbnb/polyglot.js/blob/master/lib/polyglot.js#L299
-   *
-   * @param {string} phrase that needs interpolation, with placeholders
-   * @param {object} options with values that will be used to replace placeholders
-   * @returns {string} interpolated
-   */
 
 /**
  * @license almond 0.3.3 Copyright jQuery Foundation and other contributors.

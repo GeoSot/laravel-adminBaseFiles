@@ -151,7 +151,10 @@ class FrontEndConfigs
      */
     public function getRoute(string $action, string $side = self::ADMIN): string
     {
-        return route($this->getRouteDir($side).".{$action}", $this->model);
+        $options = in_array($action, ['edit', 'update']) ? $this->model : [];
+
+
+        return route($this->getRouteDir($side).".{$action}", $options);
     }
 
     /**

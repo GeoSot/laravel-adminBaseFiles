@@ -55,7 +55,8 @@ class MainCommand extends BaseInstallCommand
             return false;
         }
 
-        $this->info('Welcome!', 'Starting the installation process...', 'comment');
+        $this->info('Welcome!');
+        $this->info('Starting the installation process...', 'comment');
 
         foreach ($this->getInstallScripts() as $key => $script) {
             $this->call(Arr::get($script, 0), Arr::get($script, 1, []));

@@ -195,7 +195,7 @@ Route::get('/', function () {
         if (!Str::contains($appConfig = file_get_contents(config_path('app.php')), 'App\\Providers\\BaseAdminServiceProvider::class')) {
             file_put_contents(config_path('app.php'), str_replace(
                 "App\Providers\AppServiceProvider::class,",
-                "App\\Providers\BaseAdminServiceProvider::class,".self::newLine(1)."        App\Providers\AppServiceProvider::class,",
+                "App\\Providers\BaseAdminServiceProvider::class,".self::newLine(2)."        App\Providers\AppServiceProvider::class,",
                 $appConfig
             ));
         }

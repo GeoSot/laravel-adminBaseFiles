@@ -10,7 +10,7 @@ class {{ class }} extends BaseSeeder
     protected $class = YOUR_MODEL::class;
 
     /**
-     * Run the database seederss.
+     * Run the database seeders.
      */
     public function seedData()
     {

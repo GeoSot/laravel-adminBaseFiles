@@ -64,7 +64,7 @@ class {{ class }} extends BaseModel
      */
    /* public function sluggable()
     {
-        return ['slug' => ['source' => 'title']];
+        return ['slug' => ['source' => ['en.title','title']]];
     }
 
     public function getRouteKeyName()

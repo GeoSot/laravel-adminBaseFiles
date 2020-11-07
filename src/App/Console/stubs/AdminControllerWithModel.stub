@@ -1,39 +1,39 @@
 <?php
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
-use DummyFullModelClass;
-use Illuminate\Http\Request;
+use {{ namespacedModel }};
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use Illuminate\Http\Request;
 
-class DummyClass extends BaseAdminController
+class {{ class }} extends BaseAdminController
 {
 
-    protected $_class = DummyModelClass::class;
+    protected $_class = {{ model }}::class;
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  DummyModelClass  $DummyModelVariable
+     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(DummyModelClass $DummyModelVariable)
+    public function edit({{ model }} ${{ modelVariable }})
     {
-        return $this->genericEdit($DummyModelVariable);
+        return $this->genericEdit(${{ modelVariable }});
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  DummyModelClass  $DummyModelVariable
+     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DummyModelClass $DummyModelVariable)
+    public function update(Request $request, {{ model }} ${{ modelVariable }})
     {
-         return $this->genericUpdate($request, $DummyModelVariable);
+         return $this->genericUpdate($request, ${{ modelVariable }});
     }
 
     protected function listFields()//Can be omitted

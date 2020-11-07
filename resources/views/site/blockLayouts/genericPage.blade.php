@@ -2,18 +2,18 @@
 
 @php
     /**
-     * @var \App\Models\Pages\Page $page
+     * @var \App\Models\Pages\Page $record
     */
 @endphp
-@section('documentTitle'){!! $page->title !!}@endsection
+@section('documentTitle'){!! $record->title !!}@endsection
 
 
 @section('content')
 
-    <div data-slug="page_{{$page->slug}}" class="">
-        <h2 class="lead"> {!! $page->sub_title!!}</h2>
+    <div data-slug="page_{{$record->slug}}" class="">
+        <h2 class="lead"> {!! $record->sub_title!!}</h2>
 
-        @each('baseAdmin::site.blockLayouts._pageArea', $page->pageAreas, 'record')
+        @each('baseAdmin::site.blockLayouts._pageArea', $record->pageAreas, 'record')
 
     </div>
 @endsection

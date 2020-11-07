@@ -3,21 +3,18 @@
 
 namespace GeoSot\BaseAdmin\App\Models\Pages;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\URL;
-use Spatie\Translatable\HasTranslations;
 
 
-class Page extends BaseModel
+class Page extends BasePage
 {
+    protected $with = ['pageAreas'];
 
     public const SESSION_PREVIEW_KEY = 'previewPage';
-    use Sluggable, HasTranslations, SoftDeletes, HasMedia;
+    use SoftDeletes;
 
     public $translatable = [
         'title',
@@ -63,21 +60,6 @@ class Page extends BaseModel
         ], $merge, $this->rules);
     }
 
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return ['slug' => ['source' => 'en.title']];
-    }
-
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
 
     /*
     *
@@ -129,4 +111,8 @@ class Page extends BaseModel
     }
 
 //*********  M E T H O D S  ***************
+    public function getViewTemplate(): string
+    {
+        return 'baseAdmin::site.blockLayouts.genericPage';
+    }
 }

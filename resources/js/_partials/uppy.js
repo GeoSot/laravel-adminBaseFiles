@@ -1,4 +1,4 @@
-import {Core, Dashboard, DragDrop, ProgressBar, Tus, Url} from 'uppy'
+import {Core, Dashboard,Tus, Url} from 'uppy'
 
 import 'uppy/dist/uppy.min.css'
 import '@uppy/image-editor/dist/style.css'
@@ -18,7 +18,7 @@ const uppy = new Core({
     restrictions: Laravel.uppy.restrictions
 })
 uppy.use(Dashboard, {
-    trigger: '.UppyModalOpenerBtn',
+    // trigger: '.UppyModalOpenerBtn',
     inline: Laravel.uppy.inline,
     target: '.UppyDashboardContainer',
     replaceTargetContent: true,
@@ -36,8 +36,6 @@ uppy.use(Url, {
     headers: headers,
     companionUrl: 'https://companion.uppy.io/',
 })
-    // .use(DragDrop, {target: '.example-one .for-DragDrop'})
-    // .use(ProgressBar, {target: '.example-one .for-ProgressBar', hideAfterFinish: false})
 
 // Function for displaying uploaded files
 const onUploadSuccess = (elForUploadedFiles) =>
@@ -60,3 +58,13 @@ uppy.on('complete', result => {
     console.log('failed files:', result.failed)
 }).on('upload-success', onUploadSuccess('.example-one .uploaded-files ol'))
 
+uppy.getFiles().forEach(file => {
+
+    if(file.source == "remote") {
+        // source = remote is how I "mark" them previoulsy
+        this.uppy.setFileState(file.id, {
+            progress: { uploadComplete: true, uploadStarted: false }
+        });
+    }
+
+});

@@ -39,10 +39,19 @@ BaseAdmin.listingActions = {
         };
         let show_message = 0;
         let keyword = $(elem).data('keyword');
+        let redirectCallBack = null;
+        let redirect = $(elem).data('after_save_redirect_to');
+
+        if (redirect) {
+            redirectCallBack = function () {
+                window.location.href = redirect;
+            }
+        }
+
         if (keyword === 'enable' || keyword === 'disable') {
-            return BaseAdmin.listingActions.ChangeEnableDisableStatus(url, type, data, show_message, keyword);
+            return BaseAdmin.listingActions.ChangeEnableDisableStatus(url, type, data, show_message, keyword, redirectCallBack);
         } else {
-            return BaseAdmin.listingActions.allOtherActions(url, type, data, show_message, keyword);
+            return BaseAdmin.listingActions.allOtherActions(url, type, data, show_message, keyword, redirectCallBack);
         }
 
     }

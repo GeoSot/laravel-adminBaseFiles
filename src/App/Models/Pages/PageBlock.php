@@ -3,17 +3,12 @@
 namespace GeoSot\BaseAdmin\App\Models\Pages;
 
 use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Sluggable;
-use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
-use Spatie\Translatable\HasTranslations;
 
 
-class PageBlock extends BaseModel
+class PageBlock extends BasePage
 {
-    use Sluggable, HasTranslations, HasMedia;
 
     public $translatable = ['title', 'sub_title', 'notes'];
 
@@ -56,17 +51,6 @@ class PageBlock extends BaseModel
     }
 
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return ['slug' => ['source' =>['en.title','title']]];
-    }
-
-
     public function scopeActive(Builder $builder)
     {
         return $builder->where('expires_at', '>', Carbon::now())->where('starts_at', '<', Carbon::now());
@@ -91,6 +75,11 @@ class PageBlock extends BaseModel
 
 
     //*********  M E T H O D S  ***************
+
+    public function getViewTemplate(): string
+    {
+        return 'baseAdmin::site.blockLayouts._pageBlock';
+    }
 
     public function hasOneImage()
     {

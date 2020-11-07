@@ -11,9 +11,7 @@ use GeoSot\BaseAdmin\App\Console\Commands\{CreateAdminBaseFromFile,
     InstallScripts\PublishInitialFiles,
     MakeAdminController,
     MakeAdminPermissions,
-    MakeLanguage,
-    MakeModel,
-    MakeView,
+    MakeLanguage
 };
 use Illuminate\Support\ServiceProvider;
 
@@ -54,8 +52,6 @@ class CommandsProvider extends ServiceProvider
             MakeAdminController::class,
             MakeAdminPermissions::class,
             MakeLanguage::class,
-            MakeModel::class,
-            MakeView::class,
         ]);
     }
 

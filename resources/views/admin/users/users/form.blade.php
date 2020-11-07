@@ -32,8 +32,7 @@
 
 @section('content')
 {{--    @include('baseAdmin::admin.users.users.croppie')--}}
-<button class="UppyModalOpenerBtn btn btn-outline-info">test</button>
-<div class="UppyDashboardContainer"></div>
+
     @php($form=$viewVals->get('extraValues')->get('form'))
     {!!  form_start($form) !!}
 

@@ -35,7 +35,7 @@
           'inline' => true,
           'height' => 400,
           'restrictions' => [
-              'maxFileSize' => 1000000,
+              'maxFileSize' => 100000000,
               'maxNumberOfFiles' => 10,
               'minNumberOfFiles' => 1,
               'allowedFileTypes' => ['image/*', 'video/*']

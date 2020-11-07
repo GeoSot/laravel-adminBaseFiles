@@ -63,7 +63,7 @@
                 <button class="btn btn-secondary  btn-sm fileinput-exists mx-1 mb-1" type="button" data-dismiss="fileinput">
                     @lang($packageVariables->get('nameSpace').'admin/generic.button.remove')
                 </button>
-
+                @include('baseAdmin::_subBlades.media.library.mediaLibrary')
             @if($val=$options['value'])
                     @php($href=
                               $options['value'] instanceOf \App\Models\Media\Medium
@@ -74,6 +74,7 @@
                 @if(\Illuminate\Support\Arr::get($options, 'repeatable', false))
                     <button class="btn btn-danger ml-auto btn-sm mb-1" type="button" data-remove="fileinput"><i class="fa fa-minus"></i></button>
                 @endif
+
             </div>
             @include('laravel-form-builder::help_block')
         @endif

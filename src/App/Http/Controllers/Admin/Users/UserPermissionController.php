@@ -16,7 +16,7 @@ class UserPermissionController extends BaseAdminController
     protected $_class = UserPermission::class;
 
     //OVERRIDES
-    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'delete'];
     protected $allowedActionsOnIndex = ['create', 'edit'];
 
 

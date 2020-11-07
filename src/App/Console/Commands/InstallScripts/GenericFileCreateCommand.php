@@ -56,8 +56,8 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
 
 
     /**
-     * @param string $path
-     * @param string $stub
+     * @param  string  $path
+     * @param  string  $stub
      *
      * @return bool|null
      */
@@ -81,13 +81,13 @@ abstract class GenericFileCreateCommand extends GeneratorCommand
     /**
      * Determine if the class already exists.
      *
-     * @param  string $rawName
+     * @param  string  $rawName
      *
      * @return bool
      */
     protected function alreadyExists($rawName)
     {
-        return $this->files->exists($this->getFileWithPath($rawName));
+        return $this->files->exists($rawName ?: $this->getFileWithPath());
     }
 
     /**
