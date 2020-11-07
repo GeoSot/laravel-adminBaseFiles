@@ -3,6 +3,8 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 use Exception;
+use GeoSot\BaseAdmin\App\Helpers\Models\FrontEndConfigs;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -51,7 +53,9 @@ trait IsExportable
         return response()->stream(function () use ($items) {
             $file = fopen('php://output', 'w');
 
-            fputcsv($file, $this->getCsvColumns());
+            fputcsv($file,array_map(function (string $text){
+                return $this->frontConfigs->trans(".fields.{$text}");
+            },  $this->getCsvColumns()));
 
             foreach ($items as $item) {
                 fputcsv($file, $item->toCsvArray());

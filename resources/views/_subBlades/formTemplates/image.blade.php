@@ -67,7 +67,7 @@
             @if($val=$options['value'])
                     @php($href=
                               $options['value'] instanceOf \App\Models\Media\Medium
-                              ?route($options['value']->getFrontEndConfigPrefixed('admin', 'route').'.edit', $options['value'])
+                               ?$options['value']->frontConfigs->getRoute('edit')
                               :$val)
                     <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>
                 @endif

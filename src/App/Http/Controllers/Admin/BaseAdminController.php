@@ -171,7 +171,7 @@ abstract class BaseAdminController extends BaseController
             'packagePrefix' => Base::addPackagePrefix(),
             'baseRoute' => $this->_modelRoute,
             'baseView' => $this->chooseProperViewFile($action),
-            'baseLang' => Base::addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir),
+            'baseLang' => Base::addPackagePrefix($this->usingLangDir()),
             'modelView' => $this->getView($action),
             'modelLang' => $this->chooseProperLangFile(),
             'modelClass' => $this->_class,
@@ -215,7 +215,7 @@ abstract class BaseAdminController extends BaseController
         $collection->put($this->chooseProperLangFile('.general.menuTitle'), route("{$this->_modelRoute}.index"));
 
         if ($action !== 'index') {
-            $collection->put(Base::addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir).'.menu.'.$action, '');
+            $collection->put(Base::addPackagePrefix($this->usingLangDir()).'.menu.'.$action, '');
         }
 
         return $collection;
@@ -398,7 +398,7 @@ abstract class BaseAdminController extends BaseController
             return redirect()->to($request->input('after_save_redirect_to'));
         }
 
-        $route = $record->getFrontEndConfigPrefixed('admin', 'route');
+        $route = $record->frontConfigs->getRouteDir('admin');
 
         if ($afterSaveVal == 'back') {
             return redirect()->route("{$route}.index");
@@ -431,7 +431,7 @@ abstract class BaseAdminController extends BaseController
 
     protected function getLang(string $langPath, $count = 1)
     {
-        return trans_choice(Base::addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir).'.messages.crud.'.$langPath, $count,
+        return trans_choice(Base::addPackagePrefix($this->usingLangDir()).'.messages.crud.'.$langPath, $count,
             ['num' => $count]);
     }
 
@@ -445,6 +445,7 @@ abstract class BaseAdminController extends BaseController
         $langFile = $this->_modelsLangDir.'.general.menuTitle';
         $this->helper->debugMsg("Try Find Lang: {$langFile}");
         if (trans()->has($langFile)) {
+            $this->helper->infoMsg("Return Lang: {$langFile}");
             return $this->_modelsLangDir.$string;
         }
         /**
@@ -474,11 +475,13 @@ abstract class BaseAdminController extends BaseController
         $view = $modelView.$suffix;
         $this->helper->debugMsg("Try Find View: {$view}");
         if (view()->exists($view)) {
+            $this->helper->infoMsg("Return View: {$view}");
             return $modelView;
         }
         $view = Base::addPackagePrefix($modelView.$suffix);
         $this->helper->debugMsg("Try Find View: {$view}");
         if (view()->exists($view)) {
+            $this->helper->infoMsg("Return View: {$view}");
             return Base::addPackagePrefix($modelView);
         }
 
@@ -520,6 +523,14 @@ abstract class BaseAdminController extends BaseController
            ];*/
 
         return [];
+    }
+
+    /**
+     * @return string
+     */
+    protected function usingLangDir(): string
+    {
+        return $this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir;
     }
 
 

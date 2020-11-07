@@ -10,7 +10,7 @@
 @component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals] )
     @if ($viewVals->get('record') )
         @slot('after')
-           {!!  $viewVals->get('record')->page->getDashBoardLink(__($viewVals->get('modelLang').'.general.pageLink'),false,['class'=>'ml-auto btn btn-sm btn-outline-admin']) !!}
+           {!!  $viewVals->get('record')->page->frontConfigs->getAdminLink(__($viewVals->get('modelLang').'.general.pageLink'),false,['class'=>'ml-auto btn btn-sm btn-outline-admin']) !!}
         @endslot
     @endif
 

@@ -99,7 +99,7 @@ class Page extends BaseModel
             return true;
         }
         if (session()->get(Page::SESSION_PREVIEW_KEY) == $this->slug) {
-            $lang = 'baseAdmin::'.$this->getFrontEndConfigPrefixed('site', 'langDir').'.';
+            $lang = 'baseAdmin::'.$this->frontConfigs->getLangDir('site').'.';
             Alert::info(__("{$lang}general.isPreview.msg"), __("{$lang}general.isPreview.title"));
             return true;
         }

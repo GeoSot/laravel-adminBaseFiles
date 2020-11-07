@@ -27,13 +27,15 @@ return [
 
     'routes' => [
         'user' => [
-            'menus' => ['user', /*'team',*/ 'role', 'permission',],
+            'menus' => [
+                'user', /*'team',*/ 'role', 'permission',
+            ],
             'icon' => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
             'order' => 20,
             'makeFiles' => false,
         ],
         'page' => [
-            'menus' => ['page', 'block', 'area'],
+            'menus' => ['page', 'area', 'block',],
             'icon' => ['class' => 'fa  fa-file-text-o', 'style' => 'color:#52c1dc',],
             'order' => 30,
             'makeFiles' => false,

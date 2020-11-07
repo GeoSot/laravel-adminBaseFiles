@@ -59,7 +59,7 @@
                 @endif
 {{--                @if($record && $record->models())--}}
 {{--                    <div class="pt-3 mb-4 border-top"><span class="font-weight-bold text-muted ">@lang("{$viewVals->get('modelLang')}.fields.ownerModel.title") :</span>--}}
-{{--                        {!! $record->ownerModel->getDashboardLink(class_basename($record->ownerModel)." (ID: {$record->ownerModel->getKey()})") !!}--}}
+{{--                        {!! $record->ownerModel->frontConfigs->getAdminLink(class_basename($record->ownerModel)." (ID: {$record->ownerModel->getKey()})") !!}--}}
 {{--                    </div>--}}
 {{--                @endif--}}
 

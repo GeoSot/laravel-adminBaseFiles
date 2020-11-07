@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers;
 
 use GeoSot\BaseAdmin\App\Forms\Admin\BasicForm;
 use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Helper;
+use GeoSot\BaseAdmin\App\Helpers\Models\FrontEndConfigs;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
@@ -44,9 +45,9 @@ abstract class BaseController extends Controller
     public function __construct()
     {
 
-        $this->helper->infoMsg('using: '.static::class);
         $this->initializeModelValues();
         $this->helper = new Helper($this->_hydratedModel);
+        $this->helper->infoMsg('using: '.static::class);
     }
 
     public function initializeModelValues()
@@ -55,10 +56,10 @@ abstract class BaseController extends Controller
 
         if (is_subclass_of($this->_class, Model::class) and Arr::has(class_uses_recursive($this->_class), HasFrontEndConfigs::class)) {
             $this->_hydratedModel = new $this->_class();
-            $modelConfigs = $this->_hydratedModel->getFrontEndConfigPrefixed((is_subclass_of($this, BaseAdminController::class)) ? 'admin' : 'site');
-            $this->_modelRoute = $modelConfigs->get('route');
-            $this->_modelsLangDir = $modelConfigs->get('langDir');
-            $this->_modelsViewsDir = $modelConfigs->get('viewDir');
+            $side = is_subclass_of($this, BaseAdminController::class) ? FrontEndConfigs::ADMIN : FrontEndConfigs::SITE;
+            $this->_modelRoute = $this->_hydratedModel->frontConfigs->getRouteDir($side);
+            $this->_modelsLangDir = $this->_hydratedModel->frontConfigs->getLangDir($side);
+            $this->_modelsViewsDir = $this->_hydratedModel->frontConfigs->getViewDir($side);
         }
 
 

@@ -19,7 +19,7 @@
                 @endif
                 @if($contact=$viewVals->get('record')->contact)
                     <a class="btn btn-outline-secondary  m-1" role="button"
-                       href="{{route($contact->getFrontEndConfigPrefixed('admin', 'route') . '.edit', $contact)}}">
+                       href="{{$contact->frontConfigs->getRoute('edit')}}">
                         <span class="btn-label"><i class="fa fa-address-card" aria-hidden="true"></i></span>
                         @lang($viewVals->get('modelLang').'.fields.contactAssigned')
                     </a>
