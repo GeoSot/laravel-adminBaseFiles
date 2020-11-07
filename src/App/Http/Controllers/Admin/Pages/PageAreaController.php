@@ -4,6 +4,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Pages;
 
 use App\Models\Media\Medium;
 use App\Models\Pages\PageArea;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -51,7 +52,7 @@ class PageAreaController extends BaseAdminController
     protected function filters()
     {
         return [
-            'page.slug' => ['type' => 'multiSelect'],
+            Filter::selectMulti('page.slug'),
         ];
     }
 

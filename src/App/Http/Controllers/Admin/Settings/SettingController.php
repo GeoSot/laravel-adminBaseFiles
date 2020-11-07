@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
 use App\Models\Media\Medium;
 use App\Models\Setting;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -111,8 +112,8 @@ class SettingController extends BaseAdminController
     protected function filters()//Can be omitted
     {
         return [
-            'group' => ['type' => 'select'],
-            'sub_group' => ['type' => 'multiSelect'],
+            Filter::select('group'),
+            Filter::selectMulti('sub_group'),
         ];
     }
 

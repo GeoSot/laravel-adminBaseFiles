@@ -1,14 +1,18 @@
 @php
-    use Illuminate\Support\Collection;
+    use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\FiltersHelper;
+use Illuminate\Support\Collection;
+
     /**
     * @var Collection $viewVals
     * @var Collection $params
     * @var Collection $params
     */
+
     $lang=$viewVals->get('baseLang');
     $modelLang=$viewVals->get('modelLang');
-    $filters=$viewVals->get('extra_filters');
-    $requestParams=$params->get('extra_filters');
+    $filters=$viewVals->get(FiltersHelper::EXTRA_FILTERS_KEY);
+    $requestParams=$params->get(FiltersHelper::EXTRA_FILTERS_KEY);
+
     $requestHasExtraFilters=$requestParams->filter(function ($it){ return is_array($it)?!empty(array_filter($it)):!is_null($it);})->isNotEmpty()
 @endphp
 @if($filters->count())
@@ -26,10 +30,15 @@
          id="extraFilters_collapse">
 
         <div class="row">
-            @foreach($filters as  $name=>$filter)
-                @php/** @var array $filter/ @endphp
-                @php($filterType=Arr::get($filter,'type'))
-                @if( in_array($filterType,['boolean','bool','hasValueInside']))
+            @foreach($filters as  $filter)
+
+                @php
+                    $name=$filter->getKey();
+                /** @var \GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter $filter */
+                @endphp
+
+
+                @if($filter->isType(\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::BOOLEAN,\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::HAS_VALUE))
                     <div class="form-group   input-group-sm d-inline-block  col-auto  ">
                         <label for="extra_filters[{{$name}}]" class="small control-label"> @lang($modelLang.'.filters.'.$name)</label>
                         <select class="form-control custom-select-sm custom-select" name="extra_filters[{{$name}}]">
@@ -42,22 +51,22 @@
                     </div>
                 @endif
 
-                @if(in_array($filterType,['multiSelect','select']))
-                    @php($isMultiSelect=(Arr::get($filter,'type') =='multiSelect'))
+                @if($filter->isType(\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::SELECT,\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::MULTI_SELECT))
+                    @php($isMultiSelect = $filter->isType(\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::MULTI_SELECT))
                     <div class="form-group   input-group-sm d-inline-block  col-auto  ">
                         <label for="extra_filters[{{$name}}]" class="small control-label"> @lang($modelLang.'.fields.'.$name)</label>
                         <select class="form-control custom-select-sm custom-select" name="extra_filters[{{$name}}]@if($isMultiSelect)[]@endif" @if($isMultiSelect) multiple @endif>
-                            @if((Arr::get($filter,'type') =='select'))
+                            @if(!$isMultiSelect)
                                 <option value=""></option>
                             @endif
-                            @foreach(Arr::get($filter,'values',[]) as $key=> $val)
+                            @foreach($filter->getValues() as $key=> $val)
                                 <option @if(in_array($key,(array)Arr::get($requestParams,$name)))selected="selected" @endif value="{{$key}}">{{$val}}</option>
                             @endforeach
                         </select>
                     </div>
                 @endif
 
-                @if(in_array($filterType,['dateTime']))
+                @if($filter->isType(\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::DATE_TIME))
                     <div class="form-group   d-inline-block  col-auto ">
                         <label for="extra_filters[{{$name}}]" class="small control-label"> @lang($modelLang.'.fields.'.$name)</label>
                         <div data-toggle="calendar" data-name="extra_filters[{{$name}}]" data-locale="DD/MM/YYYY" class="input-group  input-group-sm">
@@ -73,7 +82,7 @@
                     </div>
                 @endif
 
-                @if(in_array($filterType,['dateRange']))
+                @if($filter->isType(\GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter::DATE_RANGE))
                     @php($hasValues=!empty(Arr::get($requestParams,$name.'.start').Arr::get($requestParams,$name.'.end')))
                     @php($formattedValue=optional(Arr::get($requestParams,$name.'.start'))->format('d/m/Y') .' - ' .optional(Arr::get($requestParams,$name.'.end'))->format('d/m/Y'))
                     <div class="form-group   d-inline-block  col-auto ">

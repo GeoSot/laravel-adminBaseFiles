@@ -4,6 +4,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Queues;
 
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
 use GeoSot\BaseAdmin\Helpers\Alert;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
@@ -27,11 +28,11 @@ class QueueController extends BaseController
 
         $viewVals = collect([
             'records' => $records,
-            'modelLang' => $this->addPackagePrefix('admin/queues/queue'),
+            'modelLang' => Base::addPackagePrefix('admin/queues/queue'),
             'modelRoute' => 'admin.queues',
         ]);
 
-        return view($this->addPackagePrefix('admin.queues.index'), compact('viewVals'));
+        return view(Base::addPackagePrefix('admin.queues.index'), compact('viewVals'));
     }
 
     public function retry(Request $request, $id)

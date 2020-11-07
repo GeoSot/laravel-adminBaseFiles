@@ -86,7 +86,7 @@ class Base
     public static function transWithFallback(string $key, array $replace = [], string $locale = null)
     {
         $translation = __($key, $replace, $locale);
-        return ($key === $translation) ? __("baseAdmin::{$key}", $replace, $locale) : $translation;
+        return ($key === $translation) ? __(static::addPackagePrefix($key), $replace, $locale) : $translation;
     }
 
     public static function settings($key = null, $default = null)
@@ -100,6 +100,14 @@ class Base
         return $settings->get($key, $default);
     }
 
+    /**
+     * @param  string  $string
+     * @return string
+     */
+    public static function addPackagePrefix(string $string = ''): string
+    {
+        return 'baseAdmin::'.$string;
+    }
 
 }
 

@@ -47,4 +47,11 @@ trait HasActionHooks
         //
     }
 
+
+    protected function beforeDelete(Request &$request, $model)
+    {
+        //
+    }
+
+
 }

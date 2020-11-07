@@ -182,8 +182,7 @@ EOF;
 Route::get('/', function () {
     return view('welcome');
 });
-" => "Route::get('/', [App\Http\Controllers\Site\HomeController::class,'index'])->name('home');".self::newLine(2)."\GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider::dynamicPages();
-"
+" => "\GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider::dynamicPages();".self::newLine(3)
         ], base_path('routes/web.php'));
 
 

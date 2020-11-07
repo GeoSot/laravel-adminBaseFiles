@@ -84,27 +84,23 @@ class MainCommand extends BaseInstallCommand
 
         return [
             'publishFiles' => ['baseAdmin:install:publishInitialFiles'],
-            'iniyestializeEnv' => ['baseAdmin:install:initializeEnv'],
-            'authorization' => ['vendor:publish', ['--provider' => 'Laravel\\Fortify\\FortifyServiceProvider', '--tag' => 'config']],
-            'publishConf' => ['vendor:publish', ['--provider' => ServiceProvider::class, '--tag' => 'config']],
-            'publishLaratrustConf' => ['vendor:publish', ['--tag' => 'laratrust']],
-            'publishEnvConf' => ['vendor:publish', ['--provider' => 'GeoSot\EnvEditor\ServiceProvider', '--tag' => 'config']],
-            'publishSluggableConf' => ['vendor:publish', ['--provider' => 'Cviebrock\EloquentSluggable\ServiceProvider', '--tag' => 'config']],
-            'publishMediableConf' => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider', '--tag' => 'config']],
-            'publishMediableMigrations' => ['vendor:publish', ['--provider' => 'Plank\Mediable\MediableServiceProvider', '--tag' => 'migrations']],
-            'publishTranslatableConf' => ['vendor:publish', ['--provider' => 'Spatie\Translatable\TranslatableServiceProvider', '--tag' => 'config']],
-            'publishLocalizationConf' => ['vendor:publish', ['--provider' => 'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider', '--tag' => 'config']],
-            'publishTranslationManagerConf' => ['vendor:publish', ['--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider', '--tag' => 'config']],
-            'publishRevisionableConf' => ['vendor:publish', ['--provider' => 'Venturecraft\Revisionable\RevisionableServiceProvider']],
+            'initializeEnv' => ['baseAdmin:install:initializeEnv'],
+            'fortifyConfig' => $this->publishCmd('Laravel\\Fortify\\FortifyServiceProvider', 'fortify-config'),
+            'fortifyStubs' => $this->publishCmd('Laravel\\Fortify\\FortifyServiceProvider', 'fortify-support'),
+            'publishConf' => $this->publishCmd(ServiceProvider::class, 'config'),
+            'publishLaratrustConf' => $this->publishCmd(null, 'laratrust'),
+            'publishEnvConf' => $this->publishCmd('GeoSot\EnvEditor\ServiceProvider', 'config'),
+            'publishSluggableConf' => $this->publishCmd('Cviebrock\EloquentSluggable\ServiceProvider', 'config'),
+            'publishMediableConf' => $this->publishCmd('Plank\Mediable\MediableServiceProvider', 'config'),
+            'publishMediableMigrations' => $this->publishCmd('Plank\Mediable\MediableServiceProvider', 'migrations'),
+            'publishTranslatableConf' => $this->publishCmd('Spatie\Translatable\TranslatableServiceProvider', 'config'),
+            'publishLocalizationConf' => $this->publishCmd('Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider', 'config'),
+            'publishTranslationManagerConf' => $this->publishCmd('Barryvdh\TranslationManager\ManagerServiceProvider', 'config'),
+            'publishRevisionableConf' => $this->publishCmd('Venturecraft\Revisionable\RevisionableServiceProvider'),
 //            'publishChunkUploadConf' => ['vendor:publish', ['--provider' => 'Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider']],
 
 
-            /*   'publishTranslationMigrations' => [
-                   'vendor:publish', [
-                       '--provider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
-                       '--tag' => 'migrations'
-                   ]
-               ],*/
+            'publishTranslationMigrations' => $this->publishCmd('Barryvdh\TranslationManager\ManagerServiceProvider', 'migrations'),
 
             'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
             'clearConf' => ['config:clear'],
@@ -127,10 +123,10 @@ class MainCommand extends BaseInstallCommand
 
         foreach ($files as $file) {
             if ($results = glob($dbDir."Migrations/*{$file}")) {
-                array_map(function ($filename) {
-                    unlink($filename);
-                }, $results);
-
+                /*   array_map(function ($filename) {
+                       unlink($filename);
+                   }, $results);*/
+                continue;
             }
             $date = now()->addHour()->format('Y_m_d_His');
             copy($dbDir."MigrationsOnPackagesTables/{$file}", "{$dbDir}Migrations/{$date}{$file}");
@@ -169,6 +165,24 @@ class MainCommand extends BaseInstallCommand
             'publishAssets' => ['baseAdmin:publishAssets'],
 //            'perms'=>['baseAdmin:makePermissionsForModel'],
         ];
+    }
+
+    /**
+     * @param  string|null  $provider
+     * @param  string|null  $tag
+     * @return array
+     */
+    protected function publishCmd(string $provider = null, string $tag = null): array
+    {
+        $options = [];
+        if ($provider) {
+            $options  ['--provider'] = $provider;
+        }
+        if ($tag) {
+            $options   ['--tag'] = $tag;
+        }
+
+        return ['vendor:publish', $options];
     }
 
 

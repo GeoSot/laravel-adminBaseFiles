@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 
 use App\Models\Media\Medium;
 use App\Models\Users\User;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -73,7 +74,7 @@ class UserController extends BaseAdminController
     protected function filters()
     {
         return [
-            'roles.name' => ['type' => 'multiSelect'],
+            Filter::selectMulti('roles.name')
         ];
     }
 
