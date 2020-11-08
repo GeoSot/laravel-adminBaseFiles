@@ -4,7 +4,11 @@
 @import 'variables';
 @import '~bootstrap/scss/bootstrap';
 //Packages
-@import '~font-awesome/scss/font-awesome';
+$fa-font-path: '../fonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
 @import '~select2/src/scss/core';
 @import '~select2-theme-bootstrap4/src/select2-bootstrap';
 @import '~bootstrap-daterangepicker/daterangepicker.css';

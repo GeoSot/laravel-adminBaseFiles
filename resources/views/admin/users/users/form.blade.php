@@ -13,14 +13,14 @@
             <div class="ml-auto">
                 @if(auth()->user()->canImpersonate() and $viewVals->get('record')->canBeImpersonated() and auth()->user()->id!=$viewVals->get('record')->id )
                     <a class="btn btn-outline-info  " href="{{ route('admin.impersonate', $viewVals->get('record')->id) }}">
-                        <span class="btn-label text-danger"><i class="fa fa-user-o"></i></span>
+                        <span class="btn-label text-danger"><i class="fas fa-user"></i></span>
                         @lang($viewVals->get('modelLang').'.general.impersonate')
                     </a>
                 @endif
                 @if($contact=$viewVals->get('record')->contact)
                     <a class="btn btn-outline-secondary  m-1" role="button"
                        href="{{$contact->frontConfigs->getRoute('edit')}}">
-                        <span class="btn-label"><i class="fa fa-address-card" aria-hidden="true"></i></span>
+                        <span class="btn-label"><i class="fas fa-address-card" aria-hidden="true"></i></span>
                         @lang($viewVals->get('modelLang').'.fields.contactAssigned')
                     </a>
                 @endif

@@ -13,9 +13,9 @@ window.Swal = Swal;
 window.addEventListener('DOMContentLoaded', (event) => {
     require('./_partials/forms/_index');
 
-    if (document.querySelectorAll(".lazyload").length) {
+
         require('./_partials/lazyImages');
-    }
+
     if (document.querySelectorAll(".UppyModalOpenerBtn, .UppyDashboardContainer").length) {
         // require('./_partials/uppy');
     }

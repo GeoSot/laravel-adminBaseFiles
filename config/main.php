@@ -18,7 +18,7 @@ return [
     | Each menu item it is considered as a Model entity, in order to automatically create Models Admin Controllers and permissions
     |
     | menus: Each item inside it counts as a Model and an admin route
-    | icon: can be filled with ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
+    | icon: can be filled with ['class' => 'fas fa-group', 'style' => 'color:#0fefb3',],
     | order: defines the total order of the menu item on admin sidebar
     | makeFiles: if false doesn't create Admin files during "baseAdmin:autoCreateAll" command
     | excludeFromSideBar: excludes menu-items From admin Menu
@@ -30,19 +30,19 @@ return [
             'menus' => [
                 'user', /*'team',*/ 'role', 'permission',
             ],
-            'icon' => ['class' => 'fa  fa-group', 'style' => 'color:#0fefb3',],
+            'icon' => ['class' => 'fas fa-users', 'style' => 'color:#0fefb3',],
             'order' => 20,
             'makeFiles' => false,
         ],
         'page' => [
             'menus' => ['page', 'area', 'block',],
-            'icon' => ['class' => 'fa  fa-file-text-o', 'style' => 'color:#52c1dc',],
+            'icon' => ['class' => 'fas fa-pager', 'style' => 'color:#52c1dc',],
             'order' => 30,
             'makeFiles' => false,
         ],
         'medium' => [
             'menus' => ['medium', 'gallery',],
-            'icon' => ['class' => 'fa  fa-media', 'style' => 'color:#52c1dc',],
+            'icon' => ['class' => 'fas fa-play-circle', 'style' => 'color:#52c1dc',],
 //            'excludeFromSideBar' => ['gallery'],
             'makeFiles' => false,
             'order' => 40,
@@ -50,7 +50,7 @@ return [
 
 //        'ticket' => [
 //            'menus' => ['ticket', 'type', 'status', 'priority', 'message', 'messageNote', 'task',],
-//            'icon' => ['class' => 'fa fa-ticket', 'style' => 'color:#fff',],
+//            'icon' => ['class' => 'fas fa-ticket', 'style' => 'color:#fff',],
 //            'order' => 50,
 //            'makeFiles' => false,
 //            'excludeFromSideBar' => ['message', 'task', 'messageNote'],
@@ -59,7 +59,7 @@ return [
 
 //        'project' => [
 //            'menus' => ['project', 'fieldType', 'fieldGroup'],
-//            'icon' => ['class' => 'fa  fa-product-hunt', 'style' => 'color:#52c1dc',],
+//            'icon' => ['class' => 'fas fa-product-hunt', 'style' => 'color:#52c1dc',],
 //            'order' => 120,
 //            'makeFiles' => false,
 //            'excludeFromSideBar' => ['user', 'emailAccount',],
@@ -107,19 +107,19 @@ return [
                 //                    'url'   => 'test.gr'
                 //                ],
             ],
-            'icon' => ['class' => 'fa  fa-cog', 'style' => 'color:#ff887c',],
+            'icon' => ['class' => 'fas fa-cog', 'style' => 'color:#ff887c',],
             'order' => 150,
             'trans' => 'sideMenu.custom.configurations'
         ],
         //        'testCustomMenu'      => [
         //            'trans' => 'settings/setting.general.menuTitle',
         //            'url' => 'www.settings.gr',
-        //            'icon'  => ['class' => 'fa  fa-cog', 'style' => 'color:#73f3a2',],
+        //            'icon'  => ['class' => 'fas fa-cog', 'style' => 'color:#73f3a2',],
         //        ],
         //        'testCustomMenu'      => [
         //            'trans' => 'settings/setting.general.menuTitle',
         //            'route' => 'settings.index',
-        //            'icon'  => ['class' => 'fa  fa-cog', 'style' => 'color:#73f3a2',],
+        //            'icon'  => ['class' => 'fas fa-cog', 'style' => 'color:#73f3a2',],
         //        ]
     ],
 

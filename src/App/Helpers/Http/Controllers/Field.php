@@ -88,4 +88,9 @@ class Field
         $this->shortClass = class_basename($this->fullClass);
 
     }
+
+    public function isRelated(): bool
+    {
+        return false;
+    }
 }

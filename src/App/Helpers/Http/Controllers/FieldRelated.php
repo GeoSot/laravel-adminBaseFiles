@@ -48,4 +48,9 @@ class FieldRelated extends Field
 
         $this->columnFullName = $this->getColumnFullName();
     }
+
+    public function isRelated(): bool
+    {
+        return true;
+    }
 }

@@ -23,7 +23,7 @@
                     <?= Form::input('hidden', $name, $options['value']) ?>
                     <input type="number" class="form-control" max="60" min="-1" data-trigger="timePicker" value="{{$minutes}}">
                 <div class="input-group-append">
-                    <span class="input-group-text"><i class="fa fa-fw fa-clock-o"></i> <span class="small">( hh:mm )</span></span>
+                    <span class="input-group-text"><i class="fas fa-fw fa-clock"></i> <span class="small">( hh:mm )</span></span>
                 </div>
             </div>
 

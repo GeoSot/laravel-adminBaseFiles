@@ -15,6 +15,10 @@ return [
     ],
     'modal' => [
         'title' => 'Media Library',
-        'button' => 'Library',
+        'libButton' => '<i class="fas fa-photo-video"></i>',
+        'uploadButton' => '<i class="fas fa-upload"></i>',
+        'close' => 'Close',
+        'upload' => 'Upload File/s',
+        'pickAndClose' => 'Pick Selected',
     ],
 ];

@@ -21,7 +21,7 @@
         @endif
         @if($showField)
                 @if($isSortable )
-                    <span class="sortingHandler mouse-pointer px-2"><i class="fa fa-sort"></i></span>
+                    <span class="sortingHandler mouse-pointer px-2"><i class="fas fa-sort"></i></span>
                 @endif
             @foreach ((array)$options['children'] as $child)
                 @if( ! in_array( $child->getRealName(), (array)$options['exclude']) )
@@ -37,7 +37,7 @@
         @if($isRepeatable)
          <div class="text-right ">
                 <span class=" text-danger mouse-pointer"  data-toggle="removeParent" data-target=".form-group"><i
-                            class="fa fa-minus px-2 py-2"></i></span>
+                            class="fas fa-minus px-2 py-2"></i></span>
          </div>
         @endif
 

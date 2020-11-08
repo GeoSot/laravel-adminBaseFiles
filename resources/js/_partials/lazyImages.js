@@ -1,4 +1,5 @@
-  require('lazysizes');
+ import 'lazysizes'
+
 
 
 document.addEventListener('lazybeforeunveil', (evt) => {

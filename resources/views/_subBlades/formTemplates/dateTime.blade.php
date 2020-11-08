@@ -20,7 +20,7 @@
                    <?= Form::input($type, $name.'_formatted', ($options['value'] instanceof  \Carbon\Carbon)?$options['value']->format($options['cast']['php'] ?? 'd/m/Y'):'', $options['attr']) ?>
                </div>
                     <div class="input-group-append">
-               <button class="btn btn-secondary " type="button" @if(\Illuminate\Support\Arr::has($options['attr'],['disabled','readonly']))  disabled @endif><i class="fa fa-calendar"></i></button>
+               <button class="btn btn-secondary " type="button" @if(\Illuminate\Support\Arr::has($options['attr'],['disabled','readonly']))  disabled @endif><i class="fas fa-calendar-week"></i></button>
               </div>
             </div>
                 @include('laravel-form-builder::help_block')

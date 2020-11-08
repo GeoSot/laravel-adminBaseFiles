@@ -11,7 +11,7 @@
     <div class="mb-3">
         <a href="{{route($viewVals->get('baseRoute').'.index','clean-queries')}}" class="btn btn-outline-info  ">
             <span class=""> @lang("{$lang}.listFilters.cleanFilters")</span>
-            <span class="btn-label btn-label-right"><i class="fa fa-refresh"></i></span>
+            <span class="btn-label btn-label-right"><i class="fas fa-refresh"></i></span>
         </a>
     </div>
 @endif
@@ -25,7 +25,7 @@
                 <input id="keyword" type="text" class="form-control" placeholder=" @lang("{$lang}.listFilters.search")" name="keyword"
                        value="{!! old('keyword', $params['keyword']) !!}">
                 <div class="input-group-append">
-                    <button class="btn border" type="button" data-click="js-submit-form" id="searchSubmit"><i class="fa fa-search"></i></button>
+                    <button class="btn border" type="button" data-click="js-submit-form" id="searchSubmit"><i class="fas fa-search"></i></button>
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@
 @if($viewVals->get('options')->get('modelIsExportable'))
     <a href="{{ request()->fullUrlWithQuery(['export'=>'csv'])}}" class="btn btn-outline-info btn-sm  ">
         <span class=""> @lang("{$lang}.listFilters.export")</span>
-        <span class="btn-label btn-label-right"><i class="fa fa-download"></i></span>
+        <span class="btn-label btn-label-right"><i class="fas fa-download"></i></span>
     </a>
 @endif
 

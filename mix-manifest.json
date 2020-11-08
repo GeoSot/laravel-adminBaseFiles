@@ -1,6 +1,5 @@
 {
-    "/assets/js/admin.js": "/assets/js/admin.js?id=a3e6fa775e0259c7e4a6",
-    "/assets/css/admin.css": "/assets/css/admin.css?id=e21e2ce0ae4bcd7b3f08",
-    "/assets/css/app.css": "/assets/css/app.css?id=eacec1cb3a96a2749ba0",
-    "/assets/js/app.js": "/assets/js/app.js?id=7ba9ad8904161877a595"
+    "/assets/js/admin.js": "/assets/js/admin.js",
+    "/assets/css/admin.css": "/assets/css/admin.css",
+    "/assets/js/app.js": "/assets/js/app.js"
 }

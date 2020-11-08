@@ -2,7 +2,7 @@
     <tr>
                   @if ($standardFormat)
             <td class="text-nowrap text-{{{$log['level_class']}}}">
-                          <span class="fa fa-{{{$log['level_img']}}}" aria-hidden="true"></span>&nbsp;&nbsp;{{$log['level']}}
+                          <span class="fas fa-{{{$log['level_img']}}}" aria-hidden="true"></span>&nbsp;&nbsp;{{$log['level']}}
                       </td>
             <td class="text">{{$log['context']}}</td>
         @endif
@@ -21,7 +21,7 @@
                               @if ($log['stack'])
                                   <button type="button" class="expand btn btn-outline-dark btn-sm mb-2 ml-auto" data-toggle="collapse" data-target="#collapse_{{{$key}}}"
                                           aria-expanded="false" aria-controls="collapse_{{{$key}}}">
-                                  <span class="fa fa-search"></span>
+                                  <span class="fas fa-search"></span>
                                   </button>
                               @endif
                               @if (isset($log['in_file']))

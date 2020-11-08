@@ -1,7 +1,7 @@
 @extends($packageVariables->get('adminLayout'))
 
 @component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals]  )
-    @if ($viewVals->get('record') )
+    @if ($viewVals->get('record') && $viewVals->get('record')->pageArea )
         @slot('after')
             {!!  $viewVals->get('record')->pageArea->frontConfigs->getAdminLink(__($viewVals->get('modelLang').'.general.pageAreaLink'),false,['class'=>'ml-auto btn btn-sm btn-outline-admin']) !!}
         @endslot

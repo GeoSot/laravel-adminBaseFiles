@@ -2,7 +2,7 @@
 
     @if($options['wrapper'] !== false)
         <div {!! $options['wrapperAttrs'] !!} >
-    @endif
+            @endif
             @endif
 
             @if($showLabel && $options['label'] !== false && $options['label_show'])
@@ -24,7 +24,7 @@
                 <div class="js-collectionContainer">
 
                     <div class="js-collectionItems {!!\Illuminate\Support\Arr::get($options,'items_wrapper_class')  !!} @if($isSortable) sortableWrapper @endif">
-                    @foreach ($children=(array)$options['children'] as $child)
+                        @foreach ($children=(array)$options['children'] as $child)
                             @php
                                 if($childModels){
 
@@ -42,10 +42,14 @@
                     </div>
                     @if($isRepeatable)
                         <input type="hidden" name="repeatable_{{$options['real_name']}}" value="true">
-                        <div class="text-right">
-                            <button class="js-addToCollection btn btn-outline-success btn-sm" role="button" type="button" data-initial-count="{{count($children)}}"
+                        <div class="text-right ">
+
+                            @if($parentForm->{$options['real_name']}->prototype()->getType()==='file')
+                                @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$options['real_name']}",'preview'=>'.fileinput-preview','multiple'=>true])
+                            @endif
+                            <button class="js-addToCollection btn btn-outline-success btn-sm  mb-1" role="button" type="button" data-initial-count="{{count($children)}}"
                                     data-prototype="{{$parentForm->{$options['real_name']}->prototype()->render($extraFields)}}">
-                                <i class="fa fa-plus"></i>
+                                <i class="fas fa-plus"></i>
                             </button>
                         </div>
                     @endif
@@ -60,6 +64,6 @@
 
             @if($showLabel && $showField)
                 @if($options['wrapper'] !== false)
-    </div>
+        </div>
     @endif
 @endif

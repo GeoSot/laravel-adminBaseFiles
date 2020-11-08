@@ -11,7 +11,7 @@
     @if ($viewVals->get('record') )
         @slot('after')
             <a class="btn btn-outline-info btn-sm ml-auto" target="_blank" href="{{$viewVals->get('record')->getPreviewLink()}}">
-                <span class="btn-label"><i class="fa fa-chain"></i></span>
+                <span class="btn-label"><i class="fas fa-chain"></i></span>
                 @lang($viewVals->get('modelLang').'.general.view')
             </a>
         @endslot

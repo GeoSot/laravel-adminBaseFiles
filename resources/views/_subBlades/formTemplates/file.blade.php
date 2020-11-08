@@ -27,7 +27,7 @@
                     {!!  Form::input($type, $name,null,  ['hidden'=>true, ] )  !!}
                     <input type="hidden" name="remove_{{$name}}" data-id="{{\Illuminate\Support\Arr::get($options, 'id')}}">
                 @else
-                    <span class="form-control text-truncat  ">@if(\Illuminate\Support\Arr::has($options,'model')){{ $options['model']->name }}@endif</span>
+                    <span class="form-control   ">@if(\Illuminate\Support\Arr::has($options,'model')){{ $options['model']->name }}@endif</span>
                 @endif
                 <input type="hidden" name="old_{{$name}}" value="{{\Illuminate\Support\Arr::get($options, 'id')}}"/>
                 <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
@@ -37,7 +37,7 @@
                                   $options['value'] instanceOf \App\Models\Media\Medium
                                   ?$options['value']->frontConfigs->getRoute('edit')
                                   :$val)
-                        <a class=" btn btn-secondary px-1 " role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>
+                        <a class=" btn btn-secondary px-1 " role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
                     @endif
                     @if(!$viewAndRemoveOnly)
                         <button class="btn btn-secondary fileinput-exists " type="button"
@@ -48,7 +48,7 @@
                         </button>
                     @else
                         @if(\Illuminate\Support\Arr::get($options, 'repeatable', false) ?? $viewAndRemoveOnly)
-                            <button class="btn btn-danger ml-auto btn-sm" type="button" data-remove="fileinput"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-danger ml-auto btn-sm" type="button" data-remove="fileinput"><i class="fas fa-minus"></i></button>
                         @endif
                     @endif
                 </div>

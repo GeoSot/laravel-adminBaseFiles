@@ -9,7 +9,7 @@
     <ul id="menu" class="page-sidebar-menu flex-column  nav">
         <li class="  nav-item @if(Route::is("admin.dashboard")) active @endif">
             <a class=" d-flex align-items-center px-3 nav-link" href="{{ route('admin.dashboard') }}">
-                <i class="fa fa-home fa-lg mr-2"></i>
+                <i class="fas fa-home fa-lg mr-2"></i>
                 <span class="title"> {{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback('admin/generic.menu.dashboard')}}</span>
             </a>
         </li>

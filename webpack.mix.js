@@ -6,13 +6,13 @@ const publicDirectory = 'assets/';
 // mix.setResourceRoot('/assets/');
 mix.setPublicPath('.\\');
 
-mix.copy('node_modules/font-awesome/fonts', publicDirectory + 'fonts');
+mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', publicDirectory + 'fonts');
 //
 
 mix.js(resourcesDirectory + 'js/mainScripts/admin.js', publicDirectory + 'js/admin.js');
 mix.js(resourcesDirectory + 'js/mainScripts/site.js', publicDirectory + 'js/app.js');
 mix.sass(resourcesDirectory + 'css/admin/app.scss', publicDirectory + 'css/admin.css');
-mix.sass(resourcesDirectory + 'css/site/app.scss', publicDirectory + 'css/app.css');
+// mix.sass(resourcesDirectory + 'css/site/app.scss', publicDirectory + 'css/app.css');
 //mix.babel(),mix.minify('path/to/file.js');
 mix.options({//https://laravel-mix.com/docs/2.1/options
     processCssUrls: false,

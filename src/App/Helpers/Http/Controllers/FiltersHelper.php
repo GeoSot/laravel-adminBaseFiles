@@ -116,7 +116,7 @@ class FiltersHelper
             $value = $filteredParams->get($filter->getKey());
 
             //NOT RELATIONSHIP
-            if ($field->exists && !$field instanceof FieldRelated) {
+            if ($field->exists && !$field->isRelated()) {
                 $query = $this->makeExtraFiltersQuery($query, $filter, $filter->getKey(), $value, $filter->getKey());
             }
 
@@ -174,10 +174,10 @@ class FiltersHelper
         }
         $values = [];
         $key = $filter->getKey();
-        if ($field->exists && !$field instanceof FieldRelated) {
+        if ($field->exists && !$field->isRelated()) {
             $values = $field->newInstance->newQuery()->groupBy($key)->pluck($key, $key)->toArray();
         }
-        if ($field instanceof FieldRelated) {
+        if ($field->isRelated()) {
             $values = $field->newInstance::all()->pluck($field->column, $filter->getRelatedKey())->unique()->toArray();
         }
 

@@ -42,7 +42,7 @@
             @endisset
             <span class="title ">{{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback("admin/{$parentPlural}/{$parentRoute}.general.menuTitle")}}</span>
             @if($hasInnerMenus)
-                <span class="fa arrow-after ml-auto pl-2 fa-angle-left"></span>
+                <span class="fas arrow-after ml-auto pl-2 fa-angle-left"></span>
             @endif
         </a>
         @if($hasInnerMenus)

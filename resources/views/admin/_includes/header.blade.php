@@ -24,19 +24,19 @@
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        <i class="fa fa-user fa-lg pr-1 "></i>
+                        <i class="fas fa-user  pr-1 "></i>
                         {{ auth()->user()->first_name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class=" dropdown-item" href="{{ \App\Providers\RouteServiceProvider::HOME}}">
-                            <i class="fa fa-sitemap "></i> @lang($packageVariables->get('nameSpace').'admin/generic.menu.site')
+                            <i class="fas fa-sitemap mr-1 "></i> @lang($packageVariables->get('nameSpace').'admin/generic.menu.site')
                         </a>
 
                         <a class=" dropdown-item" href="{{route('admin.users.edit',auth()->user())}}">
-                            <i class="icon ios-person "></i> @lang($packageVariables->get('nameSpace').'admin/generic.menu.user.profile')
+                            <i class="fas fa-user-cog mr-1 "></i> @lang($packageVariables->get('nameSpace').'admin/generic.menu.user.profile')
                         </a>
                         <a class=" dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fa fa-power-off "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.user.logout')
+                            <i class="fas fa-power-off mr-1 "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.user.logout')
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                     </div>

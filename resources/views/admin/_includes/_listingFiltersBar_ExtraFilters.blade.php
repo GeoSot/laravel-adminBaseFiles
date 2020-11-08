@@ -76,7 +76,7 @@ use Illuminate\Support\Collection;
                                        value="{{optional(Arr::get($requestParams,$name))->format('d/m/Y') ?? ''}}">
                             </div>
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary "><i class="fa fa-calendar"></i></button>
+                                <button type="button" class="btn btn-secondary "><i class="fas fa-calendar-week"></i></button>
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@ use Illuminate\Support\Collection;
                         <div class="d-flex justify-content-between">
                             <label for="extra_filters[{{$name}}]" class="small control-label"> @lang($modelLang.'.fields.'.$name)</label>
                             <button type="button" class="btn btn-sm btn-outline-light " data-clear="dateRangeCalendar" data-name="extra_filters[{{$name}}]">
-                                <i class="fa-fw fa fa-eraser"></i>
+                                <i class="fa-fw fas fa-eraser"></i>
                             </button>
                         </div>
                         <div data-toggle="dateRangeCalendar" data-name="extra_filters[{{$name}}]" data-locale="DD/MM/YYYY" class="input-group  input-group-sm">
@@ -101,7 +101,7 @@ use Illuminate\Support\Collection;
                                        value="{!! $hasValues?$formattedValue : '' !!}">
                             </div>
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary "><i class="fa fa-calendar fa-fw"></i></button>
+                                <button type="button" class="btn btn-secondary "><i class="fas calendar-week  fa-fw"></i></button>
                             </div>
                         </div>
                     </div>
@@ -113,12 +113,12 @@ use Illuminate\Support\Collection;
             @if($requestParams->filter(function ($it){return !is_null($it);})->isNotEmpty())
                 <button type="button" data-toggle="clearExtraFilters" class="btn btn-outline-info btn-sm mx-1">
                     @lang($lang.'.button.clearExtraFilters')
-                    <span class="btn-label btn-label-right"><i class="fa fa-refresh"></i></span>
+                    <span class="btn-label btn-label-right"><i class="fas fa-refresh"></i></span>
                 </button>
             @endif
             <button type="submit" class="btn btn-admin btn-sm ,x-1">
                 @lang($lang.'.button.search')
-                <span class="btn-label btn-label-right"><i class="fa fa-fw fa-search"></i></span>
+                <span class="btn-label btn-label-right"><i class="fas fa-fw fa-search"></i></span>
             </button>
         </div>
         <div class="">

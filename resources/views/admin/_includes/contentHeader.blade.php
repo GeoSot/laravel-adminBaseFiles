@@ -18,7 +18,7 @@ $pushedTitle=$__env->getSection('documentTitle', __($packageVariables->get('name
         <ol class="breadcrumb bg-transparent p-0 mb-0 small ">
             <li class="breadcrumb-item ">
                 <a href="{{route('admin.dashboard')}}">
-                    <i class="fa fa-home fa-lg mr-2 text-dark"></i>@lang($packageVariables->get('nameSpace').'admin/generic.menu.dashboard')
+                    <i class="fas fa-home fa-lg mr-2 text-dark"></i>@lang($packageVariables->get('nameSpace').'admin/generic.menu.dashboard')
                 </a>
             </li>
             @if(isset($viewVals) and $viewVals->has('breadCrumb'))

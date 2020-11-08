@@ -9,7 +9,7 @@
                     @csrf
 
                     <button type="submit" class="btn  btn-primary ">
-                            <span class="btn-label"><i class="fa fa-refresh"></i></span>
+                            <span class="btn-label"><i class="fas fa-refresh"></i></span>
                         <span class="btn_text"> @lang("{$viewVals->get('modelLang')}.buttons.retryAll")</span>
                           </button>
                     </form>
@@ -19,7 +19,7 @@
                           @method('PATCH')
                     @csrf
                     <button type="submit" class="btn  btn-warning  ">
-                        <span class="btn-label"><i class="fa fa-remove"></i></span>
+                        <span class="btn-label"><i class="fas fa-remove"></i></span>
                         <span class="btn_text"> @lang("{$viewVals->get('modelLang')}.buttons.flushAll")</span>
                       </button>
                     </form>

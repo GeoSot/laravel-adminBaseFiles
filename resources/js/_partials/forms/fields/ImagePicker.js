@@ -15,6 +15,7 @@ let fileInput_OBJ = function (el) {
     this.$input = this.$wrapper.find('input:file');
     this.isImage = (this.$wrapper.attr('data-toggle') === 'imageInput');
     this.$removeInput = this.$wrapper.find('input[name="remove_' + this.$input.attr('name') + '"]');
+    this.$addIdInput = this.$wrapper.find('input[name="add_' + this.$input.attr('name') + '"]');
     this.$thumbWrapper = this.$wrapper.find('.fileinput-preview');
     this.invalidMessage = this.$wrapper.find('.fileinput-invalidMsg').text();
     this.$filename = this.$wrapper.find('.fileinput-filename');
@@ -35,6 +36,7 @@ let fileInput_OBJ = function (el) {
             this.$wrapper.removeClass(classes.noFile).addClass(classes.hasFile);
             this.$removeInput.val(null)
         }
+        this.$addIdInput.val(null);
     }
 };
 

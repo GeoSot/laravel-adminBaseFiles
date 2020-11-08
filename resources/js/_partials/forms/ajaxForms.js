@@ -164,7 +164,7 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
     let getSpinnerWrapper = () => {
         return '<div id="' + _self.spinnerId + '" class="spinnerWrapper position-absolute d-flex justify-content-center align-items-center" ' +
             'style="top: 0;bottom: 0;right: 0;left: 0; background:#0000001c; z-index: 9999; display: none">' +
-            '    <i class="fa fa-spinner fa-pulse fa-4x"></i>' +
+            '    <i class="fas fa-spinner fa-pulse fa-4x"></i>' +
             '</div>'
     };
 

@@ -52,6 +52,7 @@
 
             {!!  Form::input($type, $name,null, array_merge( $options['attr'] ,['hidden'=>true, 'accept'=>"image/*"] ))  !!}
 
+            <input type="hidden" name="add_{{$name}}" data-id="{{\Illuminate\Support\Arr::get($options, 'id')}}">
             <input type="hidden" name="remove_{{$name}}" data-id="{{\Illuminate\Support\Arr::get($options, 'id')}}">
             <input type="hidden" name="old_{{$name}}" value="{{\Illuminate\Support\Arr::get($options, 'id')}}">
             <span class="hidden fileinput-invalidMsg" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'jpeg, jpg, png, gif']) </span>
@@ -63,16 +64,20 @@
                 <button class="btn btn-secondary  btn-sm fileinput-exists mx-1 mb-1" type="button" data-dismiss="fileinput">
                     @lang($packageVariables->get('nameSpace').'admin/generic.button.remove')
                 </button>
-                @include('baseAdmin::_subBlades.media.library.mediaLibrary')
-            @if($val=$options['value'])
+
+                @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
+                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false])
+                @endif
+
+                @if($val=$options['value'])
                     @php($href=
                               $options['value'] instanceOf \App\Models\Media\Medium
                                ?$options['value']->frontConfigs->getRoute('edit')
                               :$val)
-                    <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fa fa-eye"></i></a>
+                    <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
                 @endif
                 @if(\Illuminate\Support\Arr::get($options, 'repeatable', false))
-                    <button class="btn btn-danger ml-auto btn-sm mb-1" type="button" data-remove="fileinput"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-danger ml-auto btn-sm mb-1" type="button" data-remove="fileinput"><i class="fas fa-minus"></i></button>
                 @endif
 
             </div>

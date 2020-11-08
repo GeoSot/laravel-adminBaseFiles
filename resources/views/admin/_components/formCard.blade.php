@@ -6,7 +6,7 @@
              data-toggle="collapse" data-target="#{{$randId}}" aria-expanded="true" aria-controls="{{$randId}}">
             <div class="title h5 mb-0 font-weight-normal">@isset($title) {!!$title !!} @endisset</div>
             <span class="btn text-reset">
-            <i class="fa fa-angle-up fa-lg " aria-hidden="true"></i>
+            <i class="fas fa-angle-up fa-lg " aria-hidden="true"></i>
         </span>
         </div>
     @endisset

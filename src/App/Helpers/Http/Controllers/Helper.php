@@ -5,14 +5,11 @@ namespace GeoSot\BaseAdmin\App\Helpers\Http\Controllers;
 
 
 use Barryvdh\Debugbar\Facade;
-use GeoSot\BaseAdmin\App\Forms\Admin\BasicForm;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Kris\LaravelFormBuilder\Form;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Spatie\Translatable\HasTranslations;
 use Venturecraft\Revisionable\RevisionableTrait;
@@ -26,7 +23,7 @@ class Helper
      */
     private $model;
 
-    public function __construct(Model $model)
+    public function __construct(Model $model = null)
     {
         $this->model = $model;
     }
@@ -42,7 +39,6 @@ class Helper
 
         return $numOfItems;
     }
-
 
 
     /**

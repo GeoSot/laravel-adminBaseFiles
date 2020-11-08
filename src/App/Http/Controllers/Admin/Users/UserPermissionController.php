@@ -5,6 +5,8 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 
 use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\FieldsHelper;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\FiltersHelper;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,6 +24,8 @@ class UserPermissionController extends BaseAdminController
 
     public function index(Request $request)
     {
+        $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
+        $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
         $extraValues = collect([]);
         $params = $this->makeParams($request);
         $records = UserPermission::getAsGroups();

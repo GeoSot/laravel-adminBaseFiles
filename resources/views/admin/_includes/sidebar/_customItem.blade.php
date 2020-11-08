@@ -66,7 +66,7 @@
             @endisset
             <span class="title "> {{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback("admin/".Arr::get($node,'trans','no_translation'))}}</span>
             @if($hasInnerMenus)
-                <span class="fa arrow-after ml-auto pl-2 fa-angle-left"></span>
+                <span class="fas arrow-after ml-auto pl-2 fa-angle-left"></span>
             @endif
         </a>
         @if($hasInnerMenus)

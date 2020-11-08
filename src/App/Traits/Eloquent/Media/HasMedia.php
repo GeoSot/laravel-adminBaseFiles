@@ -13,9 +13,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Plank\Mediable\Facades\MediaUploader;
 use Plank\Mediable\Media;
 use Plank\Mediable\Mediable;
-use Plank\Mediable\MediaUploaderFacade;
 
 
 trait HasMedia
@@ -69,14 +69,17 @@ trait HasMedia
 
         $files = array_filter($request->file($requestFieldName, []));
 
-        if (empty($files)) {
+
+        $libraryAddFiles = array_values(array_filter($request->get("add_$requestFieldName", [])));
+
+        if (!($files || $libraryAddFiles)) {
             return null;
         }
 
 
         // ---
         try {
-            $mediaUploader = MediaUploaderFacade::toDirectory($this->getTable())
+            $mediaUploader = MediaUploader::toDirectory($this->getTable())
                 ->setAllowedAggregateTypes(Arr::get($supportedTypes, $requestFieldName, []));
 
 
@@ -86,6 +89,9 @@ trait HasMedia
                 $mediaCollection = \Illuminate\Database\Eloquent\Collection::make($files)->map(function (UploadedFile $file) use ($mediaUploader) {
                     return $mediaUploader->fromSource($file)->upload();
                 });
+                if ($libraryAddFiles) {
+                    $mediaCollection=  Medium::whereIn('id', $libraryAddFiles)->get()->merge($mediaCollection);
+                }
 
                 $this->attachMedia($mediaCollection, $requestFieldName);
                 return $mediaCollection;
@@ -93,10 +99,14 @@ trait HasMedia
 
 
             //SAVE ONE
-            $firstMedium = Arr::first($files, function ($value, $key) {
-                return isset($value);
-            });
-            $medium = $mediaUploader->fromSource($firstMedium)->useFilename($this->getAPossibleMediaFilename())->upload();
+            if ($files) {
+                $firstMedium = Arr::first($files, function ($value, $key) {
+                    return isset($value);
+                });
+                $medium = $mediaUploader->fromSource($firstMedium)->useFilename($this->getAPossibleMediaFilename())->upload();
+            } else {
+                $medium = Medium::find(Arr::first($libraryAddFiles));
+            }
             $this->syncMedia($medium, $requestFieldName);
 
             return $medium;
@@ -128,6 +138,7 @@ trait HasMedia
      */
     final protected function removeRequestMedia(Request $request, string $requestFieldName = Medium::REQUEST_FIELD_NAME__FILE, array $tags = [])
     {
+
         $removeIdsArray = array_filter($request->get("remove_$requestFieldName", []));
         $oldIds = array_filter($request->get("old_$requestFieldName", []));
         $deleteIdsArray = $this->media()->whereNotIn('id', $oldIds)->pluck('id')->toArray();

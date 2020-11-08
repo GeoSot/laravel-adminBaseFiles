@@ -1,5 +1,5 @@
-<button id="return-to-top-btn" type="button" class="btn btn-info btn-sm  shadow-lg  badge-pil " data-pixels-scroll="200">
-    <i class="fa fa-angle-up fa-2x font-weight-light " aria-hidden="true"></i>
+<button id="return-to-top-btn" type="button" class="btn btn-info btn-sm  shadow-lg  font-weight-light " data-pixels-scroll="200">
+    <i class="fas fa-angle-up fa-2x  " aria-hidden="true"></i>
 </button>
 
 

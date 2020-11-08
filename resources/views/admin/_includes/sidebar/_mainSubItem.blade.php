@@ -15,7 +15,7 @@
 ])
 <li class="pl-3 nav-item @if($values['active']) active @endif">
     <a href="{{$values['url']}}" class="nav-link px-3 inner-level-link d-flex align-items-center">
-        <i class="fa fa-angle-double-right mr-2"></i>
+        <i class="fas fa-angle-double-right mr-2"></i>
         <span class="title">
             {{$values['title']}}
         </span>

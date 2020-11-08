@@ -11,7 +11,7 @@
 			 @lang($packageVariables->get('nameSpace').'pagination.items', ['pageitems'=> $viewVals->get('records')->count(), 'totalitems' =>$viewVals->get('records')->total() ] )
 	</div>
 	{!! $slot !!}
-	<div class="paginations ">{!! $viewVals->get('records')->appends($params->toArray())->render() !!}
+	<div class="paginations ">{!! $viewVals->get('records')->render() !!}
 	</div>
 </div>
 <!--listingPagination END-->

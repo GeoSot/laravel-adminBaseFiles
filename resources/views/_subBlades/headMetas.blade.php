@@ -32,8 +32,6 @@
               ['id' => 'keywords', 'name' => 'Keywords',]
           ],
           'endPoint' => route('admin.media.tusUpload'),
-          'inline' => true,
-          'height' => 400,
           'restrictions' => [
               'maxFileSize' => 100000000,
               'maxNumberOfFiles' => 10,

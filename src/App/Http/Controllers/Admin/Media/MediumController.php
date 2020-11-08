@@ -34,14 +34,19 @@ class MediumController extends BaseAdminController
         $neFields = [
             'listable' => ['title', 'thumb_html', 'size', 'created_at', 'id'],
             'sortable' => ['title', 'size', 'created_at', 'id'],
-            'searchable' => ['title', 'directory', 'filename', 'extension', 'aggregate_type', 'description', 'keywords', 'id'],
+            'searchable' => ['title', 'the_file_exists', 'directory', 'filename', 'extension', 'aggregate_type', 'description', 'keywords', 'id'],
         ];
 
         return array_merge(parent::listFields(), $neFields);
     }
 
+
     public function tusUpload(Request $request)
     {
+        dd($request);
+        $response = app('tus-server')->serve();
+
+        return $response->send();
 
     }
 

@@ -5,7 +5,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
 
 use Exception;
-use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\{FieldRelated, FieldsHelper, Filter, FiltersHelper};
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\{FieldsHelper, Filter, FiltersHelper};
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\app\Traits\Controller\{CachesRouteParameters, HasActionHooks, HasAllowedActions, HasFields,};
@@ -13,6 +13,7 @@ use GeoSot\BaseAdmin\app\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response,};
 use Illuminate\Support\{Arr, Collection, Facades\Route, Str};
 use Kris\LaravelFormBuilder\Form;
@@ -39,8 +40,7 @@ abstract class BaseAdminController extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
-        $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
+
     }
 
 
@@ -52,10 +52,13 @@ abstract class BaseAdminController extends BaseController
     public function index(Request $request)
     {
 
-        $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
+      /*  $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
         if (!is_null($redirectRoute)) {
             return redirect()->to($redirectRoute);
-        }
+        }*/
+
+        $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
+        $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
 
         $extraOptions = collect([]);
         $query = $this->_class::select();
@@ -75,7 +78,9 @@ abstract class BaseAdminController extends BaseController
             return $model->exportToCsv($query->get());
         }
 
+        /** @var LengthAwarePaginator  $records */
         $records = $query->paginate($params->get('num_of_items'));
+        $records->appends($params->toArray());
 
         $data = $this->variablesToView(collect($this->listFields()), 'index', [
             'records' => $records,
@@ -124,8 +129,8 @@ abstract class BaseAdminController extends BaseController
                     $field = $this->fieldsHelper->getField($query, $field);
                     if ($field->exists) {
 
-                        if (!$field->relationName) {
-                            $query->orWhere($field, 'LIKE', '%'.$params->get('keyword').'%');
+                        if (!$field->isRelated()) {
+                            $query->orWhere($field->column, 'LIKE', '%'.$params->get('keyword').'%');
                         } else {
                             $query->orWhereHas($field->relationName, function ($q) use ($field, $params) {
                                 $q->where($field->column, 'LIKE', '%'.$params->get('keyword').'%');
@@ -135,6 +140,7 @@ abstract class BaseAdminController extends BaseController
                 }
             });
         }
+
         if ($params->get('status') == "-1") {
             $query->disabled();
         }
@@ -151,7 +157,7 @@ abstract class BaseAdminController extends BaseController
         $field = $this->fieldsHelper->getField($query, $params->get('order_by'));
 
 
-        if ($field instanceof FieldRelated) {
+        if ($field->isRelated()) {
             $query = $this->fieldsHelper->sortByRelation($query, $field, $params->get('sort'));
 
             return;
@@ -483,14 +489,16 @@ abstract class BaseAdminController extends BaseController
             $this->helper->infoMsg("Return View: {$view}");
             return $modelView;
         }
-        $view = Base::addPackagePrefix($modelView.$suffix);
+        $view = Base::addPackagePrefix($view);
         $this->helper->debugMsg("Try Find View: {$view}");
         if (view()->exists($view)) {
             $this->helper->infoMsg("Return View: {$view}");
             return Base::addPackagePrefix($modelView);
         }
 
+
         $view = Base::addPackagePrefix($this->_genericViewsDir);
+
         $this->helper->infoMsg("Return View: {$view}");
         return $view;
     }
@@ -503,8 +511,9 @@ abstract class BaseAdminController extends BaseController
      */
     protected function sendProperResponse(string $action = 'index', array $data = [])
     {
+
         if (request()->wantsJson()) {
-            return response()->json(view($this->getView($action), $data)->render());
+            return response()->json(request()->has('only_data') ? $data['viewVals'] : view($this->getView($action), $data)->render());
         }
         return response()->view($this->getView($action), $data);
     }

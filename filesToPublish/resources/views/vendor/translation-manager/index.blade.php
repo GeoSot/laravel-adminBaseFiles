@@ -107,7 +107,7 @@
     {{--<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>--}}
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <script>//https://github.com/rails/jquery-ujs/blob/master/src/rails.js
-       $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>' ;
+       $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="fas fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fas fa-fw fa-remove"></i></button>' ;
 
         (function (e, t) {
             if (e.rails !== t) {

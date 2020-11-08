@@ -21,17 +21,14 @@ class FieldsHelper
      * @var Collection
      */
     protected $fields;
-    /**
-     * @var Model
-     */
-    protected $relatedModel;
+
 
 
     public function __construct(Model $relatedModel)
     {
         $this->fields = collect([]);
 
-        $this->relatedModel = $relatedModel;
+
         $modelTable = $relatedModel->getTable();
         $this->dbTables = collect([$modelTable => Schema::getColumnListing($modelTable)]);
     }
@@ -65,7 +62,7 @@ class FieldsHelper
             : new Field($fieldName, $query);
 
 
-        if ($field instanceof FieldRelated) {
+        if ($field->isRelated()) {
             $this->makeQueryJoins($query, $field->relationName);
             if (!$this->dbTables->has($field->table)) {
                 $this->dbTables->put($field->table, Schema::getColumnListing($field->table));

@@ -21,6 +21,7 @@ BaseAdmin.forms.fields = {
             $itemsContainer.find('textarea.withEditor').each(function () {
                 BaseAdmin.initTextEditor(this);
             });
+            $(document).trigger('multiplyField', {counter: counter, elem: proto});
         });
     }, colorPicker: function () {
         $('[data-toggle="colorPicker"]').each(function (e) {
