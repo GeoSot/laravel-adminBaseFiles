@@ -6,6 +6,10 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Media;
 use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Plank\Mediable\Facades\MediaUploader;
+use TusPhp\Events\UploadComplete;
+use TusPhp\Tus\Server;
 
 class MediumController extends BaseAdminController
 {
@@ -43,12 +47,15 @@ class MediumController extends BaseAdminController
 
     public function tusUpload(Request $request)
     {
-        dd($request);
-        $response = app('tus-server')->serve();
-
-        return $response->send();
+        /** @var Server $server */
+        $server = app('tus-server');
+        $response = $server->serve();
+//       dd($request,$request,$server->getUploadDir());
+        $response->send();
 
     }
+
+
 
 
 }

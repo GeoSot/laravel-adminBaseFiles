@@ -4,8 +4,8 @@ namespace GeoSot\BaseAdmin\App\Models\Media;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
-use Spatie\Translatable\HasTranslations;
 
 
 class MediumGallery extends BaseModel

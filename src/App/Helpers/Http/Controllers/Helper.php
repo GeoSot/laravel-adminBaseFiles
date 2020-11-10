@@ -5,13 +5,13 @@ namespace GeoSot\BaseAdmin\App\Helpers\Http\Controllers;
 
 
 use Barryvdh\Debugbar\Facade;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
-use Spatie\Translatable\HasTranslations;
 use Venturecraft\Revisionable\RevisionableTrait;
 
 class Helper

@@ -6,6 +6,7 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
 
@@ -68,6 +69,9 @@ class Page extends BasePage
     */
     public function getPreviewLink()
     {
+        if (!Route::has('site.pages')) {
+            return '';
+        }
         session()->put(self::SESSION_PREVIEW_KEY, $this->slug);
         return URL::signedRoute('site.pages', ['page' => $this->getRouteKey()], now()->addMinutes(45));
     }

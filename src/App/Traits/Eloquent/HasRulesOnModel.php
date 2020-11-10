@@ -5,7 +5,6 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 use Illuminate\Support\Arr;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use Spatie\Translatable\HasTranslations;
 
 trait HasRulesOnModel
 {

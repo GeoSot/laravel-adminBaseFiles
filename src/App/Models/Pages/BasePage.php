@@ -7,8 +7,9 @@ namespace GeoSot\BaseAdmin\App\Models\Pages;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
-use Spatie\Translatable\HasTranslations;
+
 
 abstract class BasePage extends BaseModel
 {

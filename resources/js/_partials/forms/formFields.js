@@ -64,7 +64,9 @@ BaseAdmin.forms.fields.Init = function () {
     }
 
     const TimePicker = require('./fields/TimePicker').default()
-    const ImagePicker = require('./fields/ImagePicker').default()
+    if (document.querySelectorAll('[data-toggle="imageInput"], [data-toggle="fileInput"]').length) {
+        const ImagePicker = require('./fields/ImagePicker').default()
+    }
 
     BaseAdmin.forms.fields.multiplyField();
 

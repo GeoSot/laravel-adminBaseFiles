@@ -1,4 +1,4 @@
-@component($packageVariables->get('blades').'_subBlades._components.modal',['id'=>'mediaLibraryModal','animation'=>'','dialogClass' =>'modal-xl vw-100'] )
+@component($packageVariables->get('blades').'_subBlades._components.modal',['id'=>'mediaLibraryModal','animation'=>'','dialogClass' =>'modal-xl modal-dialog-scrollable'] )
 
 
     @slot('triggerBtn')
@@ -12,18 +12,18 @@
     @endslot
 
     @slot('title')
-        <div v-if="isMediaLibrary" class="text-muted">
+        <span v-if="isMediaLibrary" class="text-muted">
             @lang("baseAdmin::admin/media/mediumGallery.modal.title")
-            <button class="btn btn-outline-info ml-2 px-3" @click="isMediaLibrary=false" title="@lang("baseAdmin::admin/media/mediumGallery.modal.upload")">
-                <i class="fas fa-upload"></i>
-            </button>
-        </div>
-        <div v-else class="text-muted">
+        </span>
+        <span v-else class="text-muted">
             @lang("baseAdmin::admin/media/mediumGallery.modal.upload")
-            <button class="btn btn-outline-info ml-2 px-3" @click="isMediaLibrary=true" title="@lang("baseAdmin::admin/media/mediumGallery.modal.title")">
-                <i class="fas fa-photo-video"></i>
-            </button>
-        </div>
+        </span>
+        <button class="btn btn-outline-info ml-2 px-3" :disabled="isMediaLibrary" @click="isMediaLibrary=true" title="@lang("baseAdmin::admin/media/mediumGallery.modal.title")">
+            <i class="fas fa-photo-video"></i>
+        </button>
+        <button class="btn btn-outline-info ml-2 px-3"  :disabled="!isMediaLibrary" @click="isMediaLibrary=false" title="@lang("baseAdmin::admin/media/mediumGallery.modal.upload")">
+            <i class="fas fa-upload"></i>
+        </button>
     @endslot
     @slot('footer')
         <button type="button" class="btn btn-success" v-if="choices.length>0" @click="pick">
@@ -39,32 +39,34 @@
 
 
 
-    <div class="modal-body">
+    <div class="mx-n2 mx-md-2">
 
 
         <div v-if="isMediaLibrary===true" class="card">
-            <div class="card-body ">
-                <input v-model.trim="searchText" class="form-control" v-on:keyup="search" placeholder="Search...">
+            <div class="card-body p-0">
+                <div class="p-3 ">
+                    <input v-model.trim="searchText" class="form-control" v-on:keyup="search" placeholder="Search...">
 
-            </div>
-            <div class="card-body container">
-                <div class="row row-cols-xl-6 row-cols-lg-4 row-cols-6 ">
-                    <div class="col" v-for="medium in media" v-bind:key="medium.id" :id="medium.id">
-                        <div @dblclick="pickAndClose(medium)" @click="chooseMedium(medium)" :class="['mouse-pointer border',{'border-primary':isPicked(medium)}]">
-                            <div v-html="medium.thumb_html"></div>
-                            <div class="small text-muted" v-html="mediumTitle(medium)"></div>
+                </div>
+                <div class="container">
+                    <div class="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-2  ">
+                        <div class="col text-center mb-2" v-for="medium in media" v-bind:key="medium.id" :id="medium.id">
+                            <div @dblclick="pickAndClose(medium)" @click="chooseMedium(medium)" :class="['mouse-pointer py-1',{'border-primary':isPicked(medium)}]"
+                                 style="border: 2px solid transparent">
+                                <div v-html="medium.thumb_html"></div>
+                                <div class="small text-muted" v-html="mediumTitle(medium)"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-body p-2">
-                <ul class="pagination pagination-sm justify-content-end m-0">
-                    <li v-for="page in pagination" :class="['page-item',{active:page.active}, {disabled:page.url===null}]">
-                        <a v-if="!page.active" class="page-link" :href="page.url" v-html="page.label" v-on:click.prevent="makeAjax(page.url)"></a>
-                        <span v-else class="page-link" v-html="page.label"></span>
-                    </li>
-                </ul>
-
+                <div class="p-2">
+                    <ul class="pagination pagination-sm justify-content-end m-0">
+                        <li v-for="page in pagination" :class="['page-item',{active:page.active}, {disabled:page.url===null}]">
+                            <a v-if="!page.active" class="page-link" :href="page.url" v-html="page.label" v-on:click.prevent="makeAjax(page.url)"></a>
+                            <span v-else class="page-link" v-html="page.label"></span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -85,8 +87,8 @@
                     buttonsClass: '.buttons',
                 },
                 choices: [],
-                multiple: @json($multiple??false),
-                isMediaLibrary:  @json($library??true),
+                multiple: @json($multiple ?? false),
+                isMediaLibrary:  @json($library ?? true),
                 pagination: [],
                 media: [],
                 searchText: '',
@@ -95,8 +97,13 @@
                 $('#mediaLibraryModal').on('show.bs.modal', (e) => {
                     this.makeAjax();
                 });
+                document.addEventListener('uppy-complete', (ev) => this.uploadFinished(ev))
             },
             methods: {
+                uploadFinished(ev) {
+                    this.makeAjax();
+                    setTimeout(() => this.isMediaLibrary = true, 1500)
+                },
                 isPicked(medium) {
                     return this.choices.includes(medium.id);
                 },
@@ -163,6 +170,7 @@
                     let data = Object.assign({only_data: true, extra_filters: {the_file_exists: true}}, dt);
                     BaseAdmin.makeAjax(url, 'GET', data, 0, function (data, textStatus) {
                         _this.media = data.records.data;
+                        console.log(_this.media)
                         _this.pagination = data.records.links;
                         lazySizes.loader.checkElems();
                     });

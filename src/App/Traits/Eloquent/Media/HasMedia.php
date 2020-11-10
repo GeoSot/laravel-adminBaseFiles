@@ -112,16 +112,11 @@ trait HasMedia
             return $medium;
 
         } catch (\Exception $e) {
-            if (isset($mediaCollection)) {
-                Medium::destroy($mediaCollection);
-            }
-            if (isset($medium)) {
-                Medium::destroy($medium);
-            }
+
             $fqn = class_basename($this);
 
-            $msg = __CLASS__." Media for Model {$fqn} {$this->getKey()}  was not saved";
-            Alert::error($msg);
+            $msg = "Media for Model {$fqn} id:{$this->getKey()} was not attached";
+            Alert::warning($msg,'Warring')->typeToast();
             Log::error($msg, ['msg' => $e->getMessage()]);
         }
         return null;

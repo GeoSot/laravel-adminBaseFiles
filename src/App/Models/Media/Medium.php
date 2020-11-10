@@ -4,18 +4,16 @@
 namespace GeoSot\BaseAdmin\App\Models\Media;
 
 
-use GeoSot\BaseAdmin\App\Jobs\CompressImage;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\OwnedBy;
-use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Plank\Mediable\Media;
-use Spatie\Translatable\HasTranslations;
 
 /**
  *
@@ -54,7 +52,7 @@ class Medium extends Media
         'custom_properties' => 'array',
         'size' => 'int',
     ];
-    protected $appends = [ 'url', 'thumb_html'];
+    protected $appends = ['url', 'thumb_html'];
 
     public static function boot()
     {

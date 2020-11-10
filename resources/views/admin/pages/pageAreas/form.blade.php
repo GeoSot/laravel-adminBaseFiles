@@ -8,12 +8,6 @@
 @endphp
 
 @component($packageVariables->get('blades').'admin._components.createEditButtons',['viewVals'=>$viewVals] )
-    @if ($viewVals->get('record') )
-        @slot('after')
-           {!!  $viewVals->get('record')->page->frontConfigs->getAdminLink(__($viewVals->get('modelLang').'.general.pageLink'),false,['class'=>'ml-auto btn btn-sm btn-outline-admin']) !!}
-        @endslot
-    @endif
-
 @endcomponent
 
 @section('content')
@@ -29,6 +23,11 @@
         </div>
         <div class="col-xl-5 col-lg-7 col-md-6 col-12 mb-3">
             @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('baseLang').'.formTitles.second')] )
+                @if ($viewVals->get('record') && $viewVals->get('record')->page )
+                    <div class="text-right">
+                        {!!  $viewVals->get('record')->page->frontConfigs->getAdminLink(__($viewVals->get('modelLang').'.general.pageLink'),false,['class'=>'ml-auto btn btn-sm btn-outline-admin mb-2']) !!}
+                    </div>
+                @endif
                 {!! form_until($form, 'images') !!}
             @endcomponent
         </div>

@@ -39,7 +39,8 @@
               'allowedFileTypes' => ['image/*', 'video/*']
           ],
       ],
-  ]
+  ];
+
 @endphp
 <script type="text/javascript">
     window.Laravel =@json($js)
