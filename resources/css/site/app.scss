@@ -18,11 +18,3 @@ $fa-font-path: '../fonts';
 @import "../_partials/richTextEditors";
 @import "../_partials/standards";
 
-
-a {
-    transition: all 0.3s ease-out;
-
-    &:hover {
-        opacity: .9;
-    }
-}

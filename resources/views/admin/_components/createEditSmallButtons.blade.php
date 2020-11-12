@@ -1,4 +1,3 @@
-<!--com_createEditButtons -->
 @php
     use Illuminate\Support\Collection;
   /**

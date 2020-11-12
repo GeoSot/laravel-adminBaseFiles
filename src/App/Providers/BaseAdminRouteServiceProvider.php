@@ -103,7 +103,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     {
 
 
-        Route::any('/tus/{any?}', $this->getController('Media\MediumController').'@tusUpload')->where('any', '.*')->name('media.tusUpload');
+        Route::any('/uploads/{any?}', $this->getController('Media\MediumController').'@upload')->where('any', '.*')->name('media.upload');
         Route::post('restore/{revision}', $this->getController('RestoreController').'@restoreHistory')->name('restore');
         Route::post('restore/clear/{revision}', $this->getController('RestoreController').'@clearHistory')->name('restore.clear');
 

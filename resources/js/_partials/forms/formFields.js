@@ -56,7 +56,6 @@ BaseAdmin.forms.fields = {
 
 BaseAdmin.forms.fields.Init = function () {
     if (document.querySelectorAll('[data-toggle="dateRangeCalendar"], [data-toggle="calendar"]').length) {
-
         window.moment = require('moment');
         require('bootstrap-daterangepicker');
         const DateRange = require('./fields/DateRange').default()

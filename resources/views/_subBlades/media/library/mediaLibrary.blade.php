@@ -21,19 +21,29 @@
         <button class="btn btn-outline-info ml-2 px-3" :disabled="isMediaLibrary" @click="isMediaLibrary=true" title="@lang("baseAdmin::admin/media/mediumGallery.modal.title")">
             <i class="fas fa-photo-video"></i>
         </button>
-        <button class="btn btn-outline-info ml-2 px-3"  :disabled="!isMediaLibrary" @click="isMediaLibrary=false" title="@lang("baseAdmin::admin/media/mediumGallery.modal.upload")">
+        <button class="btn btn-outline-info ml-2 px-3" :disabled="!isMediaLibrary" @click="isMediaLibrary=false" title="@lang("baseAdmin::admin/media/mediumGallery.modal.upload")">
             <i class="fas fa-upload"></i>
         </button>
     @endslot
     @slot('footer')
-        <button type="button" class="btn btn-success" v-if="choices.length>0" @click="pick">
+        <button type="button" class="btn btn-success" v-if="choices.length>0 && isMediaLibrary" @click="pick">
             @lang("baseAdmin::admin/media/mediumGallery.modal.pickAndClose")
         </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang("baseAdmin::admin/media/mediumGallery.modal.close")</button>
     @endslot
 
 
-    <div class="js-uppy-dashboard-container" v-show="isMediaLibrary!==true">
+    @php($options=[
+            'endPoint' => route('admin.media.upload'),
+            'restrictions' => [
+                    'maxFileSize' => 100000000,
+                    'maxNumberOfFiles' => 10,
+                    'allowedFileTypes' => $accept=['*/*'],
+                ],
+        ])
+
+    <div id="js-uppy-dashboard-container" data-options="{!! htmlspecialchars(json_encode($options), ENT_QUOTES, 'UTF-8') !!}"
+         :class="['justify-content-center',{'d-flex':!isMediaLibrary}]" v-show="isMediaLibrary!==true">
 
     </div>
 
@@ -78,7 +88,6 @@
     <script>
         var app2 = new Vue({
             el: '#mediaLibraryModal',
-
             data: {
                 input: {
                     name: '{{$inputName}}',
@@ -94,9 +103,13 @@
                 searchText: '',
             },
             mounted: function () {
-                $('#mediaLibraryModal').on('show.bs.modal', (e) => {
+                this.makeAjax();
+
+                $('#mediaLibraryModal').on('hide.bs.modal', (e) => {
+                    this.searchText = '';
                     this.makeAjax();
                 });
+
                 document.addEventListener('uppy-complete', (ev) => this.uploadFinished(ev))
             },
             methods: {
@@ -140,10 +153,10 @@
 
                     let buttonsWrapper = inputInstance.parentNode.querySelector(this.input.buttonsClass);
 
-                    if (buttonsWrapper.querySelector('[href="' + medium.url + '" ]')) {
-                        buttonsWrapper.querySelector('[href="' + medium.url + '" ]').href = medium.url;
+                    if (buttonsWrapper.querySelector('.js-show')) {
+                        buttonsWrapper.querySelector('.js-show').href = medium.url;
                     } else {
-                        buttonsWrapper.innerHTML += ' <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="' + medium.url + '" target="_blank"><i class="fas fa-eye"></i></a>'
+                        buttonsWrapper.innerHTML += ' <a class="js-show btn btn-secondary btn-sm align-middle mb-1" role="button" href="' + medium.url + '" target="_blank"><i class="fas fa-eye"></i></a>'
                     }
 
                 },
@@ -162,17 +175,17 @@
 
                 },
                 search() {
-                    this.makeAjax(null, {keyword: this.searchText})
+                    setTimeout(() => {
+                        this.makeAjax(null, {keyword: this.searchText})
+                    }, 100);
                 },
                 makeAjax(url = null, dt = {}) {
                     let _this = this;
                     url = url || '{{route('admin.media.index')}}';
-                    let data = Object.assign({only_data: true, extra_filters: {the_file_exists: true}}, dt);
+                    let data = Object.assign({only_data: true, num_of_items: 10, extra_filters: {the_file_exists: true}}, dt);
                     BaseAdmin.makeAjax(url, 'GET', data, 0, function (data, textStatus) {
                         _this.media = data.records.data;
-                        console.log(_this.media)
                         _this.pagination = data.records.links;
-                        lazySizes.loader.checkElems();
                     });
                 }
             },

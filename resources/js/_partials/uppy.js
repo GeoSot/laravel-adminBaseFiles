@@ -1,70 +1,73 @@
-import {Core, Dashboard,Tus, Url} from 'uppy'
+import {Core, Dashboard, Tus} from 'uppy'
 
 import 'uppy/dist/uppy.min.css'
 import '@uppy/image-editor/dist/style.css'
 
-const endPoint = Laravel.uppy.endpoint;
+const target = '#js-uppy-dashboard-container';
+const ImageEditor = require('@uppy/image-editor')
 const headers = {
-    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]')
+    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+    'Accept': 'application/json'
 }
 
+const options = JSON.parse(document.querySelector(target).dataset.options);
 
-const ImageEditor = require('@uppy/image-editor')
+const endPoint = () => options.endPoint;
 
 const uppy = new Core({
     debug: Laravel.debug,
     autoProceed: false,
     allowMultipleUploads: true,
-    restrictions: Laravel.uppy.restrictions
+    restrictions: options.restrictions
 })
 uppy.use(Dashboard, {
-    // trigger: '.UppyModalOpenerBtn',
-    inline: Laravel.uppy.inline,
-    target: '.UppyDashboardContainer',
+    // trigger: '.js-uppy-trigger-btn',
+    inline: true,
+    target: target,
     replaceTargetContent: true,
     showProgressDetails: true,
-    note: 'Images and video only, 2–3 files, up to 1 MB',
-    height: Laravel.uppy.height,
-    metaFields: Laravel.uppy.metaFields,
-    browserBackButtonClose: true
+    // note: 'Images and video only, 2–3 files, up to 1 MB',
+    height: 400,
+    metaFields: [
+        {id: 'name', name: 'Name', placeholder: 'file name'},
+        {id: 'caption', name: 'Caption', placeholder: 'describe what the image is about'},
+        {id: 'keywords', name: 'Keywords'}],
+    browserBackButtonClose: true,
+    // showLinkToFileUploadResult: false,
 });
 uppy.use(ImageEditor, {target: Dashboard});
-// uppy.use(Uppy.FileInput, {endpoint: endPoint})
-uppy.use(Tus, {endpoint: endPoint, headers: headers})
-uppy.use(Url, {
-    endpoint: endPoint,
+
+uppy.use(Tus, {
+    endpoint: endPoint(),
+    withCredentials: true,
     headers: headers,
-    companionUrl: 'https://companion.uppy.io/',
-})
-
-// Function for displaying uploaded files
-const onUploadSuccess = (elForUploadedFiles) =>
-    (file, response) => {
-        const url = response.uploadURL
-        const fileName = file.name
-
-        const li = document.createElement('li')
-        const a = document.createElement('a')
-        a.href = url
-        a.target = '_blank'
-        a.appendChild(document.createTextNode(fileName))
-        li.appendChild(a)
-
-        document.querySelector(elForUploadedFiles).appendChild(li)
-    }
+    resume: true,
+    autoRetry: true,
+    retryDelays: [0],//[0, 1000, 3000, 5000],
+});
 
 uppy.on('complete', result => {
-    console.log('successful files:', result.successful)
-    console.log('failed files:', result.failed)
-}).on('upload-success', onUploadSuccess('.example-one .uploaded-files ol'))
 
-uppy.getFiles().forEach(file => {
-
-    if(file.source == "remote") {
-        // source = remote is how I "mark" them previoulsy
-        this.uppy.setFileState(file.id, {
-            progress: { uploadComplete: true, uploadStarted: false }
-        });
+    if (result.failed.length) {
+        return;
     }
-
+    var event = new CustomEvent("uppy-complete", {
+        detail: {
+            result: result
+        }
+    });
+    document.dispatchEvent(event);
 });
+uppy.on('upload-success', (file, data, uploadUrl) => {
+    uppy.setFileState(file.id, {uploadURL: 'http://www.blah.com'});
+});
+uppy.on('upload-error', (file, error) => {
+    /*  uppy.info({
+          message: error,
+          details: 'test error message',
+      }, 'error', 10000)*/
+})
+
+uppy.on('error', (error) => {
+    console.log(3333, error)
+})

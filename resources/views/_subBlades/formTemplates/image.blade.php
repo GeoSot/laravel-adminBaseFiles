@@ -66,7 +66,7 @@
                 </button>
 
                 @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
-                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false])
+                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>"image/*"])
                 @endif
 
                 @if($val=$options['value'])
@@ -74,7 +74,7 @@
                               $options['value'] instanceOf \App\Models\Media\Medium
                                ?$options['value']->frontConfigs->getRoute('edit')
                               :$val)
-                    <a class=" btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
+                    <a class="js-show btn btn-secondary btn-sm align-middle mb-1" role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
                 @endif
                 @if(\Illuminate\Support\Arr::get($options, 'repeatable', false))
                     <button class="btn btn-danger ml-auto btn-sm mb-1" type="button" data-remove="fileinput"><i class="fas fa-minus"></i></button>

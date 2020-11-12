@@ -38,3 +38,13 @@ $fa-font-path: '../fonts';
     height: 2px;
   }
 }
+
+[class*="lazy"] {
+    transition: opacity .9s;
+    opacity: 0;
+}
+
+.lazyloaded {
+    opacity: 1;
+}
+

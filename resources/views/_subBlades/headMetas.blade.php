@@ -25,20 +25,6 @@
     $js = [
       'csrfToken' => csrf_token(),
       'debug' => config('app.debug'),
-      'uppy' => [
-          'metaFields' => [
-              ['id' => 'name', 'name' => 'Name', 'placeholder' => 'file name'],
-              ['id' => 'caption', 'name' => 'Caption', 'placeholder' => 'describe what the image is about'],
-              ['id' => 'keywords', 'name' => 'Keywords',]
-          ],
-          'endPoint' => route('admin.media.tusUpload'),
-          'restrictions' => [
-              'maxFileSize' => 100000000,
-              'maxNumberOfFiles' => 10,
-              'minNumberOfFiles' => 1,
-              'allowedFileTypes' => ['image/*', 'video/*']
-          ],
-      ],
   ];
 
 @endphp

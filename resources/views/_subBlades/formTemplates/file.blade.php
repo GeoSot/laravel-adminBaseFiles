@@ -32,6 +32,9 @@
                 <input type="hidden" name="old_{{$name}}" value="{{\Illuminate\Support\Arr::get($options, 'id')}}"/>
                 <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
                 <div class="input-group-append">
+                    @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
+                        @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>"*/*"])
+                    @endif
                     @if($val=$options['value'])
                         @php($href=
                                   $options['value'] instanceOf \App\Models\Media\Medium

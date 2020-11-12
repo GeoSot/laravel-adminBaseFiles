@@ -5,10 +5,8 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Media;
 
 use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Plank\Mediable\Facades\MediaUploader;
-use TusPhp\Events\UploadComplete;
 use TusPhp\Tus\Server;
 
 class MediumController extends BaseAdminController
@@ -45,17 +43,24 @@ class MediumController extends BaseAdminController
     }
 
 
-    public function tusUpload(Request $request)
+    public function upload(Request $request)
     {
+        if (!auth()->user()->hasPermission(['admin.create-medium'])) {
+            $message = $this->getLang('store.deny');
+            $title = $this->getLang('store.errorTitle');
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message, 'title' => $title], 403);
+            }
+            Alert::warning($message, $title);
+            return abort(403, $message);
+        }
         /** @var Server $server */
         $server = app('tus-server');
         $response = $server->serve();
-//       dd($request,$request,$server->getUploadDir());
+
         $response->send();
-
+        exit(0);
     }
-
-
 
 
 }
