@@ -1,5 +1,5 @@
 const formsInitializedClass = BaseAdmin.forms.initializedClass;
-
+let $ ;
 const selectors = {
     parent: '[data-toggle="dateRangeCalendar"]',
     clear: '[data-clear="dateRangeCalendar"]'
@@ -7,14 +7,18 @@ const selectors = {
 
 
 const init = () => {
-    $(document).on('click', selectors.parent + ':not(.' + formsInitializedClass + ')', function () {
-        internalInit($(this))
-    });
-    internalInit();
-    $(document).on('click', selectors.clear, function () {
-        $(selectors.parent).find('input').each(function () {
-            $(this).val('');
-        })
+    import('jquery').then(src => {
+        $ = src.default
+
+        $(document).on('click', selectors.parent + ':not(.' + formsInitializedClass + ')', function () {
+            internalInit($(this))
+        });
+        internalInit();
+        $(document).on('click', selectors.clear, function () {
+            $(selectors.parent).find('input').each(function () {
+                $(this).val('');
+            })
+        });
     });
 }
 
@@ -75,5 +79,5 @@ const getRanges = () => {
     };
 }
 
-export default init;
+export {init};
 

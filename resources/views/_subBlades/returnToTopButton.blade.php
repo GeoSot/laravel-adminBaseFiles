@@ -22,7 +22,7 @@
     <script defer data-comment="return to top button">
 
 
-        jsHelper.base.execute(() => {
+        jsHelper.jQuery.execute(($) => {
             let $link = $('#return-to-top-btn');
             $(window).scroll(function () {
                 let amountScrolled = $link.attr('data-pixels-scroll');

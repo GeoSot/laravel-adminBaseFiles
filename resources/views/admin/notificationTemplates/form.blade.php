@@ -45,7 +45,7 @@
 
 @push('scripts')
     <script defer data-comment="enableDevFields">
-        jsHelper.base.execute(() => {
+        jsHelper.jQuery.execute(() => {
             const $devFields = JSON.parse($('[name="dev_fields"]').val());
             $(document).on('click', '[data-toggle="enableDevFields"]', function (e) {
                 $.each($devFields, function (i, name) {

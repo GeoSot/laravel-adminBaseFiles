@@ -128,7 +128,7 @@ use Illuminate\Support\Collection;
 
     @push('scripts')
         <script defer data-comment="extra_filters on index page">
-            jsHelper.base.execute(() => {
+            jsHelper.jQuery.execute(($) => {
                 let clearFiltersBrn = '[data-toggle="clearExtraFilters"]';
                 $(document).on('click', clearFiltersBrn, function () {
                     let $filterInputs = $('[name^="extra_filters\["]');

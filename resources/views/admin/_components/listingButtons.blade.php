@@ -79,7 +79,7 @@
 
 {{--@push('scripts')--}}
 {{--    <script defer data-comment="formSubmitButtons">--}}
-{{--        jsHelper.base.execute(() => {--}}
+{{--        jsHelper.jQuery.execute(() => {--}}
 {{--            new BaseAdmin.forms.ajaxify("form#tableForm").onSubmit(function (instance, jqxhr) {--}}
 {{--                jqxhr.done(function (data) {--}}
 {{--                    console.log(data)--}}

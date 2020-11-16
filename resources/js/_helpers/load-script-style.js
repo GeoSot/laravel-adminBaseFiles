@@ -5,6 +5,7 @@ const getScriptElement = (SRC) => {
     script.type = 'text/javascript';
     script.src = '//' + SRC;
     script.id = SRC;
+    // script.crossorigin='anonymous';
     return script;
 }
 const getStyleElement = (SRC) => {
@@ -29,7 +30,7 @@ const loadGeneric = (scriptSrc, type = '') => {
 
         const existingScript = document.getElementById(SRC);
         if (existingScript) {
-            resolve(SRC);
+            resolve();
             return;
         }
 
@@ -44,8 +45,13 @@ const loadGeneric = (scriptSrc, type = '') => {
         }
 
         $el.onload = () => {
-            resolve(SRC);
+            resolve();
         };
+        $el.error = () => {
+            reject();
+        };
+        $el.addEventListener('load', resolve);
+        $el.addEventListener('error', reject);
 
     });
 

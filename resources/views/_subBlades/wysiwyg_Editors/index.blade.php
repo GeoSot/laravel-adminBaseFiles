@@ -2,9 +2,10 @@
     <script defer data-comment="wysiwyg_Editor initialize">
         window.BaseAdmin = window.BaseAdmin || {};
         BaseAdmin.textEditors = BaseAdmin.textEditors || [];
-        BaseAdmin.initTextEditor = function (el) {
+        document.addEventListener('baseAdmin:initTextEditor', (el) => {
             BaseAdmin.initActiveTextEditor(el)
-        };
+        });
+
     </script>
 @endpush
 

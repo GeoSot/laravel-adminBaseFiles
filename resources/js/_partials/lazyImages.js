@@ -1,7 +1,6 @@
  import 'lazysizes'
 
 
-
 document.addEventListener('lazybeforeunveil', (evt) => {
     let bg = evt.target.getAttribute('data-bg');
     if (bg) {

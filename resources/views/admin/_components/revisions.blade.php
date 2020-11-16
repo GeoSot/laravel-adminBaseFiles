@@ -1,4 +1,3 @@
-
 @php
     use Illuminate\Support\Collection;
   /**
@@ -25,14 +24,14 @@
                 @lang($revLang.'.title')
             @endslot
             @slot('footer')
-                    @if( auth()->user()->isAbleTo('admin.restore-'.$modelClass) && $record->revisionHistory->isNotEmpty())
-                        <form class="js-revisionsClearForm" action="{{route('admin.restore.clear',$record->revisionHistory->first())}}" method="POST">
-                            @csrf
-                            <button class="btn btn-outline-danger" type="submit">
-                                <span class="">@lang($btnsLang.'.clearHistory')</span>
-                            </button>
-                        </form>
-                    @endif
+                @if( auth()->user()->isAbleTo('admin.restore-'.$modelClass) && $record->revisionHistory->isNotEmpty())
+                    <form class="js-revisionsClearForm" action="{{route('admin.restore.clear',$record->revisionHistory->first())}}" method="POST">
+                        @csrf
+                        <button class="btn btn-outline-danger" type="submit">
+                            <span class="">@lang($btnsLang.'.clearHistory')</span>
+                        </button>
+                    </form>
+                @endif
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang($btnsLang.'.close')</button>
             @endslot
 
@@ -85,9 +84,10 @@
 
     @push('scripts')
         <script defer data-comment="messagesNewFormFormAjax ">
-            jsHelper.base.execute(() =>
+
+            jsHelper.jQuery.execute(src => {
                 BaseAdmin.forms.ajaxifyFormOnModal("form.js-revisionsForm", '#revisionsModal', '#revisionsModal, #mainForm')
-            )
+            })
         </script>
     @endpush
 

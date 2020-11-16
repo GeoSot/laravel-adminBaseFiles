@@ -1,20 +1,27 @@
 const mix = require('laravel-mix');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+
+require('laravel-mix-bundle-analyzer');
+
+if (!mix.inProduction()) {
+    mix.bundleAnalyzer();
+}
 const resourcesDirectory = './resources/';
-const publicDirectory = 'assets/';
-// mix.setPublicPath('public/assets')
+const publicDirectory = './assets/';
 // mix.setResourceRoot('/assets/');
-mix.setPublicPath('.\\');
+mix.setPublicPath('./assets/');
+
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', publicDirectory + 'fonts');
-//
 
 mix.js(resourcesDirectory + 'js/mainScripts/admin.js', publicDirectory + 'js/admin.js');
 mix.js(resourcesDirectory + 'js/mainScripts/site.js', publicDirectory + 'js/app.js');
 mix.sass(resourcesDirectory + 'css/admin/app.scss', publicDirectory + 'css/admin.css');
-// mix.sass(resourcesDirectory + 'css/site/app.scss', publicDirectory + 'css/app.css');
-//mix.babel(),mix.minify('path/to/file.js');
-mix.options({//https://laravel-mix.com/docs/2.1/options
+mix.sass(resourcesDirectory + 'css/site/app.scss', publicDirectory + 'css/app.css');
+
+
+mix.options({
     processCssUrls: false,
     cssNano: {
         discardComments: {removeAll: true},
@@ -38,8 +45,10 @@ if (mix.inProduction()) {
     });
 }
 mix.babelConfig({
-    // plugins: ['@babel/plugin-syntax-dynamic-import'],
-    "plugins": ["@babel/plugin-proposal-class-properties"]
+    "plugins": [
+        '@babel/plugin-syntax-dynamic-import',
+        "@babel/plugin-proposal-class-properties"
+    ]
 });
 
 
@@ -49,10 +58,9 @@ mix.webpackConfig({
         "assets/admin": resourcesDirectory + 'css/admin/app.scss',
          app:  resourcesDirectory + 'css/site/app.scss'
      },*/
-    // output: {
-    //     chunkFilename:publicDirectory + "js/chunks/[name].chunk.[hash].js",
-    //     publicPath: `/`
-    // },
+    output: {
+        chunkFilename: "js/chunks/[name].chunk.[hash].js",
+    },
     resolve: {
         // modules: [path.resolve(__dirname, '../../../node_modules')],
         alias: {
@@ -61,6 +69,7 @@ mix.webpackConfig({
         }
     },
     plugins: [
-        new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: [publicDirectory + '**/*']})//prosoxi katharizei ta panta apo to public
+        new MomentLocalesPlugin({localesToKeep: ['en-gb', 'el'],}),
+        new CleanWebpackPlugin({cleanStaleWebpackAssets: false,})//prosoxi katharizei ta panta apo to public
     ]
 });

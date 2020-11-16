@@ -70,7 +70,7 @@ class MainCommand extends BaseInstallCommand
         }
 
         $this->info('Platform ready! You can now login with your username and password at:');
-        $adminRoute = config('app.url').'/'.config('baseAdmin.config.backEnd.baseRoute');
+        $adminRoute = config('app.url').'/'.config('baseAdmin.config.backEnd.routePrefix');
         $this->info($adminRoute);
 
         return true;
@@ -98,9 +98,6 @@ class MainCommand extends BaseInstallCommand
             'publishLocalizationConf' => $this->publishCmd('Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider', 'config'),
             'publishTranslationManagerConf' => $this->publishCmd('Barryvdh\TranslationManager\ManagerServiceProvider', 'config'),
             'publishRevisionableConf' => $this->publishCmd('Venturecraft\Revisionable\RevisionableServiceProvider'),
-//            'publishChunkUploadConf' => ['vendor:publish', ['--provider' => 'Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider']],
-
-
             'publishTranslationMigrations' => $this->publishCmd('Barryvdh\TranslationManager\ManagerServiceProvider', 'migrations'),
 
             'editConfigFiles' => ['baseAdmin:install:editConfigFiles'],
@@ -163,7 +160,7 @@ class MainCommand extends BaseInstallCommand
             'seedPackageData' => ['db:seed', ['--class' => DatabaseSeeder::class]],
             'installPassport' => ['passport:install'],//after migrate /https://laravel.com/docs/passport
             'symlink' => ['storage:link'],
-            'publishAssets' => ['baseAdmin:publishAssets'],
+            'publishAssets' => $this->publishCmd(ServiceProvider::class, 'baseAdmin-assets'),
 //            'perms'=>['baseAdmin:makePermissionsForModel'],
         ];
     }

@@ -1,3 +1,4 @@
+let $;
 const formsInitializedClass = BaseAdmin.forms.initializedClass;
 
 const selectors = {
@@ -5,17 +6,18 @@ const selectors = {
     clear: '[data-clear="calendar"]'
 }
 
-
 const init = () => {
-
-    $(document).on('click', selectors.parent + ':not(.' + formsInitializedClass + ')', function () {
-        internalInit($(this));
-    });
-    internalInit();
-    $(document).on('click', selectors.clear, function () {
-        $(selectors.parent).find('input').each(function () {
-            $(this).val('');
-        })
+    import('jquery').then(src => {
+        $ = src.default
+        $(document).on('click', selectors.parent + ':not(.' + formsInitializedClass + ')', function () {
+            internalInit($(this));
+        });
+        internalInit();
+        $(document).on('click', selectors.clear, function () {
+            $(selectors.parent).find('input').each(function () {
+                $(this).val('');
+            })
+        });
     });
 }
 
@@ -65,5 +67,5 @@ const _callback = (start, end, label) => {
 }
 
 
-export default init;
+export {init};
 

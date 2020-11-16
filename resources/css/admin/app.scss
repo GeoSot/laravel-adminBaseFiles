@@ -14,6 +14,8 @@ $fa-font-path: '../fonts';
 @import '~bootstrap-daterangepicker/daterangepicker.css';
 @import '~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css';
 @import '~sweetalert2/src/sweetalert2.scss';
+@import '~@uppy/core/src/style.scss';
+@import '~@uppy/dashboard/src/style.scss';
 //*****
 //Our Css
 @import '../_partials/offcanvas';
@@ -38,13 +40,3 @@ $fa-font-path: '../fonts';
     height: 2px;
   }
 }
-
-[class*="lazy"] {
-    transition: opacity .9s;
-    opacity: 0;
-}
-
-.lazyloaded {
-    opacity: 1;
-}
-

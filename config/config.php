@@ -1,5 +1,7 @@
 <?php
 
+use GeoSot\BaseAdmin\Helpers\Base;
+
 return [
 
     /* ------------------------------------------------------------------------------------------------
@@ -19,13 +21,12 @@ return [
     |--------------------------------------------------------------------------
     |
     |
-    |
     */
     'backEnd' => [
         //base route for backend
-        'baseRoute' => 'admin',
+        'routePrefix' => 'admin',
         //published assets path
-        'assetsPath' => 'assets\\',
+        'assetsPath' => 'vendor\baseAdmin\\',// public_path('vendor\baseAdmin\\'),
         //Add css scripts to back layout
         'extraCss' => [],
         //Add js scripts to back layout
@@ -34,12 +35,20 @@ return [
         'layout' => 'baseAdmin::admin.layout',
     ],
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | FrontEnd Configs
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     'site' => [
-        'baseRoute' => '',
-        'extraCss' => [],
-        'extraJs' => [],
-        //Set Views options
+        'styles' => [
+            Base::adminAssets("css/app.css")
+        ],
+        'scripts' => [
+            Base::adminAssets("js/app.js")
+        ],
         'layout' => 'baseAdmin::site.layout',
     ],
 
@@ -53,11 +62,17 @@ return [
         'time' => 15,//  cache time in minutes
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Translation Options
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     'translatables' => [
         /*
         | Locales
-        |
-        | Contains an array with the applications available locales.
+        | an array with the applications available locales.
         |
         */
         'locales' => [

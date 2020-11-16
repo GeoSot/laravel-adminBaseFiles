@@ -1,14 +1,19 @@
+let $;
+let instances = [];
 const selectors = {
     trigger: '[data-toggle="timePicker"]',
 }
 const init = () => {
-    $(document).on('click', `${selectors.trigger} input`, function (e) {
-        new internalInit(this);
-    });
-
-    $(function () {
-        $(selectors.trigger).each(function (e) {
+    import('jquery').then(src => {
+        $ = src.default
+        $(document).on('click', `${selectors.trigger} input`, function (e) {
             new internalInit(this);
+        });
+
+        $(function () {
+            $(selectors.trigger).each(function (e) {
+                new internalInit(this);
+            });
         });
     });
 
@@ -22,7 +27,7 @@ const internalInit = (el) => {
     // if (Object.keys(BaseAdmin.forms.fields.Instances.timePickers).length && BaseAdmin.forms.fields.Instances.timePickers[name] !== 'undefined') {
     //     return BaseAdmin.forms.fields.Instances.timePickers[name];
     // } else {
-    BaseAdmin.forms.fields.Instances.timePickers[name] = _this;
+    instances[name] = _this;
     // }
     _this.$hoursInput = _this.$wrapper.find('input').not('[type=hidden]').first();
     _this.$minutesInput = _this.$wrapper.find('input').not('[type=hidden]').last();
@@ -101,4 +106,4 @@ const internalInit = (el) => {
 }
 
 
-export default init;
+export {init};

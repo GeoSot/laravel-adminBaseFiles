@@ -35,7 +35,7 @@
 @push('scripts')
 
     <script defer data-comment="logActions">
-        jsHelper.base.execute(() => {
+        jsHelper.jQuery.execute(() => {
             $('[data-toggle="logAction"]').click(function (e) {
                 let $btn = $(this);
                 Swal.fire({

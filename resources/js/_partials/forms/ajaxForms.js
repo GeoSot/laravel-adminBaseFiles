@@ -1,10 +1,6 @@
-window.BaseAdmin = window.BaseAdmin || {};
-window.BaseAdmin.forms = window.BaseAdmin.forms || {};
-BaseAdmin.forms.ajaxified = window.BaseAdmin.ajaxified || {};
+let ajaxified = [];
 
-
-BaseAdmin.forms.errors = function ($form) {
-
+const errors = function ($form) {
     const classes = {
         group: "form-group",
         groupError: "has-error",
@@ -67,16 +63,30 @@ BaseAdmin.forms.errors = function ($form) {
     return this;
 };
 
+const ajaxifiedForm = (formSelector) => {
+
+    this.$form = $(formSelector);
+    this.form = formSelector;
+    this.$form = $(formSelector);
+    this.id = $(formSelector).attr('id');
+    this._callback = null;
+    this.errorsObj = null;
+    this.spinnerId = 'formSpinner_' + Math.random().toString(36).substr(2, 9);
+
+}
 /**
  * Display the specified resource.
  *
  * @param   formSelector
  * @return AjaxObj
  */
-BaseAdmin.forms.ajaxify = function (formSelector) {
-    if (!(this instanceof BaseAdmin.forms.ajaxify)) return new BaseAdmin.forms.ajaxify(name);
-    if (BaseAdmin.forms.ajaxified && BaseAdmin.forms.ajaxified[formSelector]) {
-        return BaseAdmin.forms.ajaxified[formSelector];
+const ajaxify =function (formSelector) {
+
+    console.log(4)
+
+    // if (!(this instanceof ajaxify)) return new ajaxify(name);
+    if (ajaxified[formSelector]) {
+        return ajaxified[formSelector];
     }
     this.$form = $(formSelector);
     if (!this.$form.length) {
@@ -135,16 +145,12 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
             //  console.log(data);
             let text = data.statusText + '  Error Code: ' + data.status;
             if (data.responseJSON) {
-                _self.errorsObj = new BaseAdmin.forms.errors(_self.$form).setErrors(data.responseJSON.errors);
+                _self.errorsObj = new errors(_self.$form).setErrors(data.responseJSON.errors);
                 _self.errorsObj.appendFormErrors();
                 text = _self.errorsObj.getErrorsAsText() || data.responseJSON.message || text;
             }
 
-            Swal.fire({
-                title: 'Oups...!',
-                text: text,
-                icon: 'error',
-            })
+            showMessage({title: 'Oups...!', text: text, icon: 'error',})
 
         }).always(function () {
             _self.$form.removeClass('submitting');
@@ -159,7 +165,7 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
     };
     this.destroy = function () {
         destroyListeners();
-        delete window.BaseAdmin.forms.ajaxified[_self.form];
+        delete ajaxified[_self.form];
     };
     let getSpinnerWrapper = () => {
         return '<div id="' + _self.spinnerId + '" class="spinnerWrapper position-absolute d-flex justify-content-center align-items-center" ' +
@@ -168,17 +174,20 @@ BaseAdmin.forms.ajaxify = function (formSelector) {
             '</div>'
     };
 
-    window.BaseAdmin.forms.ajaxified[_self.form] = _self;
+    ajaxified[_self.form] = _self;
     return _self;
+
 };
 
 
-BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false) {
+const ajaxifyFormOnModal =function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false)  {
+    console.log(3)
 
     if (!$(formSelector).length || !$(modalSelector).length) {
         return;
     }
-    let form = new BaseAdmin.forms.ajaxify(formSelector);
+    let form = new ajaxify(formSelector)
+
     $(modalSelector).on('hide.bs.modal', function (e) {
         form.clearInputs();
         if (destroyOnClose) {
@@ -194,16 +203,28 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
         jqxhr.done(function (data) {
             // jsHelper.debug(formSelector, instance, 'ajaxifyForm taskForm');
             instance.clearInputs();
-            Swal.fire({
+            showMessage({
                 title: data.msg.title,
                 text: data.msg.msg,
                 icon: 'success',
             })
             $(modalSelector).modal('hide');
-            BaseAdmin.ajaxLoadWrappers(wrapperToReload);
+            window.BaseAdmin.ajaxLoadWrappers(wrapperToReload);
         });
     });
+
 };
+const showMessage = (data) => {
+    import('sweetalert2').then(src => {
+        src.default.fire({
+            title: data.title ? data.title : 'Error!',
+            text: data.text,
+            timer: 15000,
+            icon: data.icon,
+            timerProgressBar: true
+        })
+    })
+}
 
 
 /*
@@ -230,3 +251,5 @@ BaseAdmin.forms.ajaxifyFormOnModal = function (formSelector, modalSelector, wrap
 *
 *
 * */
+
+export {ajaxify, ajaxifyFormOnModal}

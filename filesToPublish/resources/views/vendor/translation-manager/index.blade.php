@@ -399,7 +399,7 @@
     </script>
 
     <script>
-        jsHelper.base.execute(() =>{
+        jsHelper.jQuery.execute(() =>{
 
             $.ajaxSetup({
                 beforeSend: function (xhr, settings) {

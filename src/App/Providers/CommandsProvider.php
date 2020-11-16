@@ -61,7 +61,6 @@ class CommandsProvider extends ServiceProvider
             MainCommand::class,
             InitializeEnv::class,
             PublishInitialFiles::class,
-            PublishAssets::class,
             AddValuesToConfigFiles::class,
         ]);
     }

@@ -77,8 +77,8 @@
         document.addEventListener("DOMContentLoaded", function (e) {
             let elements = document.querySelectorAll('textarea.withEditor');
             if (elements.length) {
-                window.jsHelper.loader.loadStyle('//cdn.quilljs.com/latest/quill.snow.css')
-                window.jsHelper.loader.loadScript('//cdn.quilljs.com/latest/quill.min.js').then(function () {
+                window.jsHelper.loadStyle('//cdn.quilljs.com/latest/quill.snow.css')
+                window.jsHelper.loadScript('//cdn.quilljs.com/latest/quill.min.js').then(function () {
                         for (let i = 0; i < elements.length; i++) {
                             new BaseAdmin.initActiveTextEditor(elements[i])
                         }

@@ -6,6 +6,7 @@
         * @var Collection $viewVals
         * @var Collection $packageVariables
         */
+
     @endphp
     <div class="js-translatedWords text-hide" hidden>
         @php($lang=$viewVals->get('baseLang').'.listMessages')

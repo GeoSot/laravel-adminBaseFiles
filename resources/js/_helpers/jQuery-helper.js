@@ -1,30 +1,21 @@
-let eventName = 'jqIsLoaded';
-let isLoadedEvent = new CustomEvent(eventName);
-
-const getJquery = ()=>{
+const getJquery = () => {
     return window.$ || window.jQuery;
 }
 
-const isJqLoaded = ()=>{
-    // @ts-ignore
-    return getJquery() !== undefined && jQuery.fn.popover !== undefined
+const isJqLoaded = () => {
+    return getJquery() !== undefined
 }
 
-const triggerIsLoaded = ()=>{
-    document.dispatchEvent(isLoadedEvent);
-}
-
-
-const execute = (callback)=>{
-
-    if (isJqLoaded())
-    {
+const execute = (callback) => {
+    if (isJqLoaded()) {
         callback(getJquery());
         return;
     }
-    document.addEventListener(eventName, ()=>{
-        callback(getJquery());
+    import('jquery').then(src => {
+        let $ = src.default
+
+        callback($);
     });
 }
 
-module.exports = {triggerIsLoaded, execute}
+export {execute}

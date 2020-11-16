@@ -1,6 +1,6 @@
 @push('scripts')
     <script id="{{$uuid}}">
-        jsHelper.base.execute(() => {
+        jsHelper.jQuery.execute(() => {
             Swal.fire({
                 title: '{!! $title !!}',
                 text: '{!! $msg !!}',

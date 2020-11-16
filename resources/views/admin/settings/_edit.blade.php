@@ -37,7 +37,7 @@
 </div>
 @push('scripts')
     <script defer data-comment="enableDevFields">
-        jsHelper.base.execute(() => {
+        jsHelper.jQuery.execute(() => {
             $(document).on('click', '[data-toggle="enableDevFields"]', function (e) {
 
                 $(this).parents('.card-body').find('input , select').each(function (i, el) {

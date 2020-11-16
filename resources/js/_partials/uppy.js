@@ -1,10 +1,7 @@
 import {Core, Dashboard, Tus} from 'uppy'
-
-import 'uppy/dist/uppy.min.css'
-import '@uppy/image-editor/dist/style.css'
+import ImageEditor from '@uppy/image-editor'
 
 const target = '#js-uppy-dashboard-container';
-const ImageEditor = require('@uppy/image-editor')
 const headers = {
     'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
     'Accept': 'application/json'
@@ -15,7 +12,7 @@ const options = JSON.parse(document.querySelector(target).dataset.options);
 const endPoint = () => options.endPoint;
 
 const uppy = new Core({
-    debug: Laravel.debug,
+    debug: process.env.NODE_ENV !== 'production',
     autoProceed: false,
     allowMultipleUploads: true,
     restrictions: options.restrictions

@@ -99,7 +99,7 @@
             $form.submit();
         }
 
-        {{--jsHelper.base.execute(() => {--}}
+        {{--jsHelper.jQuery.execute(() => {--}}
         {{--    new BaseAdmin.forms.ajaxify("form#mainForm").onSubmit(function (instance, jqxhr) {--}}
         {{--        jqxhr.done(function (data) {--}}
         {{--            // jsHelper.debug('form#mainForm', instance, 'ajaxifyForm newPostForm');--}}

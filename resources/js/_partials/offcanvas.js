@@ -1,21 +1,26 @@
-$(function () {
-    'use strict';
-    $('[data-toggle="offcanvas"]').each(function () {
-        let $el = {
-            header: $('.js-mainHeader'),
-            el: $(this),
-            parent: $($(this).data('parent')),
-            target: $($(this).data('target'))
-        };
-        alignOffCanvas($el);
-        $el.el.on('click', function () {
-            manageClasses($el);
-        });
-        $(window).resize(function () {
+const init = () => {
+    import('jquery').then(src => {
+        let $ = src.default
+        'use strict';
+
+        $('[data-toggle="offcanvas"]').each(function () {
+            let $el = {
+                header: $('.js-mainHeader'),
+                el: $(this),
+                parent: $($(this).data('parent')),
+                target: $($(this).data('target'))
+            };
             alignOffCanvas($el);
+            $el.el.on('click', function () {
+                manageClasses($el);
+            });
+            $(window).resize(function () {
+                alignOffCanvas($el);
+            });
         });
     });
-});
+
+};
 
 
 function alignOffCanvas($el) {
@@ -52,3 +57,5 @@ function manageClasses($el) {
         }
     }
 }
+
+export {init};

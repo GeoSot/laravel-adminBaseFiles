@@ -1,12 +1,4 @@
-window.BaseAdmin = window.BaseAdmin || {};
-window.BaseAdmin.forms = window.BaseAdmin.forms || {};
-
-
-
-require('./formFields');
-require('./ajaxForms');
-BaseAdmin.forms.fields.Init();
-require('./formSubmitByKeyboard');
+import('./formFields').then(src => src.Init())
 
 $('.modal').on('shown.bs.modal', function () {
     let $shownInput = $(this).find('input, select, textarea').not(':hidden').first();
@@ -17,5 +9,16 @@ $('.modal').on('shown.bs.modal', function () {
     if ($wysiwyg) {
         $wysiwyg.dispatchEvent(new Event('customFocus'));
     }
-
 });
+
+$(document.activeElement).on("keydown", function (e) {
+    // Ctrl-Enter pressed
+    if (e.key === 'Enter' && e.ctrlKey) {
+        let $parentForm = $(e.target).closest('form');
+        // if ($parentForm.data('can-submit')) {
+        $parentForm.submit();
+        // }
+    }
+});
+
+

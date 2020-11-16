@@ -10,7 +10,6 @@ namespace GeoSot\BaseAdmin\Helpers;
 
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 
 
 class Base
@@ -21,25 +20,22 @@ class Base
      */
     public static function adminAssets(string $path)
     {
-        if (Str::endsWith($path, '/')) {
-            $path = Str::replaceLast('/', '', $path);
-        }
-        $assetsPath = str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath'));
+        $path = '/'.trim($path, '/');
 
-        $fullPath = $assetsPath.$path;
+        $assetsPath = asset(str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath')));
 
-        $manifest = Paths::rootDir().'mix-manifest.json';
+
+        $manifest = Paths::rootDir('assets').'mix-manifest.json';
         if (file_exists($manifest)) {
             $manifestData = json_decode(file_get_contents($manifest), true);
-            $dummyPath = '/filesToPublish/assets/';
 
-            if (isset($manifestData[$dummyPath.$path])) {
-                return str_replace($dummyPath, "/$assetsPath", $manifestData[$dummyPath.$path]);
+            if (isset($manifestData[$path])) {
+                return $assetsPath.$manifestData[$path];
             }
 
         }
 
-        return "/$fullPath";
+        return $assetsPath.$path;
     }
 
     /**

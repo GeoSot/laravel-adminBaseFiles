@@ -13,6 +13,7 @@ use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -94,6 +95,19 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 //            __DIR__ . '/../resources/lang/' => resource_path("lang"),
             __DIR__.'/../resources/lang/' => resource_path("lang/vendor/{$this->package}"),
         ], 'translations');
+
+
+        $this->publishes([
+            __DIR__.'/../assets' => public_path("vendor/{$this->package}"),
+        ], 'baseAdmin-assets');
+
+
+        Blade::component("{$this->package}::_subBlades._components.modal", 'baseAdmin-modal');
+
+//                $this->publishes([
+//                    __DIR__.'/../filesToPublish' => base_path(),
+//                ], 'baseAdmin-mainFiles');
+
     }
 
 

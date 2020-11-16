@@ -39,15 +39,6 @@ class Paths
         return self::rootDir('filesToPublish'.self::sanitizePath($path));
     }
 
-    /**
-     * Return Resources path
-     * @param  string  $path
-     * @return string
-     */
-    public static function resourcesDir(string $path = '')
-    {
-        return self::rootDir('resources'.self::sanitizePath($path));
-    }
 
     /**
      * @param  string  $path

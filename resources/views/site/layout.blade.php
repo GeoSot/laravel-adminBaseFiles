@@ -3,8 +3,7 @@
       data-layout="site">
 <head>
     @include($packageVariables->get('blades').'_subBlades.headMetas')
-    <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/app.css")}}" rel="stylesheet"/>
-    @foreach(config('baseAdmin.config.site.extraJs') as $file)
+    @foreach(config('baseAdmin.config.site.styles') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>
     @endforeach
     @stack('styles')
@@ -47,8 +46,7 @@
 </div>
 
 <span class="js-scripts">
-     <script src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/app.js")}}"></script>
-    @foreach(config('baseAdmin.config.site.extraJs') as $file)
+    @foreach(config('baseAdmin.config.site.scripts') as $file)
         <script defer src="{{mix($file)}}"></script>
     @endforeach
 

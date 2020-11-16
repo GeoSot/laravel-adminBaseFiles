@@ -67,11 +67,11 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
 
         $router->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
             ->middleware(['web', 'localeSessionRedirect', 'localizationRedirect', 'localize'])->group(function () {
-                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.baseRoute'))->as('admin.')->middleware(['auth'])->group(function () {
+                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware(['auth'])->group(function () {
                     $this->loadBackendRoutes();
                 });
 
-                $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.baseRoute'))->group(function () {
+                $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.routePrefix'))->group(function () {
                     $this->loadFrontendRoutes();
                 });
             });

@@ -1,24 +1,18 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import './_helpers/_initial'
 
-require('./bootstrap')
-const Swal = require('sweetalert2')
+let url = new URL(document.currentScript.src);
+__webpack_public_path__ = url.href.substring(0, url.href.indexOf('js'));
 
-window.Swal = Swal;
+import ('./bootstrap').then(() => {
 
+    import('./_partials/forms/_index');
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    require('./_partials/forms/_index');
+})
 
 
-        require('./_partials/lazyImages');
+import('sweetalert2').then(src => {
+    window.Swal = src.default
+})
 
-    if (document.querySelectorAll(".UppyModalOpenerBtn, .UppyDashboardContainer").length) {
-        // require('./_partials/uppy');
-    }
-    jsHelper.base.triggerIsLoaded()
-});
+import('./_partials/lazyImages');
 
