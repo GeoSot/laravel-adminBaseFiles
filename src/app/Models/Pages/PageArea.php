@@ -2,15 +2,10 @@
 
 namespace GeoSot\BaseAdmin\App\Models\Pages;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasImages;
-use Spatie\Translatable\HasTranslations;
 
-
-class PageArea extends BaseModel
+class PageArea extends BasePage
 {
-    use Sluggable, HasTranslations, HasImages;
+    protected $with=['blocks'];
 
     public $translatable = ['title', 'sub_title',];
 
@@ -31,8 +26,8 @@ class PageArea extends BaseModel
         'enabled',
         'user_id',
         'modified_by',
-
     ];
+    protected $appends = ['background_image'];
 
     protected $casts = [
         'enabled' => 'boolean',
@@ -40,23 +35,17 @@ class PageArea extends BaseModel
     ];
 
 
-    function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
         return array_merge([
             'slug' => ['required', 'min:3', "unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),],
-
         ], $merge, $this->rules);
     }
 
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
+    public function getBackgroundImageAttribute()
     {
-        return ['slug' => ['source' => 'en.title']];
+        return $this->images()->first();
     }
 
 
@@ -65,6 +54,11 @@ class PageArea extends BaseModel
     * - - -  R E L A T I O N S H I P S  - - -
     *
     */
+
+    public function getViewTemplate(): string
+    {
+        return 'baseAdmin::site.blockLayouts._pageArea';
+    }
 
     public function page()
     {

@@ -16,7 +16,7 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('slug')->unique();
             $table->text('notes')->nullable();
             $table->text('css')->nullable();
@@ -24,11 +24,11 @@ class CreatePagesTable extends Migration
             $table->unsignedInteger('order')->nullable();
 
 
-            $table->string('title')->nullable();
-            $table->string('sub_title')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
-            $table->string('keywords')->nullable();
+            $table->text('title')->nullable();
+            $table->text('sub_title')->nullable();
+            $table->text('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->text('keywords')->nullable();
             $table->text('meta_tags')->nullable();
 
             //--Defaults
@@ -37,9 +37,9 @@ class CreatePagesTable extends Migration
             $table->softDeletes();
 
             //--Foreign keys
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('parent_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('modified_by')->nullable();
 
             //--Foreign keys RULEs
             $table->foreign('parent_id')->references('id')->on('pages')->onDelete('set null');

@@ -1,46 +1,26 @@
-require('../app');
+let url = new URL(document.currentScript.src);
+__webpack_public_path__ = url.href.substring(0, url.href.indexOf('js'));
+
+import Vue from 'vue';
+
+window.Vue = Vue;
+if (process.env.NODE_ENV === 'production') {
+    Vue.config.devtools = false;
+    Vue.config.debug = false;
+    Vue.config.silent = true;
+}
 
 
-window.BaseAdmin = window.BaseAdmin || {};
-
-
-require('../_partials/offcanvas');
-require('../_admin/indexPages');
-require('../_admin/stickButtonsBarsOnTop');
-const pace = require('pace-progress');
-pace.start({target:'header.js-mainHeader'});
-
-
-require('../_partials/ajaxLoadWrappers');
-
-
-$('[data-toggle="select-all"]').change(function (e) {
-    let targets = $(this).data('target');
-    $('[data-select-all="' + targets + '"]').prop('checked', $(this).prop("checked"));
+const app = new Vue({
+    el: '#app'
 });
 
+import '../app'
 
-BaseAdmin.makeAjax = function (url, type, data, show_message, callback) {
-    return jQuery.ajax({
-        url: url,
-        type: type,
-        data: data,
-        dataType: 'JSON',
-    }).done(function (data) {
-        if (data.flag === 'error' || show_message == 1) {
-            return toastr[data.flag](data.message, data.title, {timeOut: 15000});
-        }
-        if (typeof callback !== 'function') {
-            location.reload();
-        }
-    }).fail(function (jqXHR, textStatus) {
-        data = jqXHR.responseJSON;
-        return toastr['error'](data.message, data.title?data.title:'Error', {timeOut: 15000});
+import('../_partials/offcanvas').then(src => src.init());
+import('../_admin/indexPages');
+import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}));
 
-    }).always(function (data, textStatus) {
-        if (typeof callback === 'function') {
-            callback(data, textStatus);
-        }
-    })
-};
-
+if (document.querySelectorAll("#js-uppy-dashboard-container").length) {
+    import('../_partials/uppy');
+}

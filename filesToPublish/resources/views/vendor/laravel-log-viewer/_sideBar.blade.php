@@ -7,7 +7,7 @@
                        {{--data-toggle="collapse" data-target="#collapse_{{$folder}}" role="button" aria-expanded="false" aria-controls="collapse_{{$folder}}"--}}
                        class="px-3 nav-link d-flex align-items-center small  @if ($isActive=$current_folder == $folder) active @endif">
                         <span class="title ">{{$folder}}</span>
-                        <span class="fa arrow-after ml-auto pl-2 {!! $isActive?"fa-folder-open":"fa-folder" !!}"></span>
+                        <span class="fas arrow-after ml-auto pl-2 {!! $isActive?"fa-folder-open":"fa-folder" !!}"></span>
                     </a>
                     <ul id="collapse_{{$folder}}" class="sub-menu flex-column list-unstyled collapse @if ($isActive) show @endif">
                             @foreach($folder_files as $file)

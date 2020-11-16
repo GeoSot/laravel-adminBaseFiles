@@ -9,6 +9,7 @@ return [
         'id' => 'ID',
         'key' => 'Key',
         'value' => 'Value',
+        'value_dummy' => 'Value',
         'slug' => 'Slug',
         'group' => 'Group',
         'sub_group' => 'SubGroup',
@@ -18,6 +19,7 @@ return [
         'notes' => 'Notes',
         'enabled' => 'Enabled',
         'ownerModel' => ['title' => 'Related Model'],
+        'type_to_human' => 'Friendly Value',
     ],
 
 

@@ -1,28 +1,28 @@
-<button id="return-to-top-btn" type="button" class="btn btn-info btn-sm  shadow-lg  badge-pil " data-pixels-scroll="200">
-    <i class="fa fa-angle-up fa-2x font-weight-light " aria-hidden="true"></i>
+<button id="return-to-top-btn" type="button" class="btn btn-info btn-sm  shadow-lg  font-weight-light " data-pixels-scroll="200">
+    <i class="fas fa-angle-up fa-2x  " aria-hidden="true"></i>
 </button>
 
 
 @push('scripts')
     <style data-comment="return to top button">
-    #return-to-top-btn {
-        outline: none;
-        display: none;
-        position: fixed;
-        z-index: 9999;
-        right: 15px;
-        bottom: 20px;
-    }
+        #return-to-top-btn {
+            outline: none;
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            right: 15px;
+            bottom: 20px;
+        }
 
 
-</style>
+    </style>
 @endpush
 
 @push('scripts')
     <script defer data-comment="return to top button">
 
 
-        $(function () {
+        jsHelper.jQuery.execute(($) => {
             let $link = $('#return-to-top-btn');
             $(window).scroll(function () {
                 let amountScrolled = $link.attr('data-pixels-scroll');

@@ -4,7 +4,7 @@
     $withoutClass= preg_replace('/class=".*?"/', '', $wrapAttrs);
     $isSortable=\Illuminate\Support\Arr::get($options, 'sortable', false);
     $urlBtn=\Illuminate\Support\Arr::get($options, 'urlBtn', false);
-    $isRepeatable=\Illuminate\Support\Arr::get($options, 'repeatable', false);
+    $isRepeatable=\Illuminate\Support\Arr::get($options, 'repeatable', false)
 @endphp
 @if ($showLabel && $showField)
 
@@ -25,7 +25,7 @@
                 @endif
                         @if($isSortable )
                             <div class="input-group-prepend">
-                                <span class="input-group-text sortingHandler mouse-pointer px-2"><i class="fa fa-sort"></i></span>
+                                <span class="input-group-text sortingHandler mouse-pointer px-2"><i class="fas fa-sort"></i></span>
                              </div>
                         @endif
 
@@ -34,11 +34,11 @@
                             <div class="input-group-append">
                               @if($isRepeatable)
                                     <button class="btn btn-danger ml-auto btn-sm" type="button" data-toggle="removeParent" data-target=".form-group"><i
-                                                class="fa fa-minus"></i></button>
+                                                class="fas fa-minus"></i></button>
                                 @endif
                                 @if(($urlBtn===true and !empty($options['value'])) or !empty($urlBtn))
                                     <a href="{{($urlBtn===true)?$options['value']:$urlBtn}}" target="_blank" role="button" class="btn btn-outline-secondary ">
-                                        <i class="fa fa-link"></i></a>
+                                        <i class="fas fa-link"></i></a>
                                 @endif
                         </div>
                         @endif

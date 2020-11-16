@@ -6,7 +6,7 @@
  * Time: 7:30 μμ
  */
 
-namespace GeoSot\BaseAdmin\app\Traits\Controller;
+namespace GeoSot\BaseAdmin\App\Traits\Controller;
 
 
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ trait CachesRouteParameters
     /**
      * In case of Cached Route it returns the FullLink and in opposite NULL
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return mixed
      */
@@ -25,8 +25,12 @@ trait CachesRouteParameters
     {
         $query = $request->getQueryString();
         $routeName = $request->route()->getName();
-        $saveName = 'routesParameters.' . str_replace('.', '_', $routeName);
+        $saveName = 'routesParameters.'.str_replace('.', '_', $routeName);
 
+        if ($request->has('export')) {
+            session()->forget($saveName);
+            return null;
+        }
         if (empty($query) and session()->has($saveName)) {
             return route($routeName, session()->pull($saveName));
         }
@@ -35,7 +39,6 @@ trait CachesRouteParameters
         }
         if ($request->has('clean-queries')) {
             session()->forget($saveName);
-
             return route($routeName);
         }
 

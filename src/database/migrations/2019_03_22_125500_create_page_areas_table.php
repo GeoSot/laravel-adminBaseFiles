@@ -16,15 +16,15 @@ class CreatePageAreasTable extends Migration
     {
         Schema::create('page_areas', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('slug')->unique();
             $table->string('css_class')->nullable();
             $table->string('background_color')->nullable();
             $table->text('notes')->nullable();
             $table->unsignedInteger('order')->nullable();
 
-            $table->string('title')->nullable();
-            $table->string('sub_title')->nullable();
+            $table->text('title')->nullable();
+            $table->text('sub_title')->nullable();
 
 
             //--Defaults
@@ -33,9 +33,9 @@ class CreatePageAreasTable extends Migration
             //$table->softDeletes();
 
             //--Foreign keys
-            $table->unsignedBigInteger('page_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('page_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('modified_by')->nullable();
 
             //--Foreign keys RULEs
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('set null');

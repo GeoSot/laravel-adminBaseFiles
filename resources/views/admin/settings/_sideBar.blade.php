@@ -11,7 +11,7 @@
                          aria-controls="collapse_settings_{{$groupName}}"
                          class="px-3  nav-link  d-flex align-items-center">
                           <span class="title ">{{ (empty($groupName) ?? is_null($groupName)) ? 'Uncategorised':ucfirst($groupName) }}</span> <span
-                                  class="fa arrow-after ml-auto pl-2 fa-angle-left"></span>
+                                  class="fas arrow-after ml-auto pl-2 fa-angle-left"></span>
                       </a>
                       <ul id="collapse_settings_{{$groupName}}"
                           class="sub-menu  flex-column list-unstyled  collapse @if($groupIsOpen=(\Illuminate\Support\Arr::has($requestParams,'group') and \Illuminate\Support\Arr::get($requestParams,'group')==$groupName)) show @endif ">
@@ -19,7 +19,7 @@
                               <li class="pl-3 nav-item @if($groupIsOpen and \Illuminate\Support\Arr::get($requestParams,'group')==$groupName and \Illuminate\Support\Arr::get($requestParams,'sub_group')==$subGroupName) active @endif ">
                                   <a href="{{route($viewVals->get('baseRoute').'.index',['extra_filters'=>['group'=>$groupName,'sub_group'=>$subGroupName]])}}"
                                      class="nav-link px-3 inner-level-link d-flex align-items-center">
-                                      <i class="fa fa-angle-double-right mr-2"></i>
+                                      <i class="fas fa-angle-double-right mr-2"></i>
                                       <span class="title">{{(empty($subGroupName) ?? is_null($subGroupName)) ? 'Uncategorised':ucfirst($subGroupName)}}</span>
                                   </a>
                               </li>

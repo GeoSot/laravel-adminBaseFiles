@@ -2,7 +2,9 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Pages;
 
+use App\Models\Media\Medium;
 use App\Models\Pages\PageBlock;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -49,14 +51,15 @@ class PageBlockController extends BaseAdminController
     protected function filters()
     {
         return [
-            'pageArea.slug' => ['type' => 'multiSelect'],
-            'has_multiple_images' => ['type' => 'boolean'],
+            Filter::boolean('has_multiple_images'),
+            Filter::selectMulti('pageArea.slug'),
         ];
     }
 
     protected function afterSave(Request &$request, $model)
     {
-        $model->syncPictures($request);
+        /* @var PageBlock $model */
+        $model->syncRequestMedia($request, false, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
 
 }

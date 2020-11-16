@@ -50,5 +50,5 @@ return [
         'contactAssigned' => 'Assigned Contact',
         'roles' => ['name' => 'Roles', 'display_name' => 'Roles'],
     ],
-    'formTitles' => ['contactDetails' => 'Contact Details']
+    'formTitles' => ['contactDetails' => 'Contact Details'],
 ];

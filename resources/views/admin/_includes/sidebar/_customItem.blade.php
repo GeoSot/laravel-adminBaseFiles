@@ -10,14 +10,14 @@
            $hasInnerMenus=Arr::has($node, 'menus') ;
             //Gather All Permissions In Order To Find if User Can se the Item
            //**************
-           $canSeeMenu=auth()->user()->can($parentPermission);
+           $canSeeMenu=auth()->user()->isAbleTo($parentPermission);
           if($hasInnerMenus){
                $children= array_keys( $node['menus'] );
 
                $childPermissions= array_map(function ($child) use ($parentRoute) {
                    return 'admin.index-'.$child;
                }, $children);
-              $canSeeMenu= auth()->user()->can(array_merge([$parentPermission], $childPermissions));
+              $canSeeMenu= auth()->user()->isAbleTo(array_merge([$parentPermission], $childPermissions));
           }
          //**************
 
@@ -43,7 +43,7 @@
                       if ($route and Route::has('admin.'.$route)) {
                           $item['url'] = route('admin.' . $route);
                       }
-                      $item['trans'] = trans_with_fallback('admin/' . Arr::get($item,'trans','no_translation'));
+                      $item['trans'] = \GeoSot\BaseAdmin\Helpers\Base::transWithFallback('admin/' . Arr::get($item,'trans','no_translation'));
 
                       return $item;
                   })->filter(function ($item) {
@@ -64,16 +64,16 @@
                 <i class=" {{ Arr::get($icon,'class')}}  mr-2 pt-1 align-self-start"
                    style=" {{ Arr::get($icon,'style')}}"></i>
             @endisset
-            <span class="title "> {{trans_with_fallback("admin/".Arr::get($node,'trans','no_translation'))}}</span>
+            <span class="title "> {{ \GeoSot\BaseAdmin\Helpers\Base::transWithFallback("admin/".Arr::get($node,'trans','no_translation'))}}</span>
             @if($hasInnerMenus)
-                <span class="fa arrow-after ml-auto pl-2 fa-angle-left"></span>
+                <span class="fas arrow-after ml-auto pl-2 fa-angle-left"></span>
             @endif
         </a>
         @if($hasInnerMenus)
 
             <ul class="sub-menu  flex-column list-unstyled  collapse @if($activeParent) show   @endif " id="collapse_{{$parentPlural}}">
                 @foreach($node['menus'] as $subMenuKey=>$subMenu)
-                    @php($canSeeSubMenu=($subMenuKey === $parentRoute) ? $canSeeMenu : auth()->user()->can('admin.index-'.$subMenuKey))
+                    @php($canSeeSubMenu=($subMenuKey === $parentRoute) ? $canSeeMenu : auth()->user()->isAbleTo('admin.index-'.$subMenuKey))
                     @if(config('baseAdmin.main.permissionsCheckOnSideBar',true)? $canSeeSubMenu :true )
                         @include($packageVariables->get('blades').'admin._includes.sidebar._customSubItem')
                     @endif

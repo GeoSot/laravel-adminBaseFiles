@@ -8,7 +8,7 @@ trait HasAllowedActions
 
     protected $allowedActionsOnIndex = ['create', 'edit', 'enable', 'disable', 'delete', 'forceDelete', 'restore'];
     protected $allowedActionsOnCreate = ['save', 'saveAndClose', 'saveAndNew'];
-    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy'];
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy', 'delete'];
 
 
     /**

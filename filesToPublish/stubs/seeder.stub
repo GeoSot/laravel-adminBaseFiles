@@ -1,0 +1,38 @@
+<?php
+
+namespace Database\Seeders;
+
+use GeoSot\BaseAdmin\Database\Seeders\BaseSeeder;
+use Illuminate\Support\Arr;
+
+class {{ class }} extends BaseSeeder
+{
+    protected $class = YOUR_MODEL::class;
+
+    /**
+     * Run the database seeders.
+     */
+    public function seedData()
+    {
+        $static = new $this->class();
+
+        foreach ($this->data() as $index => $userData) {
+
+            $user = $static::create(Arr::except($userData, 'roles'));
+            $user->attachRoles($userData['roles']);
+            $this->creatingDataMsg($userData['first_name'] . ' ' . $userData['last_name']);
+        }
+
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function data()
+    {
+        return [
+
+        ];
+    }
+}

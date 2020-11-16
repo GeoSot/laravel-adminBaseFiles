@@ -9,6 +9,7 @@
 namespace GeoSot\BaseAdmin\Services;
 
 
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -23,19 +24,19 @@ class Settings
 {
 
     /**
-     * config
-     *
-     * @var array
+     * @var bool
      */
-
     protected $cacheIsEnabled;
     protected $cachedTime;
+    /**
+     * @var string|Setting
+     */
     protected $settingsModel;
 
 
     public function __construct()
     {
-        $this->settingsModel = config('baseAdmin.config.models.setting');
+        $this->settingsModel = Setting::class;
         $this->cacheIsEnabled = config('baseAdmin.config.cacheSettings.enable', false);
         $this->cachedTime = Carbon::now()->addMinutes(config('baseAdmin.config.cacheSettings.time', 15));
     }
@@ -84,7 +85,7 @@ class Settings
      * @param  string  $type
      *
      * @param  Model|null  $relatedModel
-     * @return boolean
+     * @return void
      */
     public function set(string $key, $value, $type, Model $relatedModel = null)
     {

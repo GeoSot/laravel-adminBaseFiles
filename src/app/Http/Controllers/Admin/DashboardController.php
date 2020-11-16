@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-
 class DashboardController extends Controller
 {
     public function index()
@@ -20,14 +19,8 @@ class DashboardController extends Controller
             return;
         }
 
-        //
-        //        $oClient = new Client(config('imap.accounts.default'));
-        //        $folder  = $oClient->getFolder(config('mail.tickets.mailFolders.inbox'));
-        //       dump($folder->getMessages());
-        //
 
         //CleanNotificationsTable::dispatch()
-        //  GetNewEmailsFromServer::dispatch();
         // User::first()->notify(new TicketNewMessageCustomer(Ticket::first(), 'newTicketToCustomer'));
     }
 

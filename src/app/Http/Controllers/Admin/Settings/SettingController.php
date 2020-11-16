@@ -3,24 +3,26 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
 
+use App\Models\Media\Medium;
 use App\Models\Setting;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class SettingController extends BaseAdminController
 {
-
     protected $_class = Setting::class;
 
     //OVERRIDES
-    protected $allowedActionsOnIndex = ['create', 'edit'];
+    protected $allowedActionsOnIndex = ['create', 'edit', 'delete', 'forceDelete', 'restore'];
     protected $allowedActionsOnCreate = ['save',];
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew', 'makeNewCopy'];
 
 
-    public function afterFilteringIndex(Request &$request, Collection &$params, &$query, &$extraOptions)
+    public function afterFilteringIndex(Request &$request, Collection &$params, Builder &$query, &$extraOptions)
     {
         if (empty($request->query())) {
             $query->whereRaw('1 = 0');
@@ -78,12 +80,28 @@ class SettingController extends BaseAdminController
         return $this->genericUpdate($request, $setting);
     }
 
+    protected function beforeUpdate(Request &$request, $model)
+    {
+
+        /* @var Setting $model */
+        if ($request->input('type') === Medium::TYPE_IMAGE) {
+            $result = $model->syncRequestMedia($request, true, 'value_dummy');
+            $request->merge(['value' => optional($result)->getKey()]);
+        }
+        if ($request->input('type') === Medium::class) {
+            $result = $model->syncRequestMedia($request, true, 'value_dummy');
+            $request->merge(['value' => optional($result)->getKey()]);
+        }
+
+    }
+
+
     protected function listFields()//Can be omitted
     {
         $neFields = [
             'linkable' => ['key'],
-            'listable' => ['key', 'value', 'type', 'ownerModel.title', 'id'],
-            'searchable' => [],
+            'listable' => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
+            'searchable' => ['key', 'group',],
             'sortable' => ['key'],
             'orderBy' => ['column' => 'key', 'sort' => 'desc'],
         ];
@@ -94,8 +112,8 @@ class SettingController extends BaseAdminController
     protected function filters()//Can be omitted
     {
         return [
-            'group' => ['type' => 'select'],
-            'sub_group' => ['type' => 'multiSelect'],
+            Filter::select('group'),
+            Filter::selectMulti('sub_group'),
         ];
     }
 

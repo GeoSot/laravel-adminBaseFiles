@@ -110,7 +110,7 @@ abstract class BaseAdminForm extends BaseForm
 
             $subForm->add($setting->key, 'static', [
                 'label' => false,
-                'value' => $setting->getDashBoardLink($setting->key, true, ['class' => 'mr-2 d-block']).$setting->value_parsed_to_human,
+                'value' => $setting->frontConfigs->getAdminLink($setting->key, true, ['class' => 'mr-2 d-block']).$setting->value_parsed_to_human,
             ]);
         }
 

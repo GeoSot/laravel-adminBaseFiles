@@ -66,6 +66,13 @@ return [
                 'errorTitle' => 'Error',
                 'errorMsg' => 'Record cannot be restored|Records cannot be restored',
             ],
+            'restoreClear' => [
+                'deny' => 'Action is denied',
+                'successTitle' => 'Success',
+                'successMsg' => 'Record revisions history was deleted',
+                'errorTitle' => 'Error',
+                'errorMsg' => 'History cannot be cleared',
+            ],
             'forceDelete' => [
                 'deny' => 'Action is denied',
                 'successTitle' => 'Success',
@@ -78,6 +85,7 @@ return [
     'button' => [
         'cancel' => 'Cancel',
         'change' => 'Change',
+        'close' => 'Close',
         'clearFilters' => 'Clear filters',
         'clearExtraFilters' => 'Clear extra filters',
         'create' => 'Create',
@@ -90,6 +98,8 @@ return [
         'permDelete' => 'Delete Permanently',
         'remove' => 'Remove',
         'restore' => 'Restore',
+        'revisions' => 'History',
+        'clearHistory' => 'Clear History',
         'save' => 'Save',
         'saveAndClose' => 'Save & Close',
         'saveAndNew' => 'Save & New',
@@ -109,6 +119,7 @@ return [
         'statusEnabled' => 'Enabled',
         'statusDisabled' => 'Disabled',
         'cleanFilters' => 'Clear Filters',
+        'export' => 'Export',
         'true' => 'True',
         'false' => 'False',
     ],
@@ -142,6 +153,16 @@ return [
         'relatedSettings' => 'Settings Related to this',
         'advancedSettings' => 'Advanced Settings',
         'formSelectPlaceHolder' => '- - Choose - -'
+    ],
+    'revisions' => [
+        'restore' => 'Restore',
+        'title' => 'Revision History',
+        'noHistoryRecords' => 'No History Records',
+        'label' => 'Field',
+        'oldValue' => 'Old value',
+        'newValue' => 'New value',
+        'user' => 'User',
+        'changedAt' => 'Changed date',
     ]
 
 

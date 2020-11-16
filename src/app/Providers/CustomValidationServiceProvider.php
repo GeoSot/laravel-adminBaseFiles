@@ -2,6 +2,8 @@
 
 namespace GeoSot\BaseAdmin\App\Providers;
 
+use Collective\Html\FormBuilder;
+use Form;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -20,16 +22,6 @@ class CustomValidationServiceProvider extends ServiceProvider
         foreach ($method_names as $class) {
             $this->$class();
         }
-        /* @var \Form $form */
-        $form = $this->app['form'];
-        $form->macro('customLabel', function ($name, $value, $options = []) use ($form) {
-            $escape = !Arr::get($options, 'raw', true);
-            if (isset($options['for']) && $for = $options['for']) {
-                unset($options['for']);
-                return $form->label($for, $value, $options, $escape);
-            }
-            return $form->label($name, $value, $options, $escape);
-        });
     }
 
     /**
@@ -60,29 +52,19 @@ class CustomValidationServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     *
-     * Example    'current_password' => 'required|samePassword:' . $user->getAuthPassword(),
-     */
-    public function customRule_samePassword()
-    {
-        $name = 'samePassword';
-        Validator::extend($name, function ($attribute, $value, $parameters, $validator) {
-            return Hash::check($value, Arr::get($parameters, 0));
-        });
 
-        Validator::replacer($name, function ($message, $attribute, $rule, $parameters) {
-            return trans('validation.samePassword', ['attribute' => $attribute]);
+    public static function registerFormCustomRawLabel(): void
+    {
+        /* @var FormBuilder $form */
+        $form = app('form');
+        $form->macro('customLabel', function ($name, $value, $options = []) use ($form) {
+            $escape = !Arr::get($options, 'raw', true);
+            if (isset($options['for']) && $for = $options['for']) {
+                unset($options['for']);
+                return $form->label($for, $value, $options, $escape);
+            }
+            return $form->label($name, $value, $options, $escape);
         });
     }
-//Rule::unique('category_translations', 'slug')
-//->where(function ($query) {
-////    $query->where('locale', 'ru');
-////})
-//return [
-//'name' => ['required', 'filled', 'max:255', 'min:2',
-//Rule::unique('organization_translations', 'name')
-//->whereNot('organization_id', $this->organization->id)
-//]
 
 }

@@ -14,7 +14,7 @@
             <td>
                 <div>
                     <a href="{!! route($viewVals->get('baseRoute').'.edit', $permission) !!}">
-                        <i class="fa  fa-cog fa-lg"></i>
+                        <i class="fas fa-cog fa-lg"></i>
                     </a>
 
                     <span data-placement="top" data-toggle="tooltip"
@@ -25,9 +25,9 @@
                     <td class="">
                         @if($role->name=='god' )
                             @if($role->hasPermission($permission->name) )
-                                <i class="fa fa-check text-success" aria-hidden="true"></i>
+                                <i class="fas fa-check text-success" aria-hidden="true"></i>
                             @else
-                                <i class="fa fa-times text-danger" aria-hidden="true"></i>
+                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
                             @endif
                             <input type="hidden" name="role_permissions[{{$role->id}}][]" value="{{$permission->id}}">
 

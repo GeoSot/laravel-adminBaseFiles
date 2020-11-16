@@ -4,55 +4,89 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin;
 
 
-use GeoSot\BaseAdmin\App\Forms\Admin\BasicForm;
+use Exception;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\{FieldsHelper, Filter, FiltersHelper};
 use GeoSot\BaseAdmin\App\Http\Controllers\BaseController;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
-use GeoSot\BaseAdmin\app\Traits\Controller\CachesRouteParameters;
-use GeoSot\BaseAdmin\App\Traits\Controller\FieldsHelper;
-use GeoSot\BaseAdmin\App\Traits\Controller\FiltersHelper;
-use GeoSot\BaseAdmin\App\Traits\Controller\HasActionHooks;
-use GeoSot\BaseAdmin\App\Traits\Controller\HasAllowedActions;
-use GeoSot\BaseAdmin\App\Traits\Controller\HasFields;
-use Illuminate\Contracts\View\Factory;
+use GeoSot\BaseAdmin\app\Traits\Controller\{CachesRouteParameters, HasActionHooks, HasAllowedActions, HasFields,};
+use GeoSot\BaseAdmin\app\Traits\Eloquent\IsExportable;
+use GeoSot\BaseAdmin\Helpers\Alert;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response,};
+use Illuminate\Support\{Arr, Collection, Facades\Route, Str};
 use Kris\LaravelFormBuilder\Form;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 abstract class BaseAdminController extends BaseController
 {
-    use HasFields, FieldsHelper, FiltersHelper, CachesRouteParameters, HasActionHooks, HasAllowedActions;
+    use HasFields, CachesRouteParameters, HasActionHooks, HasAllowedActions;
 
     protected $_useGenericLang = true;
     protected $_genericViewsDir = 'admin.generic';
     protected $_genericLangDir = 'admin/generic';
 
+    /**
+     * @var FieldsHelper
+     */
+    protected $fieldsHelper;
 
+    /**
+     * @var FiltersHelper
+     */
+    protected $filtersHelper;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+    }
+
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|RedirectResponse|Response|StreamedResponse
+     * @throws Exception
+     */
     public function index(Request $request)
     {
 
-        $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
+      /*  $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
         if (!is_null($redirectRoute)) {
-            return redirect($redirectRoute);
-        }
+            return redirect()->to($redirectRoute);
+        }*/
+
+        $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
+        $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
 
         $extraOptions = collect([]);
         $query = $this->_class::select();
         $params = $this->makeParams($request);
+
         $this->beforeFilteringIndex($request, $params, $extraOptions);
 
         $this->filteringIndexModel($request, $params, $query);
-        $this->applyExtraFiltersOnModel($params, $query);
+
+        $this->filtersHelper->applyExtraFiltersOnModel($query);
 
         $this->afterFilteringIndex($request, $params, $query, $extraOptions);
 
-        $records = $query->paginate($params->get('num_of_items'));
+        if ($request->input('export') === 'csv' && $this->helper->modelIsExportable()) {
+            /** @var IsExportable $model */
+            $model = $this->_hydratedModel;
+            return $model->exportToCsv($query->get());
+        }
 
-        $data = $this->variablesToView(collect($this->listFields()), 'index', ['records' => $records, 'params' => $params, 'extra_filters' => $this->getExtraFiltersData()]);
+        /** @var LengthAwarePaginator  $records */
+        $records = $query->paginate($params->get('num_of_items'));
+        $records->appends($params->toArray());
+
+        $data = $this->variablesToView(collect($this->listFields()), 'index', [
+            'records' => $records,
+            'params' => $params,
+            FiltersHelper::EXTRA_FILTERS_KEY => $this->filtersHelper->getAvailableData()
+        ]);
 
         return $this->sendProperResponse('index', $data);
     }
@@ -66,11 +100,11 @@ abstract class BaseAdminController extends BaseController
     {
 
         $params = collect([]);
-        $params->put('num_of_items', $this->getNumberOfListingItems($request));
+        $params->put('num_of_items', $this->helper->getNumberOfListingItems($request));
         $params->put('keyword', $request->input('keyword'));
         $params->put('status', $request->input('status'));
 
-        if ($this->modelHasSoftDeletes()) {
+        if ($this->helper->modelHasSoftDeletes()) {
             $params->put('trashed', $request->input('trashed', 0));
         }
 
@@ -81,8 +115,8 @@ abstract class BaseAdminController extends BaseController
         $params->put('order_by', $orderBy);
         $params->put('sort', $request->input('sort', $this->getOrderByOptions('sort', 'desc')));
 
-        //merge Filters Params  from TRAIT
-        $params = $params->put('extra_filters', $this->getExtraFiltersParams($request));
+        //merge Filters Params
+        $params = $params->put('extra_filters', $this->filtersHelper->parseParams($request));
 
         return $params;
     }
@@ -92,64 +126,48 @@ abstract class BaseAdminController extends BaseController
         if (!is_null($params->get('keyword'))) {
             $query->where(function ($query) use ($params) {
                 foreach ($this->getSearchableFields() as $field) {
-                    $fieldDt = $this->getFieldData($query, $field);
-                    if ($fieldDt->get('exists')) {
+                    $field = $this->fieldsHelper->getField($query, $field);
+                    if ($field->exists) {
 
-                        if (!$fieldDt->has('relationName')) {
-                            $query->orWhere($field, 'LIKE', '%'.$params->get('keyword').'%');
+                        if (!$field->isRelated()) {
+                            $query->orWhere($field->column, 'LIKE', '%'.$params->get('keyword').'%');
                         } else {
-                            $query->orWhereHas($fieldDt->get('relationName'), function ($q) use ($fieldDt, $params) {
-                                $q->where($fieldDt->get('column'), 'LIKE', '%'.$params->get('keyword').'%');
+                            $query->orWhereHas($field->relationName, function ($q) use ($field, $params) {
+                                $q->where($field->column, 'LIKE', '%'.$params->get('keyword').'%');
                             });
                         }
                     }
                 }
             });
         }
+
         if ($params->get('status') == "-1") {
             $query->disabled();
         }
         if ($params->get('status') == "1") {
             $query->enabled();
         }
-        if ($this->modelHasSoftDeletes()) {
+        if ($this->helper->modelHasSoftDeletes()) {
             $params->put('trashed', $request->input('trashed', 0));
             if ($params->get('trashed') == 1) {
                 $query->onlyTrashed();
             }
         }
 
-        $fieldDt = $this->getFieldData($query, $params->get('order_by'));
+        $field = $this->fieldsHelper->getField($query, $params->get('order_by'));
 
 
-        if ($fieldDt->has('relationName') and in_array($fieldDt->has('relationType'), ['HasOne'])) {
-            $query = $this->sortByRelation($query, $fieldDt, $params->get('sort'));
+        if ($field->isRelated()) {
+            $query = $this->fieldsHelper->sortByRelation($query, $field, $params->get('sort'));
 
             return;
-        }
-
-        if ($fieldDt->get('exists') and !$fieldDt->has('relationName')) {
+        } elseif ($field->exists) {
             $query->orderBy($params->get('order_by'), $params->get('sort'));
 
             return;
         }
 
-
     }
-
-
-    protected function getNumberOfListingItems(Request $request)
-    {
-        $keyName = 'num_of_items';
-        $sessionNumOfItems = session($keyName, settings('admin.generic.paginationDefaultNumOfItems', 100));
-        $numOfItems = $request->input($keyName, $sessionNumOfItems);
-        if ($numOfItems != $sessionNumOfItems) {
-            session([$keyName => $numOfItems]);
-        }
-
-        return $numOfItems;
-    }
-
 
     protected function getView(string $finalView)
     {
@@ -161,10 +179,10 @@ abstract class BaseAdminController extends BaseController
 
         $vals = array_merge([
             'action' => $action,
-            'packagePrefix' => $this->addPackagePrefix(),
+            'packagePrefix' => Base::addPackagePrefix(),
             'baseRoute' => $this->_modelRoute,
             'baseView' => $this->chooseProperViewFile($action),
-            'baseLang' => $this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir),
+            'baseLang' => Base::addPackagePrefix($this->usingLangDir()),
             'modelView' => $this->getView($action),
             'modelLang' => $this->chooseProperLangFile(),
             'modelClass' => $this->_class,
@@ -173,8 +191,10 @@ abstract class BaseAdminController extends BaseController
             'extraValues' => $extraValues,
             'options' => collect([
                 'fillable' => $this->_hydratedModel->getFillable(),
-                'modelHasSoftDeletes' => $this->modelHasSoftDeletes(),
-                'modelIsTranslatable' => $this->modelIsTranslatable(),
+                'modelHasSoftDeletes' => $this->helper->modelHasSoftDeletes(),
+                'modelIsExportable' => $this->helper->modelIsExportable(),
+                'modelIsTranslatable' => $this->helper->modelIsTranslatable(),
+                'modelIsRevisionable' => $this->helper->modelIsRevisionable(),
                 'modelTraits' => Arr::sortRecursive(array_flip(array_map(function ($i) {
                     return class_basename($i);
                 }, class_uses_recursive($this->_class)))),
@@ -196,13 +216,17 @@ abstract class BaseAdminController extends BaseController
         //In Case the model Has Parent put parent into breadcrumb
         if (count($routeSplit) > 2) {
             $baseLangRoute = Str::before($this->chooseProperLangFile(), lcfirst(class_basename($this->_class)));
-            $collection->put($baseLangRoute.Str::singular(explode('/', $baseLangRoute)[1]).'.general.menuTitle', route("$routeSplit[0].$routeSplit[1].index"));
+
+            $parentsRoute = "$routeSplit[0].$routeSplit[1].index";
+
+            $collection->put($baseLangRoute.Str::singular(explode('/', $baseLangRoute)[1]).'.general.menuTitle', Route::has($parentsRoute) ? route($parentsRoute) : '');
+
         }
 
         $collection->put($this->chooseProperLangFile('.general.menuTitle'), route("{$this->_modelRoute}.index"));
 
         if ($action !== 'index') {
-            $collection->put($this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir).'.menu.'.$action, '');
+            $collection->put(Base::addPackagePrefix($this->usingLangDir()).'.menu.'.$action, '');
         }
 
         return $collection;
@@ -211,8 +235,7 @@ abstract class BaseAdminController extends BaseController
     public function create(Collection $extraValues = null)
     {
         if (!$this->isAllowedAction('create')) {
-            flashToastr($this->getLang('create.deny'), null, 'danger');
-
+            Alert::error($this->getLang('create.deny'))->typeToast();
             return redirect()->back();
         }
 
@@ -230,8 +253,7 @@ abstract class BaseAdminController extends BaseController
     {
 
         if (!$this->isAllowedAction('create')) {
-            flashToastr($this->getLang('create.deny'), null, 'danger');
-
+            Alert::error($this->getLang('create.deny'))->typeToast();
             return redirect()->back();
         }
         $this->beforeStore($request);
@@ -251,7 +273,7 @@ abstract class BaseAdminController extends BaseController
         $title = $this->getLang($action.'.'.$flag.'Title');
         $message = $this->getLang($action.'.'.$flag.'Msg', $results);
         if ($flag == 'success' and !$request->input('onlyJson', false)) {
-            flashToastr($message, $title, 'success');
+            Alert::success($message, $title)->typeToast();
         }
 
         return response()->json([
@@ -279,11 +301,12 @@ abstract class BaseAdminController extends BaseController
 
     public function delete(Request $request)
     {
-        if (!$this->isAllowedAction('index', ['delete'])) {
+        if (!($this->isAllowedAction('index', ['delete']) || $this->isAllowedAction('edit', ['delete']))) {
             abort(403, $this->getLang('delete.deny'));
         }
         $ids = $request->input('ids', []);
-        $results = $this->_class::whereIn('id', $ids)->each(function ($model) {
+        $results = $this->_class::whereIn('id', $ids)->each(function ($model) use ($request) {
+            $this->beforeDelete($request, $model);
             $model->delete();
         });
 
@@ -343,15 +366,14 @@ abstract class BaseAdminController extends BaseController
             return $this->store($request);
         }
         if (!$this->isAllowedAction('edit')) {
-            flashToastr($this->getLang('edit.deny'), null, 'danger');
-
+            Alert::error($this->getLang('edit.deny'))->typeToast();
             return redirect()->back();
         }
         if (!$model->allowedToHandle()) {
-            flashToastr($this->getLang('handle.deny'), null, 'danger');
-
+            Alert::error($this->getLang('handle.deny'))->typeToast();
             return redirect()->back();
         }
+
         $this->beforeUpdate($request, $model);
         $this->validate($request, $model->getRules(), $this->getModelValidationMessages());
         $model->update($request->all());
@@ -366,7 +388,7 @@ abstract class BaseAdminController extends BaseController
     protected function checksAndNotificationsAfterSave($record, Request $request, $action)
     {
         if (is_null($record)) {
-            flashToastr($this->getLang("{$action}.errorMsg"), $this->getLang("{$action}.errorTitle"), 'danger');
+            Alert::error("{$action}.errorMsg", $this->getLang("{$action}.errorTitle"))->typeToast();
 
             return back();
         }
@@ -379,21 +401,24 @@ abstract class BaseAdminController extends BaseController
         if ($request->wantsJson()) {
             return response()->json(['record' => $record, 'msg' => $msg]);
         }
-        flashToastr($msg['msg'], $msg['title'], $msg['type']);
+        Alert::success($msg['msg'], $msg['title'])->typeToast();
 
         $afterSaveVal = $request->input('after_save');
 
         if (in_array($afterSaveVal, ['back', 'save_and_close']) and $request->has('after_save_redirect_to')) {
             return redirect()->to($request->input('after_save_redirect_to'));
         }
+
+        $route = $record->frontConfigs->getRouteDir('admin');
+
         if ($afterSaveVal == 'back') {
-            return redirect()->route("{$this->_modelRoute}.index");
+            return redirect()->route("{$route}.index");
         }
         if ($afterSaveVal == 'new') {
-            return redirect()->route("{$this->_modelRoute}.create");
+            return redirect()->route("{$route}.create");
         }
 
-        return redirect()->route("{$this->_modelRoute}.edit", $record);
+        return redirect()->route("{$route}.edit", $record);
     }
 
     /**
@@ -417,7 +442,7 @@ abstract class BaseAdminController extends BaseController
 
     protected function getLang(string $langPath, $count = 1)
     {
-        return trans_choice($this->addPackagePrefix($this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir).'.messages.crud.'.$langPath, $count,
+        return trans_choice(Base::addPackagePrefix($this->usingLangDir()).'.messages.crud.'.$langPath, $count,
             ['num' => $count]);
     }
 
@@ -429,8 +454,9 @@ abstract class BaseAdminController extends BaseController
     {
         //Translation File Can Be In LangPath
         $langFile = $this->_modelsLangDir.'.general.menuTitle';
-        $this->debugMsg("Try Find Lang: {$langFile}");
-        if (trans()->has($langFile, [])) {
+        $this->helper->debugMsg("Try Find Lang: {$langFile}");
+        if (trans()->has($langFile)) {
+            $this->helper->infoMsg("Return Lang: {$langFile}");
             return $this->_modelsLangDir.$string;
         }
         /**
@@ -439,8 +465,8 @@ abstract class BaseAdminController extends BaseController
          * $file = app()->langPath().DIRECTORY_SEPARATOR.app()->getLocale().DIRECTORY_SEPARATOR.$this->_modelsLangDir.'.php';
          * */
         $langFile = $this->_modelsLangDir.$string;
-        $this->debugMsg("Return Lang: {$langFile}");
-        return $this->addPackagePrefix($langFile);
+        $this->helper->infoMsg("Return Lang: {$langFile}");
+        return Base::addPackagePrefix($langFile);
 
     }
 
@@ -458,18 +484,22 @@ abstract class BaseAdminController extends BaseController
 
         $modelView = $this->_modelsViewsDir;
         $view = $modelView.$suffix;
-        $this->debugMsg("Try Find View: {$view}");
+        $this->helper->debugMsg("Try Find View: {$view}");
         if (view()->exists($view)) {
+            $this->helper->infoMsg("Return View: {$view}");
             return $modelView;
         }
-        $view = $this->addPackagePrefix($modelView.$suffix);
-        $this->debugMsg("Try Find View: {$view}");
+        $view = Base::addPackagePrefix($view);
+        $this->helper->debugMsg("Try Find View: {$view}");
         if (view()->exists($view)) {
-            return $this->addPackagePrefix($modelView);
+            $this->helper->infoMsg("Return View: {$view}");
+            return Base::addPackagePrefix($modelView);
         }
 
-        $view = $this->addPackagePrefix($this->_genericViewsDir);
-        $this->debugMsg("Return View: {$view}");
+
+        $view = Base::addPackagePrefix($this->_genericViewsDir);
+
+        $this->helper->infoMsg("Return View: {$view}");
         return $view;
     }
 
@@ -477,39 +507,45 @@ abstract class BaseAdminController extends BaseController
     /**
      * @param  string  $action
      * @param  array  $data
-     * @return Factory|JsonResponse|View
+     * @return JsonResponse|Response
      */
     protected function sendProperResponse(string $action = 'index', array $data = [])
     {
+
         if (request()->wantsJson()) {
-            return response()->json($data);
+            return response()->json(request()->has('only_data') ? $data['viewVals'] : view($this->getView($action), $data)->render());
         }
-        return view($this->getView($action), $data);
+        return response()->view($this->getView($action), $data);
+    }
+
+
+    /**
+     * @return array|Filter[]
+     */
+    protected function filters()
+    {
+
+        /*   return [
+               Filter::boolean('propertyToSearch'),
+               Filter::hasValue('propertyToSearchIfNullOrNot'),
+               Filter::select('propertyToSearch')->values(
+                   User::enabled()->whereRoleIs('supporter')->get()->sortBy('full_name')->pluck('full_name', 'id')->toArray()
+               ),
+               Filter::selectMulti('related.propertyToSearch')->relatedKey('slug'),
+               Filter::dateTime('propertyToSearch'),
+               Filter::dateRange('propertyToSearch'),
+           ];*/
+
+        return [];
     }
 
     /**
-     * Searches For Proper Form
-     * Searches model Directory, Package Model Directory and FallBacks to Default
-     * @param  array  $options
-     * @return Form
+     * @return string
      */
-    protected function chooseProperForm(array $options): Form
+    protected function usingLangDir(): string
     {
-        $parentDir = (Str::replaceFirst('\\', '', str_replace('App\Models', '', Str::replaceLast('\\'.class_basename($this->_class), '', $this->_class))));
-        $parenName = (empty($parentDir) ? '' : $parentDir.'\\');
-        $formName = 'App\\Forms\\Admin\\'.$parenName.class_basename($this->_class).'Form';
-        $this->debugMsg("Try Find Form: {$formName}");
-        if (class_exists($formName)) {
-            return $this->form($formName, $options);
-        }
-        $formName = 'GeoSot\\BaseAdmin\\'.$formName;
-        $this->debugMsg("Try Find Form: {$formName}");
-        if (class_exists($formName)) {
-            return $this->form($formName, $options);
-        }
-        $formName = BasicForm::class;
-        $this->debugMsg("Return Form: {$formName}");
-        return $this->form($formName, $options);
+        return $this->_useGenericLang ? $this->_genericLangDir : $this->_modelsLangDir;
     }
+
 
 }

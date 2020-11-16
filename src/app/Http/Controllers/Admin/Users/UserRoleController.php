@@ -6,6 +6,7 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Users;
 use App\Models\Users\UserPermission;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -15,7 +16,6 @@ class UserRoleController extends BaseAdminController
     protected $_class = UserRole::class;
     //OVERRIDES
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
-
 
 
     public function create(Collection $extraValues = null)
@@ -57,6 +57,7 @@ class UserRoleController extends BaseAdminController
 
     public function afterSave(Request &$request, $userRole)
     {
+
         if ($userRole->name !== 'god') {
             $userRole->syncPermissions(array_filter($request->get('permissions')));
         }
@@ -72,7 +73,7 @@ class UserRoleController extends BaseAdminController
 
 
         if (count($request['ids']) and count($originalSentIds) > count($request['ids'])) {
-            flashToastr(__('admin/'.$this->_modelsLangDir.'.some_roles_where_not_deleted_cause_they_are_protected'), null, 'warning');
+            Alert::warning(__('admin/'.$this->_modelsLangDir.'.some_roles_where_not_deleted_cause_they_are_protected'))->typeToast();
         }
 
         return parent::delete($request);

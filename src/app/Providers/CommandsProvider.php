@@ -8,15 +8,10 @@ use GeoSot\BaseAdmin\App\Console\Commands\{CreateAdminBaseFromFile,
     InstallScripts\InitializeEnv,
     InstallScripts\MainCommand,
     InstallScripts\PublishAssets,
-    InstallScripts\PublishForeignConfigs,
     InstallScripts\PublishInitialFiles,
     MakeAdminController,
     MakeAdminPermissions,
-    MakeLanguage,
-    MakeModel,
-    MakeNewMigration,
-    MakeView,
-    RefreshDbMigrationsAndSeeds
+    MakeLanguage
 };
 use Illuminate\Support\ServiceProvider;
 
@@ -57,10 +52,6 @@ class CommandsProvider extends ServiceProvider
             MakeAdminController::class,
             MakeAdminPermissions::class,
             MakeLanguage::class,
-            MakeModel::class,
-            MakeNewMigration::class,
-            MakeView::class,
-            RefreshDbMigrationsAndSeeds::class,
         ]);
     }
 
@@ -70,9 +61,7 @@ class CommandsProvider extends ServiceProvider
             MainCommand::class,
             InitializeEnv::class,
             PublishInitialFiles::class,
-            PublishAssets::class,
             AddValuesToConfigFiles::class,
-            PublishForeignConfigs::class,
         ]);
     }
 

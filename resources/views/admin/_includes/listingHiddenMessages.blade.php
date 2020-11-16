@@ -6,9 +6,10 @@
         * @var Collection $viewVals
         * @var Collection $packageVariables
         */
+
     @endphp
     <div class="js-translatedWords text-hide" hidden>
-        @php($lang=$packageVariables->get('nameSpace').$viewVals->get('baseLang').'.listMessages')
+        @php($lang=$viewVals->get('baseLang').'.listMessages')
         <span id="no_record_selected"> @lang($lang.'.noRecordSelected')</span>
         <span id="no_record_selected_msg"> @lang($lang.'.noRecordSelected_msg')</span>
         <span id="confirm_delete"> @lang($lang.'.confirmDelete')</span>

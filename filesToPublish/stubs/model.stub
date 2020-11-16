@@ -1,0 +1,84 @@
+<?php
+
+namespace {{ namespace }};
+
+use GeoSot\BaseAdmin\App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class {{ class }} extends BaseModel
+{
+    use HasFactory;
+    //use Sluggable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title',
+        'notes',
+        'slug',
+
+        'enabled',
+        'user_id',
+        'modified_by',
+    ];
+
+    protected $casts = [
+        'enabled' => 'boolean',
+    ];
+
+    /*
+    protected $frontEndConfigValues = [
+        'admin' => [
+            'langDir' => '_MODEL_LANG_DIR_',
+            'viewDir' => '_MODEL_VIEWS_DIR_',
+            'route'   => '_BASE_ROUTE_',
+        ],
+    ];*/
+
+
+
+ /* protected $errorMessages = [ //Can use ":attribute"
+            'title' => ['required' => 'The title field is mandatory.']
+    ];
+ */
+
+
+    protected function rules(array $merge = [])
+    {
+        return array_merge([
+            //  'title' => "required|min:3|unique:{$this->getTable()},title" . $this->getIgnoreTextOnUpdate(),
+           // 'notes' => 'required'
+           //    'slug'      => "min:3|unique:{$this->getTable()},slug" . $this->getIgnoreTextOnUpdate(),
+        ], $merge, $this->rules);
+    }
+
+
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+   /* public function sluggable()
+    {
+        return ['slug' => ['source' => ['en.title','title']]];
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }*/
+
+        /*
+        *
+        * - - -  R E L A T I O N S H I P S  - - -
+        *
+        */
+
+
+
+    //*********  M E T H O D S  ***************
+}

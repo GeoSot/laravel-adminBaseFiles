@@ -1,11 +1,20 @@
-<link href="//cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet"/>
-
 @push('scripts')
 
-    <script async src="//cdn.quilljs.com/1.3.7/quill.min.js"></script>
-
     <script defer data-comment="wysiwyg_Editor quill">
+        let quilToolbarOptions = [
+            ['bold', 'italic', 'underline'],        // toggled buttons
+            ['blockquote', 'link'],//'code-block'
+            [{'size': ['small', false, 'large', 'huge']}, {'header': [1, 2, 3, 4, 5, 6, false]}],  // custom dropdown
 
+            // custom button values
+            [{'list': 'ordered'}, {'list': 'bullet'}],
+            // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+            [{'align': []}, {'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
+
+            [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+
+            ['clean']                                         // remove formatting button
+        ];
 
         BaseAdmin.initActiveTextEditor = function (el) {
             const _this = this;
@@ -29,11 +38,14 @@
                 return item;
             };
             this.getId = function () {
-                return _this.el.id + '_editor_' + BaseAdmin.uuid();
+                return _this.el.id + '_editor_' + jsHelper.uuid();
             };
             this.getOptions = function () {
                 let options = {
                     theme: 'snow',
+                    modules: {
+                        toolbar: quilToolbarOptions
+                    },
                 };
                 // https://codepen.io/anon/pen/rrzpGx
                 if (_this.el.readonly) {
@@ -56,7 +68,6 @@
                     _this.editor.focus();
                 });
             };
-
             _this.editor = new Quill(getWrapper(), _this.getOptions());
             BaseAdmin.textEditors.push(_this.editor);
             _this.activateEvents();
@@ -65,10 +76,16 @@
         };
         document.addEventListener("DOMContentLoaded", function (e) {
             let elements = document.querySelectorAll('textarea.withEditor');
-            for (let i = 0; i < elements.length; i++) {
-                new BaseAdmin.initActiveTextEditor(elements[i])
+            if (elements.length) {
+                window.jsHelper.loadStyle('//cdn.quilljs.com/latest/quill.snow.css')
+                window.jsHelper.loadScript('//cdn.quilljs.com/latest/quill.min.js').then(function () {
+                        for (let i = 0; i < elements.length; i++) {
+                            new BaseAdmin.initActiveTextEditor(elements[i])
+                        }
+                    })
+                }
             }
-        });
+        );
 
     </script>
 @endpush

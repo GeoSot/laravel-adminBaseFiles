@@ -14,7 +14,7 @@
 
         @if($viewVals->get('records')->count())
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-sm table-bordered ">
+                <table id="recordsList" class="table table-striped table-hover table-sm table-bordered ">
                      @include($packageVariables->get('blades').'admin._includes._listingTableHead')
                     <tbody>
 

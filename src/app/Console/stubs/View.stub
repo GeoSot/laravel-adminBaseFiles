@@ -1,5 +1,0 @@
-@extends('DummyLayout')
-
-@section('content')
-    DummyText
-@endsection

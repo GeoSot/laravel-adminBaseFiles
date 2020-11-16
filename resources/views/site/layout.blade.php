@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{str_replace('_', '-', app()->getLocale())}}" xml:lang="{{config('app.locale')}}" itemscope itemtype="http://schema.org/WebSite"
+      data-layout="site">
 <head>
-    @includeIf('site._includes.headMetas')
-    <link href="{{baseAdmin_assets("css/site/app.css")}}" rel="stylesheet"/>
-    @foreach(config('baseAdmin.config.site.extraJs') as $file)
+    @include($packageVariables->get('blades').'_subBlades.headMetas')
+    @if(config('baseAdmin.config.site.keepBaseScripts'))
+        <link href="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("css/app.css")}}" rel="stylesheet"/>
+    @endif
+    @foreach(config('baseAdmin.config.site.styles') as $file)
         <link href="{{mix($file)}}" rel="stylesheet"/>
     @endforeach
     @stack('styles')
@@ -14,11 +17,9 @@
 <div class=" d-flex flex-column justify-content-between min-vh-100">
     @includeIf($packageVariables->get('blades').'site._includes.header')
     <div id="app" class="mainWrapper  d-flex flex-column h-100  mt-4">
-        @hasSection ('documentTitle')
-            <div class="page-header   container-fluid">
-                <div class=" ">
-                    <h1 class="" itemscope itemprop="mainEntity" itemtype="http://schema.org/Thing">@yield('documentTitle')</h1>
-                </div>
+        @hasSection('documentTitle')
+            <div class="page-header container">
+                <h1 class="text-muted" itemscope itemprop="mainEntity" itemtype="http://schema.org/Thing">@yield('documentTitle')</h1>
             </div>
         @endif
         <div id="topBar" class="container">
@@ -26,7 +27,7 @@
             @stack('topBar')
         </div>
         <div class="notificationsContainer container">
-            @include($packageVariables->get('blades').'_subBlades.notifications')
+            @include($packageVariables->get('blades').'_subBlades.notifications.index')
         </div>
         <main id="mainContent-wrapper" class="{{$containerClass??'container'}}  pt-3 d-flex flex-fill flex-column h-100" role="main" itemprop="mainContentOfPage"
               itemscope="itemscope"
@@ -39,13 +40,19 @@
         @includeIf($packageVariables->get('blades').'site._includes.footer')
     </section>
 </div>
+<div id="js-notifications" class="fixed-bottom mb-5 mr-2 w-100" aria-live="polite" aria-atomic="true" style="left: auto; max-width: 270px; ">
+    @stack('toasts')
+</div>
+
 <div class="modals-area">
     @stack('modals')
 </div>
 
 <span class="js-scripts">
-     <script async src="{{baseAdmin_assets("js/site/app.js")}}"></script>
-    @foreach(config('baseAdmin.config.site.extraJs') as $file)
+     @if(config('baseAdmin.config.site.keepBaseScripts'))
+        <script src="{{\GeoSot\BaseAdmin\Helpers\Base::adminAssets("js/app.js")}}"></script>
+    @endif
+    @foreach(config('baseAdmin.config.site.scripts') as $file)
         <script defer src="{{mix($file)}}"></script>
     @endforeach
 

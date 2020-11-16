@@ -3,14 +3,17 @@
 namespace GeoSot\BaseAdmin;
 
 
-use Carbon\Carbon;
+use GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
-use GeoSot\BaseAdmin\App\Providers\RouteServiceProvider;
-use GeoSot\BaseAdmin\App\Providers\SidebarServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\FortifyViewsServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\TusServiceProvider;
+use GeoSot\BaseAdmin\Helpers\Alert;
+use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\Services\Settings;
+use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Blade;
 
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -41,7 +44,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishResources();
         $this->registerServices();
         view()->share('packageVariables', $this->getPackageVariables());
-        $this->setSystemDefaults();
 
     }
 
@@ -52,9 +54,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
+
         $this->registerProviders();
-        $this->mergeConfigFrom(__DIR__."/../config/main.php", $this->package.'.main');
-        $this->mergeConfigFrom(__DIR__."/../config/config.php", $this->package.'.config');
+        $configDir = Paths::rootDir('config');
+        $this->mergeConfigFrom($configDir.'main.php', $this->package.'.main');
+        $this->mergeConfigFrom($configDir.'config.php', $this->package.'.config');
 
     }
 
@@ -64,9 +68,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     private function loadResources()
     {
         //  $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package);
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', $this->package);
+        $this->loadMigrationsFrom(Paths::srcDir('Database/Migrations'));
+        $this->loadViewsFrom(Paths::rootDir('resources/views'), $this->package);
+        $this->loadTranslationsFrom(Paths::rootDir('resources/lang'), $this->package);
     }
 
     /**
@@ -83,13 +87,27 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             __DIR__.'/../resources/views/' => resource_path("views/vendor/{$this->vendor}/{$this->package}"),//resource_path("views/vendor/{$this->vendor}/{$this->package}"),
         ], 'views');
 
+
         $this->publishes([
-            __DIR__.'/database/migrations/' => database_path('migrations')
+            __DIR__.'/Database/Migrations/' => database_path('migrations'),
         ], 'migrations');
         $this->publishes([
 //            __DIR__ . '/../resources/lang/' => resource_path("lang"),
             __DIR__.'/../resources/lang/' => resource_path("lang/vendor/{$this->package}"),
         ], 'translations');
+
+
+        $this->publishes([
+            __DIR__.'/../assets' => public_path("vendor/{$this->package}"),
+        ], 'baseAdmin-assets');
+
+
+        Blade::component("{$this->package}::_subBlades._components.modal", 'baseAdmin-modal');
+
+//                $this->publishes([
+//                    __DIR__.'/../filesToPublish' => base_path(),
+//                ], 'baseAdmin-mainFiles');
+
     }
 
 
@@ -114,10 +132,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $providers = [
             CustomValidationServiceProvider::class,
-            RouteServiceProvider::class,
+            BaseAdminRouteServiceProvider::class,
             CommandsProvider::class,
+            FortifyViewsServiceProvider::class,
+            TusServiceProvider::class
 //            ModuleServiceProvider::class,
-            CommandsProvider::class,
         ];
 
         array_map(function ($provider) {
@@ -134,20 +153,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton('settings', function ($app) {
             return new Settings();
         });
+        $this->app->bind('alert', function (Container $app) {
+            return new Alert($app->make('session'));
+        });
 
-    }
+        $this->app->alias('Settings', Facades\Settings::class);
 
-    /**
-     *
-     */
-    protected function setSystemDefaults(): void
-    {
-        Schema::defaultStringLength(191);
-
-        Carbon::setLocale(config('app.locale'));
-//        Carbon::serializeUsing(function ($carbon) {
-//            return $carbon->format('d/m/y H:i:s');
-//        });
     }
 
 }

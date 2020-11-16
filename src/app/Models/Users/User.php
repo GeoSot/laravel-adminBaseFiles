@@ -6,25 +6,32 @@ namespace GeoSot\BaseAdmin\App\Models\Users;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\EnabledDisabled;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasImages;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Lab404\Impersonate\Models\Impersonate;
-use Laravel\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Lab404\Impersonate\Models\Impersonate;
 use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Passport\HasApiTokens;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
 
-    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasImages, ModifiedBy, LaratrustUserTrait, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck,Impersonate;
+    use Notifiable, HasApiTokens, SoftDeletes, EnabledDisabled, HasMedia, ModifiedBy, LaratrustUserTrait, HasRulesOnModel;
+    use HasFrontEndConfigs, HasAllowedToHandleCheck, Impersonate, HasFactory, IsExportable, RevisionableTrait;
 
+    protected $historyLimit = 50;
+    protected $revisionCleanup = true;
+    protected $dontKeepRevisionOf = ['modified_by'];
     /**
      * The attributes that are mass assignable.
      *
@@ -105,11 +112,11 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     /**
      * Validation RULES
      *
-     * @param  array $merge
+     * @param  array  $merge
      *
      * @return array
      */
-    public function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
         if (is_null($this->id) or !is_null(request()->input('password'))) {
             $merge = array_merge($merge, [
@@ -123,7 +130,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         }
 
         return array_merge([
-            'email' => ['required', 'email', 'max:190', "unique:{$this->getTable()},email" . $this->getIgnoreTextOnUpdate(),],
+            'email' => ['required', 'email', 'max:190', "unique:{$this->getTable()},email".$this->getIgnoreTextOnUpdate(),],
             //            "images.*"      => "required|nullable|mimes:jpg,jpeg,bmp,png|max:100",
             'first_name' => 'required|min:3',
             'last_name' => 'required|min:3',
@@ -132,7 +139,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
 
@@ -143,7 +150,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     public function canImpersonate()
     {
-        return $this->can('admin.*') and !app('impersonate')->isImpersonating();
+        return $this->isAbleTo('admin.*') and !app('impersonate')->isImpersonating();
     }
+
 
 }

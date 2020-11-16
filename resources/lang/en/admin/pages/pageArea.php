@@ -4,6 +4,8 @@ return [
         'menuTitle' => 'Content Areas',
         'singular' => 'Content Area',
         'plural' => 'Content Areas',
+        'createNewBlock' => 'Create new Page Block',
+        'pageLink' => 'Parent Page',
     ],
     'fields' => [
         'id' => 'ID',

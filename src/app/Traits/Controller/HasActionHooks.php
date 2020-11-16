@@ -3,6 +3,8 @@
 
 namespace GeoSot\BaseAdmin\App\Traits\Controller;
 
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -15,7 +17,7 @@ trait HasActionHooks
         //
     }
 
-    protected function afterFilteringIndex(Request &$request, Collection &$params, &$query, &$extraOptions)
+    protected function afterFilteringIndex(Request &$request, Collection &$params, Builder &$query, &$extraOptions)
     {
         //
     }
@@ -44,5 +46,12 @@ trait HasActionHooks
     {
         //
     }
+
+
+    protected function beforeDelete(Request &$request, $model)
+    {
+        //
+    }
+
 
 }

@@ -6,13 +6,43 @@
  * Time: 4:10 μμ
  */
 
+namespace GeoSot\BaseAdmin\Helpers;
 
-if (!function_exists('minutesToHuman')) {
+use GeoSot\BaseAdmin\Services\Settings;
+use Illuminate\Support\Facades\Route;
+
+
+class Base
+{
+    /**
+     * @param  string  $path
+     * @return string
+     */
+    public static function adminAssets(string $path)
+    {
+        $path = '/'.trim($path, '/');
+
+        $assetsPath = asset(str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath')));
+
+
+        $manifest = Paths::rootDir('assets').'mix-manifest.json';
+        if (file_exists($manifest)) {
+            $manifestData = json_decode(file_get_contents($manifest), true);
+
+            if (isset($manifestData[$path])) {
+                return $assetsPath.$manifestData[$path];
+            }
+
+        }
+
+        return $assetsPath.$path;
+    }
+
     /**
      * @param $arg
      * @return string
      */
-    function minutesToHuman($arg)
+    public static function minutesToHuman($arg)
     {
         if (is_null($arg)) {
             return '';
@@ -26,17 +56,13 @@ if (!function_exists('minutesToHuman')) {
         return ($isNegative ? '-' : '').$hoursFormatted.':'.$minutes;
     }
 
-}
-
-
-if (!function_exists('getCachedRouteAsLink')) {
     /**
      * @param $routeName
      * @return string
      */
-    function getCachedRouteAsLink($routeName)
+    public static function getCachedRouteAsLink($routeName)
     {
-        if (is_null($routeName)) {
+        if (is_null($routeName) or !Route::has($routeName)) {
             return '#';
         }
         $saveName = 'routesParameters.'.str_replace('.', '_', $routeName);
@@ -45,59 +71,40 @@ if (!function_exists('getCachedRouteAsLink')) {
         return session()->has($saveName) ? route($routeName, session()->get($saveName)) : route($routeName);
     }
 
-}
-
-
-if (!function_exists('settings')) {
     /**
-     * @param  null  $key
-     * @param  null  $default
-     * @return \GeoSot\BaseAdmin\Services\Settings|\Illuminate\Contracts\Foundation\Application|mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * Translate the given message with a fallback string if none exists.
+     *
+     * @param  string  $key
+     * @param  array  $replace
+     * @param  string|null  $locale
+     * @return string
      */
-    function settings($key = null, $default = null)
+    public static function transWithFallback(string $key, array $replace = [], string $locale = null)
     {
+        $translation = __($key, $replace, $locale);
+        return ($key === $translation) ? __(static::addPackagePrefix($key), $replace, $locale) : $translation;
+    }
+
+    public static function settings($key = null, $default = null)
+    {
+        /** @var Settings $settings */
         $settings = app('settings');
         if (is_null($key)) {
             return $settings;
         }
 
         return $settings->get($key, $default);
-
     }
 
-}
-
-if (!function_exists('baseAdmin_assets')) {
     /**
-     * @param  string  $path
-     * @param  null  $secure
-     * @return \Illuminate\Support\HtmlString|string
-     * @throws Exception
-     */
-    function baseAdmin_assets(string $path, $secure = null)
-    {
-        if (Str::endsWith($path, '/')) {
-            $path = Str::replaceLast('/', '', $path);
-        }
-        $assetsPath = str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath'));
-
-        return mix($path, $assetsPath);
-    }
-}
-
-if (!function_exists('trans_with_fallback')) {
-    /**
-     * Translate the given message with a fallback string if none exists.
-     *
-     * @param  string  $key
-     * @param  array  $replace
-     * @param  string  $locale
+     * @param  string  $string
      * @return string
      */
-    function trans_with_fallback($key, $replace = [], $locale = null)
+    public static function addPackagePrefix(string $string = ''): string
     {
-        $translation = __($key, $replace, $locale);
-        return ($key === $translation) ? __("baseAdmin::{$key}", $replace, $locale) : $translation;
+        return 'baseAdmin::'.$string;
     }
+
 }
+
+

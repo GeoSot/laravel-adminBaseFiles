@@ -1,0 +1,20 @@
+// Bootstrap
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/mixins';
+@import 'variables';
+@import '~bootstrap/scss/bootstrap';
+//Packages
+$fa-font-path: '../fonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~select2/src/scss/core';
+@import '~select2-theme-bootstrap4/src/select2-bootstrap';
+@import '~bootstrap-daterangepicker/daterangepicker.css';
+@import '~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css';
+@import '~sweetalert2/src/sweetalert2.scss';
+//Our Css
+@import "../_partials/richTextEditors";
+@import "../_partials/standards";
+

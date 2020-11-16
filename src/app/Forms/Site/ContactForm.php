@@ -4,7 +4,7 @@ namespace GeoSot\BaseAdmin\App\Forms\Site;
 
 class ContactForm extends BaseFrontForm
 {
-//    protected $languageName='site/contact';
+
     public function getFormFields()
     {
         $this->setFormOptions($this->contactFormOptions());

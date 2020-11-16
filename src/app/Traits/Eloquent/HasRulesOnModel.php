@@ -11,44 +11,38 @@ trait HasRulesOnModel
 
     protected $rules = [];
     protected $errorMessages = [];
-    protected $translationRules = [];
-    protected $translationErrorMessages = [];
 
     /**
-     * @param array $mergeRules
-     * @param array $mergeTranslationRules
+     * @param  array  $mergeRules
      *
      * @return array
      */
-    public function getRules(array $mergeRules = [], array $mergeTranslationRules = [])
+    final public function getRules(array $mergeRules = [])
     {
-        return array_merge($this->rules($mergeRules), $this->prepareTranslations($this->translationRules($mergeTranslationRules)));
+        return $this->prepareTranslatedRulesOrMessages($this->rules($mergeRules));
     }
 
     /**
-     * @param array $mergeMessages
-     * @param array $mergeTranslationMessages
-     *
+     * @param  array  $mergeMessages  *
      * @return array
      */
-    public function getErrorMessages(array $mergeMessages = [], array $mergeTranslationMessages = [])
+    final public function getErrorMessages(array $mergeMessages = [])
     {
-        return array_merge($this->errorMessages($mergeMessages), $this->prepareTranslations($this->translationErrorMessages($mergeTranslationMessages)));
+        return $this->prepareTranslatedRulesOrMessages($this->errorMessages($mergeMessages));
     }
 
     /**
-     * @param string|null $langPrefix
-     * @param array       $mergeMessages
-     * @param array       $mergeTranslationMessages
+     * @param  string|null  $langPrefix
+     * @param  array  $mergeMessages
      *
      * @return array
      */
-    public function getErrorMessagesTranslated(string $langPrefix = null, array $mergeMessages = [], array $mergeTranslationMessages = [])
+    final public function getErrorMessagesTranslated(string $langPrefix = null, array $mergeMessages = [])
     {
-        $messages = $this->getErrorMessages($mergeMessages, $mergeTranslationMessages);
+        $messages = $this->getErrorMessages($mergeMessages);
 
         $array = Arr::dot(array_map(function ($text) use ($langPrefix) {
-            return __($langPrefix . $text);
+            return __($langPrefix.$text);
         }, Arr::dot($messages)));
 
         return $array;
@@ -58,11 +52,11 @@ trait HasRulesOnModel
     /**
      * Get rule by field name
      *
-     * @param string $field
+     * @param  string  $field
      *
      * @return array
      */
-    public function getFieldRule(string $field)
+    final public function getFieldRule(string $field)
     {
         return Arr::get($this->getRules(), $this->fieldNameToDot($field), []);
     }
@@ -71,11 +65,11 @@ trait HasRulesOnModel
     /**
      * Get rule by field name
      *
-     * @param string $field
+     * @param  string  $field
      *
      * @return array
      */
-    public function getFieldErrorMessages(string $field)
+    final public function getFieldErrorMessages(string $field)
     {
         $messages = $this->getErrorMessages();
         $fieldName = $this->fieldNameToDot($field);
@@ -89,7 +83,7 @@ trait HasRulesOnModel
      *
      * @return array
      */
-    public function getFieldRuleWithErrors(string $field)
+    final public function getFieldRuleWithErrors(string $field)
     {
         return array_merge(['rules' => $this->getFieldRule($field)], ['error_messages' => $this->getFieldErrorMessages($field)]);
     }
@@ -97,32 +91,42 @@ trait HasRulesOnModel
     /**
      * Validation RULES
      *
-     * @param  string $attr
+     * @param  string  $attr
      *
      * @return string
      */
-    protected function getIgnoreTextOnUpdate(string $attr = 'id')
+    final protected function getIgnoreTextOnUpdate(string $attr = 'id')
     {
-        return (is_null($this->{$attr}) ? '' : ',' . $this->{$attr});
+        return (is_null($this->{$attr}) ? '' : ','.$this->{$attr});
     }
 
 
-    private function prepareTranslations(array $arrayValues)
+    private function prepareTranslatedRulesOrMessages(array $arrayValues)
     {
-        $values = [];
-        foreach ($this->requiredLocales() as $localeKey => $locale) {
-            foreach ($arrayValues as $attribute => $value) {
-                $values["{$attribute}.{$localeKey}"] = $value;
-            }
+        if (!$this->modelIsTranslatable()) {
+            return $arrayValues;
         }
 
-        return $values;
+        foreach ($this->getTranslatableAttributes() as $attribute) {
+            if (in_array($attribute, array_keys($arrayValues))) {
+                $rule = $arrayValues[$attribute];
+
+                foreach ($this->requiredLocales() as $localeKey => $locale) {
+                    $arrayValues["{$attribute}.{$localeKey}"] = $rule;
+                }
+                Arr::forget($arrayValues, $attribute);
+            }
+
+        }
+
+        return $arrayValues;
     }
+
 
     /**
      * @return array
      */
-    protected function requiredLocales()
+    final protected function requiredLocales()
     {
         return LaravelLocalization::getSupportedLocales();
     }
@@ -131,7 +135,7 @@ trait HasRulesOnModel
     /**
      * Validation RULES
      *
-     * @param  array $merge
+     * @param  array  $merge
      *
      * @return array
      */
@@ -140,24 +144,10 @@ trait HasRulesOnModel
         return array_merge($this->rules, $merge);
     }
 
-
-    /**
-     * Return an array of rules for translatable fields
-     *
-     * @param  array $merge
-     *
-     * @return array
-     */
-    protected function translationRules(array $merge = [])
-    {
-        return array_merge($this->translationRules, $merge);
-    }
-
-
     /**
      * Validation RULES
      *
-     * @param  array $merge
+     * @param  array  $merge
      *
      * @return array
      */
@@ -168,18 +158,6 @@ trait HasRulesOnModel
 
 
     /**
-     * Return an array of messages for translatable fields
-     *
-     * @param  array $merge
-     *
-     * @return array
-     */
-    protected function translationErrorMessages(array $merge = [])
-    {
-        return array_merge($this->translationErrorMessages, $merge);
-    }
-
-    /**
      * @param  string  $field
      *
      * @return string
@@ -187,5 +165,13 @@ trait HasRulesOnModel
     protected function fieldNameToDot(string $field)
     {
         return str_replace(']', '', str_replace('[', '.', $field));
+    }
+
+    /**
+     * @return bool
+     */
+    private function modelIsTranslatable(): bool
+    {
+        return property_exists($this, 'translatable') and in_array(HasTranslations::class, class_uses_recursive($this));
     }
 }

@@ -5,12 +5,15 @@ namespace GeoSot\BaseAdmin\App\Models\Users;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasAllowedToHandleCheck;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasFrontEndConfigs;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasRulesOnModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laratrust\Models\LaratrustRole;
 
 class UserRole extends LaratrustRole
 {
-    use SoftDeletes, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck;
+    use SoftDeletes, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck, HasFactory, IsExportable;
+
     protected $fillable = [
         'name',
         'display_name',
@@ -34,16 +37,15 @@ class UserRole extends LaratrustRole
     /**
      * Validation RULES
      *
-     * @param  array $merge
+     * @param  array  $merge
      *
      * @return array
      */
-    public function rules(array $merge = [])
+    protected function rules(array $merge = [])
     {
-        $textOnUpdate = (is_null($this->id) ? '' : ',' . $this->id);
 
         return array_merge([
-            'name' => "required|unique:{$this->getTable()},name" . $textOnUpdate,
+            'name' => "required|unique:{$this->getTable()},name".$this->getIgnoreTextOnUpdate(),
             "display_name" => "required",
         ], $merge);
     }
@@ -58,4 +60,5 @@ class UserRole extends LaratrustRole
     {
         return $builder->where('front_users_can_choose', true);
     }
+
 }

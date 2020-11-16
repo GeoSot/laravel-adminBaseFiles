@@ -2,7 +2,9 @@
 
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Pages;
 
+use App\Models\Media\Medium;
 use App\Models\Pages\Page;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -54,14 +56,15 @@ class PageController extends BaseAdminController
     protected function filters()
     {
         return [
-            'parentPage.title' => ['type' => 'multiSelect'],
+            Filter::selectMulti('parentPage.title'),
         ];
     }
 
 
     protected function afterSave(Request &$request, $model)
     {
-        $model->syncPictures($request);
+        /* @var Page $model */
+        $model->syncRequestMedia($request, true, Medium::REQUEST_FIELD_NAME__IMAGE);
     }
 
 }

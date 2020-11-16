@@ -1,42 +1,49 @@
 <?php
+
 return [
 
     /* ------------------------------------------------------------------------------------------------
-    |  Model settings
-    | ------------------------------------------------------------------------------------------------
-    */
+     |  Model settings
+     | ------------------------------------------------------------------------------------------------
+     */
     'models' => [
-        'namespace' => 'App\\Models\\',
         'user' => App\Models\Users\User::class,
         'role' => App\Models\Users\UserRole::class,
         'permission' => App\Models\Users\UserPermission::class,
-        'setting' => App\Models\Setting::class
     ],
 
 
     /*
     |--------------------------------------------------------------------------
-    | Routes group config
+    | Backend Configs
     |--------------------------------------------------------------------------
     |
-    | The default group settings for the Paclage routes.
     |
     */
     'backEnd' => [
-        'baseRoute' => 'admin',
-        'assetsPath' => 'assets\\geo-sot\\base-admin',
+        //base route for backend
+        'routePrefix' => 'admin',
+        //published assets path
+        'assetsPath' => 'vendor\baseAdmin\\',// public_path('vendor\baseAdmin\\'),
+        //Add css scripts to back layout
         'extraCss' => [],
+        //Add js scripts to back layout
         'extraJs' => [],
-        //Set Views options
+        //Set back layout
         'layout' => 'baseAdmin::admin.layout',
     ],
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | FrontEnd Configs
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     'site' => [
-        'baseRoute' => '',
-        'extraCss' => [],
-        'extraJs' => [],
-        //Set Views options
+        'styles' => [],
+        'scripts' => [],
+        'keepBaseScripts' => true,
         'layout' => 'baseAdmin::site.layout',
     ],
 
@@ -50,12 +57,17 @@ return [
         'time' => 15,//  cache time in minutes
     ],
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | Translation Options
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     'translatables' => [
         /*
         | Locales
-        |
-        | Contains an array with the applications available locales.
+        | an array with the applications available locales.
         |
         */
         'locales' => [
@@ -69,12 +81,5 @@ return [
         'label-locale-indicator' => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'
     ],
 
-
-    'authActions' => [
-        'register' => true,
-        'reset' => true,
-        'confirm' => true,
-        'verify' => true,
-    ]
 
 ];

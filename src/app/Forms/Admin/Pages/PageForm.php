@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Forms\Admin\Pages;
 
 
+use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\App\Models\Pages\Page;
 
@@ -13,7 +14,7 @@ class PageForm extends BaseAdminForm
     {
         $this->addCheckBox('enabled');
         $this->add('title', 'text');
-//        $this->add('sub_title', 'text');
+        $this->add('sub_title', 'text');
         $this->add('parent_id', 'entity', [
             'class' => Page::class,
             'property' => 'slug',
@@ -50,16 +51,16 @@ class PageForm extends BaseAdminForm
             'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3'],
         ]);
 
-        $this->add('images', 'collection', [
+        $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
-            // 'repeatable' => true,
+//             'repeatable' => true,
             //   'viewAndRemoveOnly'=>true,
             'options' => [
                 'img_wrapper' => ['class' => 'mbed-responsive mbed-responsive-21by9 w-50   m-auto'],
                 'img' => ['class' => ' mbed-responsive-item'],
                 'label' => false,
                 'template' => 'baseAdmin::_subBlades.formTemplates.image',
-                'final_property' => 'file_path',
+                'final_property' => 'url',
             ],
         ]);
 

@@ -9,19 +9,18 @@ use Illuminate\Support\Str;
 class MakeLanguage extends GenericFileCreateCommand
 {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * @inheritDoc
      */
     protected $signature = 'baseAdmin:makeLanguageFile  {name : The name of the Instance}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @inheritDoc
      */
     protected $description = 'Create Language Files For A Model';
 
+    /**
+     * @inheritDoc
+     */
     protected $type = 'Language File';
 
 
@@ -42,21 +41,19 @@ class MakeLanguage extends GenericFileCreateCommand
         $name = ucfirst(class_basename($this->getNameInput()));
         $nameWithSpaces = trim(implode(' ', preg_split('/(?=[A-Z])/', $name)));
 
-        $stub = str_replace('DummyMenu', Str::plural($nameWithSpaces), $stub);
-        $stub = str_replace('DummySingle', $nameWithSpaces, $stub);
-        $stub = str_replace('DummyPlural', Str::plural($nameWithSpaces), $stub);
+        $stub = str_replace('{{ menu }}', Str::plural($nameWithSpaces), $stub);
+        $stub = str_replace('{{ single }}', $nameWithSpaces, $stub);
+        $stub = str_replace('{{ plural }}', Str::plural($nameWithSpaces), $stub);
 
         return $stub;
     }
 
     /**
-     * Get the stub file for the generator.
-     *
-     * @return string
+     * @inheritDoc
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/LanguageFile.stub';
+        return __DIR__.'/../stubs/LanguageFile.stub';
     }
 
 }

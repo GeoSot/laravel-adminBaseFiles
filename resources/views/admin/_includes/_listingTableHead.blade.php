@@ -28,11 +28,11 @@
                          <div class="sortingControls d-flex">
                              <span class=" mouse-pointer @if ($params['order_by']==$name  and $params['sort']=='asc' ) sorted asc text-warning @endif" data-order="{{$name}}"
                                    data-sort="asc">
-                                    <i class="fa fa-sort-amount-asc sorting_asc "></i>
+                                    <i class="fas fa-sort-amount-asc sorting_asc "></i>
                              </span>
                               <span class="ml-1 mouse-pointer @if ($params['order_by']==$name  and $params['sort']=='desc' ) sorted desc text-warning @endif" data-order="{{$name}}"
                                     data-sort="desc">
-                                    <i class="fa fa-sort-amount-desc sorting_asc"></i>
+                                    <i class="fas fa-sort-amount-desc sorting_asc"></i>
                               </span>
                                 </div>
                             </div>
