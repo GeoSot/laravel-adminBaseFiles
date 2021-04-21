@@ -24,3 +24,4 @@ import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}
 if (document.querySelectorAll("#js-uppy-dashboard-container").length) {
     import('../_partials/uppy');
 }
+

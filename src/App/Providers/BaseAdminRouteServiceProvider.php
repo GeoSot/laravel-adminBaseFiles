@@ -229,8 +229,8 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      */
     protected function getController(string $controller, string $side = 'Admin'): string
     {
-        $appController = self::APP_NS.DIRECTORY_SEPARATOR.$side.'\\'.$controller;
-        return class_exists($appController) ? $appController : self::BASE_NS.DIRECTORY_SEPARATOR.$side.'\\'.$controller;
+        $appController = self::APP_NS.'\\'.$side.'\\'.$controller;
+        return class_exists($appController) ? $appController : self::BASE_NS.'\\'.$side.'\\'.$controller;
 
     }
 }
