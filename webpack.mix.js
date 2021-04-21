@@ -58,9 +58,9 @@ mix.webpackConfig({
         "assets/admin": resourcesDirectory + 'css/admin/app.scss',
          app:  resourcesDirectory + 'css/site/app.scss'
      },*/
-    // output: {
-    //     chunkFilename: "js/chunks/[name].chunk.[hash].js",
-    // },
+    output: {
+        chunkFilename: "js/chunks/[name].chunk.[hash].js",
+    },
     resolve: {
         // modules: [path.resolve(__dirname, '../../../node_modules')],
         alias: {
