@@ -68,7 +68,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     private function loadResources()
     {
         //  $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
-        $this->loadMigrationsFrom(Paths::srcDir('Database/Migrations'));
+        $this->loadMigrationsFrom(Paths::srcDir('Database/migrations'));
         $this->loadViewsFrom(Paths::rootDir('resources/views'), $this->package);
         $this->loadTranslationsFrom(Paths::rootDir('resources/lang'), $this->package);
     }

@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Console\Commands\InstallScripts;
 
 use GeoSot\BaseAdmin\Database\Seeders\DatabaseSeeder;
+use GeoSot\BaseAdmin\Helpers\Paths;
 use GeoSot\BaseAdmin\ServiceProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Composer;
@@ -117,17 +118,17 @@ class MainCommand extends BaseInstallCommand
             '_laratrust_add_fields.php',
             '_add_columns_on_media_table.php',
         ];
-        $dbDir = __DIR__.'./../../../../Database/';
+        $dbDir = database_path('migrations') ;
 
         foreach ($files as $file) {
-            if ($results = glob($dbDir."Migrations/*{$file}")) {
+            if ($results = glob($dbDir . "migrations/*{$file}")) {
                 /*   array_map(function ($filename) {
                        unlink($filename);
                    }, $results);*/
                 continue;
             }
             $date = now()->addHour()->format('Y_m_d_His');
-            copy($dbDir."MigrationsOnPackagesTables/{$file}", "{$dbDir}Migrations/{$date}{$file}");
+            copy(Paths::srcDir('Database') . "migrationsOnPackagesTables/{$file}", "$dbDir/{$date}{$file}");
         }
 
 
