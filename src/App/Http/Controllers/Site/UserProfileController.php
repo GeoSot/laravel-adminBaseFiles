@@ -7,6 +7,8 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 use App\Models\Users\User;
 use GeoSot\BaseAdmin\App\Forms\Site\UserProfileForm;
 use GeoSot\BaseAdmin\App\Forms\Site\UserUpdatePasswordForm;
+use GeoSot\BaseAdmin\App\Helpers\Models\FrontEndConfigs;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Http\Response;
 use Laravel\Fortify\Features;
 
@@ -42,8 +44,17 @@ class UserProfileController extends BaseFrontController
 
         $extraValues = collect(compact('form', 'form2', 'roles'));
 
-        return view("baseAdmin::{$this->_modelsViewsDir}.edit", $this->variablesToView($extraValues, 'index', ['record' => auth()->user()]));
+        return view($this->getViewFile(), $this->variablesToView($extraValues, 'index', ['record' => auth()->user()]));
 
+    }
+
+    /**
+     * @return string
+     */
+    protected function getViewFile(): string
+    {
+        $side = FrontEndConfigs::SITE;
+        return Base::addPackagePrefix("{$side}.users.edit");
     }
 
 

@@ -54,10 +54,6 @@ mix.babelConfig({
 
 // Add this to very bottom of your webpack-mix.js
 mix.webpackConfig({
-    /* entry: {
-        "assets/admin": resourcesDirectory + 'css/admin/app.scss',
-         app:  resourcesDirectory + 'css/site/app.scss'
-     },*/
     output: {
         chunkFilename: "js/chunks/[name].chunk.[hash].js",
     },
@@ -70,6 +66,6 @@ mix.webpackConfig({
     },
     plugins: [
         new MomentLocalesPlugin({localesToKeep: ['en-gb', 'el'],}),
-        new CleanWebpackPlugin({cleanStaleWebpackAssets: false,})//prosoxi katharizei ta panta apo to public
+        new CleanWebpackPlugin({cleanStaleWebpackAssets: false,})
     ]
 });

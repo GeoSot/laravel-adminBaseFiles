@@ -1,6 +1,12 @@
 <?php
 
 return [
+    /*
+    | iSMultiLingual
+    | boolean to enable\disable multilingual attitudes on site
+    |
+    */
+    'isMultiLingual'=> true,
 
     /* ------------------------------------------------------------------------------------------------
      |  Model settings
@@ -74,8 +80,6 @@ return [
             'en',
             'el',
         ],
-
-        'enable-TranslatableFields-OnModel' => true,
         'input-locale-attribute' => 'data-language',
         'form-group-class' => 'form-group-translation',
         'label-locale-indicator' => '<span>%label%</span> <span class="ml-2 badge badge-pill badge-light">%locale%</span>'

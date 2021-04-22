@@ -41,7 +41,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                     </div>
                 </div>
-                @include($packageVariables->get('blades'). '_subBlades.languagesDropdown')
+                @includeWhen(\GeoSot\BaseAdmin\Helpers\Base::isMultiLingual(),$packageVariables->get('blades'). '_subBlades.languagesDropdown')
             </div>
         </div>
     </nav>

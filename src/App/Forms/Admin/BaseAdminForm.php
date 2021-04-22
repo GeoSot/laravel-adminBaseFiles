@@ -4,6 +4,7 @@ namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
 use GeoSot\BaseAdmin\App\Forms\BaseForm;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasSettings;
+use GeoSot\BaseAdmin\Helpers\Base;
 use Kris\LaravelFormBuilder\Fields\FormField;
 
 abstract class BaseAdminForm extends BaseForm
@@ -30,7 +31,7 @@ abstract class BaseAdminForm extends BaseForm
      */
     protected function createTranslatableFields()
     {
-        if (!config('baseAdmin.config.translatables.enable-TranslatableFields-OnModel', true)) {
+        if (!Base::isMultiLingual()) {
             return;
         }
         $availableLocales = (array) config('baseAdmin.config.translatables.locales');

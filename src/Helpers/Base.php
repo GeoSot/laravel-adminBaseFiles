@@ -22,8 +22,7 @@ class Base
     {
         $path = '/'.trim($path, '/');
 
-        $assetsPath = asset(str_replace(DIRECTORY_SEPARATOR, '/', config('baseAdmin.config.backEnd.assetsPath')));
-
+        $assetsPath = asset(str_replace([DIRECTORY_SEPARATOR,'\\'], '/', config('baseAdmin.config.backEnd.assetsPath')));
 
         $manifest = Paths::rootDir('assets').'mix-manifest.json';
         if (file_exists($manifest)) {
@@ -103,6 +102,14 @@ class Base
     public static function addPackagePrefix(string $string = ''): string
     {
         return 'baseAdmin::'.$string;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isMultiLingual(): bool
+    {
+        return config('baseAdmin.config.isMultiLingual');
     }
 
 }

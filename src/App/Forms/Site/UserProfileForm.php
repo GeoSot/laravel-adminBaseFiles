@@ -2,6 +2,7 @@
 
 namespace GeoSot\BaseAdmin\App\Forms\Site;
 
+use GeoSot\BaseAdmin\Helpers\Base;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class UserProfileForm extends BaseFrontForm
@@ -11,13 +12,15 @@ class UserProfileForm extends BaseFrontForm
         $this->setFormOptions($this->getThisFormOptions());
         $this->addStaticTextTitle($this->transText('personalData'), 'h3 text-muted border-bottom mt-5 mb-4');
         $this->add('first_name', 'text')->add('last_name', 'text')->add('email', 'email');
-        $this->add('preferred_lang', 'select', [
-            'choices' => array_map(function ($el) {
-                return $el['native'];
-            }, LaravelLocalization::getSupportedLocales()),
-            'empty_value' => $this->getSelectEmptyValueLabel(),
-        ]);
+        if (Base::isMultiLingual()) {
+            $this->add('preferred_lang', 'select', [
+                'choices' => array_map(function ($el) {
+                    return $el['native'];
+                }, LaravelLocalization::getSupportedLocales()),
+                'empty_value' => $this->getSelectEmptyValueLabel(),
+            ]);
 
+        }
         $this->add('submit', 'submit', [
             'attr' => ['class' => 'btn btn-outline-primary mt-3'],
             'wrapper' => ['class' => 'form-group text-center'],

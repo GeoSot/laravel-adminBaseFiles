@@ -7,6 +7,7 @@ use App\Models\Media\Medium;
 use App\Models\Users\User;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
+use GeoSot\BaseAdmin\Helpers\Base;
 
 class UserForm extends BaseAdminForm
 {
@@ -31,12 +32,15 @@ class UserForm extends BaseAdminForm
             'expanded' => true,
             'multiple' => false
         ]);
-        $this->add('preferred_lang', 'select', [
-            'choices' => array_map(function ($el) {
-                return $el['native'];
-            }, config('laravellocalization.supportedLocales')),
-            'empty_value' => $this->getSelectEmptyValueLabel(),
-        ]);
+
+        if (Base::isMultiLingual()) {
+            $this->add('preferred_lang', 'select', [
+                'choices' => array_map(function ($el) {
+                    return $el['native'];
+                }, config('laravellocalization.supportedLocales')),
+                'empty_value' => $this->getSelectEmptyValueLabel(),
+            ]);
+        }
 
         $this->add('dob', 'text', [
             'template' => 'baseAdmin::_subBlades.formTemplates.dateTime',

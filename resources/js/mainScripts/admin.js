@@ -10,10 +10,10 @@ if (process.env.NODE_ENV === 'production') {
     Vue.config.silent = true;
 }
 
-
-const app = new Vue({
-    el: '#app'
-});
+//
+// const app = new Vue({
+//     el: '#app'
+// });
 
 import '../app'
 
