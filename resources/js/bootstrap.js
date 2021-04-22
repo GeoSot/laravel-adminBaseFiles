@@ -1,4 +1,6 @@
-window.axios = () => import('axios').then(src => src);
+import axios from 'axios';
+
+window.axios = axios
 window.axios.defaults = window.axios.defaults || {};
 window.axios.defaults.headers = window.axios.defaults.headers || {};
 window.axios.defaults.headers.common = window.axios.defaults.headers.common || [];

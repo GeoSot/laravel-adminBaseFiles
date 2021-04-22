@@ -28,8 +28,7 @@ if ($target) {
         target: target,
         replaceTargetContent: true,
         showProgressDetails: true,
-        // note: 'Images and video only, 2–3 files, up to 1 MB',
-        height: 400,
+        height: 500,
         metaFields: [
             {id: 'name', name: 'Name', placeholder: 'file name'},
             {id: 'caption', name: 'Caption', placeholder: 'describe what the image is about'},

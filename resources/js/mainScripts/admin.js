@@ -3,6 +3,8 @@ __webpack_public_path__ = url.href.substring(0, url.href.indexOf('js'));
 
 import Vue from 'vue';
 
+import '../app'
+
 window.Vue = Vue;
 if (process.env.NODE_ENV === 'production') {
     Vue.config.devtools = false;
@@ -15,11 +17,10 @@ if (process.env.NODE_ENV === 'production') {
 //     el: '#app'
 // });
 
-import '../app'
 
-    import('../_partials/offcanvas').then(src => src.init());
-    import('../_admin/indexPages');
-    import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}));
+import('../_partials/offcanvas').then(src => src.init());
+import('../_admin/indexPages');
+import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}));
 
 window.addEventListener('DOMContentLoaded', (event) => {
     if (document.querySelector("#js-uppy-dashboard-container")) {

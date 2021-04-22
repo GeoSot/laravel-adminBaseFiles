@@ -5,7 +5,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 require('laravel-mix-bundle-analyzer');
 
 if (!mix.inProduction()) {
-    mix.bundleAnalyzer();
+    // mix.bundleAnalyzer();
 }
 const resourcesDirectory = './resources/';
 const publicDirectory = './assets/';
@@ -61,7 +61,8 @@ mix.webpackConfig({
         // modules: [path.resolve(__dirname, '../../../node_modules')],
         alias: {
             jquery: "jquery/src/jquery",
-            pace: 'pace-progress'
+            pace: 'pace-progress',
+            vue: 'vue/dist/vue.js'
         }
     },
     plugins: [
