@@ -12,7 +12,6 @@ const ChangeEnableDisableStatus = function (url, type, data, show_message, keywo
     })
 };
 const allOtherActions = function (url, type, data, show_message, keyword, callback = null) {
-    //   console.log(keyword)
     return showMessage({
         title: $('#confirm_' + keyword).text(),
         text: $('#confirm_' + keyword + '_msg').text(),

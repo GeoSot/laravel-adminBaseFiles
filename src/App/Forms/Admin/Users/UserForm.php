@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Forms\Admin\Users;
 
 
 use App\Models\Media\Medium;
-use App\Models\Users\User;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\Helpers\Base;
@@ -14,10 +13,68 @@ class UserForm extends BaseAdminForm
 
     public function getFormFields()
     {
-
-
         $this->getMainFields();
+        $this->getSecondaryFields();
+        $this->getNotificationFields();
+        $this->addSeparatorLine();
+        $this->getAddressFields();
+        $this->getThirdPanel();
 
+    }
+
+    private function getAddressFields(): void
+    {
+        $this->add('address', 'text')
+            ->add('city', 'text')
+            ->add('postal', 'text')
+            ->add('state', 'text')
+            ->add('country', 'text')
+            ->add('phone1', 'text')
+            ->add('phone2', 'text');
+    }
+
+    private function getMainFields(): void
+    {
+        $this->add('first_name', 'text')
+            ->add('last_name', 'text')
+            ->add('email', 'email')
+            ->add('password', 'password', [
+                'value' => false,
+            ])
+            ->add('password_confirmation', 'password');
+    }
+
+    protected function getThirdPanel(): void
+    {
+        $this->addCheckBox('enabled');
+        $this->add('roles', 'entity', [
+            'class' => UserRole::class,
+            'property' => 'display_name',
+            'multiple' => true,
+            'label' => $this->transText('roles.name'),
+            'query_builder' => function (UserRole $role) {
+                return $role;
+//                return $role->where($this->getModel()->getKeyName(), '<>', optional($this->getModel())->getKey());
+//
+//                // If query builder option is not provided, all data is fetched
+//                return $lang->where('active', 1);
+            }
+        ]);
+//        $this->add('rolesTeams', 'entity', [
+//            'class' => UserRole::class,
+//            'property' => 'display_name',
+//            'multiple' => true,
+//            'label' => $this->transText('roles.name')
+//            //                    'query_builder' => function (App\Language $lang) {
+//            //                        // If query builder option is not provided, all data is fetched
+//            //                        return $lang->where('active', 1);
+//            //                    }
+//        ]);
+//        $this->add('notes', 'textarea', ['attr' => ['rows' => '3'],]);
+    }
+
+    protected function getSecondaryFields(): void
+    {
         $this->add('gender', 'choice', [
             'choices' => [
                 'M' => $this->transText('gender_M'),
@@ -59,8 +116,10 @@ class UserForm extends BaseAdminForm
             ]
         ]);
         $this->add('bio', 'textarea', ['attr' => ['rows' => '5']]);
+    }
 
-
+    protected function getNotificationFields(): void
+    {
         $this->add('notification_types', 'choice', [
             'choices' => ['mail' => 'Email', 'slack' => 'Slack'],
             'expanded' => true,
@@ -72,62 +131,6 @@ class UserForm extends BaseAdminForm
             ],
             'selected' => ['mail'],
         ]);
-
-
         $this->add('slack_webhook_url', 'text');
-        $this->addSeparatorLine();
-        /** @var User $user */
-        $user = $this->getModel();
-
-        $this->getAddressFields();
-
-        $this->addCheckBox('enabled');
-        $this->add('roles', 'entity', [
-            'class' => UserRole::class,
-            'property' => 'display_name',
-            'multiple' => true,
-            'label' => $this->transText('roles.name'),
-            'query_builder' => function (UserRole $role) {
-                return $role;
-//                return $role->where($this->getModel()->getKeyName(), '<>', optional($this->getModel())->getKey());
-//
-//                // If query builder option is not provided, all data is fetched
-//                return $lang->where('active', 1);
-            }
-        ]);
-//        $this->add('rolesTeams', 'entity', [
-//            'class' => UserRole::class,
-//            'property' => 'display_name',
-//            'multiple' => true,
-//            'label' => $this->transText('roles.name')
-//            //                    'query_builder' => function (App\Language $lang) {
-//            //                        // If query builder option is not provided, all data is fetched
-//            //                        return $lang->where('active', 1);
-//            //                    }
-//        ]);
-//        $this->add('notes', 'textarea', ['attr' => ['rows' => '3'],]);
-
-    }
-
-    private function getAddressFields(): void
-    {
-        $this->add('address', 'text')
-            ->add('city', 'text')
-            ->add('postal', 'text')
-            ->add('state', 'text')
-            ->add('country', 'text')
-            ->add('phone1', 'text')
-            ->add('phone2', 'text');
-    }
-
-    private function getMainFields(): void
-    {
-        $this->add('first_name', 'text')
-            ->add('last_name', 'text')
-            ->add('email', 'email')
-            ->add('password', 'password', [
-                'value' => false,
-            ])
-            ->add('password_confirmation', 'password');
     }
 }

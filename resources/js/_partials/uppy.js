@@ -71,6 +71,6 @@ if ($target) {
     })
 
     uppy.on('error', (error) => {
-        console.log(3333, error)
+        console.log('uppy error', error)
     })
 }

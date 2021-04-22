@@ -81,9 +81,6 @@ const ajaxifiedForm = (formSelector) => {
  * @return AjaxObj
  */
 const ajaxify =function (formSelector) {
-
-    console.log(4)
-
     // if (!(this instanceof ajaxify)) return new ajaxify(name);
     if (ajaxified[formSelector]) {
         return ajaxified[formSelector];
@@ -181,8 +178,6 @@ const ajaxify =function (formSelector) {
 
 
 const ajaxifyFormOnModal =function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false)  {
-    console.log(3)
-
     if (!$(formSelector).length || !$(modalSelector).length) {
         return;
     }

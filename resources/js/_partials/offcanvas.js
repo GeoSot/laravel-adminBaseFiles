@@ -51,8 +51,6 @@ function manageClasses($el) {
         $el.parent.addClass('open');
         $el.target.addClass('open');
         if ($el.target.css("position") !== "fixed") {
-            // console.log($el.target.width());
-            // console.log($el.target.outerWidth(true));
             $el.target.css('margin-left', -$el.target.outerWidth(true) + 'px');
         }
     }
