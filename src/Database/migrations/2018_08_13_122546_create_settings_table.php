@@ -37,7 +37,7 @@ class CreateSettingsTable extends Migration
 
             //--Foreign keys RULEs
 
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('modified_by')->references('id')->on('users')->nullOnDelete();
         });
     }
 

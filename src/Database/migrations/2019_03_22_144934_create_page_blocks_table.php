@@ -40,9 +40,9 @@ class CreatePageBlocksTable extends Migration
             $table->foreignId('modified_by')->nullable();
 
             //--Foreign keys RULEs
-            $table->foreign('page_area_id')->references('id')->on('page_areas')->onDelete('set null');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('page_area_id')->references('id')->on('page_areas')->nullOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('modified_by')->references('id')->on('users')->nullOnDelete();
         });
     }
 

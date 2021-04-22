@@ -44,6 +44,7 @@ class Medium extends Media
         'the_file_exists',
         'thumb',
         'custom_properties',
+        'user_id',
         'modified_by',
     ];
 
