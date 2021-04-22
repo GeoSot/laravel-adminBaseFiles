@@ -17,11 +17,12 @@ if (process.env.NODE_ENV === 'production') {
 
 import '../app'
 
-import('../_partials/offcanvas').then(src => src.init());
-import('../_admin/indexPages');
-import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}));
+    import('../_partials/offcanvas').then(src => src.init());
+    import('../_admin/indexPages');
+    import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}));
 
-if (document.querySelectorAll("#js-uppy-dashboard-container").length) {
-    import('../_partials/uppy');
-}
-
+window.addEventListener('DOMContentLoaded', (event) => {
+    if (document.querySelectorAll("#js-uppy-dashboard-container").length) {
+        import('../_partials/uppy');
+    }
+})
