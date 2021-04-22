@@ -187,7 +187,6 @@
                         url = url || '{{route('admin.media.index')}}';
                         let data = Object.assign({only_data: true, num_of_items: 10, extra_filters: {the_file_exists: true}}, dt);
                         BaseAdmin.makeAjax(url, 'GET', data, 0, function (data, textStatus) {
-                            console.log(1)
                             _this.media = data.records.data;
                             _this.pagination = data.records.links;
                         });

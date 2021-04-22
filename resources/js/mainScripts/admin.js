@@ -22,7 +22,7 @@ import '../app'
     import('pace-progress').then((src) => src.start({target: 'header.js-mainHeader'}));
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    if (document.querySelectorAll("#js-uppy-dashboard-container").length) {
+    if (document.querySelector("#js-uppy-dashboard-container")) {
         import('../_partials/uppy');
     }
 })
