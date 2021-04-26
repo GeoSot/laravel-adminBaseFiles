@@ -66,7 +66,7 @@ class Medium extends Media
 
     public function scopeEnabled(Builder $builder)
     {
-        return $builder/*->where('enabled', true)*/ ->where('the_file_exists', true);
+        return $builder/*->where('is_enabled', true)*/ ->where('the_file_exists', true);
     }
 
 

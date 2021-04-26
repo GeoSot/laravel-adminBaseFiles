@@ -46,8 +46,8 @@ class UserController extends BaseAdminController
     protected function listFields()
     {
         $neFields = [
-            'listable' => ['full_name', 'enabled', 'roles.display_name', 'id'],
-            'searchable' => ['first_name', 'last_name', 'enabled', 'id'],
+            'listable' => ['full_name', 'is_enabled', 'roles.display_name', 'id'],
+            'searchable' => ['first_name', 'last_name', 'is_enabled', 'id'],
             'sortable' => ['full_name', 'id'],
             'linkable' => ['full_name'],
         ];

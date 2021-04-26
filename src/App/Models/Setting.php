@@ -45,7 +45,7 @@ class Setting extends BaseModel
         'model_type',
         'model_id',
         'type',
-        'enabled',
+        'is_enabled',
         'modified_by',
     ];
 

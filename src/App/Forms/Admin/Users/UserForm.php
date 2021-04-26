@@ -46,7 +46,7 @@ class UserForm extends BaseAdminForm
 
     protected function getThirdPanel(): void
     {
-        $this->addCheckBox('enabled');
+        $this->addCheckBox('is_enabled');
         $this->add('roles', 'entity', [
             'class' => UserRole::class,
             'property' => 'display_name',

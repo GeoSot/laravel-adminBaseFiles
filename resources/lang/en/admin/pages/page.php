@@ -14,7 +14,7 @@ return [
         'title' => 'Title',
         'sub_title' => 'SubTitle',
         'notes' => 'Notes',
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'meta_title' => 'Page Title (metaTags) ',
         'meta_description' => 'Description (metaTags)',
         'keywords' => 'Keywords (metaTags) ',

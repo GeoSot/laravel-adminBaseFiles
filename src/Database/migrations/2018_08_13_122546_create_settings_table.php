@@ -15,7 +15,7 @@ class CreateSettingsTable extends Migration
     public function up()
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
             $table->string('slug')->unique();
             $table->string('key');
             $table->string('group')->nullable();
@@ -27,7 +27,7 @@ class CreateSettingsTable extends Migration
 
 
             //--Defaults
-            $table->boolean('enabled')->default(1);
+            $table->boolean('is_enabled')->default(1);
             $table->timestamps();
             $table->softDeletes();
 

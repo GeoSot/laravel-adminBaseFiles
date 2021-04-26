@@ -17,7 +17,7 @@ return [
         'model_id' => 'Model Name',
         'type' => 'Type',
         'notes' => 'Notes',
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'ownerModel' => ['title' => 'Related Model'],
         'type_to_human' => 'Friendly Value',
     ],

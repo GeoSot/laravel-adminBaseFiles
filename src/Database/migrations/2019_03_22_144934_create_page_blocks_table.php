@@ -16,7 +16,7 @@ class CreatePageBlocksTable extends Migration
     {
         Schema::create('page_blocks', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->id('id');
+            $table->id();
             $table->string('slug')->unique();
             $table->string('layout')->nullable();
             $table->string('background_color')->nullable();
@@ -30,7 +30,7 @@ class CreatePageBlocksTable extends Migration
 
 
             //--Defaults
-            $table->boolean('enabled')->default(1);
+            $table->boolean('is_enabled')->default(1);
             $table->timestamps();
             //$table->softDeletes();
 

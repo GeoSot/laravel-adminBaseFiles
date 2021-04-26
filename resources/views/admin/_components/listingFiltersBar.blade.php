@@ -31,7 +31,7 @@
         </div>
     @endif
 
-    @if(in_array('enabled',$viewVals->get('options')->get('fillable')) and in_array('enabled',$viewVals->get('extraValues')->get('listable')))
+    @if(in_array('is_enabled',$viewVals->get('options')->get('fillable')) and in_array('is_enabled',$viewVals->get('extraValues')->get('listable')))
         <div class="form-group  col-auto">
             <select class="form-control  custom-select " name="status" id="status" data-change="js-submit-form">
                 <option value=""> @lang("{$lang}.listFilters.selectStatus")</option>

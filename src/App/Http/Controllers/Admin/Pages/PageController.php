@@ -47,8 +47,8 @@ class PageController extends BaseAdminController
     protected function listFields()//Can be omitted
     {
         $newFields = [
-            'listable' => ['title', 'slug', 'parentPage.title', 'childrenPages.title', 'enabled', 'id'],
-            'searchable' => ['title', 'enabled', 'id'],
+            'listable' => ['title', 'slug', 'parentPage.title', 'childrenPages.title', 'is_enabled', 'id'],
+            'searchable' => ['title', 'is_enabled', 'id'],
         ];
         return array_merge(parent::listFields(), $newFields);
     }

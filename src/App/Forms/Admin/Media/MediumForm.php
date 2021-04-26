@@ -10,7 +10,7 @@ class MediumForm extends BaseAdminForm
 
     public function getFormFields()
     {
-//        $this->addCheckBox('enabled');
+//        $this->addCheckBox('is_enabled');
 
         $this->add('title', 'text');
         $this->add('notes', 'textarea');

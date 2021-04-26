@@ -16,7 +16,7 @@ class CreatePageAreasTable extends Migration
     {
         Schema::create('page_areas', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->id('id');
+            $table->id();
             $table->string('slug')->unique();
             $table->string('css_class')->nullable();
             $table->string('background_color')->nullable();
@@ -28,7 +28,7 @@ class CreatePageAreasTable extends Migration
 
 
             //--Defaults
-            $table->boolean('enabled')->default(1);
+            $table->boolean('is_enabled')->default(1);
             $table->timestamps();
             //$table->softDeletes();
 

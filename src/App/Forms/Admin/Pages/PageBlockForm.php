@@ -18,7 +18,7 @@ class PageBlockForm extends BaseAdminForm
     //
     public function getFormFields()
     {
-        $this->addCheckBox('enabled');
+        $this->addCheckBox('is_enabled');
         $this->add('slug', 'text');
         if ($this->isCreate) {
             $this->addCheckBox('has_multiple_images');

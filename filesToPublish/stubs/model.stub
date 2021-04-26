@@ -20,13 +20,13 @@ class {{ class }} extends BaseModel
         'notes',
         'slug',
 
-        'enabled',
+        'is_enabled',
         'user_id',
         'modified_by',
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'is_enabled' => 'boolean',
     ];
 
     /*

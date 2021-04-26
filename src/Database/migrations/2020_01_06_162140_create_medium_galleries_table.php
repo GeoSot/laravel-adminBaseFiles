@@ -16,7 +16,7 @@ class CreateMediumGalleriesTable extends Migration
     {
         Schema::create('media_galleries', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->id('id');
+            $table->id();
             $table->string('title')->unique();
             $table->string('slug')->unique();
             $table->text('notes')->nullable();
@@ -25,7 +25,7 @@ class CreateMediumGalleriesTable extends Migration
 
 
             //--Defaults
-            $table->boolean('enabled')->default(1);
+            $table->boolean('is_enabled')->default(1);
             $table->timestamps();
 
             //--Foreign keys

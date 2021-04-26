@@ -32,13 +32,13 @@ class MediumGallery extends BaseModel
         'related_id',
         'show_details',
 
-        'enabled',
+        'is_enabled',
         'user_id',
         'modified_by',
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'is_enabled' => 'boolean',
         'show_details' => 'array',
     ];
 

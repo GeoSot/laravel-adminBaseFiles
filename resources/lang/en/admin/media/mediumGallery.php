@@ -10,7 +10,7 @@ return [
         'title' => 'Name',
         'slug' => 'Url Slug',
         'notes' => 'Description',
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'images' => 'Images'
     ],
     'modal' => [

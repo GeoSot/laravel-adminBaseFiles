@@ -11,7 +11,7 @@ return [
         'id' => 'ID',
         'title' => 'Name',
         'notes' => 'Notes',
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'sub_title' => 'Sub title',
         'parentPage' => 'Parent Page',
         'css_class' => 'Css Classes',

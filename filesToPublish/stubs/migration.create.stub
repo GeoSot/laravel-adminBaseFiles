@@ -25,7 +25,7 @@ class {{ class }} extends Migration
 
 
             //--Defaults
-            $table->boolean('enabled')->default(1);
+            $table->boolean('is_enabled')->default(1);
             $table->timestamps();
             //$table->softDeletes();
 

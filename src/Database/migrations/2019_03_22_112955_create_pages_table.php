@@ -16,7 +16,7 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->id('id');
+            $table->id();
             $table->string('slug')->unique();
             $table->text('notes')->nullable();
             $table->text('css')->nullable();
@@ -32,7 +32,7 @@ class CreatePagesTable extends Migration
             $table->text('meta_tags')->nullable();
 
             //--Defaults
-            $table->boolean('enabled')->default(1);
+            $table->boolean('is_enabled')->default(1);
             $table->timestamps();
             $table->softDeletes();
 

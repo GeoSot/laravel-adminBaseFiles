@@ -16,7 +16,7 @@ class PageAreaForm extends BaseAdminForm
     public function getFormFields()
     {
 
-        $this->addCheckBox('enabled');
+        $this->addCheckBox('is_enabled');
         $this->add('title', 'text');
         $this->add('sub_title', 'text');
         $this->add('slug', 'text');

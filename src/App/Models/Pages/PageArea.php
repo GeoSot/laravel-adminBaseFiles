@@ -23,14 +23,14 @@ class PageArea extends BasePage
         'notes',
         'background_color',
         'slug',
-        'enabled',
+        'is_enabled',
         'user_id',
         'modified_by',
     ];
     protected $appends = ['background_image'];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'is_enabled' => 'boolean',
         'order' => 'integer',
     ];
 

@@ -28,8 +28,8 @@ class MediumGalleryController extends BaseAdminController
     protected function listFields()
     {
         $neFields = [
-            'listable' => ['title', 'ownerModel', 'enabled', 'id'],
-            'searchable' => ['title', 'slug', 'related_type', 'enabled', 'id'],
+            'listable' => ['title', 'ownerModel', 'is_enabled', 'id'],
+            'searchable' => ['title', 'slug', 'related_type', 'is_enabled', 'id'],
         ];
 
         return array_merge(parent::listFields(), $neFields);

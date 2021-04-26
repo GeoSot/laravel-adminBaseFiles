@@ -293,7 +293,7 @@ abstract class BaseAdminController extends BaseController
         }
         $ids = $request->input('ids', []);
         $status = $request->input('status');
-        $results = $this->_class::whereIn('id', $ids)->update(['enabled' => $status ? 1 : 0]);
+        $results = $this->_class::whereIn('id', $ids)->update(['is_enabled' => $status ? 1 : 0]);
 
         return $this->jsonResponse($results, 'changeStatus', $request);
     }

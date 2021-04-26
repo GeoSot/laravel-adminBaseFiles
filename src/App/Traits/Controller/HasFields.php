@@ -16,9 +16,9 @@ trait HasFields
     protected function listFields()
     {
         return [
-            'listable' => ['title', 'enabled', 'id'],
-            'searchable' => ['title', 'enabled',],
-            'sortable' => ['title', 'enabled', 'id'],
+            'listable' => ['title', 'is_enabled', 'id'],
+            'searchable' => ['title', 'is_enabled',],
+            'sortable' => ['title', 'is_enabled', 'id'],
             'linkable' => ['title'],
             'orderBy' => ['column' => 'created_at', 'sort' => 'desc'],
         ];

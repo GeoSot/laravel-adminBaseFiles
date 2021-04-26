@@ -40,7 +40,7 @@ class Page extends BasePage
         'meta_tags',
         'notes',
         'slug',
-        'enabled',
+        'is_enabled',
         'user_id',
         'modified_by',
         'parent_id',
@@ -49,7 +49,7 @@ class Page extends BasePage
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'is_enabled' => 'boolean',
     ];
 
 

@@ -10,7 +10,7 @@ return [
         'id' => 'ID',
         'title' => 'Title',
         'notes' => 'Main Body',
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'sub_title' => 'Sub title',
         'css_class' => 'Css Classes',
         'layout' => 'Layout',

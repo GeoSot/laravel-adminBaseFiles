@@ -13,7 +13,7 @@
     @case('firstCheckBox')
     @includeIf($snippetsDir.'firstCheckBox')
     @break
-    @case('enabled')
+    @case('is_enabled')
     @includeIf($snippetsDir.'enabled')
     @break
     @case('counter')
@@ -35,7 +35,7 @@
          $dataCollection=data_get($record,$array[0])
     @endphp
     <td>
-        @if( in_array($listName,['enabled','color']) )
+        @if( in_array($listName,['is_enabled','color']) )
             @includeIf($snippetsDir.$listName)
         @elseif($viewVals->get('extraValues')->has('linkable') and in_array($listName,$viewVals->get('extraValues')->get('linkable') ))
             <a href="{{route($viewVals->get('baseRoute').'.edit',$record)}}">{!! Str::limit(data_get($record,$listName),50) ?:'----'!!}</a>

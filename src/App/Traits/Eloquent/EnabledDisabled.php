@@ -11,7 +11,7 @@ trait EnabledDisabled
      */
     public function isEnabled()
     {
-        return $this->hasAttribute('enabled') ? $this->enabled : true;
+        return $this->hasAttribute('is_enabled') ? $this->enabled : true;
     }
 
     /**
@@ -21,7 +21,7 @@ trait EnabledDisabled
      */
     public function scopeEnabled(Builder $builder)
     {
-        return $this->hasAttribute('enabled') ? $builder->where('enabled', true) : $builder;
+        return $this->hasAttribute('is_enabled') ? $builder->where('is_enabled', true) : $builder;
     }
 
     /**
@@ -31,7 +31,7 @@ trait EnabledDisabled
      */
     public function scopeDisabled(Builder $builder)
     {
-        return $this->hasAttribute('enabled') ? $builder->where('enabled', false) : $builder;
+        return $this->hasAttribute('is_enabled') ? $builder->where('is_enabled', false) : $builder;
     }
 
     /**

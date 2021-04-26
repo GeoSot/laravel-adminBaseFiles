@@ -42,8 +42,8 @@ class PageBlockController extends BaseAdminController
     protected function listFields()//Can be omitted
     {
         $newFields = [
-            'listable' => ['title', 'pageArea.slug', 'order', 'has_multiple_images', 'enabled', 'id'],
-            'searchable' => ['title', 'enabled', 'id'],
+            'listable' => ['title', 'pageArea.slug', 'order', 'has_multiple_images', 'is_enabled', 'id'],
+            'searchable' => ['title', 'is_enabled', 'id'],
         ];
         return array_merge(parent::listFields(), $newFields);
     }

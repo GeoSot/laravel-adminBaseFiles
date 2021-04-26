@@ -32,7 +32,7 @@ return [
         'phone1' => 'Phone',
         'phone2' => 'Mobile',
         /* Advanced */
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'active' => 'Activated',
         'images' => 'Profile Image',
         'alt_text' => 'Image Alternative Text',

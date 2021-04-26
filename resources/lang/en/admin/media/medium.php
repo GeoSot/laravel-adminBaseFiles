@@ -12,7 +12,7 @@ return [
         'notes' => 'Description',
         'alt_attribute' => 'Alt Attribute',
         'keywords' => 'Keywords',
-        'enabled' => 'Enabled',
+        'is_enabled' => 'Enabled',
         'custom_properties' => 'Custom properties',
         'thumb_html' => 'Thumb',
 

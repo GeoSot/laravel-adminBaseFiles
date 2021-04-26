@@ -157,9 +157,10 @@ class CreateAdminBaseFromFile extends Command
      */
     protected function makeMigration($name, $parentRoute, $model)
     {
+        $className=strtolower(Str::plural($model));
         $this->call('make:migration', [
-            'name' => Str::plural($model),
-            '--create' => (($parentRoute) ? $parentRoute.'_' : '').Str::plural($name),
+            'name' => "create_{$className}_table",
+            '--create' => (($parentRoute) ? $parentRoute.'_' : '').$className,
         ]);
     }
 

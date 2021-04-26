@@ -26,14 +26,14 @@ class PageBlock extends BasePage
         'has_multiple_images',
         'order',
         'slug',
-        'enabled',
+        'is_enabled',
         'user_id',
         'modified_by',
 
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'is_enabled' => 'boolean',
         'has_multiple_images' => 'boolean',
         'starts_at' => 'datetime:d/m/Y',
         'expires_at' => 'datetime:d/m/Y',

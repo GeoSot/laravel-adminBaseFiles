@@ -56,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         'bio',
         'slack_webhook_url',
         'notification_types',
-        'enabled',
+        'is_enabled',
         'modified_by',
     ];
     /**

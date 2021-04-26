@@ -19,8 +19,8 @@ class BasicForm extends BaseAdminForm
         //            ]);
         //        }
 
-        if (in_array('enabled', $modelInstance->getFillable())) {
-            $this->addCheckBox('enabled');
+        if (in_array('is_enabled', $modelInstance->getFillable())) {
+            $this->addCheckBox('is_enabled');
             $this->add('title', 'text');
         }
 
