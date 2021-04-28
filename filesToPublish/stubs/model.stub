@@ -3,12 +3,13 @@
 namespace {{ namespace }};
 
 use GeoSot\BaseAdmin\App\Models\BaseModel;
+use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class {{ class }} extends BaseModel
 {
     use HasFactory;
-    //use Sluggable;
+    //use Sluggable, IsExportable;
 
     /**
      * The attributes that are mass assignable.
