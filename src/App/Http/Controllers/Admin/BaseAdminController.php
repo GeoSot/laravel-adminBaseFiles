@@ -522,7 +522,7 @@ abstract class BaseAdminController extends BaseController
     /**
      * @return array|Filter[]
      */
-    protected function filters()
+    protected function filters(): array
     {
 
         /*   return [

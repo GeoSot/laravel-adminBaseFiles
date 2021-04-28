@@ -39,7 +39,7 @@ class PageBlockController extends BaseAdminController
         return $this->genericUpdate($request, $pageBlock);
     }
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $newFields = [
             'listable' => ['title', 'pageArea.slug', 'order', 'has_multiple_images', 'is_enabled', 'id'],
@@ -48,7 +48,7 @@ class PageBlockController extends BaseAdminController
         return array_merge(parent::listFields(), $newFields);
     }
 
-    protected function filters()
+    protected function filters(): array
     {
         return [
             Filter::boolean('has_multiple_images'),

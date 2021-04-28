@@ -44,7 +44,7 @@ class PageController extends BaseAdminController
         return $this->genericUpdate($request, $page);
     }
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $newFields = [
             'listable' => ['title', 'slug', 'parentPage.title', 'childrenPages.title', 'is_enabled', 'id'],
@@ -53,7 +53,7 @@ class PageController extends BaseAdminController
         return array_merge(parent::listFields(), $newFields);
     }
 
-    protected function filters()
+    protected function filters(): array
     {
         return [
             Filter::selectMulti('parentPage.title'),

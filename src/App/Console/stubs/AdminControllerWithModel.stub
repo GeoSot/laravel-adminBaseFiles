@@ -4,7 +4,7 @@ namespace {{ namespace }};
 
 use {{ namespacedModel }};
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
-use Illuminate\Http\Request;
+use Illuminate\Http\{Request, Response};
 
 class {{ class }} extends BaseAdminController
 {
@@ -16,7 +16,7 @@ class {{ class }} extends BaseAdminController
      *
      * @param  \{{ namespacedModel }}  ${{ modelVariable }}
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit({{ model }} ${{ modelVariable }})
     {
@@ -26,17 +26,17 @@ class {{ class }} extends BaseAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
+     * @param Request $request
+     * @param \{{ namespacedModel }}  ${{ modelVariable }}
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, {{ model }} ${{ modelVariable }})
     {
          return $this->genericUpdate($request, ${{ modelVariable }});
     }
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $newFields = [
             'listable'   => ['title', 'is_enabled', 'id'],

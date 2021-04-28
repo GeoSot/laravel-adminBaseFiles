@@ -40,7 +40,7 @@ class PageAreaController extends BaseAdminController
         return $this->genericUpdate($request, $pageArea);
     }
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $newFields = [
             'listable' => ['title', 'page.slug', 'order', 'blocks.slug', 'is_enabled', 'id'],
@@ -49,7 +49,7 @@ class PageAreaController extends BaseAdminController
         return array_merge(parent::listFields(), $newFields);
     }
 
-    protected function filters()
+    protected function filters(): array
     {
         return [
             Filter::selectMulti('page.slug'),

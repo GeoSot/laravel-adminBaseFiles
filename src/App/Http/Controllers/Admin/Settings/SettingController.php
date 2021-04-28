@@ -96,7 +96,7 @@ class SettingController extends BaseAdminController
     }
 
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $neFields = [
             'linkable' => ['key'],
@@ -109,7 +109,7 @@ class SettingController extends BaseAdminController
         return array_merge(parent::listFields(), $neFields);
     }
 
-    protected function filters()//Can be omitted
+    protected function filters(): array //Can be omitted
     {
         return [
             Filter::select('group'),

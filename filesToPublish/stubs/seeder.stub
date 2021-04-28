@@ -16,11 +16,11 @@ class {{ class }} extends BaseSeeder
     {
         $static = new $this->class();
 
-        foreach ($this->data() as $index => $userData) {
+        foreach ($this->data() as $index => $data) {
 
-            $user = $static::create(Arr::except($userData, 'roles'));
-            $user->attachRoles($userData['roles']);
-            $this->creatingDataMsg($userData['first_name'] . ' ' . $userData['last_name']);
+            $record = $static::create(Arr::except($data, 'roles'));
+            $record->attachRoles($data['roles']);
+            $this->creatingDataMsg($data['first_name'] . ' ' . $data['last_name']);
         }
 
     }

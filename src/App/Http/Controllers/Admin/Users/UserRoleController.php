@@ -79,7 +79,7 @@ class UserRoleController extends BaseAdminController
         return parent::delete($request);
     }
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $neFields = [
             'listable' => ['display_name', 'name', 'id'],

@@ -43,7 +43,7 @@ class UserController extends BaseAdminController
         return $this->genericUpdate($request, $user);
     }
 
-    protected function listFields()
+    protected function listFields(): array
     {
         $neFields = [
             'listable' => ['full_name', 'is_enabled', 'roles.display_name', 'id'],
@@ -71,7 +71,7 @@ class UserController extends BaseAdminController
         }
     }
 
-    protected function filters()
+    protected function filters(): array
     {
         return [
             Filter::selectMulti('roles.name')

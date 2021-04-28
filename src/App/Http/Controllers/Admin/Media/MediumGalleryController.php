@@ -25,7 +25,7 @@ class MediumGalleryController extends BaseAdminController
     }
 
 
-    protected function listFields()
+    protected function listFields(): array
     {
         $neFields = [
             'listable' => ['title', 'ownerModel', 'is_enabled', 'id'],

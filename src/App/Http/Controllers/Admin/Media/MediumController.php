@@ -31,7 +31,7 @@ class MediumController extends BaseAdminController
     }
 
 
-    protected function listFields()
+    protected function listFields(): array
     {
         $neFields = [
             'listable' => ['title', 'thumb_html', 'size', 'created_at', 'id'],

@@ -8,12 +8,12 @@ use Illuminate\Support\Arr;
 trait HasFields
 {
 
-    private function getSearchableFields()
+    private function getSearchableFields(): array
     {
         return Arr::get($this->listFields(), 'searchable', []);
     }
 
-    protected function listFields()
+    protected function listFields(): array
     {
         return [
             'listable' => ['title', 'is_enabled', 'id'],
@@ -24,12 +24,12 @@ trait HasFields
         ];
     }
 
-    private function getSortableFields()
+    private function getSortableFields(): array
     {
         return Arr::get($this->listFields(), 'sortable', []);
     }
 
-    private function getListableFields()
+    private function getListableFields(): array
     {
         return Arr::get($this->listFields(), 'listable', []);
     }

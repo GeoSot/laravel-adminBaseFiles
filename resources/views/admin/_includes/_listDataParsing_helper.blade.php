@@ -14,7 +14,7 @@
     @includeIf($snippetsDir.'firstCheckBox')
     @break
     @case('is_enabled')
-    @includeIf($snippetsDir.'enabled')
+    @includeIf($snippetsDir.'is_enabled')
     @break
     @case('counter')
     @includeIf($snippetsDir.'counter')

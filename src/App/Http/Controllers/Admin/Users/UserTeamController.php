@@ -40,7 +40,7 @@ class UserTeamController extends BaseAdminController
     }
 
 
-    protected function listFields()//Can be omitted
+    protected function listFields(): array //Can be omitted
     {
         $neFields = [
             'listable' => ['display_name', 'name', 'id'],
