@@ -19,7 +19,7 @@ const init = () => {
 
 }
 
-const internalInit = (el) => {
+const internalInit = function (el) {
     const _this = this;
     _this.$wrapper = ($(el).is(selectors.trigger)) ? $(el) : $(el).parents(selectors.trigger);
     _this.$hiddenInput = this.$wrapper.find('[type="hidden"]');

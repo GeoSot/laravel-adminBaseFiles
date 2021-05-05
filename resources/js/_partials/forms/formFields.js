@@ -34,9 +34,12 @@ const initSelect2 = function ($el) {
 
 
     document.addEventListener('baseAdmin:ajaxLoadWrappers', () => {
+
         $($el).find('select').each(function () {
+
             let $sel = $(this);
             if ($sel.is('[multiple]') || $sel.hasClass('select2')) {
+
                 $sel.select2();
             }
         });

@@ -23,6 +23,9 @@ return [
             'field_class' => 'form-control withEditor',
         ],
 
+        'entity' => [
+            'field_class' => 'custom-select',
+        ],
         // Override a class from a field.
         //'text'                => [
         //    'wrapper_class'   => 'form-field-text',

@@ -28,7 +28,7 @@ class CreateAdminBaseFromFile extends Command
     /**
      * Create a new migration install command instance.
      *
-     * @param  Composer  $composer
+     * @param Composer $composer
      *
      * @return void
      */
@@ -73,21 +73,21 @@ class CreateAdminBaseFromFile extends Command
 
     protected function makeFiles($name, $plural, $parentRoute = '', $hasSubMenus = true)
     {
-        $controllerName = ucfirst($parentRoute).ucfirst($name).'Controller';
-        $model = ucfirst($parentRoute).ucfirst($name);
-        $modelNameSpace = 'App\Models\\'.(($plural) ? ucfirst($plural).'\\' : '');
-        $fullModelClass = $modelNameSpace.$model;
+        $controllerName = ucfirst($parentRoute) . ucfirst($name) . 'Controller';
+        $model = ucfirst($parentRoute) . ucfirst($name);
+        $modelNameSpace = 'App\Models\\' . (($plural) ? ucfirst($plural) . '\\' : '');
+        $fullModelClass = $modelNameSpace . $model;
         $viewBaseDir = lcfirst(Str::plural(empty($parentRoute) ? $model : $parentRoute));
         if ($hasSubMenus) {
-            $viewBaseDir .= '/'.lcfirst(Str::plural($model));
+            $viewBaseDir .= '/' . lcfirst(Str::plural($model));
         }
         $viewBase = str_replace('/', '.', $viewBaseDir);
-        $langBase = lcfirst($plural).'/'.lcfirst($model);
-        $routeBase = ((!empty($parentRoute)) ? Str::plural($parentRoute).'.' : '').Str::plural($name);
+        $langBase = lcfirst($plural) . '/' . lcfirst($model);
+        $routeBase = ((!empty($parentRoute)) ? Str::plural($parentRoute) . '.' : '') . Str::plural($name);
 
 
         $this->info('');
-        $this->info($model.'  ---  Making Files');
+        $this->info($model . '  ---  Making Files');
         $this->info('------------------------------------------');
 
         if ($this->confirm("Make  {$model} Files?")) {
@@ -102,7 +102,7 @@ class CreateAdminBaseFromFile extends Command
                 $this->makeController($plural, $controllerName, $fullModelClass);
             }
             if ($this->confirm("Make {$model} Migration?")) {
-                $this->makeMigration($name, $parentRoute, $model);
+                $this->makeMigration($name, $parentRoute);
             }
             if ($this->confirm("Make {$model} Factory?")) {
                 $this->makeFactory($model, $fullModelClass);
@@ -118,9 +118,9 @@ class CreateAdminBaseFromFile extends Command
 
     /**
      * @param        $fullModelClass
-     * @param  string  $viewBase
-     * @param  string  $langBase
-     * @param  string  $routeBase
+     * @param string $viewBase
+     * @param string $langBase
+     * @param string $routeBase
      */
     protected function makeModel($fullModelClass, string $viewBase, string $langBase, string $routeBase)
     {
@@ -145,22 +145,22 @@ class CreateAdminBaseFromFile extends Command
     protected function makeController($plural, $controllerName, $fullModelClass)
     {
         $this->call('baseAdmin:makeAdminController', [
-            'name' => ucfirst($plural).'\\'.$controllerName,
+            'name' => ucfirst($plural) . '\\' . $controllerName,
             '--model' => $fullModelClass,
         ]);
     }
 
     /**
      * @param $name
-     * @param $parentRoute
-     * @param $model
+     * @param $parentName
      */
-    protected function makeMigration($name, $parentRoute, $model)
+    protected function makeMigration($name, $parentName)
     {
-        $className=strtolower(Str::plural($model));
+        $mainName = Str::of($name)->lower()->plural()->snake()->__toString();
+        $tableName = (($parentName) ? $parentName . '_' : '') . $mainName;
         $this->call('make:migration', [
-            'name' => "create_{$className}_table",
-            '--create' => (($parentRoute) ? $parentRoute.'_' : '').$className,
+            'name' => "create_{$tableName}_table",
+            '--create' => $tableName
         ]);
     }
 
@@ -171,7 +171,7 @@ class CreateAdminBaseFromFile extends Command
     protected function makeFactory($model, $fullModelClass)
     {
         $this->call('make:factory', [
-            'name' => $model.'Factory',
+            'name' => $model . 'Factory',
             '--model' => $fullModelClass
         ]);
     }
@@ -182,7 +182,7 @@ class CreateAdminBaseFromFile extends Command
     protected function makeLanguage($langBase)
     {
         $this->call('baseAdmin:makeLanguageFile', [
-            'name' => 'admin/'.$langBase
+            'name' => 'admin/' . $langBase
         ]);
     }
 

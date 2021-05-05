@@ -21,7 +21,7 @@ const init = () => {
     });
 }
 
-const internalInit = ($el = null) => {
+const internalInit = function ($el = null) {
 
     $(selectors.parent).not('.' + formsInitializedClass).addClass(formsInitializedClass).each(function (i, elem) {
         if ($(elem).find('input[name$="_formatted"]').first().is(':disabled')) {
@@ -43,9 +43,7 @@ const internalInit = ($el = null) => {
                 format: $(elem).attr('data-locale')
             }
 
-        }, function (start, end, label) {
-            _callback(start, end, label);
-        });
+        }, _callback);
     });
     if ($el) {
         $el.click();
@@ -53,7 +51,7 @@ const internalInit = ($el = null) => {
 
 }
 
-const _callback = (start, end, label) => {
+const _callback = function (start, end, label) {
     let $parent = $(this.element);
     let $input = $('[name="' + $parent.data('name') + '"]');
     let $formatted_input = $('[name="' + $parent.data('name') + '_formatted"]');

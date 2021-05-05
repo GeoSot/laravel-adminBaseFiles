@@ -1,5 +1,5 @@
 const formsInitializedClass = BaseAdmin.forms.initializedClass;
-let $ ;
+let $;
 const selectors = {
     parent: '[data-toggle="dateRangeCalendar"]',
     clear: '[data-clear="dateRangeCalendar"]'
@@ -46,14 +46,12 @@ const internalInit = () => {
             linkedCalendars: false,
             alwaysShowCalendars: true,
 
-        }, function (start, end, label) {
-            callback(start, end, label);
-        });
+        }, callback);
     });
 
 }
 
-const callback = (start, end, label) => {
+const callback = function (start, end, label) {
     let $parent = $(this.element);
     let $inputStart = $('[name="' + $parent.data('name') + '[start]"]');
     let $inputEnd = $('[name="' + $parent.data('name') + '[end]"]');
