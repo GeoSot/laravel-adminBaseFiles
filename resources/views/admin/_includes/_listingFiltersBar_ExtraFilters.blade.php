@@ -101,7 +101,7 @@ use Illuminate\Support\Collection;
                                        value="{!! $hasValues?$formattedValue : '' !!}">
                             </div>
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary "><i class="fas calendar-week  fa-fw"></i></button>
+                                <button type="button" class="btn btn-secondary "><i class="fas fa-calendar-week  fa-fw"></i></button>
                             </div>
                         </div>
                     </div>

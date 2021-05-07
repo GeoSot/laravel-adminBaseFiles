@@ -6,7 +6,7 @@
 @endphp
 @php($subMenuPlural = Str::plural($subMenu))
 @php($routeName =($subMenu == $parentRoute)? "admin.{$subMenuPlural}.index": "admin.{$parentPlural}.{$subMenuPlural}.index")
-@php($routePrefix=LaravelLocalization::getCurrentLocale()."/admin/{$parentPlural}")
+@php($routePrefix=\GeoSot\BaseAdmin\Helpers\Base::isMultiLingual()?LaravelLocalization::getCurrentLocale().'/':''."admin/{$parentPlural}")
 
 @php($values=[
 'active'=>Request::is($routePrefix."/{$subMenuPlural}*") or (Request::is($routePrefix) and  $subMenu == $parentRoute),

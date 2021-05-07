@@ -1,0 +1,1 @@
+<span class=" badge badge-pill" style="background-color:{{$record[$listName]}} ">&nbsp;</span>

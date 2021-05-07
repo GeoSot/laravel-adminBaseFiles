@@ -4,6 +4,7 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 trait OwnedBy
@@ -17,9 +18,9 @@ trait OwnedBy
         });
     }
 
-    public function owner()
+    public function owner(): ?BelongsTo
     {
-        return in_array('user_id', $this->getFillable()) ? $this->belongsTo(config('baseAdmin.config.models.user'), 'user_id') : null;
+        return in_array('user_id', $this->getAttributes()) ? $this->belongsTo(config('baseAdmin.config.models.user'), 'user_id') : null;
     }
 
     //Laratrust auth()->user()->owns($connection)

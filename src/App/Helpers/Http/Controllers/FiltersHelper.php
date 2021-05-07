@@ -121,7 +121,7 @@ class FiltersHelper
             }
 
             // RELATIONSHIP FIELD
-            if ($field->relationName && ($field->exists || $field->isAppended)) {
+            if (isset($field->relationName) && ($field->exists || $field->isAppended)) {
                 $query->whereHas($field->relationName, function ($q) use ($field, $filter, $value) {
                     $foreignTableColumn = $field->table.'.'.$filter->getRelatedKey();
                     return $this->makeExtraFiltersQuery($q, $filter, $field->column, $value, $foreignTableColumn);
