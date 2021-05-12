@@ -9,7 +9,7 @@
                     @csrf
 
                     <button type="submit" class="btn  btn-primary ">
-                            <span class="btn-label"><i class="fas fa-refresh"></i></span>
+                            <span class="btn-label"><i class="fas fa-sync"></i></span>
                         <span class="btn_text"> @lang("{$viewVals->get('modelLang')}.buttons.retryAll")</span>
                           </button>
                     </form>

@@ -3,10 +3,8 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 use Exception;
-use GeoSot\BaseAdmin\App\Helpers\Models\FrontEndConfigs;
-use GeoSot\BaseAdmin\Helpers\Base;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait IsExportable
@@ -14,51 +12,70 @@ trait IsExportable
     /**
      * @return array
      */
-    public function getCsvColumns()
+    public function getCsvColumns(): array
     {
         return $this->getArrayableItems(array_merge($this->getFillable(), $this->appends));
+    }
+
+    protected function parseValueForCsv($data, $key)
+    {
+        $isRelation = Str::substrCount($key, '.');
+        if ($isRelation) {
+            return $this->parseValueForCsv(data_get($data, Str::beforeLast($key, '.')), Str::afterLast($key, '.'));
+        }
+
+        if (!is_iterable($data)) {
+            return data_get($data, $key);
+        }
+
+        $result = '';
+        foreach ($data as $dt) {
+            $result .= "{$this->parseValueForCsv($dt, $key)}, ";
+        }
+
+        return $result;
     }
 
     /**
      * @return array
      */
-    public function toCsvArray()
+    public function toCsvArray($item): array
     {
-        return array_map(function ($it) {
-            return is_array($it) ? implode(', ', $it) : $it;
-        }, Arr::only($this->attributesToArray(), $this->getCsvColumns()));
+        return array_map(function ($key) use ($item) {
+            $result = $this->parseValueForCsv($item, $key) ?: '';
+            return is_array($result) ? implode(', ', $result) : $result;
+        }, $this->getCsvColumns());
     }
 
     /**
      * Export a csv file based on a collection of items.
      *
-     * @param  Collection  $items
+     * @param Collection $items
      * @return StreamedResponse
      * @throws Exception
      */
-    public function exportToCsv(Collection $items)
+    public function exportToCsv(Collection $items, callable $translateCallback = null): StreamedResponse
     {
-        $filename = now()->format('Y-m-d-his').'-'.$this->getTable().'.csv';
-
+        $filename = now()->format('Y-m-d-his') . '-' . $this->getTable() . '.csv';
 
         $headers = [
             "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=".$filename,
+            "Content-Disposition" => "attachment; filename=" . $filename,
             "Pragma" => "no-cache",
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"
         ];
 
 
-        return response()->stream(function () use ($items) {
+        return response()->stream(function () use ($items, $translateCallback) {
             $file = fopen('php://output', 'w');
 
-            fputcsv($file,array_map(function (string $text){
-                return $this->frontConfigs->trans(".fields.{$text}");
-            },  $this->getCsvColumns()));
+            fputcsv($file, array_map(function (string $text) use ($translateCallback) {
+                return $translateCallback ? $translateCallback($text) : $text;
+            }, $this->getCsvColumns()));
 
             foreach ($items as $item) {
-                fputcsv($file, $item->toCsvArray());
+                fputcsv($file, $this->toCsvArray($item));
             }
 
             fclose($file);

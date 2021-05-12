@@ -11,7 +11,7 @@
             @if( auth()->user()->isAbleTo('admin.delete-log'))
                 <button role="button" class="btn  btn-info  m-1" data-toggle="logAction" data-title="Clean Log File"
                         data-href="?clean={{ \Illuminate\Support\Facades\Crypt::encrypt($current_file) }}{{ ($current_folder) ? '&f=' . \Illuminate\Support\Facades\Crypt::encrypt($current_folder) : '' }}">
-                    <span class="btn-label"><i class="fas fa-refresh"></i></span>
+                    <span class="btn-label"><i class="fas fa-sync"></i></span>
                     <span class="btn_text">Clean file</span>
                 </button>
 

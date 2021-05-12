@@ -113,7 +113,7 @@ use Illuminate\Support\Collection;
             @if($requestParams->filter(function ($it){return !is_null($it);})->isNotEmpty())
                 <button type="button" data-toggle="clearExtraFilters" class="btn btn-outline-info btn-sm mx-1">
                     @lang($lang.'.button.clearExtraFilters')
-                    <span class="btn-label btn-label-right"><i class="fas fa-refresh"></i></span>
+                    <span class="btn-label btn-label-right"><i class="fas fa-sync"></i></span>
                 </button>
             @endif
             <button type="submit" class="btn btn-admin btn-sm ,x-1">

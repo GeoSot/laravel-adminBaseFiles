@@ -24,7 +24,7 @@
                     @method('PATCH')
                      @csrf
                      <button type="submit" class="btn  btn-primary btn-sm" title=" @lang("{$viewVals->get('modelLang')}.buttons.retry")">
-                     <i class="fas fa-refresh"></i>
+                     <i class="fas fa-sync"></i>
                       </button>
                 </form>
              @endif

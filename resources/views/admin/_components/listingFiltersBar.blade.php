@@ -11,7 +11,7 @@
     <div class="mb-3">
         <a href="{{route($viewVals->get('baseRoute').'.index','clean-queries')}}" class="btn btn-outline-info  ">
             <span class=""> @lang("{$lang}.listFilters.cleanFilters")</span>
-            <span class="btn-label btn-label-right"><i class="fas fa-refresh"></i></span>
+            <span class="btn-label btn-label-right"><i class="fas fa-sync"></i></span>
         </a>
     </div>
 @endif

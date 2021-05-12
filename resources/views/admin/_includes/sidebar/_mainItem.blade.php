@@ -10,10 +10,12 @@
    //Gather All Permissions In Order To Find if User Can se the Item
    //**************
    $parentPermission="admin.index-{$parentRoute}";
-   $isExcludedFromConfFile= in_array( $parentRoute,Arr::get($node,'excludeFromSideBar',[]));
+   $exclutions=Arr::get($node,'excludeFromSideBar',[]);
+   $excludeAll= in_array('*', $exclutions);
+   $isExcludedFromConfFile= in_array( $parentRoute, $exclutions) || $excludeAll;
 
    $canSeeMenu=(auth()->user()->isAbleTo($parentPermission) and !$isExcludedFromConfFile );
-  if( $hasInnerMenus ){
+  if( $hasInnerMenus && !$excludeAll){
        $children= array_diff ( $node['menus'] , [$parentRoute]);
        $childPermissions= array_map(function ($child) use ($parentRoute) {
            return 'admin.index-'.$parentRoute.ucfirst($child);

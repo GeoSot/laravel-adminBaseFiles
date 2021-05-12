@@ -13,8 +13,8 @@ use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response,};
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\{Arr, Collection, Facades\Route, Str};
 use Kris\LaravelFormBuilder\Form;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -45,17 +45,17 @@ abstract class BaseAdminController extends BaseController
 
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse|RedirectResponse|Response|StreamedResponse
      * @throws Exception
      */
     public function index(Request $request)
     {
 
-      /*  $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
-        if (!is_null($redirectRoute)) {
-            return redirect()->to($redirectRoute);
-        }*/
+        /*  $redirectRoute = $this->checkForPreviousPageVersionWithFiltersAndReturnThem($request);
+          if (!is_null($redirectRoute)) {
+              return redirect()->to($redirectRoute);
+          }*/
 
         $this->fieldsHelper = new FieldsHelper($this->_hydratedModel);
         $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
@@ -75,10 +75,13 @@ abstract class BaseAdminController extends BaseController
         if ($request->input('export') === 'csv' && $this->helper->modelIsExportable()) {
             /** @var IsExportable $model */
             $model = $this->_hydratedModel;
-            return $model->exportToCsv($query->get());
+            return $model->exportToCsv($query->get(), function (string $arg) {
+                return trans($this->chooseProperLangFile(".fields.{$arg}"));
+            });
+
         }
 
-        /** @var LengthAwarePaginator  $records */
+        /** @var LengthAwarePaginator $records */
         $records = $query->paginate($params->get('num_of_items'));
         $records->appends($params->toArray());
 
@@ -92,7 +95,7 @@ abstract class BaseAdminController extends BaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Collection
      */
@@ -130,10 +133,10 @@ abstract class BaseAdminController extends BaseController
                     if ($field->exists) {
 
                         if (!$field->isRelated()) {
-                            $query->orWhere($field->column, 'LIKE', '%'.$params->get('keyword').'%');
+                            $query->orWhere($field->column, 'LIKE', '%' . $params->get('keyword') . '%');
                         } else {
                             $query->orWhereHas($field->relationName, function ($q) use ($field, $params) {
-                                $q->where($field->column, 'LIKE', '%'.$params->get('keyword').'%');
+                                $q->where($field->column, 'LIKE', '%' . $params->get('keyword') . '%');
                             });
                         }
                     }
@@ -171,7 +174,7 @@ abstract class BaseAdminController extends BaseController
 
     protected function getView(string $finalView)
     {
-        return $this->chooseProperViewFile($finalView).'.'.$finalView;
+        return $this->chooseProperViewFile($finalView) . '.' . $finalView;
     }
 
     protected function variablesToView(Collection $extraValues = null, $action = 'index', $merge = [])
@@ -219,14 +222,14 @@ abstract class BaseAdminController extends BaseController
 
             $parentsRoute = "$routeSplit[0].$routeSplit[1].index";
 
-            $collection->put($baseLangRoute.Str::singular(explode('/', $baseLangRoute)[1]).'.general.menuTitle', Route::has($parentsRoute) ? route($parentsRoute) : '');
+            $collection->put($baseLangRoute . Str::singular(explode('/', $baseLangRoute)[1]) . '.general.menuTitle', Route::has($parentsRoute) ? route($parentsRoute) : '');
 
         }
 
         $collection->put($this->chooseProperLangFile('.general.menuTitle'), route("{$this->_modelRoute}.index"));
 
         if ($action !== 'index') {
-            $collection->put(Base::addPackagePrefix($this->usingLangDir()).'.menu.'.$action, '');
+            $collection->put(Base::addPackagePrefix($this->usingLangDir()) . '.menu.' . $action, '');
         }
 
         return $collection;
@@ -270,8 +273,8 @@ abstract class BaseAdminController extends BaseController
     protected function jsonResponse($results, $action, Request $request)
     {
         $flag = $results == 0 ? 'error' : 'success';
-        $title = $this->getLang($action.'.'.$flag.'Title');
-        $message = $this->getLang($action.'.'.$flag.'Msg', $results);
+        $title = $this->getLang($action . '.' . $flag . 'Title');
+        $message = $this->getLang($action . '.' . $flag . 'Msg', $results);
         if ($flag == 'success' and !$request->input('onlyJson', false)) {
             Alert::success($message, $title)->typeToast();
         }
@@ -345,7 +348,7 @@ abstract class BaseAdminController extends BaseController
         $extraValues->put('form', $form);
         if (request()->wantsJson()) {
             $newForm = clone $form;
-            $extraValues->put('formRendered', $newForm->renderForm(['id' => 'edit'.class_basename($this->_class).'Form']));
+            $extraValues->put('formRendered', $newForm->renderForm(['id' => 'edit' . class_basename($this->_class) . 'Form']));
         }
 
         $data = $this->variablesToView($extraValues, 'edit', ['record' => $model]);
@@ -422,7 +425,7 @@ abstract class BaseAdminController extends BaseController
     }
 
     /**
-     * @param  null  $model
+     * @param null $model
      * @return Form
      */
     protected function makeForm($model = null)
@@ -430,7 +433,7 @@ abstract class BaseAdminController extends BaseController
 
         $options = [
             'method' => $model ? 'PATCH' : 'POST',
-            'url' => route($this->_modelRoute.'.'.($model ? 'update' : 'store'), $model),
+            'url' => route($this->_modelRoute . '.' . ($model ? 'update' : 'store'), $model),
             'language_name' => $this->chooseProperLangFile('.fields'),
             'id' => 'mainForm',
             'model' => $model ?? $this->_hydratedModel,
@@ -442,29 +445,29 @@ abstract class BaseAdminController extends BaseController
 
     protected function getLang(string $langPath, $count = 1)
     {
-        return trans_choice(Base::addPackagePrefix($this->usingLangDir()).'.messages.crud.'.$langPath, $count,
+        return trans_choice(Base::addPackagePrefix($this->usingLangDir()) . '.messages.crud.' . $langPath, $count,
             ['num' => $count]);
     }
 
     /**
-     * @param  string  $string
+     * @param string $string
      * @return string
      */
     protected function chooseProperLangFile(string $string = ''): string
     {
         //Translation File Can Be In LangPath
-        $langFile = $this->_modelsLangDir.'.general.menuTitle';
+        $langFile = $this->_modelsLangDir . '.general.menuTitle';
         $this->helper->debugMsg("Try Find Lang: {$langFile}");
         if (trans()->has($langFile)) {
             $this->helper->infoMsg("Return Lang: {$langFile}");
-            return $this->_modelsLangDir.$string;
+            return $this->_modelsLangDir . $string;
         }
         /**
          * Or in LangPath/vendor/package/locale/etc
          * Example: resources/lang/vendor/baseAdmin/en/admin/pages/page.php
          * $file = app()->langPath().DIRECTORY_SEPARATOR.app()->getLocale().DIRECTORY_SEPARATOR.$this->_modelsLangDir.'.php';
          * */
-        $langFile = $this->_modelsLangDir.$string;
+        $langFile = $this->_modelsLangDir . $string;
         $this->helper->infoMsg("Return Lang: {$langFile}");
         return Base::addPackagePrefix($langFile);
 
@@ -480,10 +483,10 @@ abstract class BaseAdminController extends BaseController
     protected function chooseProperViewFile($action): string
     {
 
-        $suffix = '.'.($action == 'index' ? 'index' : 'form');
+        $suffix = '.' . ($action == 'index' ? 'index' : 'form');
 
         $modelView = $this->_modelsViewsDir;
-        $view = $modelView.$suffix;
+        $view = $modelView . $suffix;
         $this->helper->debugMsg("Try Find View: {$view}");
         if (view()->exists($view)) {
             $this->helper->infoMsg("Return View: {$view}");
@@ -505,8 +508,8 @@ abstract class BaseAdminController extends BaseController
 
 
     /**
-     * @param  string  $action
-     * @param  array  $data
+     * @param string $action
+     * @param array $data
      * @return JsonResponse|Response
      */
     protected function sendProperResponse(string $action = 'index', array $data = [])
