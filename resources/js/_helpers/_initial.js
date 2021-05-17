@@ -15,8 +15,11 @@ window.BaseAdmin.makeAjax = (url, method, data, show_message, callback) =>
 
 window.BaseAdmin.forms = window.BaseAdmin.forms || {};
 window.BaseAdmin.forms.ajaxifyFormOnModal = (formSelector, modalSelector, wrapperToReload, destroyOnClose = false) =>
-    import( '../_partials/forms/ajaxForms').then((src) => {
-        src.ajaxifyFormOnModal(formSelector, modalSelector, wrapperToReload, destroyOnClose = false)
+    import('jquery').then(src => {
+        let $ = src.default
+        import( '../_partials/forms/ajaxForms').then((src) => {
+            src.ajaxifyFormOnModal(formSelector, modalSelector, wrapperToReload, destroyOnClose = false)
+        });
     });
 
 

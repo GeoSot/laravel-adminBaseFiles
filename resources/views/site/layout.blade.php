@@ -16,7 +16,7 @@
 <body data-layout="site">
 <div class=" d-flex flex-column justify-content-between min-vh-100">
     @includeIf($packageVariables->get('blades').'site._includes.header')
-    <div id="app" class="mainWrapper  d-flex flex-column h-100  mt-4">
+    <div id="app" class="mainWrapper  d-flex flex-column mh-100  mt-5">
         @hasSection('documentTitle')
             <div class="page-header container">
                 <h1 class="text-muted" itemscope itemprop="mainEntity" itemtype="http://schema.org/Thing">@yield('documentTitle')</h1>

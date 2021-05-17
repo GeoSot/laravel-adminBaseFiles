@@ -35,6 +35,7 @@ const internalInit = function ($el = null) {
             showDropdowns: true,
             singleDatePicker: true,
             startDate: value,
+            autoApply: true,
             // autoUpdateInput: false,
             timePicker: ($(elem).attr('data-locale').match(/H:|h:|mm/g) != null),
             timePicker24Hour: true,

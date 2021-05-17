@@ -15,6 +15,7 @@ class MakeAdminPermissions extends Command
      * @var string
      */
     protected $signature = 'baseAdmin:makePermissionsForModel {name : The name of the Model / or PermissionName }
+                                                           {--side=admin : admin|site }
                                                            {--isPermName= : flag it as true is you want to make only one permission from parsed from string}';
 
     /**
@@ -50,7 +51,7 @@ class MakeAdminPermissions extends Command
      */
     protected function getPermissionsMapping()
     {
-        return [
+        $admin = [
             'admin.index',
             'admin.create',
             'admin.edit',
@@ -59,7 +60,15 @@ class MakeAdminPermissions extends Command
             'admin.forceDelete',
             'admin.restore',
         ];
-
+        $site = [
+            'site.index',
+            'site.create',
+            'site.edit',
+            'site.update',
+            'site.delete',
+        ];
+        $side = lcfirst($this->option('side'));
+        return $side === 'site' ? $site : $admin;
     }
 
     protected function createPermissionsForAllAdminModels()
@@ -76,7 +85,7 @@ class MakeAdminPermissions extends Command
                 if ($name == $parentRoute) {
                     continue;
                 }
-                $this->createPermissionsForModel($parentRoute.ucfirst($name));
+                $this->createPermissionsForModel($parentRoute . ucfirst($name));
             }
 
         }
@@ -90,8 +99,8 @@ class MakeAdminPermissions extends Command
         $this->info('');
         foreach ($this->getPermissionsMapping() as $el) {
 
-            $friendlyName = ucwords(str_replace('.', ' ', $el)).' '.ucfirst(Str::plural($nameInput));
-            $name = $el.'-'.$nameInput;
+            $friendlyName = ucwords(str_replace('.', ' ', $el)) . ' ' . ucfirst(Str::plural($nameInput));
+            $name = $el . '-' . $nameInput;
             $permission = $this->updateOrCreatePermissionModel($name, $friendlyName);
         }
 
@@ -116,8 +125,8 @@ class MakeAdminPermissions extends Command
     }
 
     /**
-     * @param  string  $name
-     * @param  string  $friendlyName
+     * @param string $name
+     * @param string $friendlyName
      *
      * @return mixed
      */
@@ -131,7 +140,7 @@ class MakeAdminPermissions extends Command
             //                'permission_group_id'
         ]);
 
-        $this->info(($permission->wasRecentlyCreated ? 'Creating' : 'Existing').'  Permission '.$permission->name);
+        $this->info(($permission->wasRecentlyCreated ? 'Creating' : 'Existing') . '  Permission ' . $permission->name);
 
 
         return $permission;
@@ -148,7 +157,7 @@ class MakeAdminPermissions extends Command
             }, Arr::wrap($permissions));
         }
         foreach (config('baseAdmin.main.customMenuItems', []) as $parentRoute => $node) {
-            $this->createPermissionFromString('admin.index-'.$parentRoute);
+            $this->createPermissionFromString('admin.index-' . $parentRoute);
         }
     }
 

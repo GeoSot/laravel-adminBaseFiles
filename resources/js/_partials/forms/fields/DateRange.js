@@ -78,4 +78,3 @@ const getRanges = () => {
 }
 
 export {init};
-

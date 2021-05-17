@@ -43,7 +43,7 @@ trait IsExportable
     {
         return array_map(function ($key) use ($item) {
             $result = $this->parseValueForCsv($item, $key) ?: '';
-            return is_array($result) ? implode(', ', $result) : $result;
+            return strip_tags(is_array($result) ? implode(', ', $result) : $result);
         }, $this->getCsvColumns());
     }
 

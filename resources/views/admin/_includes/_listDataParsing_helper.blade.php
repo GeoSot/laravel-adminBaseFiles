@@ -52,7 +52,7 @@
         @elseif(is_bool($fieldData))
             @includeFirst([$snippetsDir.'boolean',$snippetsDir.'bool'])
         @elseif( is_object($dataCollection) and is_subclass_of($dataCollection, \Illuminate\Database\Eloquent\Model::class))
-            {!!$dataCollection->frontConfigs->getAdminLink(Arr::last($array), false,['target'=>'_blank']) !!}
+            {!!$dataCollection->frontConfigs->getAdminLink(Arr::last($array), false,['target'=>'_blank','class'=>'text-muted']) !!}
         @elseif( $dataCollection instanceof  \Illuminate\Support\Collection)
             @foreach($dataCollection as $dt)
                 @php($class = 'badge badge-primary badge-pill')

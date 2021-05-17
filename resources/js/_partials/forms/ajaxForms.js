@@ -1,6 +1,6 @@
 let ajaxified = [];
 
-const errors = function ($form) {
+const errors = function ($form, $) {
     const classes = {
         group: "form-group",
         groupError: "has-error",
@@ -80,7 +80,7 @@ const ajaxifiedForm = (formSelector) => {
  * @param   formSelector
  * @return AjaxObj
  */
-const ajaxify =function (formSelector) {
+const ajaxify = function (formSelector) {
     // if (!(this instanceof ajaxify)) return new ajaxify(name);
     if (ajaxified[formSelector]) {
         return ajaxified[formSelector];
@@ -142,7 +142,7 @@ const ajaxify =function (formSelector) {
             //  console.log(data);
             let text = data.statusText + '  Error Code: ' + data.status;
             if (data.responseJSON) {
-                _self.errorsObj = new errors(_self.$form).setErrors(data.responseJSON.errors);
+                _self.errorsObj = new errors(_self.$form, $).setErrors(data.responseJSON.errors);
                 _self.errorsObj.appendFormErrors();
                 text = _self.errorsObj.getErrorsAsText() || data.responseJSON.message || text;
             }
@@ -173,12 +173,12 @@ const ajaxify =function (formSelector) {
 
     ajaxified[_self.form] = _self;
     return _self;
-
 };
 
 
-const ajaxifyFormOnModal =function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false)  {
+const ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToReload, destroyOnClose = false) {
     if (!$(formSelector).length || !$(modalSelector).length) {
+        console.error({modalSelector, formSelector})
         return;
     }
     let form = new ajaxify(formSelector)
@@ -207,13 +207,12 @@ const ajaxifyFormOnModal =function (formSelector, modalSelector, wrapperToReload
             window.BaseAdmin.ajaxLoadWrappers(wrapperToReload);
         });
     });
-
 };
 const showMessage = (data) => {
     import('sweetalert2').then(src => {
         src.default.fire({
             title: data.title ? data.title : 'Error!',
-            text: data.text,
+            html: data.text,
             timer: 15000,
             icon: data.icon,
             timerProgressBar: true
