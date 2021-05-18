@@ -36,13 +36,17 @@ const initSelect2 = function ($el) {
     document.addEventListener('baseAdmin:ajaxLoadWrappers', () => {
 
         $($el).find('select').each(function () {
-
-            let $sel = $(this);
-            if ($sel.is('[multiple]') || $sel.hasClass('select2')) {
-
-                $sel.select2();
+            let $elem = $(this);
+            if ($elem.is('[multiple]') || $elem.hasClass('select2')) {
+                $elem.select2({
+                    dropdownParent: $elem.parent()
+                });
             }
         });
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-container--open .select2-search__field').focus();
+        });
+
     })
     let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: null});
     document.dispatchEvent(ev)

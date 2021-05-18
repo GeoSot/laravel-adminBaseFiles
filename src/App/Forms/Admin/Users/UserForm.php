@@ -7,6 +7,7 @@ use App\Models\Media\Medium;
 use App\Models\Users\UserRole;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\Helpers\Base;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class UserForm extends BaseAdminForm
 {
@@ -60,6 +61,13 @@ class UserForm extends BaseAdminForm
 //                return $lang->where('active', 1);
             }
         ]);
+        if ($this->getModel() instanceof MustVerifyEmail) {
+            $val = $this->getModel()->hasVerifiedEmail() ? 'fa-check text-success' : 'fa-times text-danger';
+            $this->add('is_verified', 'static', [
+                'value' => '<span class="fas ' . $val . '"> </span>'
+            ]);
+        }
+
 //        $this->add('rolesTeams', 'entity', [
 //            'class' => UserRole::class,
 //            'property' => 'display_name',

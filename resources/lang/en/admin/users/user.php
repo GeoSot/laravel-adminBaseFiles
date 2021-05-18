@@ -33,6 +33,7 @@ return [
         'phone2' => 'Mobile',
         /* Advanced */
         'is_enabled' => 'Enabled',
+        'is_verified' => 'Has verified mail',
         'active' => 'Activated',
         'images' => 'Profile Image',
         'alt_text' => 'Image Alternative Text',

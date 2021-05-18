@@ -7,6 +7,7 @@ use App\Models\Media\Medium;
 use App\Models\Users\User;
 use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -53,6 +54,11 @@ class UserController extends BaseAdminController
         ];
 
         return array_merge(parent::listFields(), $neFields);
+    }
+
+    protected function afterStore(Request &$request, $record)
+    {
+        event(new Registered($record));
     }
 
     protected function afterSave(Request &$request, $model)

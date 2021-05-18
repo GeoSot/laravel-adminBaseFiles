@@ -211,9 +211,9 @@ const ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToReloa
 const showMessage = (data) => {
     import('sweetalert2').then(src => {
         src.default.fire({
-            title: data.title ? data.title : 'Error!',
+            title: data.title,
             html: data.text,
-            timer: 15000,
+            timer: 4000,
             icon: data.icon,
             timerProgressBar: true
         })
