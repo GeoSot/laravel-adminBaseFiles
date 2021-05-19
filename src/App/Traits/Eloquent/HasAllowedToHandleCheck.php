@@ -9,20 +9,27 @@
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
 
+use App\Models\Users\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 trait HasAllowedToHandleCheck
 {
-    public function allowedToHandle(string $arg = null)
+    public function allowedToHandle(string $arg = null): bool
     {
         return true;
     }
 
-    public function allowedToHandleRelation(string $arg = null)
+    public function allowedToHandleRelation(string $arg = null): bool
     {
         return true;
     }
+
+    public function allowedToHandleByUser(User $user): bool
+    {
+        return true;
+    }
+
 
     /**
      * @param bool $onlyNames

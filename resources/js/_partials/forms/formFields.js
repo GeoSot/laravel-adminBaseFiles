@@ -33,22 +33,20 @@ const initSelect2 = function ($el) {
     $.fn.select2.defaults.set("dropdownAutoWidth", true);
 
 
-    document.addEventListener('baseAdmin:ajaxLoadWrappers', () => {
+    document.addEventListener('baseAdmin:ajaxLoadWrappers', ev => {
 
-        $($el).find('select').each(function () {
+        $(ev.detail).find('select.select2, select[multiple]').each(function () {
             let $elem = $(this);
-            if ($elem.is('[multiple]') || $elem.hasClass('select2')) {
-                $elem.select2({
-                    dropdownParent: $elem.parent()
-                });
-            }
+            $elem.select2({
+                dropdownParent: $elem.parent()
+            });
         });
-        $(document).on('select2:open', () => {
-            document.querySelector('.select2-container--open .select2-search__field').focus();
-        });
+    });
 
-    })
-    let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: null});
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-container--open .select2-search__field').focus();
+    });
+    let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: $el});
     document.dispatchEvent(ev)
 
 

@@ -1,4 +1,4 @@
-export const ajaxLoadWrappers = (wrappersToReload) => {
+export const ajaxLoadWrappers = wrappersToReload => {
     import('jquery').then(src => {
         let $ = src.default
         let wrappersArray = wrappersToReload.split(',');
@@ -10,11 +10,15 @@ export const ajaxLoadWrappers = (wrappersToReload) => {
                 $.each(wrappersArray, function (key, selector) {
                     let $selector = $(selector);
                     $selector.html($(response).find(selector).html());
-                    let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: $selector});
-                    document.dispatchEvent(ev);
-
+                    triggerAjaxLoadEvent($selector)
                 });
             });
         }
     });
 };
+
+
+export const triggerAjaxLoadEvent = target => {
+    let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: target});
+    document.dispatchEvent(ev)
+}

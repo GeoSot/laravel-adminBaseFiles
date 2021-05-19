@@ -3,7 +3,12 @@ import helpers from './helpers'
 
 window.jsHelper = helpers;
 window.BaseAdmin = window.BaseAdmin || {};
-window.BaseAdmin.ajaxLoadWrappers = (wrappersToReload) =>
+window.BaseAdmin.trigger = target =>
+    import('../_partials/ajaxLoadWrappers').then(src => {
+        src.triggerAjaxLoadEvent(target)
+    });
+
+window.BaseAdmin.ajaxLoadWrappers = wrappersToReload =>
     import('../_partials/ajaxLoadWrappers').then(src => {
         src.ajaxLoadWrappers(wrappersToReload)
     });

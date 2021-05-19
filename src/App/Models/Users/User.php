@@ -81,15 +81,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         ],
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-        static::created(function ($model) {
-            //   $token = app("auth.password.broker")->createToken($model);
-//            $model->notify(new UserCreated($model, $token));
-        });
-    }
-
     public function setPasswordAttribute($password)
     {
         if (Hash::needsRehash($password)) {
