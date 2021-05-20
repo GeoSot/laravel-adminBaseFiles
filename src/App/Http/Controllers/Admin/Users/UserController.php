@@ -77,6 +77,11 @@ class UserController extends BaseAdminController
         }
     }
 
+    protected function loadRelationsDuringIndexing(): array
+    {
+        return ['roles'];
+    }
+
     protected function filters(): array
     {
         return [
