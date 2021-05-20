@@ -34,7 +34,7 @@ class Message
     {
         $this->message = $message;
         $this->title = $title;
-        $this->level = $level ? $level->getType() : (Color::info())->getType();;
+        $this->level = $level ?: Color::info();
     }
 
 
@@ -110,12 +110,10 @@ class Message
     {
         return [
             'msg' => $this->message,
-            'level' => $this->level,
+            'level' => $this->level->getType(),
             'title' => $this->title,
         ];
     }
 
-
 }
-
 

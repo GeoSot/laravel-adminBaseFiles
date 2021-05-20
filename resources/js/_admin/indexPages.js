@@ -1,6 +1,4 @@
-const $tableForm = () => {
-    $('#tableForm')
-};
+const $tableForm = () => $('#tableForm');
 
 
 const ChangeEnableDisableStatus = function (url, type, data, show_message, keyword, callback = null) {
@@ -125,10 +123,10 @@ import('jquery').then(src => {
 const showMessage = (data, callback) => {
     import('sweetalert2').then(src => {
         src.default.fire({
-            title: data.title ? data.title : 'Error!',
+            title: data.title || '',
             text: data.text,
-            timer: 15000,
-            icon: 'error',
+            timer: 1500,
+            icon: data.icon,
             timerProgressBar: true
         }).then(function (continueAction) {
             if (typeof callback === 'function') {

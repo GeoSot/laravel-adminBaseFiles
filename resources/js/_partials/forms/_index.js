@@ -1,4 +1,9 @@
-import('./formFields').then(src => src.Init())
+document.onreadystatechange = () => {
+    if (document.readyState === 'complete') {
+        import('./formFields').then(src => src.Init())
+    }
+};
+
 
 $('.modal').on('shown.bs.modal', function () {
     let $shownInput = $(this).find('input, select, textarea').not(':hidden').first();

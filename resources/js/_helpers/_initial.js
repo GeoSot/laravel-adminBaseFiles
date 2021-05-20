@@ -3,7 +3,7 @@ import helpers from './helpers'
 
 window.jsHelper = helpers;
 window.BaseAdmin = window.BaseAdmin || {};
-window.BaseAdmin.trigger = target =>
+window.BaseAdmin.triggerAjaxLoadEvent = target =>
     import('../_partials/ajaxLoadWrappers').then(src => {
         src.triggerAjaxLoadEvent(target)
     });

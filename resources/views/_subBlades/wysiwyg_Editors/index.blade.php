@@ -10,7 +10,6 @@
                 BaseAdmin.initActiveTextEditor(el)
             });
         });
-
     </script>
 @endpush
 

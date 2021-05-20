@@ -26,7 +26,7 @@ const initColorPicker = function () {
         $(this).colorpicker();
     });
 };
-const initSelect2 = function ($el) {
+const initSelect2 = function (el) {
 
     $.fn.select2.defaults.set("theme", "bootstrap");
     $.fn.select2.defaults.set("width", '100%');
@@ -46,7 +46,7 @@ const initSelect2 = function ($el) {
     $(document).on('select2:open', () => {
         document.querySelector('.select2-container--open .select2-search__field').focus();
     });
-    let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: $el});
+    let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: el});
     document.dispatchEvent(ev)
 
 
@@ -68,6 +68,7 @@ const removeParent = function () {
 
 
 const Init = () => {
+
     import('jquery').then(src => {
         $ = src.default
 
@@ -108,7 +109,7 @@ const Init = () => {
         }
         if (document.querySelectorAll('select').length) {
             import('select2').then(() => {
-                initSelect2($('body'));
+                initSelect2(document.body);
             })
 
         }

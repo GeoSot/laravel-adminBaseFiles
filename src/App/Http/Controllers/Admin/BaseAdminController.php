@@ -12,7 +12,6 @@ use GeoSot\BaseAdmin\App\Traits\Controller\{CachesRouteParameters, HasActionHook
 use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Base;
-use GeoSot\BaseAdmin\Helpers\Message;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response,};
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -46,7 +45,7 @@ abstract class BaseAdminController extends BaseController
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse|RedirectResponse|Response|StreamedResponse
      * @throws Exception
      */
@@ -62,7 +61,10 @@ abstract class BaseAdminController extends BaseController
         $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
 
         $extraOptions = collect([]);
-        $query = $this->_class::select();
+        $query = $this->_class::select()->with(['owner', 'taskCategory', 'project']);
+        if ($this->loadRelationsDuringIndexing()) {
+            $query->with($this->loadRelationsDuringIndexing());
+        }
         $params = $this->makeParams($request);
 
         $this->beforeFilteringIndex($request, $params, $extraOptions);
@@ -96,7 +98,7 @@ abstract class BaseAdminController extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return Collection
      */
@@ -330,7 +332,7 @@ abstract class BaseAdminController extends BaseController
 
     public function forceDelete(Request $request)
     {
-        if (!$this->isAllowedAction('index', ['forceDelete'])) {
+        if ( ! $this->isAllowedAction('index', ['forceDelete'])) {
             abort(403, $this->getLang('forceDelete.deny'));
         }
         $ids = $request->input('ids', []);
@@ -369,7 +371,7 @@ abstract class BaseAdminController extends BaseController
             }
             return $this->store($request);
         }
-        if (!$this->isAllowedAction('edit')) {
+        if ( ! $this->isAllowedAction('edit')) {
             Alert::error($this->getLang('edit.deny'))->typeToast();
             return redirect()->back();
         }
@@ -522,6 +524,14 @@ abstract class BaseAdminController extends BaseController
         return response()->view($this->getView($action), $data);
     }
 
+
+    /** Use it to eager load relations during query and minimize the amount of total queries
+     * @return array|string[]
+     */
+    protected function loadRelationsDuringIndexing(): array
+    {
+        return [];
+    }
 
     /**
      * @return array|Filter[]

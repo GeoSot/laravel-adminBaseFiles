@@ -8,7 +8,7 @@
 <meta name="google" content="notranslate">
 @php
     $nameSpace=$packageVariables->get('nameSpace');
-        $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($nameSpace.$viewVals->get('modelLang').'.general.menuTitle'): __($nameSpace.'admin/generic.menu.dashboard');
+        $title=  ( isset($viewVals) and $viewVals->has('modelLang'))? __($viewVals->get('modelLang').'.general.menuTitle'): __($nameSpace.'admin/generic.menu.dashboard');
         $pushedTitle=$__env->getSection('documentTitle', $title)
 @endphp
 

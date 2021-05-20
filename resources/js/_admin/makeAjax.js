@@ -32,7 +32,7 @@ const showMessage = (data) => {
         src.default.fire({
             title: data.title ? data.title : 'Error!',
             text: data.message,
-            timer: 15000,
+            timer: 1500,
             icon: 'error',
             timerProgressBar: true
         })

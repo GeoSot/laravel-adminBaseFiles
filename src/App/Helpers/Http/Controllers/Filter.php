@@ -119,6 +119,10 @@ class Filter
     }
 
 
+    /**
+     * foreign Column name that is used as a key in our Entity (usually :id)
+     * @return string
+     */
     public function getRelatedKey(): string
     {
         return $this->relatedKey ;

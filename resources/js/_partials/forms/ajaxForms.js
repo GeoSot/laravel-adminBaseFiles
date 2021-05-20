@@ -213,7 +213,7 @@ const showMessage = (data) => {
         src.default.fire({
             title: data.title,
             html: data.text,
-            timer: 4000,
+            timer: 1500,
             icon: data.icon,
             timerProgressBar: true
         })
