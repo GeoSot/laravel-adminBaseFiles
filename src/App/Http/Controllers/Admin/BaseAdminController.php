@@ -61,7 +61,7 @@ abstract class BaseAdminController extends BaseController
         $this->filtersHelper = new FiltersHelper($this->_hydratedModel, $this->fieldsHelper, $this->filters());
 
         $extraOptions = collect([]);
-        $query = $this->_class::select()->with(['owner', 'taskCategory', 'project']);
+        $query = $this->_class::select();
         if ($this->loadRelationsDuringIndexing()) {
             $query->with($this->loadRelationsDuringIndexing());
         }
