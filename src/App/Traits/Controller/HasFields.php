@@ -19,7 +19,7 @@ trait HasFields
 
     private function getSearchableFields(): array
     {
-        return Arr::get($this->listFields(), 'searchable', []);
+        return Arr::get($this->getListFields(), 'searchable', []);
     }
 
     protected function listFields(): array
