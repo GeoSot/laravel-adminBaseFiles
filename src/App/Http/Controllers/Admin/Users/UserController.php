@@ -14,6 +14,7 @@ use Illuminate\Http\Response;
 class UserController extends BaseAdminController
 {
     protected $_class = User::class;
+    protected $loadRelationsDuringIndexing = ['roles'];
 
     //OVERRIDES
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'saveAndNew'];
@@ -46,14 +47,12 @@ class UserController extends BaseAdminController
 
     protected function listFields(): array
     {
-        $neFields = [
+        return [
             'listable' => ['full_name', 'is_enabled', 'roles.display_name', 'id'],
             'searchable' => ['first_name', 'last_name', 'is_enabled', 'id'],
             'sortable' => ['full_name', 'id'],
             'linkable' => ['full_name'],
         ];
-
-        return array_merge(parent::listFields(), $neFields);
     }
 
     protected function afterStore(Request &$request, $record)
@@ -75,11 +74,6 @@ class UserController extends BaseAdminController
             $request->request->remove('password');
             $request->request->remove('password_confirmation');
         }
-    }
-
-    protected function loadRelationsDuringIndexing(): array
-    {
-        return ['roles'];
     }
 
     protected function filters(): array

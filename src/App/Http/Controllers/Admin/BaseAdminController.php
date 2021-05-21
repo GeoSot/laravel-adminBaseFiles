@@ -26,7 +26,11 @@ abstract class BaseAdminController extends BaseController
     protected $_useGenericLang = true;
     protected $_genericViewsDir = 'admin.generic';
     protected $_genericLangDir = 'admin/generic';
-
+    /**
+     * Use it to eager load relations during query and minimize the amount of total queries
+     * @var array
+     */
+    protected $loadRelationsDuringIndexing = [];
     /**
      * @var FieldsHelper
      */
@@ -62,8 +66,8 @@ abstract class BaseAdminController extends BaseController
 
         $extraOptions = collect([]);
         $query = $this->_class::select();
-        if ($this->loadRelationsDuringIndexing()) {
-            $query->with($this->loadRelationsDuringIndexing());
+        if ($this->loadRelationsDuringIndexing) {
+            $query->with($this->loadRelationsDuringIndexing);
         }
         $params = $this->makeParams($request);
 
@@ -88,7 +92,7 @@ abstract class BaseAdminController extends BaseController
         $records = $query->paginate($params->get('num_of_items'));
         $records->appends($params->toArray());
 
-        $data = $this->variablesToView(collect($this->listFields()), 'index', [
+        $data = $this->variablesToView(collect($this->getListFields()), 'index', [
             'records' => $records,
             'params' => $params,
             FiltersHelper::EXTRA_FILTERS_KEY => $this->filtersHelper->getAvailableData()
@@ -524,14 +528,6 @@ abstract class BaseAdminController extends BaseController
         return response()->view($this->getView($action), $data);
     }
 
-
-    /** Use it to eager load relations during query and minimize the amount of total queries
-     * @return array|string[]
-     */
-    protected function loadRelationsDuringIndexing(): array
-    {
-        return [];
-    }
 
     /**
      * @return array|Filter[]

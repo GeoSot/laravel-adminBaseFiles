@@ -42,11 +42,10 @@ class PageAreaController extends BaseAdminController
 
     protected function listFields(): array //Can be omitted
     {
-        $newFields = [
+        return [
             'listable' => ['title', 'page.slug', 'order', 'blocks.slug', 'is_enabled', 'id'],
             'searchable' => ['title', 'is_enabled', 'id'],
         ];
-        return array_merge(parent::listFields(), $newFields);
     }
 
     protected function filters(): array

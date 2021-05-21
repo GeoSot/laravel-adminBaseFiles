@@ -17,15 +17,19 @@
 @endif
 
 <!--listingFiltersBar script:indexPages.js-->
-<form action="{{route($viewVals->get('baseRoute').'.index')}}" id="tableForm" class="main_form row mb-3 @] " method="GET">
-
-    @if(!empty( $viewVals->get('extraValues')->get('searchable')))
+<form action="{{route($viewVals->get('baseRoute').'.index')}}" id="tableForm" class="main_form row mb-3 @] "
+      method="GET">
+    @php($searchables=$viewVals->get('extraValues')->get('searchable'))
+    @if(!empty($searchables))
+        @php($translatedSearchables=array_map(function ($text) use ($viewVals){ return __($viewVals->get('modelLang').'.fields.'.$text);},$searchables))
         <div class="form-group   col-auto">
             <div class="input-group ">
-                <input id="keyword" type="text" class="form-control" placeholder=" @lang("{$lang}.listFilters.search")" name="keyword"
+                <input id="keyword" type="text" class="form-control" placeholder="@lang("{$lang}.listFilters.search"): {{implode(', ',$translatedSearchables)}}"
+                       name="keyword"
                        value="{!! old('keyword', $params['keyword']) !!}">
                 <div class="input-group-append">
-                    <button class="btn border" type="button" data-click="js-submit-form" id="searchSubmit"><i class="fas fa-search"></i></button>
+                    <button class="btn border" type="button" data-click="js-submit-form" id="searchSubmit"><i
+                            class="fas fa-search"></i></button>
                 </div>
             </div>
         </div>
@@ -35,8 +39,10 @@
         <div class="form-group  col-auto">
             <select class="form-control  custom-select " name="status" id="status" data-change="js-submit-form">
                 <option value=""> @lang("{$lang}.listFilters.selectStatus")</option>
-                <option {{ ($params['status']==1) ? 'selected': '' }} value="1"> @lang("{$lang}.listFilters.statusEnabled")</option>
-                <option {{ ($params['status']==-1) ? 'selected': '' }} value="-1"> @lang("{$lang}.listFilters.statusDisabled")</option>
+                <option
+                    {{ ($params['status']==1) ? 'selected': '' }} value="1"> @lang("{$lang}.listFilters.statusEnabled")</option>
+                <option
+                    {{ ($params['status']==-1) ? 'selected': '' }} value="-1"> @lang("{$lang}.listFilters.statusDisabled")</option>
             </select>
         </div>
     @endif

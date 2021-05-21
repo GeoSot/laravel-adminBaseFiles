@@ -98,15 +98,13 @@ class SettingController extends BaseAdminController
 
     protected function listFields(): array //Can be omitted
     {
-        $neFields = [
+        return [
             'linkable' => ['key'],
             'listable' => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
             'searchable' => ['key', 'group',],
             'sortable' => ['key'],
             'orderBy' => ['column' => 'key', 'sort' => 'desc'],
         ];
-
-        return array_merge(parent::listFields(), $neFields);
     }
 
     protected function filters(): array //Can be omitted

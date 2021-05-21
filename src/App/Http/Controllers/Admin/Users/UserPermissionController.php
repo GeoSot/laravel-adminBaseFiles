@@ -38,7 +38,7 @@ class UserPermissionController extends BaseAdminController
         ]);
 
         return view($this->getView('index'),
-            $this->variablesToView(collect($this->listFields()), 'index', ['records' => $records, 'params' => $params, 'roles' => $roles, 'form' => $form]));
+            $this->variablesToView(collect($this->getlistFields()), 'index', ['records' => $records, 'params' => $params, 'roles' => $roles, 'form' => $form]));
 
     }
 

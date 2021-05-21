@@ -42,14 +42,12 @@ class UserTeamController extends BaseAdminController
 
     protected function listFields(): array //Can be omitted
     {
-        $neFields = [
+      return [
             'listable' => ['display_name', 'name', 'id'],
             'searchable' => ['name', 'display_name', 'id'],
             'sortable' => ['display_name', 'id'],
             'linkable' => ['display_name'],
         ];
-
-        return array_merge(parent::listFields(), $neFields);
     }
 
 }

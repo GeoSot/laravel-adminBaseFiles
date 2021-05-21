@@ -8,6 +8,15 @@ use Illuminate\Support\Arr;
 trait HasFields
 {
 
+    private $defaultListFields = [
+        'listable' => ['title', 'is_enabled', 'id'],
+        'searchable' => ['title', 'id',],
+        'sortable' => ['title', 'is_enabled', 'id'],
+        'linkable' => ['title'],
+        'orderBy' => ['column' => 'created_at', 'sort' => 'desc'],
+    ];
+
+
     private function getSearchableFields(): array
     {
         return Arr::get($this->listFields(), 'searchable', []);
@@ -15,23 +24,23 @@ trait HasFields
 
     protected function listFields(): array
     {
-        return [
-            'listable' => ['title', 'is_enabled', 'id'],
-            'searchable' => ['title', 'is_enabled',],
-            'sortable' => ['title', 'is_enabled', 'id'],
-            'linkable' => ['title'],
-            'orderBy' => ['column' => 'created_at', 'sort' => 'desc'],
-        ];
+        return [];
     }
+
+    protected function getListFields(): array
+    {
+        return array_merge($this->defaultListFields, $this->listFields());
+    }
+
 
     private function getSortableFields(): array
     {
-        return Arr::get($this->listFields(), 'sortable', []);
+        return Arr::get($this->getListFields(), 'sortable', []);
     }
 
     private function getListableFields(): array
     {
-        return Arr::get($this->listFields(), 'listable', []);
+        return Arr::get($this->getListFields(), 'listable', []);
     }
 
     /**
@@ -42,7 +51,7 @@ trait HasFields
      */
     private function getOrderByOptions(string $arg = null, string $default = null)
     {
-        $options = Arr::get($this->listFields(), 'orderBy', []);
+        $options = Arr::get($this->getListFields(), 'orderBy', []);
 
         return is_null($arg) ? $options : Arr::get($options, $arg, $default);
     }

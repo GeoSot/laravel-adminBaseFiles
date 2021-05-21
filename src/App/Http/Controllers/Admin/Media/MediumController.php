@@ -33,13 +33,11 @@ class MediumController extends BaseAdminController
 
     protected function listFields(): array
     {
-        $neFields = [
+        return [
             'listable' => ['title', 'thumb_html', 'size', 'created_at', 'id'],
             'sortable' => ['title', 'size', 'created_at', 'id'],
             'searchable' => ['title', 'the_file_exists', 'directory', 'filename', 'extension', 'aggregate_type', 'description', 'keywords', 'id'],
         ];
-
-        return array_merge(parent::listFields(), $neFields);
     }
 
 

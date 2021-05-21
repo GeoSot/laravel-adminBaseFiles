@@ -38,11 +38,13 @@ class {{ class }} extends BaseAdminController
 
     protected function listFields(): array //Can be omitted
     {
-        $newFields = [
-            'listable'   => ['title', 'is_enabled', 'id'],
-            'searchable' => ['title', 'is_enabled', 'id'],
+        return [
+            'listable' => ['title', 'is_enabled', 'id'],
+            'searchable' => ['title', 'id',],
+             'sortable' => ['title', 'is_enabled', 'id'],
+             'linkable' => ['title'],
+             'orderBy' => ['column' => 'created_at', 'sort' => 'desc'],
         ];
-        return array_merge(parent::listFields(), $newFields);
     }
 
 
