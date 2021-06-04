@@ -11,7 +11,7 @@ class ResetPasswordForm extends AuthForm
     {
 
         $emailDefault = request()->input('email');
-        $token = request()->input('token');
+        $token = request()->route('token');
         $this
             ->add('token', 'hidden', ['value' => $token])
             ->add('email', 'email', [
