@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 abstract class BaseSeeder extends Seeder
 {
     protected $class;
+    protected $truncateTables = true;
 
     /**
      * Run the database seeders.
@@ -17,7 +18,9 @@ abstract class BaseSeeder extends Seeder
     public function run()
     {
         $this->command->info('');
-        $this->truncateTables();
+        if ($this->truncateTables) {
+            $this->truncateTables();
+        }
         $this->seedData();
         $this->finishSeedingMsg();
         $this->command->info('');
@@ -31,11 +34,11 @@ abstract class BaseSeeder extends Seeder
     protected function truncateTables()
     {
         if (app()->environment(['production', 'live'])) {
-            $this->command->info('Truncating is DISABLED on "' . app()->environment() . '" Environment');
+            $this->command->info('Truncating is DISABLED on "'.app()->environment().'" Environment');
 
             return;
         }
-        $this->command->info('Truncating ' . (new $this->class ())->getTable() . ' Table');
+        $this->command->info('Truncating '.(new $this->class ())->getTable().' Table');
         Schema::disableForeignKeyConstraints();
         $this->class::truncate();
         Schema::enableForeignKeyConstraints();
@@ -64,7 +67,7 @@ abstract class BaseSeeder extends Seeder
     protected function finishSeedingMsg()
     {
         //this message shown in your terminal after running db:seed command
-        $this->command->info(class_basename($this->class) . ' table seeded ');
+        $this->command->info(class_basename($this->class).' table seeded ');
     }
 
     /**
@@ -80,12 +83,12 @@ abstract class BaseSeeder extends Seeder
     /**
      * this message shown in your terminal after running db:seed command
      *
-     * @param string $name
+     * @param  string  $name
      *
      * @return    void
      */
     protected function creatingDataMsg(string $name)
     {
-        $this->command->info('Creating ' . class_basename($this->class) . '  ' . ucfirst($name));
+        $this->command->info('Creating '.class_basename($this->class).'  '.ucfirst($name));
     }
 }
