@@ -67,7 +67,9 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
 
         $router->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
             ->middleware(['web', 'localeSessionRedirect', 'localizationRedirect', 'localize'])->group(function () {
-                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware(['auth'])->group(function () {
+                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
+                    'auth', 'verified'
+                ])->group(function () {
                     $this->loadBackendRoutes();
                 });
 
@@ -103,21 +105,28 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     {
 
 
-        Route::any('/uploads/{any?}', $this->getController('Media\MediumController').'@upload')->where('any', '.*')->name('media.upload');
+        Route::any('/uploads/{any?}', $this->getController('Media\MediumController').'@upload')->where('any',
+            '.*')->name('media.upload');
         Route::post('restore/{revision}', $this->getController('RestoreController').'@restoreHistory')->name('restore');
-        Route::post('restore/clear/{revision}', $this->getController('RestoreController').'@clearHistory')->name('restore.clear');
+        Route::post('restore/clear/{revision}',
+            $this->getController('RestoreController').'@clearHistory')->name('restore.clear');
 
         Route::impersonate();
         $this->getRouter()->get('log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs.index');
-        $this->getRouter()->get('', $this->getController('DashboardController').'@index')->name('dashboard')->middleware(['permission:admin.*']);
-        $this->getRouter()->get('admin.or-site', $this->getController('DashboardController').'@choosePage')->name('choosePage');
+        $this->getRouter()->get('',
+            $this->getController('DashboardController').'@index')->name('dashboard')->middleware(['permission:admin.*']);
+        $this->getRouter()->get('admin.or-site',
+            $this->getController('DashboardController').'@choosePage')->name('choosePage');
 
 
         //QUEUES
         $this->getRouter()->prefix('queues')->name('queues.')->group(function () {
-            $this->getRouter()->get('', $this->getController('Queues\QueueController').'@index')->name('index')->middleware(['permission:admin.index-job']);
-            $this->getRouter()->patch('retry/{id}', $this->getController('Queues\QueueController').'@retry')->name('retry')->middleware(['permission:admin.retry-job']);
-            $this->getRouter()->patch('flush/{id}', $this->getController('Queues\QueueController').'@flush')->name('flush')->middleware(['permission:admin.flush-job']);
+            $this->getRouter()->get('',
+                $this->getController('Queues\QueueController').'@index')->name('index')->middleware(['permission:admin.index-job']);
+            $this->getRouter()->patch('retry/{id}',
+                $this->getController('Queues\QueueController').'@retry')->name('retry')->middleware(['permission:admin.retry-job']);
+            $this->getRouter()->patch('flush/{id}',
+                $this->getController('Queues\QueueController').'@flush')->name('flush')->middleware(['permission:admin.flush-job']);
         });
 
 
@@ -174,10 +183,14 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
         foreach ($adminRoutes as $parentRoute => $node) {
             $parentPlural = Arr::get($node, 'plural', Str::plural($parentRoute));
 
-            $this->getRouter()->prefix($parentPlural)->as($parentPlural.'.')->group(function () use ($parentRoute, $node, $parentPlural) {
+            $this->getRouter()->prefix($parentPlural)->as($parentPlural.'.')->group(function () use (
+                $parentRoute,
+                $node,
+                $parentPlural
+            ) {
 
                 $nameSpace = ucfirst($parentPlural);
-                if (!Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
+                if ( ! Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
                     $this->makeCrudRoutes($parentRoute, $nameSpace, '', $parentPlural);
                 }
 
@@ -185,7 +198,11 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
                     if ($name == $parentRoute) {
                         continue;
                     }
-                    $this->getRouter()->prefix(Str::plural($name))->as(Str::plural($name).'.')->group(function () use ($parentRoute, $name, $nameSpace) {
+                    $this->getRouter()->prefix(Str::plural($name))->as(Str::plural($name).'.')->group(function () use (
+                        $parentRoute,
+                        $name,
+                        $nameSpace
+                    ) {
                         $this->makeCrudRoutes($name, $nameSpace, $parentRoute, null);
                     });
 
@@ -199,11 +216,14 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
 
         $this->getRouter()->as('site.')->group(function () {
             $this->getRouter()->get('/', $this->getController('HomeController', 'Site').'@index')->name('home');
-            $this->getRouter()->post('contact-us', $this->getController('HomeController', 'Site').'@contactUs')->name('contactUs.store');
-            $this->getRouter()->middleware(['auth'])->group(function () {
+            $this->getRouter()->post('contact-us',
+                $this->getController('HomeController', 'Site').'@contactUs')->name('contactUs.store');
+            $this->getRouter()->middleware(['auth', 'verified'])->group(function () {
                 $this->getRouter()->as('users.')->prefix('profile')->group(function () {
-                    $this->getRouter()->get('', $this->getController('UserProfileController', 'Site').'@edit')->name('edit');
-                    $this->getRouter()->patch('', $this->getController('UserProfileController', 'Site').'@update')->name('update');
+                    $this->getRouter()->get('',
+                        $this->getController('UserProfileController', 'Site').'@edit')->name('edit');
+                    $this->getRouter()->patch('',
+                        $this->getController('UserProfileController', 'Site').'@update')->name('update');
                 });
             });
 
