@@ -55,7 +55,7 @@
                                 <td>@lang($viewVals->get('modelLang').'.fields.'.$history->fieldName())</td>
                                 <td>{!! $history->newValue() !!}</td>
                                 <td class="text-muted">{!! $history->oldValue() !!} </td>
-                                <td>{!! $history->userResponsible()->frontConfigs->getAdminLink('fullName')  !!}</td>
+                                <td>{!! optional(optional($history->userResponsible())->frontConfigs)->getAdminLink('fullName')  !!}</td>
                                 <td>{{$history->created_at->format('d-m-Y H:i:s')}}</td>
                                 <td>
                                     @if( auth()->user()->isAbleTo('admin.restore-'.$modelClass))

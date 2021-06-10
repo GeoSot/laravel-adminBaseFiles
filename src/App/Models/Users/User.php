@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     protected $historyLimit = 50;
     protected $revisionCleanup = true;
-    protected $dontKeepRevisionOf = ['modified_by'];
+    protected $dontKeepRevisionOf = ['modified_by', 'password', 'remember_token',];
     /**
      * The attributes that are mass assignable.
      *
@@ -109,7 +109,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
      */
     protected function rules(array $merge = [])
     {
-        if (is_null($this->id) or !is_null(request()->input('password'))) {
+        if (is_null($this->id) or ! is_null(request()->input('password'))) {
             $merge = array_merge($merge, [
                 'password' => 'required|min:6|confirmed'
             ]);
@@ -121,7 +121,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         }
 
         return array_merge([
-            'email' => ['required', 'email', 'max:190', "unique:{$this->getTable()},email".$this->getIgnoreTextOnUpdate(),],
+            'email' => [
+                'required', 'email', 'max:190', "unique:{$this->getTable()},email".$this->getIgnoreTextOnUpdate(),
+            ],
             //            "images.*"      => "required|nullable|mimes:jpg,jpeg,bmp,png|max:100",
             'first_name' => 'required|min:3',
             'last_name' => 'required|min:3',
@@ -141,7 +143,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     public function canImpersonate()
     {
-        return $this->isAbleTo('admin.*') and !app('impersonate')->isImpersonating();
+        return $this->isAbleTo('admin.*') and ! app('impersonate')->isImpersonating();
     }
 
 
