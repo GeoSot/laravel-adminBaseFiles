@@ -36,6 +36,7 @@ const internalInit = () => {
             autoApply: true,
             startDate: value,
             // autoUpdateInput: false,
+            drops: "auto",
             timePicker: ($(elem).attr('data-locale').match(/H:|h:|mm/g) != null),
             timePicker24Hour: true,
             minYear: 1930,
