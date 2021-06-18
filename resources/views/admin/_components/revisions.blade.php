@@ -15,7 +15,8 @@
     <div class="mr-auto">
         @component($packageVariables->get('blades').'_subBlades._components.modal',['id'=>'revisionsModal','animation'=>'','dialogClass' =>'modal-xl'] )
             @slot('triggerBtn')
-                <a href="#" data-toggle="modal" data-target="#revisionsModal" role="button" class="btn btn-outline-primary btn-sm">
+                <a href="#" data-toggle="modal" data-target="#revisionsModal" role="button"
+                   class="btn btn-outline-primary btn-sm">
                     @lang("{$btnsLang}.revisions")
                 </a>
             @endslot
@@ -25,7 +26,8 @@
             @endslot
             @slot('footer')
                 @if( auth()->user()->isAbleTo('admin.restore-'.$modelClass) && $record->revisionHistory->isNotEmpty())
-                    <form class="js-revisionsClearForm" action="{{route('admin.restore.clear',$record->revisionHistory->first())}}" method="POST">
+                    <form class="js-revisionsClearForm"
+                          action="{{route('admin.restore.clear',$record->revisionHistory->first())}}" method="POST">
                         @csrf
                         <button class="btn btn-outline-danger" type="submit">
                             <span class="">@lang($btnsLang.'.clearHistory')</span>
@@ -51,15 +53,18 @@
                         </thead>
                         <tbody>
                         @foreach($record->revisionHistory as $history )
+
                             <tr class="small border-bottom">
-                                <td>@lang($viewVals->get('modelLang').'.fields.'.$history->fieldName())</td>
+                                @php($field=__($viewVals->get('modelLang').'.fields.'.$history->fieldName()))
+                                <td>{{is_string($field) ? $field : $history->fieldName()}}</td>
                                 <td>{!! $history->newValue() !!}</td>
                                 <td class="text-muted">{!! $history->oldValue() !!} </td>
                                 <td>{!! optional(optional($history->userResponsible())->frontConfigs)->getAdminLink('fullName')  !!}</td>
                                 <td>{{$history->created_at->format('d-m-Y H:i:s')}}</td>
                                 <td>
                                     @if( auth()->user()->isAbleTo('admin.restore-'.$modelClass))
-                                        <form class="js-revisionsForm" action="{{route('admin.restore',$history)}}" method="POST">
+                                        <form class="js-revisionsForm" action="{{route('admin.restore',$history)}}"
+                                              method="POST">
                                             @csrf
                                             <button class="btn btn-outline-primary btn-sm" type="submit">
                                                 <span class="">@lang($revLang.'.restore')</span>
