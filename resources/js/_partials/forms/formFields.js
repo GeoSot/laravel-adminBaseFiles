@@ -46,6 +46,14 @@ const initSelect2 = function (el) {
     $(document).on('select2:open', () => {
         document.querySelector('.select2-container--open .select2-search__field').focus();
     });
+    $(document).on('reset', 'form', function () {
+        setTimeout(() => {
+            $(this).find('select.select2, select[multiple]').each(function () {
+                $(this).trigger('change');
+            })
+        }, 0);
+    })
+
     let ev = new CustomEvent('baseAdmin:ajaxLoadWrappers', {detail: el});
     document.dispatchEvent(ev)
 

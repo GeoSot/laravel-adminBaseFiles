@@ -208,6 +208,23 @@ const ajaxifyFormOnModal = function (formSelector, modalSelector, wrapperToReloa
         });
     });
 };
+
+const ajaxifyDynamicFormOnModal = function (triggerSelector, formSelector, modalSelector, wrapperToReload) {
+    $(document).on('click', triggerSelector, function (e) {
+        const $modal = $(modalSelector);
+        let $this = $(this);
+        $.getJSON($this.data('url'), function (data) {
+            let modelForm = data.extraValues.formRendered;
+            $modal.find('.modal-body').html(modelForm);
+            BaseAdmin.triggerAjaxLoadEvent($modal.get(0))
+
+            $modal.modal('show');
+            BaseAdmin.forms.ajaxifyFormOnModal(formSelector, modalSelector, wrapperToReload, true)
+        })
+    });
+}
+
+
 const showMessage = (data) => {
     import('sweetalert2').then(src => {
         src.default.fire({
@@ -246,4 +263,4 @@ const showMessage = (data) => {
 *
 * */
 
-export {ajaxify, ajaxifyFormOnModal}
+export {ajaxify, ajaxifyFormOnModal, ajaxifyDynamicFormOnModal}

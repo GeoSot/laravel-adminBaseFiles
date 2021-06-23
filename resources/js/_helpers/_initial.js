@@ -26,6 +26,13 @@ window.BaseAdmin.forms.ajaxifyFormOnModal = (formSelector, modalSelector, wrappe
             src.ajaxifyFormOnModal(formSelector, modalSelector, wrapperToReload, destroyOnClose = false)
         });
     });
+window.BaseAdmin.forms.ajaxifyDynamicFormOnModal = (triggerSelector, formSelector, modalSelector, wrapperToReload) =>
+    import('jquery').then(src => {
+        let $ = src.default
+        import( '../_partials/forms/ajaxForms').then((src) => {
+            src.ajaxifyDynamicFormOnModal(triggerSelector, formSelector, modalSelector, wrapperToReload)
+        });
+    });
 
 
 window.BaseAdmin.forms.ajaxify = (formSelector) => import( '../_partials/forms/ajaxForms').then(src => src.ajaxify(formSelector));
