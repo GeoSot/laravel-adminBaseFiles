@@ -243,6 +243,10 @@ const showMessage = (data) => {
 *
     <script defer data-comment="newPostAjax">
 
+     BaseAdmin.forms.ajaxifyDynamicFormOnModal('[data-toggle="ajaxEdit"]', "#editModal form", '#editModal', '#wrapper-to-reload')
+
+     * or
+
      new BaseAdmin.forms.ajaxify("form#newPostForm").onSubmit(function (instance, jqxhr) {
          jqxhr.done(function (data) {
              jsHelper.debug('form#newPostForm', instance, 'ajaxifyForm newPostForm');

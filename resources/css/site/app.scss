@@ -13,7 +13,8 @@ $fa-font-path: '../fonts';
 @import '~select2-theme-bootstrap4/src/select2-bootstrap';
 @import '~bootstrap-daterangepicker/daterangepicker.css';
 @import '~bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css';
-@import '~sweetalert2/src/sweetalert2.scss';
+//@import '~sweetalert2/src/sweetalert2.scss';
+@import '~@sweetalert2/theme-bootstrap-4/bootstrap-4.scss';
 //Our Css
 @import "../_partials/richTextEditors";
 @import "../_partials/standards";
