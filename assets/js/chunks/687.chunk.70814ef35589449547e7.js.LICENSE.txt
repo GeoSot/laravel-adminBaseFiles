@@ -34,5 +34,5 @@
    *
    * @param {string} phrase that needs interpolation, with placeholders
    * @param {object} options with values that will be used to replace placeholders
-   * @returns {string} interpolated
+   * @returns {any[]} interpolated
    */
