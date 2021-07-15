@@ -30,7 +30,7 @@ return [
         //base route for backend
         'routePrefix' => 'admin',
         //published assets path
-        'assetsPath' => 'vendor\baseAdmin\\',// public_path('vendor\baseAdmin\\'),
+        'assetsPath' => 'vendor/baseAdmin/',
         //Add css scripts to back layout
         'extraCss' => [],
         //Add js scripts to back layout

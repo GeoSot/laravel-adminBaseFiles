@@ -2,6 +2,7 @@ const mix = require('laravel-mix');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
+require('laravel-mix-versionhash')
 require('laravel-mix-bundle-analyzer');
 
 if (!mix.inProduction()) {
@@ -10,7 +11,7 @@ if (!mix.inProduction()) {
 const resourcesDirectory = './resources/';
 const publicDirectory = './assets/';
 // mix.setResourceRoot('/assets/');
-mix.setPublicPath('./assets/');
+mix.setPublicPath(publicDirectory);
 
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', publicDirectory + 'fonts');
@@ -37,7 +38,9 @@ mix.options({
 
 
 if (mix.inProduction()) {
-    mix.version();
+//     mix.version();
+    mix.versionHash();
+
 } else {
     mix.sourceMaps();
     mix.webpackConfig({

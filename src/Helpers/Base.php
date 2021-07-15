@@ -22,9 +22,10 @@ class Base
     {
         $path = '/'.trim($path, '/');
 
-        $assetsPath = asset(str_replace([DIRECTORY_SEPARATOR,'\\'], '/', config('baseAdmin.config.backEnd.assetsPath')));
+        $assetsDir = config('baseAdmin.config.backEnd.assetsPath');
+        $assetsPath = asset(str_replace([DIRECTORY_SEPARATOR, '\\'], '/', $assetsDir));
 
-        $manifest = Paths::rootDir('assets').'mix-manifest.json';
+        $manifest = realpath($assetsDir.'/mix-manifest.json');
         if (file_exists($manifest)) {
             $manifestData = json_decode(file_get_contents($manifest), true);
 
