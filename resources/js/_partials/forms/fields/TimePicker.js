@@ -21,57 +21,47 @@ const init = () => {
 
 const internalInit = function (el) {
     const _this = this;
-    _this.$wrapper = ($(el).is(selectors.trigger)) ? $(el) : $(el).parents(selectors.trigger);
-    _this.$hiddenInput = this.$wrapper.find('[type="hidden"]');
-    let element = _this.$hiddenInput.get(0);
+    this.$wrapper = ($(el).is(selectors.trigger)) ? $(el) : $(el).parents(selectors.trigger);
+    this.$hiddenInput = this.$wrapper.find('[type="hidden"]');
+    let element = this.$hiddenInput.get(0);
     if (instances.has(element)) {
         return
         // return instances.get(element)
     } else {
         instances.set(element, _this);
     }
-    _this.$hoursInput = _this.$wrapper.find('input').not('[type=hidden]').first();
-    _this.$minutesInput = _this.$wrapper.find('input').not('[type=hidden]').last();
-    $(this.$hiddenInput).off('input.formFields');
+    this.$hoursInput = _this.$wrapper.find('input').not('[type=hidden]').first();
+    this.$minutesInput = _this.$wrapper.find('input').not('[type=hidden]').last();
+    $(this.$hiddenInput).off('change.formFields');
     $(this.$hoursInput).off('input.formFields');
     $(this.$minutesInput).off('input.formFields');
 
-    _this.totalMinutes = 0;
-    _this.minutes = 0;
-    _this.hours = 0;
+    this.totalMinutes = 0;
+    this.minutes = 0;
+    this.hours = 0;
 
-    let initializeFields = function () {
+    let initializeFields = () => {
         _this.totalMinutes = parseInt(_this.$hiddenInput.val()) || 0;
-        let time = _this.getTimeSeparate();
-        _this.minutes = time.minutes;
-        _this.hours = time.hours;
+        this.minutes = this.getTotalMinutes();
+        this.hours = this.getTotalHours();
         _this.setTimeToInputs();
     };
 
     this.getTimeForHumans = function () {
-        let time = _this.getTimeSeparate();
-        return ("0" + time.hours).slice(-2) + ':' + ("0" + time.minutes).slice(-2);
+        return ("0" + this.getTotalHours()).slice(-2) + ':' + ("0" + this.getTotalMinutes()).slice(-2);
     };
 
+    this.getTotalMinutes = () => this.totalMinutes % 60 | 0
+    this.getTotalHours = () => this.totalMinutes / 60 | 0
+    this.getTimeToMinutes = () => this.totalMinutes
 
-    this.getTimeSeparate = function () {
-        return {
-            hours: _this.totalMinutes / 60 | 0,
-            minutes: _this.totalMinutes % 60 | 0
-        }
-    };
-    this.getTimeToMinutes = function () {
-        return _this.totalMinutes;
-    };
-
-    let updateTotalMinutes = function () {
-        _this.totalMinutes = _this.minutes + (_this.hours * 60);
+    let updateTotalMinutes = () =>{
+        this.totalMinutes = this.minutes + (this.hours * 60);
     };
     this.setTimeToInputs = () => {
-        let time = _this.getTimeSeparate();
         _this.$hiddenInput.val(_this.totalMinutes);
-        _this.$hoursInput.val(time.hours);
-        _this.$minutesInput.val(time.minutes);
+        _this.$hoursInput.val(this.getTotalHours());
+        _this.$minutesInput.val(this.getTotalMinutes());
     };
 
 
@@ -98,12 +88,10 @@ const internalInit = function (el) {
         _this.setTimeToInputs();
     });
 
-    $(this.$hiddenInput).on('input.formFields', function (e) {
+    $(this.$hiddenInput).on('change.formFields', function (e) {
         initializeFields();
     });
     initializeFields();
-
-
 }
 
 

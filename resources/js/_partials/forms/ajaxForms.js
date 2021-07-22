@@ -1,4 +1,4 @@
-let ajaxified = [];
+const ajaxified = new Map();
 
 const errors = function ($form, $) {
     const classes = {
@@ -63,7 +63,7 @@ const errors = function ($form, $) {
     return this;
 };
 
-const ajaxifiedForm = (formSelector) => {
+const AjaxifiedForm = function (formSelector) {
 
     this.$form = $(formSelector);
     this.form = formSelector;
@@ -82,17 +82,16 @@ const ajaxifiedForm = (formSelector) => {
  */
 const ajaxify = function (formSelector) {
     // if (!(this instanceof ajaxify)) return new ajaxify(name);
-    if (ajaxified[formSelector]) {
-        return ajaxified[formSelector];
-    }
     this.$form = $(formSelector);
     if (!this.$form.length) {
         console.error('"ajaxifyForm" --> NO VALID SELECTOR');
         return false;
     }
+    if (ajaxified.has(this.$form.get(0))) {
+        return  ajaxified.get(this.$form.get(0))
+    }
     const _self = this;
     this.form = formSelector;
-    this.$form = $(formSelector);
     this.id = $(formSelector).attr('id');
     this._callback = null;
     this.errorsObj = null;
@@ -162,7 +161,7 @@ const ajaxify = function (formSelector) {
     };
     this.destroy = function () {
         destroyListeners();
-        delete ajaxified[_self.form];
+        ajaxified.delete(this.$form.get(0))
     };
     let getSpinnerWrapper = () => {
         return '<div id="' + _self.spinnerId + '" class="spinnerWrapper position-absolute d-flex justify-content-center align-items-center" ' +
@@ -171,7 +170,7 @@ const ajaxify = function (formSelector) {
             '</div>'
     };
 
-    ajaxified[_self.form] = _self;
+    ajaxified.set(this.$form.get(0), _self)
     return _self;
 };
 
