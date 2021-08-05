@@ -33,59 +33,63 @@ const internalInit = function (el) {
     this.$hoursInput = _this.$wrapper.find('input').not('[type=hidden]').first();
     this.$minutesInput = _this.$wrapper.find('input').not('[type=hidden]').last();
     $(this.$hiddenInput).off('change.formFields');
-    $(this.$hoursInput).off('input.formFields');
-    $(this.$minutesInput).off('input.formFields');
+    $(this.$hoursInput).off('change.formFields');
+    $(this.$minutesInput).off('change.formFields');
 
     this.totalMinutes = 0;
     this.minutes = 0;
     this.hours = 0;
 
     let initializeFields = () => {
-        _this.totalMinutes = parseInt(_this.$hiddenInput.val()) || 0;
-        this.minutes = this.getTotalMinutes();
-        this.hours = this.getTotalHours();
-        _this.setTimeToInputs();
+        const totalMinutes = parseInt(_this.$hiddenInput.val()) || 0;
+        this.minutes = totalMinutes % 60;
+        this.hours = Math.floor(totalMinutes / 60);
+        _this.$hoursInput.val(this.hours);
+        _this.$minutesInput.val(this.minutes);
     };
 
     this.getTimeForHumans = function () {
-        return ("0" + this.getTotalHours()).slice(-2) + ':' + ("0" + this.getTotalMinutes()).slice(-2);
+        return ("0" + this.getHours()).slice(-2) + ':' + ("0" + this.getMinutes()).slice(-2);
     };
 
-    this.getTotalMinutes = () => this.totalMinutes % 60 | 0
-    this.getTotalHours = () => this.totalMinutes / 60 | 0
-    this.getTimeToMinutes = () => this.totalMinutes
+    this.getMinutes = () => this.minutes
+    this.getHours = () => this.hours
+    this.getTimeToMinutes = () => this.hours * 60 + this.minutes
 
-    let updateTotalMinutes = () =>{
-        this.totalMinutes = this.minutes + (this.hours * 60);
-    };
-    this.setTimeToInputs = () => {
-        _this.$hiddenInput.val(_this.totalMinutes);
-        _this.$hoursInput.val(this.getTotalHours());
-        _this.$minutesInput.val(this.getTotalMinutes());
-    };
-
-
-    $(this.$hoursInput).on('input.formFields', function (e) {
+    $(this.$hoursInput).on('change.formFields', function (e) {
         _this.hours = parseInt($(this).val());
-        updateTotalMinutes();
-        _this.setTimeToInputs();
+        _this.$hiddenInput.val(_this.getTimeToMinutes());
     });
-    $(this.$minutesInput).on('input.formFields', function (e) {
+    $(this.$minutesInput).on('change.formFields', function (e) {
         let minVal = parseInt($(this).val());
-        if (minVal === 60) {
-            _this.hours++;
-            minVal = 0;
+        let nowVal = minVal
+
+        if (minVal > 59) {
+            const hours = Math.floor(minVal / 60)
+            _this.hours += hours;
+            nowVal %= Math.abs(minVal) || 0;
         }
+
         if (minVal === -1) {
-            minVal = 0;
             if (_this.hours > 0) {
-                _this.hours--;
-                minVal = 59;
+                _this.hours--
             }
+            nowVal = 59;
         }
-        _this.minutes = minVal;
-        updateTotalMinutes();
-        _this.setTimeToInputs();
+        if (minVal < -1) {
+            minVal=Math.abs(minVal)
+            const hours = Math.floor(minVal / 60)
+            _this.hours -= hours;
+            if (_this.hours < 0) {
+                _this.hours = 0
+            }
+            nowVal = minVal % 60 ;
+        }
+
+        _this.minutes = nowVal;
+        _this.$hiddenInput.val(_this.getTimeToMinutes());
+        _this.$minutesInput.val(_this.minutes);
+        _this.$hoursInput.val(_this.getHours());
     });
 
     $(this.$hiddenInput).on('change.formFields', function (e) {
