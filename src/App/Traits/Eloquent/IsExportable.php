@@ -24,7 +24,8 @@ trait IsExportable
             return $this->parseValueForCsv(data_get($data, Str::beforeLast($key, '.')), Str::afterLast($key, '.'));
         }
 
-        if (!is_iterable($data)) {
+        $val= data_get($data, $key) ;
+        if (!is_iterable($data) ||  !is_iterable($val) && $val) {
             return data_get($data, $key);
         }
 
@@ -65,7 +66,6 @@ trait IsExportable
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"
         ];
-
 
         return response()->stream(function () use ($items, $translateCallback) {
             $file = fopen('php://output', 'w');
