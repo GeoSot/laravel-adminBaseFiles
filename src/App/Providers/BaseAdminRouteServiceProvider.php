@@ -73,6 +73,13 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
                     $this->loadBackendRoutes();
                 });
 
+                $file = base_path('routes/admin.php');
+                if (file_exists($file)) {
+                    $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
+                        'auth', 'verified'
+                    ])->group($file);
+                }
+
                 $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.routePrefix'))->group(function () {
                     $this->loadFrontendRoutes();
                 });
