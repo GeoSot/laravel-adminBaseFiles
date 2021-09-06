@@ -59,18 +59,18 @@ class FiltersHelper
 
         $requestFilters = $request->input(static::EXTRA_FILTERS_KEY, []);
 
-        if (!$requestFilters || $this->requestParams->isNotEmpty()) {
+        if (! $requestFilters || $this->requestParams->isNotEmpty()) {
             return $this->requestParams;
         }
 
         foreach ($this->filters as $filter) {
             $value = Arr::get($requestFilters, $filter->getKey());
 
-            if ($filter->isType(Filter::DATE_TIME) && !is_null($value)) {
+            if ($filter->isType(Filter::DATE_TIME) && ! is_null($value)) {
                 $value = $this->tryParseStringToCarbon($value);
             }
 
-            if ($filter->isType(Filter::DATE_RANGE) && !is_null($value)) {
+            if ($filter->isType(Filter::DATE_RANGE) && ! is_null($value)) {
                 $value = array_map(function ($el) {
                     return $this->tryParseStringToCarbon($el);
                 }, $value);
@@ -106,7 +106,7 @@ class FiltersHelper
     public function applyExtraFiltersOnModel(&$query)
     {
         $filteredParams = $this->requestParams->filter(function ($it) {
-            return is_array($it) ? !empty(array_filter($it)) : !is_null($it);
+            return is_array($it) ? ! empty(array_filter($it)) : ! is_null($it);
         });
         $filteredFilters = $this->filters->intersectByKeys($filteredParams);
 
@@ -116,7 +116,7 @@ class FiltersHelper
             $value = $filteredParams->get($filter->getKey());
 
             //NOT RELATIONSHIP
-            if ($field->exists && !$field->isRelated()) {
+            if ($field->exists && ! $field->isRelated()) {
                 $query = $this->makeExtraFiltersQuery($query, $filter, $filter->getKey(), $value, $filter->getKey());
             }
 
@@ -151,7 +151,7 @@ class FiltersHelper
             return $this->askDateRange($query, $column, $value);
         }
         if ($filter->isType(Filter::HAS_VALUE)) {
-            return $this->askHasValueInside($query, $value, $column);
+            return $this->askHasValueInside($query, $column, $value);
         }
         if ($fallBackWhereIn) {
             return $query->whereIn($fallBackWhereIn, (array) $value);
@@ -174,7 +174,7 @@ class FiltersHelper
         }
         $values = [];
         $key = $filter->getKey();
-        if ($field->exists && !$field->isRelated()) {
+        if ($field->exists && ! $field->isRelated()) {
             $values = $field->newInstance->newQuery()->groupBy($key)->pluck($key, $key)->toArray();
         }
         if ($field->isRelated()) {
