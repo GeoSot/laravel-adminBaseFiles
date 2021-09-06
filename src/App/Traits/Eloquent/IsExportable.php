@@ -25,7 +25,7 @@ trait IsExportable
         }
 
         $val= data_get($data, $key) ;
-        if (!is_iterable($data) ||  !is_iterable($val) && $val) {
+        if (!is_iterable($data) || !is_iterable($val) && isset($data[$key])) {
             return data_get($data, $key);
         }
 
