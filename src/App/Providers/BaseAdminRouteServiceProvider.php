@@ -53,6 +53,11 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     ];
 
 
+    public function boot()
+    {
+        $this->registerMiddlewareGroups();
+    }
+
     /**
      * Define the routes for the application.
      *
@@ -60,12 +65,9 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function map(Router $router)
+    public function map()
     {
-        $this->router = $router;
-        $this->registerMiddlewareGroups();
-
-        $router->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
+        $this->getRouter()->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
             ->middleware(['web', 'localeSessionRedirect', 'localizationRedirect', 'localize'])->group(function () {
                 $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
                     'auth', 'verified'
@@ -102,7 +104,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      */
     protected function getRouter()
     {
-        return $this->router;
+        return resolve(Router::class);
     }
 
 
