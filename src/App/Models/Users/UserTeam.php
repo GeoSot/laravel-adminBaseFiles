@@ -47,7 +47,7 @@ class UserTeam extends LaratrustTeam
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return ['name' => ['source' => 'display_name']];
     }

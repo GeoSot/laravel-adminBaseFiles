@@ -22,7 +22,7 @@ abstract class BasePage extends BaseModel
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return ['slug' => ['source' => ['en.title', 'title']]];
     }
