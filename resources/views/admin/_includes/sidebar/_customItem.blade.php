@@ -38,7 +38,7 @@
         else{
                   //Normalize All subItems To have Url and Translation
                   //**************
-                $routes = collect(Arr::get($node, 'menus',[]))->transform(function (&$item) use ($packageVariables) {
+                $routes = collect(Arr::get($node, 'menus',[]))->transform(function ($item) use ($packageVariables) {
                       $route = Str::replaceFirst('admin.', '', Arr::get($item, 'route', false));
                       if ($route and Route::has('admin.'.$route)) {
                           $item['url'] = route('admin.' . $route);
