@@ -49,7 +49,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
         'localizationRedirect' => Mcamara\LaravelLocalizationRedirectFilter::class,
         'localeSessionRedirect' => Mcamara\LocaleSessionRedirect::class,
         'localeCookieRedirect' => Mcamara\LocaleCookieRedirect::class,
-        'localeViewPath' => Mcamara\LaravelLocalizationViewPath::class
+        'localeViewPath' => Mcamara\LaravelLocalizationViewPath::class,
     ];
 
 
@@ -199,7 +199,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
             ) {
 
                 $nameSpace = ucfirst($parentPlural);
-                if ( ! Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
+                if (!Arr::has($node, 'menus') or in_array($parentRoute, $node['menus'])) {
                     $this->makeCrudRoutes($parentRoute, $nameSpace, '', $parentPlural);
                 }
 
