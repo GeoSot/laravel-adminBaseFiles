@@ -3,7 +3,7 @@ BaseAdmin.forms = BaseAdmin.forms || {};
 BaseAdmin.forms.initializedClass = 'formField-initialized';
 
 const multiplyField = function () {
-    $(document).on('click', '.js-addwToCollection', function (e) {
+    $(document).on('click', '.js-addToCollection', function (e) {
         e.preventDefault();
         let $container = $(this).closest('.js-collectionContainer');
         let $itemsContainer = $container.find('.js-collectionItems');
