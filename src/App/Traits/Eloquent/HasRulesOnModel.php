@@ -3,6 +3,7 @@
 
 namespace GeoSot\BaseAdmin\App\Traits\Eloquent;
 
+use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Support\Arr;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -170,8 +171,8 @@ trait HasRulesOnModel
     /**
      * @return bool
      */
-    private function modelIsTranslatable(): bool
+    public function modelIsTranslatable(): bool
     {
-        return property_exists($this, 'translatable') and in_array(HasTranslations::class, class_uses_recursive($this));
+        return property_exists($this, 'translatable') && in_array(HasTranslations::class, class_uses_recursive($this)) && Base::isMultiLingual();
     }
 }

@@ -5,7 +5,6 @@ namespace GeoSot\BaseAdmin\App\Helpers\Http\Controllers;
 
 
 use Barryvdh\Debugbar\Facade;
-use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\IsExportable;
 use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Database\Eloquent\Model;
@@ -76,15 +75,15 @@ class Helper
     /**
      * @return bool
      */
-    public function modelIsTranslatable()
+    public function modelIsTranslatable(): bool
     {
-        return $this->usesTrait(HasTranslations::class);
+        return $this->model->modelIsTranslatable();
     }
 
     /**
      * @return bool
      */
-    public function modelHasSoftDeletes()
+    public function modelHasSoftDeletes(): bool
     {
         return $this->usesTrait(SoftDeletes::class);
     }
@@ -92,7 +91,7 @@ class Helper
     /**
      * @return bool
      */
-    public function modelIsRevisionable()
+    public function modelIsRevisionable(): bool
     {
         return $this->usesTrait(RevisionableTrait::class);
     }
@@ -100,7 +99,7 @@ class Helper
     /**
      * @return bool
      */
-    public function modelIsExportable()
+    public function modelIsExportable(): bool
     {
         return $this->usesTrait(IsExportable::class);
     }

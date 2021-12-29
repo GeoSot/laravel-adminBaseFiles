@@ -36,7 +36,7 @@ abstract class BaseAdminForm extends BaseForm
         }
         $availableLocales = (array) config('baseAdmin.config.translatables.locales');
 
-        if (!property_exists($this->getModel(), 'translatable')) {
+        if (!$this->getModel()->modelIsTranslatable()) {
             return;
         }
 
