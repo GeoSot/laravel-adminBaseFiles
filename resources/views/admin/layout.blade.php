@@ -38,7 +38,7 @@
 </div>
 
 <section id="footer">
-    @include($packageVariables->get('blades').'_subBlades.returnToTopButton')
+    @include($packageVariables->get('blades').'_subBlades.back-to-top-btn')
     @includeIf($packageVariables->get('blades').'admin._includes.footer')
 </section>
 

@@ -116,6 +116,4 @@ class PageMeta implements Htmlable
     {
         return view('baseAdmin::_subBlades.page-meta', ['meta' => $this])->render();
     }
-
-
 }
