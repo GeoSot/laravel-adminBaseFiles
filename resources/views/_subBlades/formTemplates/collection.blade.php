@@ -26,8 +26,7 @@
                     <div class="js-collectionItems {!!\Illuminate\Support\Arr::get($options,'items_wrapper_class')  !!} @if($isSortable) sortableWrapper @endif">
                         @foreach ($children=(array)$options['children'] as $child)
                             @php
-                                if($childModels){
-
+                                if($childModels && $childModels instanceof \Illuminate\Support\Collection){
                                       $model=  $childModels->where('id',$child->getOption('value'))->first();
                                        $extraFields=array_merge($extraFields,['model'=>$model]);
                                       if($model){
