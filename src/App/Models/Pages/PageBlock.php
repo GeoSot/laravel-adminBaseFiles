@@ -76,7 +76,7 @@ class PageBlock extends BasePage
 
     //*********  M E T H O D S  ***************
 
-    public function getViewTemplate(): string
+    protected function getViewTemplate(): string
     {
         return 'baseAdmin::site.blockLayouts._pageBlock';
     }

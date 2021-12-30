@@ -55,7 +55,7 @@ class PageArea extends BasePage
     *
     */
 
-    public function getViewTemplate(): string
+    protected function getViewTemplate(): string
     {
         return 'baseAdmin::site.blockLayouts._pageArea';
     }

@@ -9,9 +9,10 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use GeoSot\BaseAdmin\App\Models\BaseModel;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
+use Illuminate\Contracts\Support\Htmlable;
 
 
-abstract class BasePage extends BaseModel
+abstract class BasePage extends BaseModel implements Htmlable
 {
 
     use Sluggable, SluggableScopeHelpers, HasTranslations, HasMedia;
@@ -36,19 +37,19 @@ abstract class BasePage extends BaseModel
      * Template to use in order to render the Model
      * @return string
      */
-    abstract public function getViewTemplate(): string;
+    abstract protected function getViewTemplate(): string;
 
 
-    public static function echo(string $slug)
+    public static function asHtml(string $slug)
     {
         $model = static::findBySlug($slug);
 
-        return $model ? $model->render() : '';
+        return $model ? $model->toHtml() : '';
     }
 
-    public function render()
+    public function toHtml(): string
     {
-        view($this->getViewTemplate(), ['record' => $this])->render();
+      return view($this->getViewTemplate(), ['record' => $this])->render();
     }
 
 
