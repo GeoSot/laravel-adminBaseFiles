@@ -21,13 +21,13 @@ trait CachesQueries
     }
 
 
-    protected static function cacheResult(\Closure $callback, string $cacheKey, $ttl = 60): mixed
+    protected static function cacheResult(\Closure $callback, string $cacheKey, $ttl = 60)
     {
         return Cache::remember(static::class.$cacheKey, $ttl, $callback);
     }
 
 
-    protected static function cacheResultForToday(\Closure $callback, string $cacheKey): mixed
+    protected static function cacheResultForToday(\Closure $callback, string $cacheKey)
     {
         $ednOfDateTimestamp = now()->endOfDay()->timestamp;
         return static::cacheResult($callback, $ednOfDateTimestamp.$cacheKey, $ednOfDateTimestamp);
