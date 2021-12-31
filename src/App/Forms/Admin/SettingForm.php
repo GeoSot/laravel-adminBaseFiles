@@ -4,8 +4,11 @@ namespace GeoSot\BaseAdmin\App\Forms\Admin;
 
 
 use App\Models\Media\Medium;
-use App\Models\Setting;
+use Carbon\CarbonPeriod;
+use GeoSot\BaseAdmin\Services\SettingsChoices;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Kris\LaravelFormBuilder\Field;
 use Symfony\Component\Finder\Finder;
 
 class SettingForm extends BaseAdminForm
@@ -34,7 +37,7 @@ class SettingForm extends BaseAdminForm
 
 
         $this->add('type', 'choice', [
-            'choices' => Arr::sort(Setting::getSettingTypes()),
+            'choices' => Arr::sort(SettingsChoices::getSettingTypes()),
             'empty_value' => $this->getSelectEmptyValueLabel(),
             'help_block' => [
                 'text' => $this->transHelpText('type'),
@@ -45,12 +48,12 @@ class SettingForm extends BaseAdminForm
             'choices' => $this->getModelNames()->toArray(),
             'empty_value' => $this->getSelectEmptyValueLabel(),
             'help_block' => [
-                'text' => $this->transHelpText('model_type')
-            ]
+                'text' => $this->transHelpText('model_type'),
+            ],
         ]);
     }
 
-    protected function getModelNames()
+    protected function getModelNames(): Collection
     {
         $modelPath = app_path('Models/');
         $files = Finder::create()->in($modelPath)->name('*.php')->contains('HasSettings')->sortByName();
@@ -69,6 +72,7 @@ class SettingForm extends BaseAdminForm
     {
         $this->getEditFirstFields();
         $this->getEditValueField();
+        $this->add('dummy_hidden', Field::HIDDEN);
         $this->getEditSecondFields();
         $this->getEditRelatedModelFields();
         $this->add('notes', 'textarea');
@@ -90,19 +94,40 @@ class SettingForm extends BaseAdminForm
 
         if (in_array($type, ['textarea', 'number'])) {
             $this->add('value', $type);
+            return;
         }
+
         if ($type == 'boolean') {
             $this->addCheckBox('value');
+            return;
         }
 
         if ($type == 'timeToMinutes') {
             $this->add('value', 'text', ['template' => 'baseAdmin::_subBlades.formTemplates.minutesToTime']);
+            return;
         }
         if ($type == 'dateTime') {
             $this->add('value', 'text', [
                 'template' => 'baseAdmin::_subBlades.formTemplates.dateTime',
-                'cast' => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY']
+                'cast' => ['php' => 'd/m/Y', 'js' => 'DD/MM/YYYY'],
             ]);
+            return;
+        }
+
+
+        if ($type == SettingsChoices::DATE_RANGE) {
+            $value = $this->getModel()->value ? CarbonPeriod::createFromIso($this->getModel()->value) : null;
+
+            $this->add('value', Field::HIDDEN);
+            $this->add('value[from]', Field::DATETIME_LOCAL, [
+                'value' => $value ? $value->first()->toDateTimeLocalString() : null,
+                'label' => $this->transText('date_range_from'),
+            ]);
+            $this->add('value[to]', Field::DATETIME_LOCAL, [
+                'value' => $value ? $value->last()->toDateTimeLocalString() : null,
+                'label' => $this->transText('date_range_to'),
+            ]);
+            return;
         }
 
         $this->getValueField($type);
@@ -127,7 +152,7 @@ class SettingForm extends BaseAdminForm
             $this->add('model_type', 'select', [
                 'choices' => $this->getModelNames()->toArray(),
                 'empty_value' => $this->getSelectEmptyValueLabel(),
-                'attr' => ['disabled']
+                'attr' => ['disabled'],
             ]);
 
             $this->add('model_id', 'entity', [
@@ -146,14 +171,14 @@ class SettingForm extends BaseAdminForm
      */
     protected function getValueField($type): void
     {
-        if (in_array($type, ['collectionSting', 'collectionNumber'])) {
+        if (in_array($type, [SettingsChoices::COLLECTION_STRING, SettingsChoices::COLLECTION_NUMBER])) {
             $this->add('value', 'collection', [
-                'type' => ('collectionSting' == $type) ? 'text' : 'number',
+                'type' => (SettingsChoices::COLLECTION_STRING == $type) ? 'text' : 'number',
                 'repeatable' => true,
                 'options' => [    // these are options for a single type
                     'label' => false,
                 ],
-                'data' => collect(json_decode($this->getModel()->value))
+                'data' => collect(json_decode($this->getModel()->value)),
             ]);
         }
 
@@ -171,8 +196,8 @@ class SettingForm extends BaseAdminForm
                     'value' => function () {
                         $val = $this->getModel()->value;
                         return $val ? Medium::find($val) : '';
-                    }
-                ]
+                    },
+                ],
             ]);
             $this->add('value', 'hidden');
             return;

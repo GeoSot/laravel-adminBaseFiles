@@ -3,11 +3,10 @@
 namespace GeoSot\BaseAdmin\App\Models;
 
 
-use App\Models\Media\Medium;
-use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\Media\HasMedia;
 use GeoSot\BaseAdmin\Facades\Settings;
+use GeoSot\BaseAdmin\Services\SettingsChoices;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -19,17 +18,6 @@ class Setting extends BaseModel
 {
     use Sluggable, HasMedia;
 
-    public $choices = [
-        'string',
-        'boolean',
-        'textarea',
-        'number',
-        'timeToMinutes',
-        'dateTime',
-        'collectionSting',
-        'collectionNumber',
-        Medium::class,
-    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -64,7 +52,7 @@ class Setting extends BaseModel
     protected $errorMessages = [
         'key' => ['unique' => 'keySubGroupGroupUnique'],
         'sub_group' => ['unique' => 'keySubGroupGroupUnique'],
-        'group' => ['unique' => 'keySubGroupGroupUnique']
+        'group' => ['unique' => 'keySubGroupGroupUnique'],
     ];
 
     public static function boot()
@@ -77,7 +65,7 @@ class Setting extends BaseModel
             }
 
             if (is_array($model->value)) {
-                $model->value = json_encode($model->value);
+                $model->value = json_encode(array_values(array_filter($model->value)));
             }
 
         });
@@ -123,7 +111,7 @@ class Setting extends BaseModel
 
         return array_merge([
             // 'key'  => "required|min:3|unique:{$this->getTable()},key" . $textOnUpdate,
-            'key' => ['required','min:3', $uniqueCombinationRule],
+            'key' => ['required', 'min:3', $uniqueCombinationRule],
             'sub_group' => ['required_with:group', $uniqueCombinationRule],
             'group' => [$uniqueCombinationRule],
             'type' => 'required',
@@ -146,7 +134,7 @@ class Setting extends BaseModel
                 'method' => function ($string, $sep) {
                     return preg_replace('/[^a-zA-Z0-9-]+/i', $sep, trim($string));
                 },
-            ]
+            ],
         ];
     }
 
@@ -182,55 +170,11 @@ class Setting extends BaseModel
     public function getValueParsedAttribute()
     {
         $value = Arr::get($this->attributes, 'value');
-        if (!$value or empty($value)) {
-            return null;
-        }
-
-        if (in_array($this->type, ['number', 'timeToMinutes'])) {
-            return (float) $value;
-        }
-        if (in_array($this->type, ['collectionSting', 'collectionNumber'])) {
-            return array_map(function ($it) {
-                return ($this->type == 'collectionNumber') ? (float) $it : $it;
-            }, (array) json_decode($value));
-        }
-        if ($this->type == 'dateTime') {
-            return Carbon::parse($value);
-        }
-        if ($this->type == 'boolean') {
-            return (bool) $value;
-        }
-        if ($this->type == Medium::class) {
-            /* @var Medium $FQN */
-            $FQN = $this->type;
-            return $FQN::find($value);
-        }
-
-        return $value;
-
+        return SettingsChoices::parseValue($this->type, $value);
     }
 
     public function getTypeToHumanAttribute()
     {
-        return Arr::get(static::getSettingTypes(), $this->type, $this->type);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSettingTypes()
-    {
-        return [
-            'string' => 'String',
-            'textarea' => 'Textarea',
-            'boolean' => 'Boolean',
-            'number' => 'Number',
-            'timeToMinutes' => 'Time To Minutes',
-            'dateTime' => 'DateTime',
-            'collectionSting' => 'Collection of Strings',
-            'collectionNumber' => 'Collection of Numbers',
-            Medium::class => 'Media',
-            Medium::TYPE_IMAGE => 'Image',
-        ];
+        return Arr::get(SettingsChoices::getSettingTypes(), $this->type, $this->type);
     }
 }

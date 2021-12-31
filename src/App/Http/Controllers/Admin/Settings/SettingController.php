@@ -5,8 +5,10 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Settings;
 
 use App\Models\Media\Medium;
 use App\Models\Setting;
+use Carbon\Carbon;
 use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
+use GeoSot\BaseAdmin\Services\SettingsChoices;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -47,7 +49,7 @@ class SettingController extends BaseAdminController
                 'keys' => $settings->whereNotIn('key', [''])->pluck('key')->unique()->sort(),
                 'groups' => $settings->whereNotIn('group', [''])->pluck('group')->unique()->sort(),
                 'subGroups' => $settings->whereNotIn('sub_group', [''])->pluck('sub_group')->unique()->sort(),
-            ]
+            ],
         ]);
 
         return $extraValues;
@@ -80,15 +82,19 @@ class SettingController extends BaseAdminController
         return $this->genericUpdate($request, $setting);
     }
 
+    /**
+     * @param  Request  $request
+     * @param  Setting  $model
+     */
     protected function beforeUpdate(Request &$request, $model)
     {
-
-        /* @var Setting $model */
-        if ($request->input('type') === Medium::TYPE_IMAGE) {
-            $result = $model->syncRequestMedia($request, true, 'value_dummy');
-            $request->merge(['value' => optional($result)->getKey()]);
+        $type = $request->input('type');
+        if ($type === SettingsChoices::DATE_RANGE) {
+            $value = Carbon::parse($request->input('value.from'))->daysUntil($request->input('value.to'));
+            $request['value'] = $value->toIso8601String();
         }
-        if ($request->input('type') === Medium::class) {
+
+        if (in_array($type, [Medium::TYPE_IMAGE, Medium::class])) {
             $result = $model->syncRequestMedia($request, true, 'value_dummy');
             $request->merge(['value' => optional($result)->getKey()]);
         }
@@ -99,9 +105,9 @@ class SettingController extends BaseAdminController
     protected function listFields(): array //Can be omitted
     {
         return [
-            'linkable' => ['key'],
-            'listable' => ['key', 'value', 'type_to_human', 'ownerModel.title', 'id'],
-            'searchable' => ['key', 'group',],
+            'linkable' => ['slug'],
+            'listable' => ['slug', 'value', 'type_to_human', 'ownerModel.title', 'id'],
+            'searchable' => ['slug'],
             'sortable' => ['key'],
             'orderBy' => ['column' => 'key', 'sort' => 'desc'],
         ];
