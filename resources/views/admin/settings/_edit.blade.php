@@ -1,6 +1,6 @@
 <div class="col-md-6 col-12 mb-3">
     @component($packageVariables->get('blades').'admin._components.formCard',['title'=>__($viewVals->get('modelLang').'.formTitles.value')] )
-        {!! form_until($form, 'value') !!}
+        {!! form_until($form, 'dummy_hidden') !!}
     @endcomponent
 </div>
 

@@ -9,7 +9,9 @@ return [
         'id' => 'ID',
         'key' => 'Key',
         'value' => 'Value',
-        'value_dummy' => 'Value',
+        'date_range_from' => 'Value',
+        'date_range_to' => 'From Date',
+        'value_dummy' => 'Till Date',
         'slug' => 'Slug',
         'group' => 'Group',
         'sub_group' => 'SubGroup',
@@ -19,7 +21,7 @@ return [
         'notes' => 'Notes',
         'is_enabled' => 'Enabled',
         'ownerModel' => ['title' => 'Related Model'],
-        'type_to_human' => 'Friendly Value',
+        'type_to_human' => 'Type',
     ],
 
 

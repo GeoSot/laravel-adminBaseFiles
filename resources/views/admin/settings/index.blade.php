@@ -3,12 +3,11 @@
 @component($packageVariables->get('blades').'admin._components.listingButtons',['viewVals'=>$viewVals, ]  )   @endcomponent
 @section('content')
 
-
-    {{--            @component($packageVariables->get('blades').'admin._components.listingFiltersBar',['viewVals'=>$viewVals, ] )@endcomponent--}}
-
     <div class="row flex-fill ">
         <aside id="settingsSideBar" class="flex-fill px-1 col-12 col-sm-4 col-md-4 col-lg-3 col-xl-2">
-            @include($packageVariables->get('blades').'admin.settings._sideBar')
+            @if(Arr::get(\Illuminate\Support\Facades\Request::query(),'extra_filters.group') || !array_key_exists('keyword', \Illuminate\Support\Facades\Request::query()))
+                @include($packageVariables->get('blades').'admin.settings._sideBar')
+            @endif
         </aside>
 
         <div class="col-12  col-sm-8 col-md-8 col-lg-9 col-xl-9 offset-xl-1 ">
@@ -53,6 +52,18 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+
+    <div class="card mt-5">
+        <div class="card-body">
+            <div class="text-center mouse-pointer" data-toggle="collapse" data-target="#extraSettingFilters">
+                Extra Filters <small class="text-muted">(It gets messy)</small>
+            </div>
+        </div>
+        <div class="card-body collapse" id="extraSettingFilters">
+            @component($packageVariables->get('blades').'admin._components.listingFiltersBar',['viewVals'=>$viewVals, ] )@endcomponent
         </div>
     </div>
 
