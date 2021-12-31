@@ -29,9 +29,10 @@
                 @else
                     <span class="form-control   ">@if(\Illuminate\Support\Arr::has($options,'model')){{ $options['model']->name }}@endif</span>
                 @endif
+                <input type="hidden" name="add_{{$name}}" data-id="{{\Illuminate\Support\Arr::get($options, 'id')}}">
                 <input type="hidden" name="old_{{$name}}" value="{{\Illuminate\Support\Arr::get($options, 'id')}}"/>
                 <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
-                <div class="input-group-append">
+                <div class="buttons input-group-append">
                     @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
                         @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>"*/*"])
                     @endif
@@ -40,7 +41,7 @@
                                   $options['value'] instanceOf \App\Models\Media\Medium
                                   ?$options['value']->frontConfigs->getRoute('edit')
                                   :$val)
-                        <a class=" btn btn-secondary px-1 " role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
+                        <a class="js-show btn btn-secondary px-1 " role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
                     @endif
                     @if(!$viewAndRemoveOnly)
                         <button class="btn btn-secondary fileinput-exists " type="button"

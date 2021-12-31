@@ -151,8 +151,10 @@
                     fillHtml(inputInstance, medium) {
                         inputInstance.value = medium.id;
                         let preview = inputInstance.parentNode.querySelector(this.input.previewClass)
-                        let fileClasses = preview.dataset.imgclass;
-                        preview.innerHTML = '<img src="' + medium.url + '" class="' + fileClasses + '"/>';
+                        if (preview){
+                            let fileClasses = preview.dataset.imgclass;
+                            preview.innerHTML = '<img src="' + medium.url + '" class="' + fileClasses + '"/>';
+                        }
 
                         let buttonsWrapper = inputInstance.parentNode.querySelector(this.input.buttonsClass);
 
