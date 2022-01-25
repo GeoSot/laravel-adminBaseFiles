@@ -11,6 +11,7 @@ namespace GeoSot\BaseAdmin\Services;
 
 use App\Models\Media\Medium;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Arr;
 use Plank\Mediable\Media;
 
@@ -73,7 +74,7 @@ class SettingsChoices
         }
 
         if (self::typeIs($type, self::DATE_RANGE)) {
-            return Carbon::parse($value);
+            return CarbonPeriod::createFromIso($value);
         }
 
         if (self::typeIs($type, self::BOOLEAN)) {

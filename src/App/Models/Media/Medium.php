@@ -11,8 +11,8 @@ use GeoSot\BaseAdmin\App\Traits\Eloquent\HasTranslations;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\ModifiedBy;
 use GeoSot\BaseAdmin\App\Traits\Eloquent\OwnedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Plank\Mediable\Media;
 
 /**
@@ -21,17 +21,19 @@ use Plank\Mediable\Media;
  * */
 class Medium extends Media
 {
+    protected $with = ['variants'];
     use HasTranslations, OwnedBy, ModifiedBy, HasRulesOnModel, HasFrontEndConfigs, HasAllowedToHandleCheck;
 
     const REQUEST_FIELD_NAME__IMAGE = 'images';
     const REQUEST_FIELD_NAME__VIDEO = 'videos';
     const REQUEST_FIELD_NAME__FILE = 'files';
+    public const VARIANT_NAME_THUMB = 'thumb';
 
     public $translatable = [
         'title',
         'description',
         'alt_attribute',
-        'keywords'
+        'keywords',
     ];
 
     protected $fillable = [
@@ -42,7 +44,6 @@ class Medium extends Media
 
 
         'the_file_exists',
-        'thumb',
         'custom_properties',
         'user_id',
         'modified_by',
@@ -58,15 +59,21 @@ class Medium extends Media
     public static function boot()
     {
         parent::boot();
-        static::created(function (Medium $model) {
-//            dispatch(new CompressImage($model));
+
+        static::addGlobalScope('original', function (Builder $builder) {
+            $builder->whereNull('original_media_id');
+        });
+        static::deleting(function (Medium $medium) {
+            $medium->getAllVariants()->each(function (Media $variant) {
+                $variant->delete();
+            });
         });
     }
 
 
     public function scopeEnabled(Builder $builder)
     {
-        return $builder/*->where('is_enabled', true)*/ ->where('the_file_exists', true);
+        return $builder->where('the_file_exists', true);
     }
 
 
@@ -78,16 +85,18 @@ class Medium extends Media
         return $this->getUrl();
     }
 
+    public function getThumb(): Medium
+    {
+        return $this->findVariant(static::VARIANT_NAME_THUMB) ?: $this;
+    }
+
 
     /**
      * @return string
      */
-    private function getThumbUrl()
+    public function getThumbUrl(): string
     {
-        if ($this->disk == 'public' && $this->thumb) {
-            return Storage::disk($this->disk)->url($this->thumb);
-        }
-        return $this->getUrl();
+        return $this->getThumb()->getUrl();
     }
 
     /**
@@ -106,23 +115,14 @@ class Medium extends Media
         return $this->getThumbHtml();
     }
 
-    /**
-     * @param  string  $width
-     * @return string
-     */
-    public function getThumbHtml(string $width = '')
+
+    public function getThumbHtml(string $width = ''): string
     {
         return '<img class="lazyload img-fluid" style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbUrl().'" />';
     }
 
 
-    /**
-     *
-     * @param  array  $args
-     * @return string
-     *
-     */
-    public function getHtml($args = [])
+    public function getHtml(array $args = []): string
     {
         $data = [
             'class',
@@ -148,16 +148,10 @@ class Medium extends Media
             default:
                 return $model->getUrl();
         }
-
     }
 
-    /**
-     * @param  null  $class
-     * @param  bool  $download
-     *
-     * @return string
-     */
-    public function getLinkHtml($class = null, $download = false)
+
+    public function getLinkHtml(string $class = null, bool $download = false): string
     {
         $downloadAttr = ($download) ? ' download="true" ' : '';
         $class = $class ?? 'btn btn-link';
@@ -165,5 +159,13 @@ class Medium extends Media
         return '<a data-id="'.$this->getKey().'" class="'.$class.'" href="'.$this->getUrl().'" target="_blank" '.$downloadAttr.' title="'.$title.'">'.$title.'</a>';
     }
 
+
+    /**
+     * @inerhitDoc
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany(get_class($this), 'original_media_id')->withoutGlobalScope('original');
+    }
 
 }

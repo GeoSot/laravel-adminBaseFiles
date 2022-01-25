@@ -2,7 +2,8 @@
 
 namespace GeoSot\BaseAdmin\App\Jobs;
 
-use GeoSot\BaseAdmin\App\Models\Media\Medium;
+
+use App\Models\Media\Medium;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

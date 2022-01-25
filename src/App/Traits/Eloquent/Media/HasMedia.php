@@ -5,6 +5,7 @@ namespace GeoSot\BaseAdmin\App\Traits\Eloquent\Media;
 
 
 use App\Models\Media\Medium;
+use GeoSot\BaseAdmin\App\Events\MediumUploaded;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\Request;
@@ -85,12 +86,13 @@ trait HasMedia
 
             //SAVE MANY
             if ($request->get("repeatable_$requestFieldName") && !$keepFirstOnly) {
-
                 $mediaCollection = \Illuminate\Database\Eloquent\Collection::make($files)->map(function (UploadedFile $file) use ($mediaUploader) {
-                    return $mediaUploader->fromSource($file)->upload();
+                    $medium = $mediaUploader->fromSource($file)->upload();
+                    MediumUploaded::dispatch($medium);
+                    return $medium;
                 });
                 if ($libraryAddFiles) {
-                    $mediaCollection=  Medium::whereIn('id', $libraryAddFiles)->get()->merge($mediaCollection);
+                    $mediaCollection = Medium::whereIn('id', $libraryAddFiles)->get()->merge($mediaCollection);
                 }
 
                 $this->attachMedia($mediaCollection, $requestFieldName);
@@ -104,23 +106,22 @@ trait HasMedia
                     return isset($value);
                 });
                 $medium = $mediaUploader->fromSource($firstMedium)->useFilename($this->getAPossibleMediaFilename())->upload();
+                MediumUploaded::dispatch($medium);
+                return $medium;
             } else {
                 $medium = Medium::find(Arr::first($libraryAddFiles));
             }
             $this->syncMedia($medium, $requestFieldName);
 
             return $medium;
-
         } catch (\Exception $e) {
-
             $fqn = class_basename($this);
 
             $msg = "Media for Model {$fqn} id:{$this->getKey()} was not attached";
-            Alert::warning($msg,'Warring')->typeToast();
+            Alert::warning($msg, 'Warring')->typeToast();
             Log::error($msg, ['msg' => $e->getMessage()]);
         }
         return null;
-
     }
 
 
@@ -133,7 +134,6 @@ trait HasMedia
      */
     final protected function removeRequestMedia(Request $request, string $requestFieldName = Medium::REQUEST_FIELD_NAME__FILE, array $tags = [])
     {
-
         $removeIdsArray = array_filter($request->get("remove_$requestFieldName", []));
         $oldIds = array_filter($request->get("old_$requestFieldName", []));
         $deleteIdsArray = $this->media()->whereNotIn('id', $oldIds)->pluck('id')->toArray();
@@ -160,8 +160,6 @@ trait HasMedia
 
         $parts = array_merge([$this->getKey()], $text, [now()->toDateTimeString()]);
         return Str::slug(implode('-', $parts));
-
-
     }
 
 }

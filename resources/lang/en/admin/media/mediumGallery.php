@@ -11,7 +11,8 @@ return [
         'slug' => 'Url Slug',
         'notes' => 'Description',
         'is_enabled' => 'Enabled',
-        'images' => 'Images'
+        'images' => 'Images',
+        'ownerModel' => 'Owner Model'
     ],
     'modal' => [
         'title' => 'Media Library',

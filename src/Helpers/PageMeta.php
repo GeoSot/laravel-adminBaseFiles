@@ -18,7 +18,7 @@ class PageMeta implements Htmlable
     protected array $extraMetaTags = [];
 
 
-    public static function make(): PageMeta
+    public static function make(): self
     {
         return new static();
     }
@@ -61,33 +61,22 @@ class PageMeta implements Htmlable
     }
 
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getImage(): string
     {
-        return $this->image?: asset('favicon.ico');
+        return $this->image ?: asset('favicon.ico');
     }
 
-    /**
-     * @return string
-     */
+
     public function getUrl(): string
     {
         return $this->url ?: URL::current();
@@ -107,7 +96,7 @@ class PageMeta implements Htmlable
     }
 
 
-    public function addExtraMetaTags(string $key, string $value): void
+    public function addExtraMetaTags(string $key, ?string $value): void
     {
         $this->extraMetaTags[$key] = $value;
     }

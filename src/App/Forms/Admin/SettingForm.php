@@ -120,11 +120,11 @@ class SettingForm extends BaseAdminForm
 
             $this->add('value', Field::HIDDEN);
             $this->add('value[from]', Field::DATETIME_LOCAL, [
-                'value' => $value ? $value->first()->toDateTimeLocalString() : null,
+                'value' => $value ? $value->start->toDateTimeLocalString() : null,
                 'label' => $this->transText('date_range_from'),
             ]);
             $this->add('value[to]', Field::DATETIME_LOCAL, [
-                'value' => $value ? $value->last()->toDateTimeLocalString() : null,
+                'value' => $value ? $value->end->toDateTimeLocalString() : null,
                 'label' => $this->transText('date_range_to'),
             ]);
             return;

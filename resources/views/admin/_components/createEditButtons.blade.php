@@ -46,7 +46,7 @@
             {!! $slot !!}
 
 
-            <button onclick="cancelButtonClicked(this)" id="back" data-value="back" class="btn btn-danger  m-1">
+            <button onclick="cancelButtonClicked(this)" id="back" data-value="back" class="btn btn-dark  m-1">
                 <span class="btn-label"><i class="fas fa-reply"></i></span>
                 <span class=""> @lang("{$btnsLang}.cancel")</span>
             </button>

@@ -61,8 +61,8 @@ class MediumGallery extends BaseModel
     protected function rules(array $merge = [])
     {
         return array_merge([
-            'title' => "required|min:3|",
-            'slug' => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
+            'title' => "required|min:3",
+//            'slug' => "min:3|unique:{$this->getTable()},slug".$this->getIgnoreTextOnUpdate(),
         ], $merge, $this->rules);
     }
 

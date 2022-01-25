@@ -16,12 +16,12 @@
     "license": "MIT",
     "require": {
         "php": ">=7.4",
-        "ankitpokhrel/tus-php": "^2.0",
-        "laravel/fortify": "^1.6",
+        "ankitpokhrel/tus-php": "^2.2",
+        "laravel/fortify": "^1.9",
         "barryvdh/laravel-debugbar": "^v3.5.1",
         "barryvdh/laravel-translation-manager": "^v0.5.9",
         "cviebrock/eloquent-sluggable": "^8.0.0",
-        "geo-sot/laravel-env-editor": "^0.9.4",
+        "geo-sot/laravel-env-editor": "^1",
         "kris/laravel-form-builder": "^1.40.0",
         "lab404/laravel-impersonate": "^1.7.1",
         "laravel/passport": "^10.0.1",
@@ -48,8 +48,8 @@
         }
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^v2.8.1",
-        "laravel/framework": "6.x|7.*|8.*",
+        "barryvdh/laravel-ide-helper": "^v2.12",
+        "laravel/framework": "7.*|8.*",
         "phpunit/phpunit": "^9.3"
     },
     "autoload-dev": {

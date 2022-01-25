@@ -3,6 +3,7 @@
 
 namespace GeoSot\BaseAdmin\App\Providers;
 
+use GeoSot\BaseAdmin\App\Models\Media\Medium;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\Image;
 use Plank\Mediable\Facades\ImageManipulator;
@@ -20,8 +21,6 @@ class ImageManipulatorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
-
     }
 
     /**
@@ -31,10 +30,12 @@ class ImageManipulatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        ImageManipulator::defineVariant('thumb',
+        ImageManipulator::defineVariant(Medium::VARIANT_NAME_THUMB,
             ImageManipulation::make(function (Image $image) {
                 $image->fit(192, 108);
-            })->toPngFormat()->setOutputQuality(70)
+            })
+                ->outputPngFormat()
+                ->setOutputQuality(70)
         );
     }
 }

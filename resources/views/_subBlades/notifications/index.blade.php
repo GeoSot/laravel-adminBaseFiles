@@ -1,15 +1,6 @@
 <div class="notificationsWrapper">
     @if ($errors->any())
-        <div class="alert alert-danger my-2  alert-dismissible fade show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <ul class="list-unstyled small">
-                @foreach ($errors->all() as $error)
-                    <li>{!! $error !!}</li>
-                @endforeach
-            </ul>
-        </div>
+        @include($packageVariables->get('blades').'_subBlades.notifications.inline-multiple',['errors'=>$errors->all()])
     @endif
     @if ( Session::has(\GeoSot\BaseAdmin\Helpers\Alert::SESSION_KEY))
 

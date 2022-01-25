@@ -3,6 +3,7 @@
 namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Media;
 
 
+use App\Models\Media\Medium;
 use App\Models\Media\MediumGallery;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
@@ -23,6 +24,13 @@ class MediumGalleryController extends BaseAdminController
     {
         return $this->genericUpdate($request, $mediumGallery);
     }
+
+    protected function afterSave(Request &$request, $model)
+    {
+        /* @var MediumGallery $model */
+        $model->syncRequestMedia($request, false, Medium::REQUEST_FIELD_NAME__IMAGE);
+    }
+
 
 
     protected function listFields(): array

@@ -17,7 +17,7 @@ class MediumController extends BaseAdminController
     //OVERRIDES
 
     protected $allowedActionsOnIndex = ['edit', 'delete', 'forceDelete', 'restore'];
-    protected $allowedActionsOnEdit = ['save', 'saveAndClose'];
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose','delete'];
 
 
     public function edit(Medium $medium)

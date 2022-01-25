@@ -6,6 +6,7 @@ namespace GeoSot\BaseAdmin\App\Forms\Admin\Pages;
 use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\App\Forms\Admin\BaseAdminForm;
 use GeoSot\BaseAdmin\App\Models\Pages\Page;
+use Kris\LaravelFormBuilder\Field;
 
 class PageForm extends BaseAdminForm
 {
@@ -22,12 +23,12 @@ class PageForm extends BaseAdminForm
             'empty_value' => $this->getSelectEmptyValueLabel(),
             'query_builder' => function (Page $page) {
                 return $page->where($this->getModel()->getKeyName(), '<>', optional($this->getModel())->getKey());
-            }
+            },
         ]);
         $this->add('slug', 'text', [
             'help_block' => [
-                'text' => $this->transHelpText('slug')
-            ]
+                'text' => $this->transHelpText('slug'),
+            ],
         ]);
         if (!$this->isCreate) {
             $this->modify('slug', 'text', ['attr' => ['readonly' => 'readonly']]);
@@ -37,19 +38,17 @@ class PageForm extends BaseAdminForm
         $this->add('meta_title', 'text');
         $this->add('meta_description', 'textarea', [
             'attr' => [
-                'class' => 'form-control withOutEditor', 'rows' => '3'
+                'class' => 'form-control withOutEditor', 'rows' => '3',
             ],
             'help_block' => [
-                'text' => $this->transHelpText('meta_description')
-            ]
+                'text' => $this->transHelpText('meta_description'),
+            ],
         ]);
 
         $this->add('keywords', 'text', [
-            'help_block' => ['text' => $this->transHelpText('keywords')]
+            'help_block' => ['text' => $this->transHelpText('keywords')],
         ]);
-        $this->add('meta_tags', 'textarea', [
-            'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3'],
-        ]);
+        $this->addExtraMetaTags();
 
         $this->add(Medium::REQUEST_FIELD_NAME__IMAGE, 'collection', [
             'type' => 'file',
@@ -66,13 +65,59 @@ class PageForm extends BaseAdminForm
 
 
         $this->add('css', 'textarea', [
-            'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3']
+            'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3'],
         ]);
         $this->add('javascript', 'textarea', [
-            'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3']
+            'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3'],
         ]);
 
         $this->add('notes', 'textarea', ['attr' => ['rows' => '3']]);
 
+    }
+
+    protected function addExtraMetaTags()
+    {
+//        $this->add('meta_tags', 'textarea', [
+//            'attr' => ['class' => 'form-control withOutEditor', 'rows' => '3'],
+//        ]);
+//        return;
+        $subForm = $this->formBuilder->plain();
+        $subForm->add('key', Field::TEXT, [
+//            'label' => false,
+//            'value'=>function($x){dump(8);},
+            'wrapper' => [
+                'class' => 'col-4',
+            ],
+        ]);
+        $subForm->add('val', Field::TEXT, [
+//            'label' => false,
+//            'data'=>fn($x)=>dd($x),
+//            'value'=>fn($x)=>dump($x),
+            'wrapper' => [
+                'class' => 'col',
+            ],
+        ]);
+//        dd($this->getModel()->meta_tags);
+//        dd($this->getModel()->getAttributes(),$this->getModel()->meta_tags,$this->getModel()->title);
+//dd($this->getModel());
+//        dd($this->getModel()->meta_tags);
+//        dd($this->getModel()->meta_tags?:[]);
+        $this->add('meta_tags', 'collection', [
+            'type' => Field::FORM,
+            'repeatable' => true,
+            'multiple' => true,
+//            'form' => $this,
+//'value'=>fn($x)=>dd($x),
+//            'data'=>function($x){dd($x);},
+            'options' => [    // these are options for a single type
+//                'is_child' => true,
+                'class' => $subForm,
+//                'value'=>fn($x)=>dump($x),
+                'label' => false,
+                'wrapper' => [
+                    'class' => 'row',
+                ],
+            ],
+        ]);
     }
 }

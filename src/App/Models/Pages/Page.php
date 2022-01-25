@@ -133,7 +133,9 @@ class Page extends BasePage
 
     public function getMeta(): PageMeta
     {
-        $meta = PageMeta::make()
+        /** @var PageMeta $pageMeta */
+        $pageMeta = app(PageMeta::class);
+        $meta = $pageMeta
             ->setTitle($this->meta_title ?: $this->title)
             ->setDescription($this->meta_description)
             ->setImage('')
@@ -142,7 +144,9 @@ class Page extends BasePage
 
         $meta->addExtraMetaTags('robots', 'index,follow');
         foreach ($this->meta_tags as $me) {
-            $meta->addExtraMetaTags($me['key'], $me['val']);
+          if ($me['key']){
+              $meta->addExtraMetaTags($me['key'], $me['val']);
+          }
         }
         return $meta;
     }

@@ -7,6 +7,7 @@ use GeoSot\BaseAdmin\App\Providers\BaseAdminRouteServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\CommandsProvider;
 use GeoSot\BaseAdmin\App\Providers\CustomValidationServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\FortifyViewsServiceProvider;
+use GeoSot\BaseAdmin\App\Providers\ImageManipulatorServiceProvider;
 use GeoSot\BaseAdmin\App\Providers\TusServiceProvider;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\Paths;
@@ -135,7 +136,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             BaseAdminRouteServiceProvider::class,
             CommandsProvider::class,
             FortifyViewsServiceProvider::class,
-            TusServiceProvider::class
+            TusServiceProvider::class,
+            ImageManipulatorServiceProvider::class
 //            ModuleServiceProvider::class,
         ];
 

@@ -1,4 +1,4 @@
-<button class="btn btn-primary p-1 c-backToTop shadow-lg position-fixed opacity-75" data-pixels-scroll="{{$pixelsScroll??100}}">
+<button class="btn  p-1 c-backToTop shadow-lg position-fixed {{$class??'btn-primary opacity-75 '}}" data-pixels-scroll="{{$pixelsScroll??100}}">
     <i class="{{$iconClass ?? 'fas fa-angle-up fa-2x'}}  " aria-hidden="true"></i>
 </button>
 

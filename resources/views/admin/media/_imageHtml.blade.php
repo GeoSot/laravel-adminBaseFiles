@@ -5,9 +5,9 @@
     {!! $record->getLinkHtml('btn-block'); !!}
     <div class=" my-4 "> {!! $record->getHtml(); !!}</div>
 
-    @if($record->thumb)
+    @if($thumb=$record->findVariant(\App\Models\Media\Medium::VARIANT_NAME_THUMB))
         <div class="border-top my-4 pt-2"> @lang("{$viewVals->get('modelLang')}.fields.thumb")</div>
-        <div>{!!optional($record)->getThumbHtml() !!}</div>
+        <div>{!!$thumb->getHtml() !!}</div>
     @endif
 
 @endcomponent

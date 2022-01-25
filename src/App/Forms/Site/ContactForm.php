@@ -5,22 +5,32 @@ namespace GeoSot\BaseAdmin\App\Forms\Site;
 class ContactForm extends BaseFrontForm
 {
 
+    protected $languageName = 'baseAdmin::site/contact.fields';
+
     public function getFormFields()
     {
         $this->setFormOptions($this->contactFormOptions());
-        $rules = [
+        $this->add('name', 'text', [
             'rules' => ['required'],
-        ];
-        $this->add('name', 'text', $rules);
-        $this->add('email', 'email', $rules);
-        $this->add('subject', 'text', $rules);
-        $this->add('message', 'textarea', array_merge($rules, ['attr' => ['rows' => '5']]));
+        ]);
+        $this->add('email', 'email', [
+            'rules' => ['required','email'],
+        ]);
+        $this->add('subject', 'text',  [
+            'rules' => ['required','max:100'],
+        ]);
+        $this->add('message', 'textarea', [
+            'attr' => [
+                'rows' => '5',
+            ], 'rules' => ['required','min:50'],
+        ]);
 
-        $this->addCheckBox('agree_with_terms', array_merge($rules, [
+        $this->addCheckBox('agree_with_terms', [
+            'rules' => ['required','accepted'],
             'help_block' => [
-                'text' => $this->transHelpText('agree_with_terms')
-            ]
-        ]));
+                'text' => $this->transHelpText('agree_with_terms'),
+            ],
+        ]);
 
         $this->add('submit', 'submit', [
             'attr' => ['class' => 'btn btn-outline-primary'],
@@ -36,7 +46,6 @@ class ContactForm extends BaseFrontForm
         return [
             'method' => 'POST',
             'url' => route('site.contactUs.store'),
-            'language_name' => 'baseAdmin::site/contact',
             'id' => 'contactForm',
         ];
     }
