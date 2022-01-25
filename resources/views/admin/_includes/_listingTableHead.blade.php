@@ -19,7 +19,8 @@
     <th scope="col">
         @include($packageVariables->get('blades').'admin._includes._selectAllBtn',['target'=>'col1','class'=>'mx-2'])
     </th>
-    @foreach($listable as $name)
+    @foreach($listable as $listField)
+        @php($name= \GeoSot\BaseAdmin\App\Helpers\Http\Controllers\ListField::make($listField)->getProperty())
         <th scope="col" class="{{$name}} align-top " data-name="{{$name}}">
             <div class="d-flex justify-content-between flex-wrap p-1 mr-1">
                 <span>	{!!__( "{$modelLang}.fields.{$name}" )!!}</span>

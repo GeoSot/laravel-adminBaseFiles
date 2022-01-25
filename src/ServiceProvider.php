@@ -32,6 +32,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      * @var string
      */
     protected $package = 'baseAdmin';
+    protected const PACKAGE = 'baseAdmin';
 
 
     /**
@@ -44,8 +45,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadResources();
         $this->publishResources();
         $this->registerServices();
-        view()->share('packageVariables', $this->getPackageVariables());
-
+        view()->share('packageVariables', static::getPackageVariables());
     }
 
     /**
@@ -55,12 +55,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-
         $this->registerProviders();
         $configDir = Paths::rootDir('config');
-        $this->mergeConfigFrom($configDir.'main.php', $this->package.'.main');
-        $this->mergeConfigFrom($configDir.'config.php', $this->package.'.config');
-
+        $this->mergeConfigFrom($configDir.'main.php', static::PACKAGE.'.main');
+        $this->mergeConfigFrom($configDir.'config.php', static::PACKAGE.'.config');
     }
 
     /**
@@ -70,8 +68,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         //  $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
         $this->loadMigrationsFrom(Paths::srcDir('Database/migrations'));
-        $this->loadViewsFrom(Paths::rootDir('resources/views'), $this->package);
-        $this->loadTranslationsFrom(Paths::rootDir('resources/lang'), $this->package);
+        $this->loadViewsFrom(Paths::rootDir('resources/views'), static::PACKAGE);
+        $this->loadTranslationsFrom(Paths::rootDir('resources/lang'), static::PACKAGE);
     }
 
     /**
@@ -79,9 +77,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     private function publishResources()
     {
-
         $this->publishes([
-            __DIR__."/../config" => config_path($this->package)
+            __DIR__."/../config" => config_path(static::PACKAGE),
         ], 'config');
 
         $this->publishes([
@@ -115,14 +112,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     /**
      * @return Collection
      */
-    private function getPackageVariables()
+    public static function getPackageVariables(): Collection
     {
         return collect([
-            'package' => $this->package,
-            'nameSpace' => $this->package.'::',
-            'adminLayout' => config($this->package.".config.backEnd.layout"),
-            'siteLayout' => config($this->package.".config.site.layout"),
-            'blades' => $this->package."::",
+            'package' => static::PACKAGE,
+            'nameSpace' => static::PACKAGE.'::',
+            'adminLayout' => config(static::PACKAGE.".config.backEnd.layout"),
+            'siteLayout' => config(static::PACKAGE.".config.site.layout"),
+            'blades' => static::PACKAGE."::",
         ]);
     }
 
@@ -144,7 +141,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         array_map(function ($provider) {
             $this->app->register($provider);
         }, $providers);
-
     }
 
     /**
@@ -160,7 +156,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
         $this->app->alias('Settings', Facades\Settings::class);
-
     }
 
 }
