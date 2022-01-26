@@ -15,19 +15,19 @@ return [
         'slug' => 'Slug',
         'group' => 'Group',
         'sub_group' => 'SubGroup',
-        'model_type' => 'Related Model',
+        'model_type' => 'Related Entity',
         'model_id' => 'Model Name',
         'type' => 'Type',
         'notes' => 'Notes',
         'is_enabled' => 'Enabled',
-        'ownerModel' => ['title' => 'Related Model'],
+        'ownerModel' => ['title' => 'Related Entity'],
         'type_to_human' => 'Type',
     ],
 
 
     'errorMessages' => ['keySubGroupGroupUnique' => 'The combination of key, subGroup and group has to be unique'],
     'formTitles' => [
-        'relatedModel' => 'Related Model',
+        'relatedModel' => 'Related Entity',
         'value' => 'Setting Value',
     ],
     'fieldsHelpTexts' => [

@@ -4,7 +4,9 @@ namespace GeoSot\BaseAdmin\App\Providers;
 
 
 use Carbon\Carbon;
+use GeoSot\BaseAdmin\App\Events\MediumUploaded;
 use GeoSot\BaseAdmin\App\Models\Media\Medium;
+use GeoSot\BaseAdmin\Helpers\Uploads;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +25,6 @@ class TusServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
     }
 
     /**
@@ -36,8 +37,9 @@ class TusServiceProvider extends ServiceProvider
         $this->app->singleton('tus-server', function ($app) {
             $server = new Server('file');
             $server
-                ->setApiPath(route('admin.media.upload', [], false))
-                ->setUploadDir($this->getUploadDir()); // uploads dir.
+                ->setApiPath(Uploads::getMediaUploadPath(false))
+                ->setUploadDir($this->getUploadDir());// uploads dir changes per month
+//                ->setCache(new FileStore(Storage::disk(config('mediable.default_disk', 'public'))->path('')));
             $this->registerEvents($server);
             return $server;
         });
@@ -46,9 +48,7 @@ class TusServiceProvider extends ServiceProvider
     protected function getUploadDir(): string
     {
         $dir = $this->getStoragePath($this->getUploadSubDir());
-
         if (!File::exists($dir)) {
-
             File::makeDirectory($dir, 0755, true, true);
         }
 
@@ -56,23 +56,21 @@ class TusServiceProvider extends ServiceProvider
     }
 
 
-    protected function registerEvents(Server $server)
+    protected function registerEvents(Server $server): void
     {
-
         $server->event()->addListener(UploadComplete::NAME, function (TusEvent $event) {
-
             $file = $event->getFile();
             $meta = $file->details()['metadata'];
             $fileMeta = [
                 'keywords' => Arr::get($meta, 'keywords'),
                 'description' => Arr::get($meta, 'caption'),
-                'title' => basename($file->getName() ?: $file->getFilePath())
+                'title' => basename($file->getName() ?: $file->getFilePath()),
             ];
             $path = str_replace($this->getStoragePath($this->getUploadSubDir()), $this->getUploadSubDir(), $file->getFilePath());
-            MediaUploader::beforeSave(function (Medium $media, $data) use ($fileMeta) {
+            $medium = MediaUploader::beforeSave(function (Medium $media, $data) use ($fileMeta) {
                 $media->fill($fileMeta);
             })->importPath('public', $path);
-
+            MediumUploaded::dispatch($medium);
         });
     }
 
@@ -81,18 +79,12 @@ class TusServiceProvider extends ServiceProvider
      */
     protected function getUploadSubDir(): string
     {
-        return Carbon::now()->format('Y'.DIRECTORY_SEPARATOR.'m');
+        return Carbon::now()->format("Y").DIRECTORY_SEPARATOR.Carbon::now()->format("m");
     }
 
 
-    /**
-     * @param  string  $path
-     * @return string|false
-     */
-    protected function getStoragePath(string $path = '')
+    protected function getStoragePath(string $path = ''): string
     {
-        return Storage::disk('public')->path($path);
+        return Storage::disk(Uploads::getDefaultDisk())->path($path);
     }
-
-
 }

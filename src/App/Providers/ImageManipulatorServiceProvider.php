@@ -32,7 +32,7 @@ class ImageManipulatorServiceProvider extends ServiceProvider
     {
         ImageManipulator::defineVariant(Medium::VARIANT_NAME_THUMB,
             ImageManipulation::make(function (Image $image) {
-                $image->fit(192, 108);
+                $image->heighten(108);
             })
                 ->outputPngFormat()
                 ->setOutputQuality(70)

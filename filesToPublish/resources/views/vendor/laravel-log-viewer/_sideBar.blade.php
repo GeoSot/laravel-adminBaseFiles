@@ -10,27 +10,26 @@
                         <span class="fas arrow-after ml-auto pl-2 {!! $isActive?"fa-folder-open":"fa-folder" !!}"></span>
                     </a>
                     <ul id="collapse_{{$folder}}" class="sub-menu flex-column list-unstyled collapse @if ($isActive) show @endif">
-                            @foreach($folder_files as $file)
+                        @foreach($folder_files as $file)
                             <li class="pl-3 nav-item  ">
-                                    <a href="?l={{ \Illuminate\Support\Facades\Crypt::encrypt($file) }}&f={{ \Illuminate\Support\Facades\Crypt::encrypt($folder) }}"
-                                       class="small nav-link px-3 inner-level-link d-flex align-items-center @if ($current_file == $file) active @endif">
-                                        {{$file}}
-                                    </a>
-                                </li>
+                                <a href="?l={{ \Illuminate\Support\Facades\Crypt::encrypt($file) }}&f={{ \Illuminate\Support\Facades\Crypt::encrypt($folder) }}"
+                                   class="small nav-link px-3 inner-level-link d-flex align-items-center @if ($current_file == $file) active @endif">
+                                    {{$file}}
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </li>
             @endforeach
+            @php(rsort($files))
             @foreach($files as $file)
                 <li class="nav-item">
-                        <a href="?l={{ \Illuminate\Support\Facades\Crypt::encrypt($file) }}"
-                           class="small nav-link px-3 inner-level-link d-flex align-items-center @if ($current_file == $file) active @endif">
-                            {{$file}}
-                        </a>
-                    </li>
+                    <a href="?l={{ \Illuminate\Support\Facades\Crypt::encrypt($file) }}"
+                       class="small nav-link px-3 inner-level-link d-flex align-items-center @if ($current_file == $file) active @endif">
+                        {{$file}}
+                    </a>
+                </li>
             @endforeach
         </ul>
     </section>
 </div>
-
-

@@ -44,7 +44,7 @@
                         <div class="text-right ">
 
                             @if($parentForm->{$options['real_name']}->prototype()->getType()==='file')
-                                @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$options['real_name']}",'multiple'=>true])
+                                @include('baseAdmin::_subBlades.media.library.mediaLibrary',['grouped'=>false, 'inputName'=>"add_{$options['real_name']}",'multiple'=>true])
                             @endif
                             <button class="js-addToCollection btn btn-outline-success btn-sm  mb-1" role="button" type="button" data-initial-count="{{count($children)}}"
                                     data-prototype="{{$parentForm->{$options['real_name']}->prototype()->render($extraFields)}}">

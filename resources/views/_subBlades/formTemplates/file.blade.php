@@ -34,7 +34,7 @@
                 <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
                 <div class="buttons input-group-append">
                     @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
-                        @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>"*/*"])
+                        @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>["*/*"]])
                     @endif
                     @if($val=$options['value'])
                         @php($href=
@@ -52,7 +52,7 @@
                         </button>
                     @else
                         @if(\Illuminate\Support\Arr::get($options, 'repeatable', false) ?? $viewAndRemoveOnly)
-                            <button class="btn btn-danger ml-auto btn-sm" type="button" data-remove="fileinput"><i class="fas fa-minus"></i></button>
+                            <button class="btn btn-danger ml-auto order-last btn-sm" type="button" data-remove="fileinput"><i class="fas fa-minus"></i></button>
                         @endif
                     @endif
                 </div>

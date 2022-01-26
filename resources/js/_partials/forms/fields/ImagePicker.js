@@ -22,7 +22,7 @@ let fileInput_OBJ = function (el) {
     this.$filename = this.$wrapper.find('.fileinput-filename');
 
 
-    this.changeInputAndText = function (isFilled, name) {
+    this.changeInputAndText = function (isFilled, name, addInputVal = null) {
         if (!isFilled) {
             this.$input.val('');
             if (this.$filename.length) {
@@ -37,7 +37,7 @@ let fileInput_OBJ = function (el) {
             this.$wrapper.removeClass(classes.noFile).addClass(classes.hasFile);
             this.$removeInput.val(null)
         }
-        this.$addIdInput.val(null);
+        this.$addIdInput.val(addInputVal);
     }
 };
 
@@ -46,6 +46,10 @@ const init = () => {
     import('jquery').then(src => {
         $ = src.default
 
+        document.addEventListener('baseAdmin.fileInput.changed', function (e) {
+            let el = new fileInput_OBJ(e.detail.input);
+            el.changeInputAndText(e.detail.filled || false, e.detail.name || null, e.detail.addInputVal);
+        });
         $(document).on('click', triggers.removeWrapper, function (e) {
             let el = new fileInput_OBJ(this);
             el.$wrapper.remove();
@@ -88,4 +92,4 @@ const init = () => {
 
 
 }
-export {init};
+export { init };

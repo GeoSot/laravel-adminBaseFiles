@@ -16,7 +16,7 @@ mix.setPublicPath(publicDirectory);
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', publicDirectory + 'fonts');
 
-mix.js(resourcesDirectory + 'js/mainScripts/admin.js', publicDirectory + 'js/admin.js');
+mix.js(resourcesDirectory + 'js/mainScripts/admin.js', publicDirectory + 'js/admin.js').vue({ version: 2 });
 mix.js(resourcesDirectory + 'js/mainScripts/site.js', publicDirectory + 'js/app.js');
 mix.sass(resourcesDirectory + 'css/admin/app.scss', publicDirectory + 'css/admin.css');
 mix.sass(resourcesDirectory + 'css/site/app.scss', publicDirectory + 'css/app.css');
@@ -65,7 +65,6 @@ mix.webpackConfig({
         alias: {
             jquery: "jquery/src/jquery",
             pace: 'pace-progress',
-            vue: 'vue/dist/vue.js'
         }
     },
     plugins: [

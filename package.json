@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.13",
-        "@fortawesome/fontawesome-free": "5.15.3",
+        "@fortawesome/fontawesome-free": "^5",
         "babel-plugin-transform-class-properties": "^6.24.1",
         "browser-sync": "^2.27",
         "clean-webpack-plugin": "^4.0.0",
@@ -23,12 +23,13 @@
         "sass": "^1.39.0",
         "sass-loader": "^12",
         "vue": "^2",
+        "vue-loader": "^15.9.8",
         "vue-template-compiler": "^2",
         "webpack-bundle-analyzer": "^4.5"
     },
     "dependencies": {
         "@sweetalert2/theme-bootstrap-4": "^5.0.0",
-        "@uppy/image-editor": "^0",
+        "@uppy/image-editor": "^1",
         "bootstrap": "^4.6.1",
         "bootstrap-colorpicker": "^3.2.0",
         "bootstrap-daterangepicker": "^3.1",
@@ -42,6 +43,6 @@
         "sortablejs": "^1",
         "sweetalert2": "^11",
         "update": "^0.7.4",
-        "uppy": "^1.27.0"
+        "uppy": "^2"
     }
 }

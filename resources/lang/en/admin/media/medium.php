@@ -23,7 +23,7 @@ return [
         'aggregate_type' => 'Type',
         'mime_type' => 'Mime Type',
         'extension' => 'Extension',
-        'ownerModel' => ['title' => 'Related Model'],
+        'ownerModel' => ['title' => 'Related Entity'],
         'fileLink' => 'Link To File',
         'thumb' => 'Thumb',
         'created_at' => 'Created At',

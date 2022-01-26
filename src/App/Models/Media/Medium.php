@@ -63,7 +63,7 @@ class Medium extends Media
         static::addGlobalScope('original', function (Builder $builder) {
             $builder->whereNull('original_media_id');
         });
-        static::deleting(function (Medium $medium) {
+        static::deleted(function (Medium $medium) {
             $medium->getAllVariants()->each(function (Media $variant) {
                 $variant->delete();
             });

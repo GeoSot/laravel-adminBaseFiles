@@ -4,7 +4,6 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Media;
 
 
 use App\Models\Media\Medium;
-use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\ListField;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use Illuminate\Http\Request;
@@ -18,7 +17,7 @@ class MediumController extends BaseAdminController
     //OVERRIDES
 
     protected $allowedActionsOnIndex = ['edit', 'delete', 'forceDelete', 'restore'];
-    protected $allowedActionsOnEdit = ['save', 'saveAndClose','delete'];
+    protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'delete'];
 
 
     public function edit(Medium $medium)
@@ -38,6 +37,7 @@ class MediumController extends BaseAdminController
             'listable' => ['title', 'thumb_html', 'size', 'created_at', 'id'],
             'sortable' => ['title', 'size', 'created_at', 'id'],
             'searchable' => ['title', 'the_file_exists', 'directory', 'filename', 'extension', 'aggregate_type', 'description', 'keywords', 'id'],
+            'linkable' => ['title', 'thumb_html'],
         ];
     }
 
