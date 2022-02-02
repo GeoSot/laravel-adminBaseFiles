@@ -4,9 +4,13 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Admin\Media;
 
 
 use App\Models\Media\Medium;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\Filter;
+use GeoSot\BaseAdmin\App\Helpers\Http\Controllers\ListField;
 use GeoSot\BaseAdmin\App\Http\Controllers\Admin\BaseAdminController;
 use GeoSot\BaseAdmin\Helpers\Alert;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use TusPhp\Tus\Server;
 
 class MediumController extends BaseAdminController
@@ -19,6 +23,12 @@ class MediumController extends BaseAdminController
     protected $allowedActionsOnIndex = ['edit', 'delete', 'forceDelete', 'restore'];
     protected $allowedActionsOnEdit = ['save', 'saveAndClose', 'delete'];
 
+    protected function afterFilteringIndex(Request &$request, Collection &$params, Builder &$query, &$extraOptions)
+    {
+        if (in_array(Medium::TYPE_ALL, $request->input('extra_filters.aggregate_type', []))) {
+            $query->orWhereNotNull('aggregate_type');
+        }
+    }
 
     public function edit(Medium $medium)
     {
@@ -34,9 +44,9 @@ class MediumController extends BaseAdminController
     protected function listFields(): array
     {
         return [
-            'listable' => ['title', 'thumb_html', 'size', 'created_at', 'id'],
+            'listable' => ['title', 'thumb_html', ListField::make('size', fn(Medium $m, Collection $viewVars) => $m->readableSize()), 'created_at', 'id'],
             'sortable' => ['title', 'size', 'created_at', 'id'],
-            'searchable' => ['title', 'the_file_exists', 'directory', 'filename', 'extension', 'aggregate_type', 'description', 'keywords', 'id'],
+            'searchable' => ['filename', 'extension'],
             'linkable' => ['title', 'thumb_html'],
         ];
     }
@@ -61,5 +71,15 @@ class MediumController extends BaseAdminController
         exit(0);
     }
 
+
+    protected function filters(): array
+    {
+        return [
+            Filter::selectMulti('aggregate_type'),
+            Filter::selectMulti('directory'),
+            Filter::selectMulti('extension'),
+            Filter::selectMulti('mime_type'),
+        ];
+    }
 
 }

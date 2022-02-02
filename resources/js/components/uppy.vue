@@ -63,7 +63,7 @@ export default {
                 replaceTargetContent: true,
                 showProgressDetails: true,
                 width: width,
-                height: width / 1.7,
+                height: Math.min(width / 1.7, (window.innerHeight - this.$el.getBoundingClientRect().top)),
                 metaFields: [
                     { id: 'name', name: 'Name', placeholder: 'file name' },
                     { id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' },

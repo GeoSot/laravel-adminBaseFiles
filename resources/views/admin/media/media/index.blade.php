@@ -9,7 +9,7 @@
             </div>
             <div class="collapse my-2" id="collapse-uploader">
                 <div class="d-flex justify-content-center">
-                    <uppy :is-shown="true" :options="{{\Illuminate\Support\Js::from(\GeoSot\BaseAdmin\Helpers\Uploads::getUppyOptions($accept?? ['*/*']))}}">
+                    <uppy :is-shown="true" :options="{{\Illuminate\Support\Js::from(\GeoSot\BaseAdmin\Helpers\Uploads::getUppyOptions(\App\Models\Media\Medium::TYPE_ALL))}}">
                     </uppy>
                 </div>
             </div>

@@ -44,8 +44,15 @@
                         <div class="text-right ">
 
                             @if($parentForm->{$options['real_name']}->prototype()->getType()==='file')
-                                @include('baseAdmin::_subBlades.media.library.mediaLibrary',['grouped'=>false, 'inputName'=>"add_{$options['real_name']}",'multiple'=>true])
+                                @if(\Illuminate\Support\Str::endsWith(optional(\Illuminate\Support\Arr::first($parentForm->{$options['real_name']}->getChildren()))->getOption('template',''),'.image'))
+                                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['grouped'=>false, 'inputName'=>"add_{$options['real_name']}",'multiple'=>true, 'accept'=>[\GeoSot\BaseAdmin\App\Models\Media\Medium::TYPE_IMAGE]])
+                                @else
+                                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['grouped'=>false, 'inputName'=>"add_{$options['real_name']}",'multiple'=>true])
+                                @endif
                             @endif
+
+
+
                             <button class="js-addToCollection btn btn-outline-success btn-sm  mb-1" role="button" type="button" data-initial-count="{{count($children)}}"
                                     data-prototype="{{$parentForm->{$options['real_name']}->prototype()->render($extraFields)}}">
                                 <i class="fas fa-plus"></i>

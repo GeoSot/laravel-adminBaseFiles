@@ -8,8 +8,8 @@
            <i class="fas fa-upload"></i>
          </span>
         </button>
-        <div :class="['modal',{'show':isShown} ,{'d-block':isShown}]" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
+        <div :class="['modal',{'show':isShown} ,{'d-block':isShown}]" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true" @click="isShown=false">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document" @click.stop>
                 <div class="modal-content">
                     <div class="modal-content">
 
@@ -59,7 +59,7 @@
                                                          :class="['mouse-pointer py-1',{'border-primary':isPicked(medium)}]"
                                                          style="border: 2px solid transparent">
                                                         <div v-html="medium.thumb_html"></div>
-                                                        <div class="small text-muted" v-html="mediumTitle(medium)"></div>
+                                                        <div class="small text-muted" v-html="medium.title"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,6 +104,7 @@ export default {
         isLibrary: Boolean,
         isGrouped: Boolean,
         uppyOptions: Object,
+        acceptedTypes: String | Array | null,
     },
     data: function () {
         return {
@@ -145,9 +146,6 @@ export default {
         isPicked(medium) {
             return this.choices.includes(medium.id);
         },
-        mediumTitle(medium) {
-            return medium.title ? medium.title : medium.filename
-        },
         pickAndClose(medium) {
             this.chooseMedium(medium);
             this.pick();
@@ -176,7 +174,7 @@ export default {
             let preview = inputInstance.parentNode.querySelector(this.input.previewClass)
             if (preview) {
                 let fileClasses = preview.dataset.imgclass;
-                preview.innerHTML = '<img src="' + medium.url + '" class="' + fileClasses + '"/>';
+                preview.innerHTML = '<img src="' + medium.thumb_url + '" class="' + fileClasses + '"/>';
             }
 
             let buttonsWrapper = inputInstance.parentNode.querySelector(this.input.buttonsClass);
@@ -187,14 +185,14 @@ export default {
                 let classString = this.isGrouped ? '' : 'mb-1 ml-1';
                 buttonsWrapper.insertAdjacentHTML('beforeend', `<a class="${classString} js-show btn btn-secondary btn-sm align-middle" role="button" href="${medium.url}" target="_blank"><i class="fas fa-eye"></i></a>`)
             }
-           document.dispatchEvent(new CustomEvent('baseAdmin.fileInput.changed',{
-               bubbles: true,
-               cancelable: false,
-                detail:{
+            document.dispatchEvent(new CustomEvent('baseAdmin.fileInput.changed', {
+                bubbles: true,
+                cancelable: false,
+                detail: {
                     addInputVal: medium.id,
                     input: inputInstance,
-                    filled:true,
-                    name:`${medium.filename}.${medium.extension}`
+                    filled: true,
+                    name: `${medium.filename}.${medium.extension}`
                 }
             }))
 
@@ -222,10 +220,19 @@ export default {
         makeAjax(url = null, dt = {}) {
             let _this = this;
             url = url || this.mediaRoute;
-            let data = Object.assign({ only_data: true, num_of_items: 10, extra_filters: { the_file_exists: true } }, dt);
-            BaseAdmin.makeAjax(url, 'GET', data, 0, function (data, textStatus) {
-                _this.media = data.records.data;
-                _this.pagination = data.records.links;
+
+            let data = Object.assign({
+                only_data: true,
+                num_of_items: 10,
+                extra_filters: {
+                    the_file_exists: true,
+                    ...(this.acceptedTypes ? { aggregate_type: this.acceptedTypes } : {})
+                }
+            }, dt);
+
+            BaseAdmin.makeAjax(url, 'GET', data, 0, function (result, textStatus) {
+                _this.media = result.records.data;
+                _this.pagination = result.records.links;
             });
         }
     },

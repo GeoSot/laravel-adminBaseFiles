@@ -24,10 +24,10 @@ class ListField
     }
 
 
-    public static function make($arg): self
+    public static function make($arg, callable $callback = null): self
     {
         if (is_string($arg)) {
-            return static::new($arg);
+            return new self($arg, $callback);
         }
         if ($arg instanceof ListField) {
             return $arg;
@@ -35,10 +35,6 @@ class ListField
         throw new \Exception("ListField couldn't be parsed");
     }
 
-    public static function new(string $property, callable $callback = null): self
-    {
-        return new self($property, $callback);
-    }
 
     public function getProperty(): string
     {

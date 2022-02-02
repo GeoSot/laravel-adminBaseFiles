@@ -66,7 +66,7 @@
                 </button>
 
                 @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
-                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>["image/*"]])
+                    @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>[\GeoSot\BaseAdmin\App\Models\Media\Medium::TYPE_IMAGE]])
                 @endif
 
                 @if($val=$options['value'])

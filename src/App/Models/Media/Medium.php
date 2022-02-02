@@ -53,8 +53,11 @@ class Medium extends Media
         'the_file_exists' => 'boolean',
         'custom_properties' => 'array',
         'size' => 'int',
+        self::CREATED_AT => 'datetime:d/m/Y - H:i',
     ];
-    protected $appends = ['url', 'thumb_html'];
+
+
+    protected $appends = ['title', 'url', 'thumb_html', 'thumb_url'];
 
     public static function boot()
     {
@@ -64,7 +67,7 @@ class Medium extends Media
             $builder->whereNull('original_media_id');
         });
         static::deleted(function (Medium $medium) {
-            $medium->getAllVariants()->each(function (Media $variant) {
+            $medium->variants()->each(function (Media $variant) {
                 $variant->delete();
             });
         });
@@ -96,21 +99,38 @@ class Medium extends Media
      */
     public function getThumbUrl(): string
     {
-        return $this->getThumb()->getUrl();
+        $thumb = $this->getThumb();
+        return $thumb->aggregate_type === \App\Models\Media\Medium::TYPE_IMAGE
+            ? $thumb->getUrl()
+            : self::getNoPReviewImageUrl("no preview .$thumb->extension");
     }
 
     /**
      * @return string
      */
-    public static function getDummyImageUrl()
+    public static function getDummyImageUrl(): string
     {
         return "https://dummyimage.com/600x400/737480/fff.png&text=your+image+is+loading...";
     }
 
-    /**
-     * @return string
-     */
-    public function getThumbHtmlAttribute()
+    protected static function getNoPReviewImageUrl(string $text = ''): string
+    {
+        $text = str_replace(' ', '+', $text ?: 'No+preview');
+        return "https://dummyimage.com/100x60/000/fff.png&text={$text}";
+    }
+
+
+    public function getThumbUrlAttribute(): string
+    {
+        return $this->getThumbUrl();
+    }
+
+    public function getTitleAttribute(): string
+    {
+        return "$this->filename.$this->extension";
+    }
+
+    public function getThumbHtmlAttribute(): string
     {
         return $this->getThumbHtml();
     }
@@ -118,7 +138,7 @@ class Medium extends Media
 
     public function getThumbHtml(string $width = ''): string
     {
-        return '<img class="lazyload img-fluid" style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbUrl().'" />';
+        return '<img class="lazyload img-fluid" title='.$this->title.'  style="max-width:100%; max-height:100px; width:'.$width.';" src="'.static::getDummyImageUrl().'" data-src="'.$this->getThumbUrl().'" />';
     }
 
 
@@ -165,7 +185,7 @@ class Medium extends Media
      */
     public function variants(): HasMany
     {
-        return $this->hasMany(get_class($this), 'original_media_id')->withoutGlobalScope('original');
+        return $this->hasMany(static::class, 'original_media_id')->withoutGlobalScope('original');
     }
 
 }

@@ -34,12 +34,12 @@
                 <span class="hidden fileinput-invalidMsg  text-truncate" hidden> @lang($packageVariables->get('nameSpace').'admin/generic.button.wrongFile',['types'=>'']) </span>
                 <div class="buttons input-group-append">
                     @if(!\Illuminate\Support\Arr::get($options, 'repeatable', false))
-                        @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>["*/*"]])
+                        @include('baseAdmin::_subBlades.media.library.mediaLibrary',['inputName'=>"add_{$name}",'multiple'=>false,'accept'=>[\GeoSot\BaseAdmin\App\Models\Media\Medium::TYPE_ALL]])
                     @endif
                     @if($val=$options['value'])
                         @php($href=
-                                  $options['value'] instanceOf \App\Models\Media\Medium
-                                  ?$options['value']->frontConfigs->getRoute('edit')
+                                  \Illuminate\Support\Arr::get($options,'model') instanceOf \App\Models\Media\Medium
+                                  ?$options['model']->frontConfigs->getRoute('edit')
                                   :$val)
                         <a class="js-show btn btn-secondary px-1 " role="button" href="{{$href}}" target="_blank"><i class="fas fa-eye"></i></a>
                     @endif

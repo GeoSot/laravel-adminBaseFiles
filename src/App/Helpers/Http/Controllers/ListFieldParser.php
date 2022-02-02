@@ -30,7 +30,7 @@ class ListFieldParser
     public function getValue(callable $callback = null): ?string
     {
         if (is_callable($callback)) {
-            return $this->maybeAddLink(call_user_func($callback, $this->model, $this->viewVals));
+            return $this->maybeAddLink(call_user_func($callback, $this->record, $this->viewVals));
         }
         return $this->maybeAddLink($this->tryToParseGivenProperty());
     }

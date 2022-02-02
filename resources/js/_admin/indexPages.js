@@ -125,7 +125,7 @@ const showMessage = (data, callback) => {
         src.default.fire({
             title: data.title || '',
             text: data.text,
-            timer: 1500,
+            timer: 2000,
             icon: data.icon,
             timerProgressBar: true
         }).then(function (continueAction) {

@@ -1,17 +1,3 @@
-import axios from 'axios';
-
-window.axios = axios
-window.axios.defaults = window.axios.defaults || {};
-window.axios.defaults.headers = window.axios.defaults.headers || {};
-window.axios.defaults.headers.common = window.axios.defaults.headers.common || [];
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-let token = document.head.querySelector('meta[name="csrf-token"]');
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-}
-
-
 import('jquery').then(jquery => {
     window.Popper = import('popper.js').then(src => src.default);
     window.$ = window.jQuery = jquery.default;
@@ -24,8 +10,8 @@ import('jquery').then(jquery => {
     });
 
 
+    let token = document.head.querySelector('meta[name="csrf-token"]');
     if (token) {
-        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': token.content
@@ -38,3 +24,31 @@ import('jquery').then(jquery => {
 
 })
 
+//
+// window.envClient = (endpoint, customConfig) => {
+//     const data= customConfig && customConfig.data
+//     let headers = {
+//         'Accept': 'application/json',
+//         "X-CSRF-Token": '{{csrf_token()}}'
+//     }
+//     if (data) {
+//         headers['Content-Type'] = 'application/json'
+//         customConfig.body = JSON.stringify(customConfig.data)
+//     }
+//
+//     const config = {
+//         ...customConfig,
+//         headers: headers,
+//     }
+//
+//     return window
+//         .fetch(endpoint, config)
+//         .then(async response => {
+//             const data = await response.json()
+//             if (response.ok) {
+//                 return data
+//             }
+//             envAlert('danger', data.message);
+//             return Promise.reject(data)
+//         })
+// };

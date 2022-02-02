@@ -27,12 +27,11 @@ trait HasMedia
     /**
      * Relation of Images to parent model. Morph Many To Many relationship
      * Get all images related to the parent model.
-     *
-     * @return MorphToMany
      */
-    public function images()
+    public function images(): MorphToMany
     {
-        return $this->media()->whereIn('aggregate_type', [Medium::TYPE_IMAGE, Medium::TYPE_IMAGE_VECTOR]);
+        return $this->media()->whereIn('aggregate_type', [Medium::TYPE_IMAGE, Medium::TYPE_IMAGE_VECTOR])
+            ->wherePivotIn('tag', [Medium::REQUEST_FIELD_NAME__IMAGE]);
     }
 
 
@@ -40,11 +39,19 @@ trait HasMedia
      * Relation of Videos to parent model. Morph Many To Many relationship
      * Get all videos related to the parent model.
      *
-     * @return MorphToMany
      */
-    public function videos()
+    public function videos(): MorphToMany
     {
-        return $this->media()->whereIn('aggregate_type', [Medium::TYPE_VIDEO]);
+        return $this->media()->whereIn('aggregate_type', [Medium::TYPE_VIDEO])
+            ->wherePivotIn('tag', [Medium::REQUEST_FIELD_NAME__VIDEO]);
+    }
+
+
+    public function files(): MorphToMany
+    {
+        return $this->media()
+//            ->orWhere('aggregate_type', Medium::TYPE_ARCHIVE)
+            ->wherePivotIn('tag', [Medium::REQUEST_FIELD_NAME__FILE]);
     }
 
 
@@ -107,7 +114,6 @@ trait HasMedia
                 });
                 $medium = $mediaUploader->fromSource($firstMedium)->useFilename($this->getAPossibleMediaFilename())->upload();
                 MediumUploaded::dispatch($medium);
-                return $medium;
             } else {
                 $medium = Medium::find(Arr::first($libraryAddFiles));
             }
