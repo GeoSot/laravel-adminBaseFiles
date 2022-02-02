@@ -67,9 +67,9 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->getRouter()->namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
+        Route::namespace($this->namespace)->prefix(LaravelLocalization::setLocale())
             ->middleware(['web', 'localeSessionRedirect', 'localizationRedirect', 'localize'])->group(function () {
-                $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
+                Route::prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
                     'auth', 'verified'
                 ])->group(function () {
                     $this->loadBackendRoutes();
@@ -77,12 +77,12 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
 
                 $file = base_path('routes/admin.php');
                 if (file_exists($file)) {
-                    $this->getRouter()->prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
+                    Route::prefix(config('baseAdmin.config.backEnd.routePrefix'))->as('admin.')->middleware([
                         'auth', 'verified'
                     ])->group($file);
                 }
 
-                $this->getRouter()->prefix(config('baseAdmin.config.frontEnd.routePrefix'))->group(function () {
+                Route::prefix(config('baseAdmin.config.frontEnd.routePrefix'))->group(function () {
                     $this->loadFrontendRoutes();
                 });
             });
@@ -95,7 +95,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     protected function registerMiddlewareGroups()
     {
         foreach ($this->middlewareToAdd as $name => $class) {
-            $this->getRouter()->aliasMiddleware($name, $class);
+            Route::aliasMiddleware($name, $class);
         }
     }
 
@@ -114,28 +114,28 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     {
 
 
-        Route::any('/uploads/{any?}', $this->getController('Media\MediumController').'@upload')->where('any',
+        Route::any('/uploads/{any?}', static::getController('Media\MediumController').'@upload')->where('any',
             '.*')->name('media.upload');
-        Route::post('restore/{revision}', $this->getController('RestoreController').'@restoreHistory')->name('restore');
+        Route::post('restore/{revision}', static::getController('RestoreController').'@restoreHistory')->name('restore');
         Route::post('restore/clear/{revision}',
-            $this->getController('RestoreController').'@clearHistory')->name('restore.clear');
+            static::getController('RestoreController').'@clearHistory')->name('restore.clear');
 
         Route::impersonate();
-        $this->getRouter()->get('log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs.index');
-        $this->getRouter()->get('',
-            $this->getController('DashboardController').'@index')->name('dashboard')->middleware(['permission:admin.*']);
-        $this->getRouter()->get('admin.or-site',
-            $this->getController('DashboardController').'@choosePage')->name('choosePage');
+        Route::get('log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs.index');
+        Route::get('',
+            static::getController('DashboardController').'@index')->name('dashboard')->middleware(['permission:admin.*']);
+        Route::get('admin.or-site',
+            static::getController('DashboardController').'@choosePage')->name('choosePage');
 
 
         //QUEUES
-        $this->getRouter()->prefix('queues')->name('queues.')->group(function () {
-            $this->getRouter()->get('',
-                $this->getController('Queues\QueueController').'@index')->name('index')->middleware(['permission:admin.index-job']);
-            $this->getRouter()->patch('retry/{id}',
-                $this->getController('Queues\QueueController').'@retry')->name('retry')->middleware(['permission:admin.retry-job']);
-            $this->getRouter()->patch('flush/{id}',
-                $this->getController('Queues\QueueController').'@flush')->name('flush')->middleware(['permission:admin.flush-job']);
+        Route::prefix('queues')->name('queues.')->group(function () {
+            Route::get('',
+                static::getController('Queues\QueueController').'@index')->name('index')->middleware(['permission:admin.index-job']);
+            Route::patch('retry/{id}',
+                static::getController('Queues\QueueController').'@retry')->name('retry')->middleware(['permission:admin.retry-job']);
+            Route::patch('flush/{id}',
+                static::getController('Queues\QueueController').'@flush')->name('flush')->middleware(['permission:admin.flush-job']);
         });
 
 
@@ -157,29 +157,29 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
         $permissionPrefix = 'permission:admin.';
         $controller = $namespace.'\\'.ucfirst($parentRoute).ucfirst($name).'Controller';
 
-        $controller = $this->getController($controller);
+        $controller = static::getController($controller);
 
         $model = ($parentRoute) ? $parentRoute.ucfirst($name) : $name;
 
 
-        $this->getRouter()->get('',
+        Route::get('',
             "{$controller}@index")->name('index')->middleware([$permissionPrefix.'index-'.$model]);
 
-        $this->getRouter()->get('create',
+        Route::get('create',
             "{$controller}@create")->name('create')->middleware([$permissionPrefix.'create-'.$model]);
-        $this->getRouter()->post('',
+        Route::post('',
             "{$controller}@store")->name('store')->middleware([$permissionPrefix.'create-'.$model]);
-        $this->getRouter()->get("edit/{{$model}}",
+        Route::get("edit/{{$model}}",
             "{$controller}@edit")->name('edit')->middleware([$permissionPrefix.'edit-'.$model]);
-        $this->getRouter()->patch("{{$model}}",
+        Route::patch("{{$model}}",
             "{$controller}@update")->name('update')->middleware([$permissionPrefix.'update-'.$model]);
-        $this->getRouter()->delete('delete',
+        Route::delete('delete',
             "{$controller}@delete")->name('delete')->middleware([$permissionPrefix.'delete-'.$model]);
-        $this->getRouter()->post('restore',
+        Route::post('restore',
             "{$controller}@restore")->name('restore')->middleware([$permissionPrefix.'restore-'.$model]);
-        $this->getRouter()->delete('forceDelete',
+        Route::delete('forceDelete',
             "{$controller}@forceDelete")->name('force.delete')->middleware([$permissionPrefix.'forceDelete-'.$model]);
-        $this->getRouter()->post('changeStatus',
+        Route::post('changeStatus',
             "{$controller}@changeStatus")->name('change.status')->middleware([$permissionPrefix.'update-'.$model]);
 
     }
@@ -192,7 +192,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
         foreach ($adminRoutes as $parentRoute => $node) {
             $parentPlural = Arr::get($node, 'plural', Str::plural($parentRoute));
 
-            $this->getRouter()->prefix($parentPlural)->as($parentPlural.'.')->group(function () use (
+            Route::prefix($parentPlural)->as($parentPlural.'.')->group(function () use (
                 $parentRoute,
                 $node,
                 $parentPlural
@@ -207,7 +207,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
                     if ($name == $parentRoute) {
                         continue;
                     }
-                    $this->getRouter()->prefix(Str::plural($name))->as(Str::plural($name).'.')->group(function () use (
+                    Route::prefix(Str::plural($name))->as(Str::plural($name).'.')->group(function () use (
                         $parentRoute,
                         $name,
                         $nameSpace
@@ -223,29 +223,29 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
     private function loadFrontendRoutes()
     {
 
-        $this->getRouter()->as('site.')->group(function () {
-            $this->getRouter()->get('/', $this->getController('HomeController', 'Site').'@index')->name('home');
-            $this->getRouter()->post('contact-us',
-                $this->getController('HomeController', 'Site').'@contactUs')->name('contactUs.store');
-            $this->getRouter()->middleware(['auth', 'verified'])->group(function () {
-                $this->getRouter()->as('users.')->prefix('profile')->group(function () {
-                    $this->getRouter()->get('',
-                        $this->getController('UserProfileController', 'Site').'@edit')->name('edit');
-                    $this->getRouter()->patch('',
-                        $this->getController('UserProfileController', 'Site').'@update')->name('update');
+        Route::as('site.')->group(function () {
+            Route::get('/', static::getController('HomeController', 'Site').'@index')->name('home');
+            Route::post('contact-us',
+                static::getController('HomeController', 'Site').'@contactUs')->name('contactUs.store');
+            Route::middleware(['auth', 'verified'])->group(function () {
+                Route::as('users.')->prefix('profile')->group(function () {
+                    Route::get('',
+                        static::getController('UserProfileController', 'Site').'@edit')->name('edit');
+                    Route::patch('',
+                        static::getController('UserProfileController', 'Site').'@update')->name('update');
                 });
             });
-
         });
-
     }
 
     public static function dynamicPages()
     {
-        Route::get('{page}', function ($page) {
-            $pg = Page::where('slug', $page)->first();
-            if ($pg) {
-                return App::call($this->getController('GenericPageController', 'Site'), '@show', ['page' => $pg]);
+        Route::get('{page?}', function ($page) {
+            if ($page) {
+                $pg = Page::where('slug', $page)->first();
+                if ($pg) {
+                    return App::call(static::getController('GenericPageController', 'Site'), '@show', ['page' => $pg]);
+                }
             }
             return abort(404);
         })->name('site.pages');
@@ -256,7 +256,7 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
      * @param  string  $side
      * @return string
      */
-    protected function getController(string $controller, string $side = 'Admin'): string
+    protected static function getController(string $controller, string $side = 'Admin'): string
     {
         $appController = self::APP_NS.'\\'.$side.'\\'.$controller;
         return class_exists($appController) ? $appController : self::BASE_NS.'\\'.$side.'\\'.$controller;
