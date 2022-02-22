@@ -14,7 +14,7 @@ class Uploads
         return [
             'endpoint' => static::getMediaUploadPath(),
             'restrictions' => [
-                'maxFileSize' => 100000000,
+                'maxFileSize' => 1000000000,
                 'maxNumberOfFiles' => 10,
                 'allowedFileTypes' => static::parseAllowedTypes($allowedFileTypes),
             ],

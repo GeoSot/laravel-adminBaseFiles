@@ -9,6 +9,6 @@
     v-bind:is-library="@json($library??true)"
     v-bind:is-grouped="@json($grouped??true)"
     v-bind:accepted-types="{{\Illuminate\Support\Js::from($acceptTypes)}}"
-    v-bind:uppy-options="{{\Illuminate\Support\Js::from(\GeoSot\BaseAdmin\Helpers\Uploads::getUppyOptions($acceptTypes))}}">
+    v-bind:uppy-options="{{\Illuminate\Support\Js::from(\GeoSot\BaseAdmin\Helpers\Uploads::getUppyOptions($acceptTypes?:'*'))}}">
 </media-library>
 
