@@ -84,6 +84,7 @@ class ListFieldParser
                 $style = ($dt->bg_color ?? null) ? "background-color: {$dt->bg_color};" : '';
                 if (is_subclass_of($dt, Model::class) && $dt->allowedToHandle()) {
                     $result .= $dt->frontConfigs->getAdminLink(Arr::last($array), false, ['class' => $class, 'style' => $style]);
+                    continue;
                 }
                 $result .= '<span class="'.$class.'">'.data_get($dt, $array[1]).'</span>';
             }
