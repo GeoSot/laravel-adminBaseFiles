@@ -15,21 +15,21 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "ankitpokhrel/tus-php": "^2.2",
-        "laravel/fortify": "^1.10",
+        "laravel/fortify": "^1",
         "barryvdh/laravel-debugbar": "^v3.5.1",
         "barryvdh/laravel-translation-manager": "^v0.6",
-        "cviebrock/eloquent-sluggable": "^8.0.0",
-        "geo-sot/laravel-env-editor": "^v1.1.0",
-        "kris/laravel-form-builder": "^1.40.0",
+        "cviebrock/eloquent-sluggable": "^9",
+        "geo-sot/laravel-env-editor": "^v1.1",
+        "kris/laravel-form-builder": "^1",
         "lab404/laravel-impersonate": "^1.7",
-        "laravel/passport": "^10.0.1",
-        "mcamara/laravel-localization": "^1.6.0",
+        "laravel/passport": "^10",
+        "mcamara/laravel-localization": "^1",
         "plank/laravel-mediable": "^5",
         "rap2hpoutre/laravel-log-viewer": "^2",
-        "santigarcor/laratrust": "^6.3",
-        "spatie/laravel-translatable": "^4",
+        "santigarcor/laratrust": "^7",
+        "spatie/laravel-translatable": "^6",
         "venturecraft/revisionable": "1.*"
     },
     "autoload": {
@@ -49,8 +49,8 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^v2.12",
-        "laravel/framework": "7.*|8.*",
-        "phpunit/phpunit": "^9.3"
+        "laravel/framework": "^7|^8|^9",
+        "phpunit/phpunit": "^9"
     },
     "autoload-dev": {
         "psr-4": {
