@@ -5,7 +5,7 @@
                 @php($folder= \Illuminate\Support\Str::afterLast($fullFolder, DIRECTORY_SEPARATOR))
                 <li class="nav-item">
                     <a href="?f={{ \Illuminate\Support\Facades\Crypt::encrypt($folder) }}"
-                       {{--                       data-toggle="collapse" data-target="#collapse_{{$folder}}" role="button" aria-expanded="false" aria-controls="collapse_{{$folder}}"--}}
+                       {{--data-toggle="collapse" data-target="#collapse_{{$folder}}" role="button" aria-expanded="false" aria-controls="collapse_{{$folder}}"--}}
                        class="px-3 nav-link d-flex align-items-center small  @if ($isActive=$current_folder == $folder) active @endif">
                         <span class="title ">{{$folder}}</span>
                         <span class="fas arrow-after ml-auto pl-2 {!! $isActive?"fa-folder-open":"fa-folder" !!}"></span>
