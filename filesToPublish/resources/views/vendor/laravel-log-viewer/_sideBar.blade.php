@@ -1,7 +1,8 @@
 <div class="adminSidebar navbar   h-100  bg-admin navbar-dark px-0 align-items-start">
     <section class="navbar-nav sidebar  flex-fill ">
         <ul id="menu" class="page-sidebar-menu flex-column  nav">
-            @foreach($folders as $folder)
+            @foreach($folders as $key => $fullFolder)
+                @php($folder= \Illuminate\Support\Str::afterLast($fullFolder, DIRECTORY_SEPARATOR))
                 <li class="nav-item">
                     <a href="?f={{ \Illuminate\Support\Facades\Crypt::encrypt($folder) }}"
                        {{--data-toggle="collapse" data-target="#collapse_{{$folder}}" role="button" aria-expanded="false" aria-controls="collapse_{{$folder}}"--}}
@@ -21,8 +22,8 @@
                     </ul>
                 </li>
             @endforeach
-            @php(rsort($files))
-            @foreach($files as $file)
+            @foreach(glob($storage_path.'/*.log') as $fullFile)
+                @php($file=\Illuminate\Support\Str::afterLast($fullFile, DIRECTORY_SEPARATOR))
                 <li class="nav-item">
                     <a href="?l={{ \Illuminate\Support\Facades\Crypt::encrypt($file) }}"
                        class="small nav-link px-3 inner-level-link d-flex align-items-center @if ($current_file == $file) active @endif">
