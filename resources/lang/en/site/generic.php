@@ -7,6 +7,7 @@ return [
             'profile' => 'My Profile',
             'logout' => 'Logout',
             'login' => 'Login',
+            '2fa' => 'Two Factor Authentication',
         ],
     ],
     'errorPages' => [
