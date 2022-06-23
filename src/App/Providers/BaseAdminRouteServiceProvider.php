@@ -233,6 +233,11 @@ class BaseAdminRouteServiceProvider extends ServiceProvider
                         static::getController('UserProfileController', 'Site').'@edit')->name('edit');
                     Route::patch('',
                         static::getController('UserProfileController', 'Site').'@update')->name('update');
+
+                    if(\Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::twoFactorAuthentication())){
+                        Route::get('2fa',
+                            static::getController('UserTwoFactorAuthenticationController', 'Site').'@edit')->name('2fa');
+                    }
                 });
             });
         });

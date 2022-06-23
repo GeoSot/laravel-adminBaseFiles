@@ -14,6 +14,11 @@
             <a class="dropdown-item" href="{{ route('site.users.edit') }}">
                 <i class="fas fa-user-cog mr-1 "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.user.profile')
             </a>
+            @if(\Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::twoFactorAuthentication()))
+                <a class="dropdown-item" href="{{ route('site.users.2fa') }}">
+                    <i class="fas fa-user-shield mr-1 "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.user.2fa')
+                </a>
+            @endif
             <a class="dropdown-item" href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-power-off mr-1 "></i> @lang($packageVariables->get('nameSpace').'site/generic.menu.user.logout')

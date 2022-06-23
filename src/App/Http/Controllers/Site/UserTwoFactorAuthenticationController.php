@@ -5,15 +5,16 @@ namespace GeoSot\BaseAdmin\App\Http\Controllers\Site;
 
 
 use App\Models\Users\User;
+use GeoSot\BaseAdmin\App\Forms\Auth\DisableUserTwoFactorAuthenticationForm;
+use GeoSot\BaseAdmin\App\Forms\Auth\EnableUserTwoFactorAuthenticationForm;
+use GeoSot\BaseAdmin\App\Forms\Auth\UserTwoFactorAuthenticationForm;
 use Illuminate\Support\Collection;
-use GeoSot\BaseAdmin\App\Forms\Site\UserProfileForm;
-use GeoSot\BaseAdmin\App\Forms\Site\UserUpdatePasswordForm;
 use GeoSot\BaseAdmin\App\Helpers\Models\FrontEndConfigs;
 use GeoSot\BaseAdmin\Helpers\Base;
 use Illuminate\Http\Response;
 use Laravel\Fortify\Features;
 
-class UserProfileController extends BaseFrontController
+class UserTwoFactorAuthenticationController extends BaseFrontController
 {
 
     protected $_class = User::class;
@@ -26,23 +27,12 @@ class UserProfileController extends BaseFrontController
      */
     public function edit()
     {
-
         /** @var User $user */
         $user = auth()->user();
-        $profileForm = null;
-        $passwordForm = null;
 
-        if (Features::enabled(Features::updateProfileInformation())) {
-            $profileForm = $this->makeForm(UserProfileForm::class, $user)->setErrorBag('updateProfileInformation');
-        }
-        if (Features::enabled(Features::updatePasswords())) {
-            $passwordForm = $this->makeForm(UserUpdatePasswordForm::class, $user)->setErrorBag('updatePassword');
-        }
+        $twoFactorsForm = $this->getTwoFaForm($user);
 
-
-        $roles = $user->roles()->where('front_users_can_see', true)->get();
-
-        $extraValues = collect(compact('profileForm', 'passwordForm', 'roles'));
+        $extraValues = collect(compact('twoFactorsForm'));
 
         return view($this->getViewFile(), $this->variablesToView($this->gatherExtraValues($extraValues), 'index', ['record' => $user]));
 
@@ -54,11 +44,21 @@ class UserProfileController extends BaseFrontController
     protected function getViewFile(): string
     {
         $side = FrontEndConfigs::SITE;
-        return Base::addPackagePrefix("{$side}.users.edit");
+        return Base::addPackagePrefix("{$side}.users.two-factor");
     }
 
     protected function gatherExtraValues(Collection $values): Collection
     {
         return $values;
     }
+
+
+    public function getTwoFaForm(User $user): \Kris\LaravelFormBuilder\Form|\GeoSot\BaseAdmin\App\Forms\BaseForm
+    {
+        if ($user->two_factor_secret) {
+            return $this->makeForm(DisableUserTwoFactorAuthenticationForm::class, $user);
+        }
+        return $this->makeForm(EnableUserTwoFactorAuthenticationForm::class, $user);
+    }
+
 }

@@ -17,7 +17,7 @@ return [
         'current_password' => 'Ισχύων Κωδικός (password)',
         'submit' => 'Εφαμογή αλλαγών',
         'personalData' => 'Προσωπικά Στοιχεία',
-        'changePassword' => 'Αλλαγή Κωδικού'
+        'changePassword' => 'Αλλαγή Κωδικού',
     ],
     'profileChange' => [
         'success' => [
