@@ -10,6 +10,7 @@ use GeoSot\BaseAdmin\Services\SettingsChoices;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 /**
  * GeoSot\BaseAdmin\App\Models\Setting
@@ -176,5 +177,14 @@ class Setting extends BaseModel
     public function getTypeToHumanAttribute()
     {
         return Arr::get(SettingsChoices::getSettingTypes(), $this->type, $this->type);
+    }
+
+    public function getShortHtml():?View
+    {
+        if (!$this->getKey()){
+            return null;
+        }
+
+        return view('baseAdmin::admin.settings._shorthtml',['record'=>$this]);
     }
 }

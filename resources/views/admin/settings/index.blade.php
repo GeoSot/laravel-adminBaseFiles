@@ -1,6 +1,17 @@
 @extends($packageVariables->get('adminLayout'))
 
-@component($packageVariables->get('blades').'admin._components.listingButtons',['viewVals'=>$viewVals, ]  )   @endcomponent
+@component($packageVariables->get('blades').'admin._components.listingButtons',['viewVals'=>$viewVals, ]  )
+
+    @slot('afterRight')
+        @php($cleanView=route('admin.settings.index',['extra_filters'=>['group'=>'',],'keyword'=>'',]))
+        @if(\Illuminate\Support\Facades\URL::full()==  route('admin.settings.index'))
+            <a href="{{$cleanView}}" class="btn btn-outline-admin">See all in one Page</a>
+        @else
+            <a href="{{route('admin.settings.index')}}" class="btn btn-outline-admin">Return to Default view</a>
+        @endif
+
+    @endslot
+@endcomponent
 @section('content')
 
     <div class="row flex-fill ">
@@ -35,7 +46,7 @@
                             <tbody>
 
                             @foreach($viewVals->get('records') as $record)
-                                <tr>
+                                <tr @if($record->notes)data-toggle="popover" data-content="{{$record->notes}}" data-trigger="hover" data-html="true" data-placement="bottom" data-container="body"  @endif>
                                     @include($packageVariables->get('blades').'admin._includes._listDataParsing_helper', ['parse'=>'firstCheckBox'])
                                     @foreach($listable=$viewVals->get('extraValues')->get('listable') as $listName)
                                         @include($packageVariables->get('blades').'admin._includes._listDataParsing_helper', ['parse'=>'fields'])
