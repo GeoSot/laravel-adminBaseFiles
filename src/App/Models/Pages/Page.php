@@ -3,6 +3,7 @@
 
 namespace GeoSot\BaseAdmin\App\Models\Pages;
 
+use App\Models\Media\Medium;
 use GeoSot\BaseAdmin\Helpers\Alert;
 use GeoSot\BaseAdmin\Helpers\PageMeta;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -144,10 +145,18 @@ class Page extends BasePage
 
         $meta->addExtraMetaTags('robots', 'index,follow');
         foreach ($this->meta_tags as $me) {
-          if ($me['key']){
-              $meta->addExtraMetaTags($me['key'], $me['val']);
-          }
+            if ($me['key']) {
+                $meta->addExtraMetaTags($me['key'], $me['val']);
+            }
         }
+
+        /** @var Medium $image */
+        $image = $this->images()->first();
+
+        if ($image) {
+            $meta->setImage($image->getUrl());
+        }
+
         return $meta;
     }
 }
